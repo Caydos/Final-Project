@@ -95,8 +95,12 @@ void Scene::Initialize(GameData* _gameData)
 
 void Scene::Inputs(GameData* _gameData)
 {
-	if (_gameData->window.IsFocused())
+	if ((!Editor::IsDisplayed() && !TexturePicker::IsActive()) || _gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_MIDDLE))
 	{
+		if (!_gameData->window.IsFocused())
+		{
+			_gameData->window.Focus(true);
+		}
 		World::MouseInputs(_gameData);
 		if (_gameData->window.IsKeyPressed(Keys::W))
 		{
@@ -123,7 +127,15 @@ void Scene::Inputs(GameData* _gameData)
 			World::ProcessCameraInput(_gameData, FPVCam, DOWN);
 		}
 	}
-	if (_gameData->window.IsKeyPressed(Keys::E) && inputClock.GetElapsedTime() > 125 && !Editor::IsDisplayed())
+	else
+	{
+		if ((Editor::IsDisplayed() || TexturePicker::IsActive()) && _gameData->window.IsFocused())
+		{
+			_gameData->window.Focus(false);
+		}
+	}
+
+	if (!Editor::IsDisplayed() && _gameData->window.IsKeyPressed(Keys::E) && inputClock.GetElapsedTime() > 125)
 	{
 		if (TexturePicker::IsActive())
 		{
@@ -151,7 +163,7 @@ void Scene::Inputs(GameData* _gameData)
 		}
 		inputClock.Restart();
 	}
-	if (_gameData->window.IsKeyPressed(Keys::F1) && inputClock.GetElapsedTime() > 125 && !TexturePicker::IsActive())
+	if (!TexturePicker::IsActive() && _gameData->window.IsKeyPressed(Keys::F1) && inputClock.GetElapsedTime() > 125)
 	{
 		if (Editor::IsDisplayed())
 		{
@@ -173,7 +185,7 @@ void Scene::Tick(GameData* _gameData)
 	Inputs(_gameData);
 
 	// Needs to be called after the inputs that enables it
-	if (!_gameData->window.IsFocused())
+	//if (!_gameData->window.IsFocused())
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -212,7 +224,7 @@ void Scene::Tick(GameData* _gameData)
 	Crosshairs::Draw();
 
 	glEnable(GL_DEPTH_TEST);
-	if (!_gameData->window.IsFocused())
+	//if (!_gameData->window.IsFocused())
 	{
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
