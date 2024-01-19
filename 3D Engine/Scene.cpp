@@ -152,7 +152,7 @@ void Scene::Inputs(GameData* _gameData)
 		}
 		inputClock.Restart();
 	}
-	if (_gameData->window.IsKeyPressed(Keys::TAB) && inputClock.GetElapsedTime() > 125 && !TexturePicker::IsActive())
+	if (_gameData->window.IsKeyPressed(Keys::F1) && inputClock.GetElapsedTime() > 125 && !TexturePicker::IsActive())
 	{
 		if (Editor::IsDisplayed())
 		{
