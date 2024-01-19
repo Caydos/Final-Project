@@ -5,17 +5,22 @@
 
 bool Collisions::PointCollidingBox(glm::vec3 _position, Bounds::Box _box)
 {
-	return false;
+	bool collisionX = _position.x >= _box.min.x && _position.x <= _box.max.x;
+	bool collisionY = _position.y >= _box.min.y && _position.y <= _box.max.y;
+	bool collisionZ = _position.z >= _box.min.z && _position.z <= _box.max.z;
+
+	return collisionX && collisionY && collisionZ;
+	//return false;
 }
 
 bool Collisions::BoxColliding(Bounds::Box _firstBox, Bounds::Box _secondBox)
 {
+	bool collisionX = _firstBox.min.x <= _secondBox.max.x && _firstBox.max.x >= _secondBox.min.x;
+	bool collisionY = _firstBox.min.y <= _secondBox.max.y && _firstBox.max.y >= _secondBox.min.y;
+	bool collisionZ = _firstBox.min.z <= _secondBox.max.z && _firstBox.max.z >= _secondBox.min.z;
 
-
-
-
-
-	return false;
+	return collisionX && collisionY && collisionZ;
+	//return false;
 }
 
 static bool initialized = false;
@@ -39,7 +44,18 @@ void Collisions::Tick()
 		initialized = true;
 	}
 
-	if (BoxColliding(objects[0]->GetBoundingBox(), objects[1]->GetBoundingBox()))
+	//if (BoxColliding(objects[0]->GetBoundingBox(), objects[1]->GetBoundingBox()))
+	//{
+	//	Crosshairs::Get()->SetColor(Colors::Red);
+	//}
+	//else
+	//{
+	//	Crosshairs::Get()->SetColor(Colors::Green);
+	//
+
+
+	Camera* cam = Scene::World::GetCamera();
+	if (PointCollidingBox(cam->Position, objects[1]->GetBoundingBox()))
 	{
 		Crosshairs::Get()->SetColor(Colors::Red);
 	}
@@ -47,4 +63,5 @@ void Collisions::Tick()
 	{
 		Crosshairs::Get()->SetColor(Colors::Green);
 	}
+
 }
