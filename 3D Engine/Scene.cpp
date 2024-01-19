@@ -8,7 +8,6 @@
 #include "Decor.h"
 #include "Crosshair.h"
 #include "Maze.h"
-#include "Entity.h"
 
 static bool initialized = false;
 static unsigned int FPVCam;
@@ -190,7 +189,6 @@ void Scene::Tick(GameData* _gameData)
 
 
 	_gameData->window.Clear(clearColor);
-	Entities::Tick(_gameData);
 	Scene::World::Render(_gameData);
 	if (!Editor::IsDisplayed())
 	{
