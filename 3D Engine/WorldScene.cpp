@@ -125,7 +125,7 @@ void Scene::World::MouseInputs(GameData* _gameData)
 		std::cout << "[Camera] - (MouseInputs) : Exception caught: " << e.what() << std::endl;
 	}
 }
-#include "Crosshair.h"
+
 void Scene::World::Render(GameData* _gameData)
 {
 	{
@@ -147,7 +147,6 @@ void Scene::World::Render(GameData* _gameData)
 	Camera* camera = &cameras.at(focusedCamera);
 
 	_gameData->shaders[Shaders::WORLD_OBJECT]->use();
-	//_gameData->shaders[Shaders::WORLD_OBJECT]->setBool("instanceUsage", true);
 
 	projection = glm::perspective(glm::radians(camera->Fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 	_gameData->shaders[Shaders::WORLD_OBJECT]->setMat4("projection", projection);
@@ -163,16 +162,10 @@ void Scene::World::Render(GameData* _gameData)
 	for (size_t objId = 0; objId < components.size(); objId++)
 	{
 		Bounds::Box boundingBox = components[objId]->GetBoundingBox();
-		//FrustrumCulling::isBoxInFrustum(view, boundingBox.min, boundingBox.max);
-		//if (FrustrumCulling::isBoxInFrustum(view, boundingBox.min, boundingBox.max))
+		if (FrustrumCulling::IsBoxInFrustum(projection,view, boundingBox.min, boundingBox.max))
 		{
-			Crosshairs::Get()->SetColor(Colors::Red);
 			components[objId]->Draw();
 		}
-		//else
-		//{
-		//	Crosshairs::Get()->SetColor(Colors::Green);
-		//}
 	}
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);

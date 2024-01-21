@@ -24,6 +24,7 @@
     <ProjectGuid>{f15ce010-fc63-4131-acd3-52a3ad530509}</ProjectGuid>
     <RootNamespace>My3DEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

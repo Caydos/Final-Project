@@ -8,50 +8,43 @@
 
 namespace FrustrumCulling
 {
-	enum FrustumPlane
+	struct Plane
 	{
-		FRUSTUM_RIGHT = 0,
-		FRUSTUM_LEFT,
-		FRUSTUM_BOTTOM,
-		FRUSTUM_TOP,
-		FRUSTUM_FAR,
-		FRUSTUM_NEAR
+		glm::vec3 normal;
+		float distance;
 	};
 
-	bool isBoxInFrustum(glm::mat4 viewProjectionMatrix, glm::vec3 minCorner, glm::vec3 maxCorner)
+	bool IsBoxInFrustum(glm::mat4 projectionMatrix, glm::mat4 viewMatrix, glm::vec3 minCorner, glm::vec3 maxCorner)
 	{
-		// Extract frustum planes from the view projection matrix
-		glm::vec4 planes[6];
+		glm::mat4 mat = projectionMatrix * viewMatrix;
+		Plane planes[6];
 
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < 6; i++)
 		{
-			planes[i] = viewProjectionMatrix[i] + viewProjectionMatrix[12];
-			planes[i + 4] = viewProjectionMatrix[12] - viewProjectionMatrix[i];
+			int sign = (i % 2 == 0) ? 1 : -1;
+
+			planes[i].normal.x = mat[0][3] + sign * mat[0][i / 2];
+			planes[i].normal.y = mat[1][3] + sign * mat[1][i / 2];
+			planes[i].normal.z = mat[2][3] + sign * mat[2][i / 2];
+			planes[i].distance = mat[3][3] + sign * mat[3][i / 2];
+
+			if (i < 4)
+			{
+				planes[i].distance += 0.1f; // Margin
+			}
 		}
-		// Normalize frustum planes
-		for (int i = 0; i < 6; ++i)
+
+		for (const auto& plane : planes)
 		{
-			float length = glm::length(glm::vec3(planes[i]));
-			planes[i] /= length;
-		}
-
-		// Check box against each frustum plane
-		for (int i = 0; i < 6; ++i)
-		{
-			glm::vec3 normal = glm::vec3(planes[i]);
-			float d = planes[i].w;
-
-			// Calculate the distance from the box center to the frustum plane
-			float distance = glm::dot(normal, 0.5f * (minCorner + maxCorner)) + d;
-
-			// If the distance is negative, the box is behind the frustum plane
-			if (distance < 0.0f)
+			if (glm::dot(plane.normal, minCorner) + plane.distance < 0
+				&& glm::dot(plane.normal, maxCorner) + plane.distance < 0)
 			{
 				return false;
 			}
 		}
-		// If the box is not behind any frustum plane, it is inside the frustum
+
 		return true;
 	}
+
 }
 #endif // !FRUSTRUM_CULLING_H
