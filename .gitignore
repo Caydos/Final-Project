@@ -95,7 +95,7 @@ StyleCopReport.xml
 *.tlog
 *.recipe
 *.exe
-
+*.ini
 
 # Chutzpah Test files
 _Chutzpah*

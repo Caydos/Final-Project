@@ -3,6 +3,7 @@
 #include "Lightning.h"
 #include <algorithm>
 #include "Files.h"
+#include "FrustrumCulling.h"
 
 static std::vector<Camera> cameras;
 static unsigned int focusedCamera = 0;
@@ -124,7 +125,7 @@ void Scene::World::MouseInputs(GameData* _gameData)
 		std::cout << "[Camera] - (MouseInputs) : Exception caught: " << e.what() << std::endl;
 	}
 }
-
+#include "Crosshair.h"
 void Scene::World::Render(GameData* _gameData)
 {
 	{
@@ -161,7 +162,17 @@ void Scene::World::Render(GameData* _gameData)
 
 	for (size_t objId = 0; objId < components.size(); objId++)
 	{
-		components[objId]->Draw();
+		Bounds::Box boundingBox = components[objId]->GetBoundingBox();
+		//FrustrumCulling::isBoxInFrustum(view, boundingBox.min, boundingBox.max);
+		//if (FrustrumCulling::isBoxInFrustum(view, boundingBox.min, boundingBox.max))
+		{
+			Crosshairs::Get()->SetColor(Colors::Red);
+			components[objId]->Draw();
+		}
+		//else
+		//{
+		//	Crosshairs::Get()->SetColor(Colors::Green);
+		//}
 	}
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);

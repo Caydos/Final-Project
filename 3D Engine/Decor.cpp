@@ -219,7 +219,6 @@ bool Decors::Decor::LoadFromFile(const char* _name)
 		}
 	}
 	this->CalculateBoundingBox();
-	this->ShowBounds(true);
 	return true;
 }
 

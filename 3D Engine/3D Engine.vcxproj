@@ -206,6 +206,7 @@
     <ClInclude Include="EventListing.h" />
     <ClInclude Include="Exploration.h" />
     <ClInclude Include="Files.h" />
+    <ClInclude Include="FrustrumCulling.h" />
     <ClInclude Include="Instances.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LightMenu.h" />

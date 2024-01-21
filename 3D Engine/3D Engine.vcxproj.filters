@@ -82,9 +82,6 @@
     <Filter Include="Source Files\Rendering Engine\Drawables">
       <UniqueIdentifier>{6276a9f5-9edd-42fa-a1db-0cf4995c2fa5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Rendering Engine\Drawables\Instances">
-      <UniqueIdentifier>{4bab4039-d4ee-43a8-bbea-631e99de1a4d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Rendering Engine\Visual">
       <UniqueIdentifier>{30ec2660-1e08-4ae9-9aad-645bb84398cb}</UniqueIdentifier>
     </Filter>
@@ -141,6 +138,12 @@
     </Filter>
     <Filter Include="Source Files\Audio Engine">
       <UniqueIdentifier>{268709e6-c977-4f7b-a188-e2b11ca9e3b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Optimizations">
+      <UniqueIdentifier>{0dca8719-eb90-49e6-8659-d537b14d2ad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Optimizations\Instances">
+      <UniqueIdentifier>{4bab4039-d4ee-43a8-bbea-631e99de1a4d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -256,7 +259,7 @@
       <Filter>Source Files\Game\Scripting\Manager\Ped</Filter>
     </ClCompile>
     <ClCompile Include="Instances.cpp">
-      <Filter>Source Files\Rendering Engine\Drawables\Instances</Filter>
+      <Filter>Source Files\Rendering Engine\Optimizations\Instances</Filter>
     </ClCompile>
     <ClCompile Include="Bounds.cpp">
       <Filter>Source Files\Physic Engine\Bounds</Filter>
@@ -414,7 +417,7 @@
       <Filter>Source Files\Game\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="Instances.h">
-      <Filter>Source Files\Rendering Engine\Drawables\Instances</Filter>
+      <Filter>Source Files\Rendering Engine\Optimizations\Instances</Filter>
     </ClInclude>
     <ClInclude Include="Bounds.h">
       <Filter>Source Files\Physic Engine\Bounds</Filter>
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="Wav.h">
       <Filter>Source Files\Audio Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="FrustrumCulling.h">
+      <Filter>Source Files\Rendering Engine\Optimizations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

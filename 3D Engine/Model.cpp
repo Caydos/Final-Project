@@ -196,6 +196,7 @@ bool Models::Model::LoadFromFile(const char* _name)
 			this->objects.push_back(obj);
 		}
 	}
+	this->CalculateBoundingBox();
 	return true;
 }
 

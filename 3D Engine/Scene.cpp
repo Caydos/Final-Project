@@ -202,6 +202,7 @@ void Scene::Tick(GameData* _gameData)
 
 	_gameData->window.Clear(clearColor);
 	Scene::World::Render(_gameData);
+
 	if (!Editor::IsDisplayed())
 	{
 		TexturePicker::Inputs(_gameData);
