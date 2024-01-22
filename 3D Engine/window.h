@@ -86,7 +86,6 @@ public:
 			instance->firstMouse = false;
 		}
 
-		//std::cout << instance->lastX << std::endl;
 		instance->xoffset = xpos - instance->lastX;
 		instance->yoffset = instance->lastY - ypos; // reversed since y-coordinates go from bottom to top
 

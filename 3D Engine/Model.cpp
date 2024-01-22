@@ -19,6 +19,7 @@ void Models::Model::InsertObject(Cube _object)
 	float scale = this->GetScale();
 	_object.SetScale(scale, scale, scale);
 	_object.SetId(this->objects.size());
+	_object.SetAttachment(this->GetMatrix());
 	this->objects.push_back(_object);
 }
 
@@ -211,17 +212,6 @@ void Models::Model::Save()
 	}
 
 	Files::Create(MODEL_DIRECTORY, this->GetName().c_str(), MODEL_FILE_EXTENSION, jsonObject.dump().c_str());
-}
-
-void Models::Model::ApplyOffset(glm::vec3 _offset)
-{
-	glm::vec3 oldOffset = this->GetOffset();
-	for (auto& object : this->objects)
-	{
-		object.SetPosition(object.GetPosition() - oldOffset);
-		object.SetPosition(object.GetPosition() + _offset);
-	}
-	this->SetOffset(_offset);
 }
 
 void Models::Model::LoadInstances()

@@ -272,12 +272,6 @@ void Editor::Menu(GameData* _gameData)
 								it->SetVisible(visible);
 							}
 
-							ImGui::Text("Offset : ");
-							glm::vec3 offset = it->GetOffset();
-							if (ImGui::DragFloat3((std::string("##") + std::to_string((int)it)).c_str(), &offset.x, it->GetScale()))
-							{
-								it->ApplyOffset(offset);
-							}
 							ImGui::TreePop();
 						}
 						ImGui::NewLine();
@@ -399,6 +393,19 @@ void Editor::Tick(GameData* _gameData)
 		{
 			Cube* hit = activeComponent->GetRaycastHit();
 			activeComponent->RemoveObject(hit);
+			inputClock.Restart();
+		}
+	}
+	if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT) && inputClock.GetElapsedTime() > 125)
+	{
+		if (_gameData->window.yScroll > 0)
+		{
+			activeComponent->Move(glm::vec3(.0f, .0f, activeComponent->GetScale()));
+			inputClock.Restart();
+		}
+		else if (_gameData->window.yScroll < 0)
+		{
+			activeComponent->Move(glm::vec3(.0f, .0f, -activeComponent->GetScale()));
 			inputClock.Restart();
 		}
 	}

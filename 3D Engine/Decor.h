@@ -25,10 +25,7 @@ namespace Decors
 		bool LoadFromFile(const char* _name) override;
 		void Save() override;
 
-		void ApplyOffset(glm::vec3 _offset) override;
-
 		void LoadInstances() override;
-
 
 		void CalculateBoundingBox() override;
 

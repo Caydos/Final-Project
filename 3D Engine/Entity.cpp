@@ -35,11 +35,6 @@ void Entities::Entity::Save()
 {
 }
 
-void Entities::Entity::ApplyOffset(glm::vec3 _offset)
-{
-}
-
-
 void Entities::Entity::LoadInstances()
 {
 }

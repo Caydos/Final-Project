@@ -300,24 +300,58 @@ glm::mat4* Scene::World::Component::GetMatrix()
 	return this->matrix;
 }
 
-bool Scene::World::Component::IsUsingOffsets()
+glm::vec3 Scene::World::Component::GetPosition()
 {
-	return this->useOffset;
+	return this->position;
 }
 
-void Scene::World::Component::SetOffsetUsage(bool _usage)
+void Scene::World::Component::SetPosition(glm::vec3 _position)
 {
-	this->useOffset = _usage;
+	this->position = _position;
+	*this->matrix = glm::mat4(1.0f);
+	*this->matrix = glm::translate(*this->matrix, _position);
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(this->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+
+	this->SetUpdated(true);
 }
 
-glm::vec3 Scene::World::Component::GetOffset()
+void Scene::World::Component::Move(glm::vec3 _offset)
 {
-	return this->offset;
+	this->position += _offset;
+	*this->matrix = glm::translate(*this->matrix, _offset);
+
+	this->SetUpdated(true);
 }
 
-void Scene::World::Component::SetOffset(glm::vec3 _offset)
+glm::vec3 Scene::World::Component::GetRotation()
 {
-	this->offset = _offset;
+	return this->rotation;
+}
+
+void Scene::World::Component::SetRotation(glm::vec3 _rotation)
+{
+	this->rotation = _rotation;
+	*this->matrix = glm::mat4(1.0f);
+	*this->matrix = glm::translate(*this->matrix, this->position);
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(this->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+
+	this->SetUpdated(true);
+}
+
+void Scene::World::Component::Rotate(glm::vec3 _rotation)
+{
+	this->rotation += _rotation;
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	*this->matrix = glm::rotate(*this->matrix, glm::radians(_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	this->SetUpdated(true);
 }
 
 bool Scene::World::Component::IsInstanced()
@@ -348,4 +382,15 @@ Bounds::Box Scene::World::Component::GetBoundingBox()
 void Scene::World::Component::SetBoundingBox(Bounds::Box _box)
 {
 	this->boundingBox = _box;
+}
+
+bool Scene::World::Component::IsUpdated()
+{
+	return this->updated;
+}
+
+void Scene::World::Component::SetUpdated(bool _updated)
+{
+	this->updated = _updated;
+	std::cout << "Updated" << std::endl;
 }

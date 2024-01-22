@@ -45,7 +45,7 @@ namespace Instances
 		{
 			GameData* gameData = GetGameData();
 
-			this->shader->use();
+			//this->shader->use();
 
 			this->shader->setBool("instanceUsage", true);
 

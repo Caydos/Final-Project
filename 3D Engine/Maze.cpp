@@ -42,7 +42,7 @@ void Maze::Generate()
 						cell.ground = new Decors::Decor("Ground");
 						cell.ground->LoadFromFile("Ground");
 						Scene::World::InsertComponent(cell.ground);
-						cell.ground->ApplyOffset(glm::vec3(CELL_W * column + BRICK_W + chunkColumn * CHUNK_W, 0 + CELL_W * stageNb, CELL_W * line + BRICK_W + chunkLine * CHUNK_W));
+						//cell.ground->ApplyOffset(glm::vec3(CELL_W * column + BRICK_W + chunkColumn * CHUNK_W, 0 + CELL_W * stageNb, CELL_W * line + BRICK_W + chunkLine * CHUNK_W));
 						cell.ground->LoadInstances();
 						cell.ground->SetInstanced(true);
 						if (chunk.type == GARDEN && stageNb != 0 || chunk.type == EXTERIOR)
@@ -56,7 +56,7 @@ void Maze::Generate()
 							cell.roof = new Decors::Decor("Ground");
 							cell.roof->LoadFromFile("Ground");
 							Scene::World::InsertComponent(cell.roof);
-							cell.roof->ApplyOffset(glm::vec3(CELL_W * column + BRICK_W + chunkColumn * CHUNK_W, CELL_W / 2 + CELL_W * stageNb, CELL_W * line + BRICK_W + chunkLine * CHUNK_W));
+							//cell.roof->ApplyOffset(glm::vec3(CELL_W * column + BRICK_W + chunkColumn * CHUNK_W, CELL_W / 2 + CELL_W * stageNb, CELL_W * line + BRICK_W + chunkLine * CHUNK_W));
 							cell.roof->LoadInstances();
 							cell.roof->SetInstanced(true);
 						}
@@ -75,7 +75,7 @@ void Maze::Generate()
 									wall.decor = new Decors::Decor("Wall");
 									wall.decor->LoadFromFile("Wall");
 									Scene::World::InsertComponent(wall.decor);
-									wall.decor->ApplyOffset(glm::vec3(CELL_W * column + BRICK_W / 2 + chunkColumn * CHUNK_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + CELL_W + chunkLine * CHUNK_W));
+									//wall.decor->ApplyOffset(glm::vec3(CELL_W * column + BRICK_W / 2 + chunkColumn * CHUNK_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + CELL_W + chunkLine * CHUNK_W));
 									wall.decor->LoadInstances();
 									wall.decor->SetInstanced(true);
 								}
@@ -84,7 +84,7 @@ void Maze::Generate()
 									wall.decor = new Decors::Decor("WallRot");
 									wall.decor->LoadFromFile("WallRot");
 									Scene::World::InsertComponent(wall.decor);
-									wall.decor->ApplyOffset(glm::vec3(CELL_W * column + BRICK_W / 2 + chunkColumn * CHUNK_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + chunkLine * CHUNK_W));
+									//wall.decor->ApplyOffset(glm::vec3(CELL_W * column + BRICK_W / 2 + chunkColumn * CHUNK_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + chunkLine * CHUNK_W));
 									wall.decor->LoadInstances();
 									wall.decor->SetInstanced(true);
 								}
@@ -124,7 +124,7 @@ void Maze::Generate()
 									wallMissing.decor = new Decors::Decor("Wall");
 									wallMissing.decor->LoadFromFile("Wall");
 									Scene::World::InsertComponent(wallMissing.decor);
-									wallMissing.decor->ApplyOffset(glm::vec3(2.5 * column + BRICK_W / 2 + chunkColumn * CHUNK_W, BRICK_W + CELL_W * stageNb, 2.5 * line + BRICK_W + chunkLine * CHUNK_W));
+									//wallMissing.decor->ApplyOffset(glm::vec3(2.5 * column + BRICK_W / 2 + chunkColumn * CHUNK_W, BRICK_W + CELL_W * stageNb, 2.5 * line + BRICK_W + chunkLine * CHUNK_W));
 									wallMissing.decor->LoadInstances();
 									wallMissing.decor->SetInstanced(true);
 								}
@@ -133,7 +133,7 @@ void Maze::Generate()
 									wallMissing.decor = new Decors::Decor("WallRot"); //LEFT WALL
 									wallMissing.decor->LoadFromFile("WallRot");
 									Scene::World::InsertComponent(wallMissing.decor);
-									wallMissing.decor->ApplyOffset(glm::vec3(2.5 * column + BRICK_W / 2 + chunkColumn * CHUNK_W - 2.5, BRICK_W + CELL_W * stageNb, 2.5 * line + BRICK_W + chunkLine * CHUNK_W));
+									//wallMissing.decor->ApplyOffset(glm::vec3(2.5 * column + BRICK_W / 2 + chunkColumn * CHUNK_W - 2.5, BRICK_W + CELL_W * stageNb, 2.5 * line + BRICK_W + chunkLine * CHUNK_W));
 									wallMissing.decor->LoadInstances();
 									wallMissing.decor->SetInstanced(true);
 								}

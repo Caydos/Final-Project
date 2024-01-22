@@ -46,6 +46,15 @@ void Decors::Decor::Draw()
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
+	if (this->IsUpdated())
+	{
+		for (size_t i = 0; i < this->objects.size(); i++)
+		{
+			this->objects[i].Update();
+		}
+		this->CalculateBoundingBox();
+		this->LoadInstances();
+	}
 	if (this->IsInstanced())
 	{
 		for (size_t i = 0; i < instances.size(); i++)
@@ -234,23 +243,6 @@ void Decors::Decor::Save()
 
 	Files::Create(DECOR_DIRECTORY, this->GetName().c_str(), DECOR_FILE_EXTENSION, jsonObject.dump().c_str());
 }
-
-void Decors::Decor::ApplyOffset(glm::vec3 _offset)
-{
-	glm::vec3 oldOffset = this->GetOffset();
-	for (auto& object : this->objects)
-	{
-		object.SetPosition(object.GetPosition() - oldOffset);
-		object.SetPosition(object.GetPosition() + _offset);
-		if (object.GetLight() != nullptr)
-		{
-			object.GetLight()->SetPosition(object.GetPosition());
-		}
-	}
-	this->SetOffset(_offset);
-	this->CalculateBoundingBox();
-}
-
 
 void Decors::Decor::LoadInstances()
 {

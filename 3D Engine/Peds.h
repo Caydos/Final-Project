@@ -68,8 +68,8 @@ namespace Peds
 			if (this->GetModel() != nullptr)
 			{
 				std::cout << "offsetSetting " << _position.x << " " << _position.y << " " << _position.z << std::endl;
-				this->GetModel()->SetOffsetUsage(true);
-				this->GetModel()->ApplyOffset(this->position);
+				//this->GetModel()->SetOffsetUsage(true);
+				//this->GetModel()->ApplyOffset(this->position);
 			}
 		}
 	};

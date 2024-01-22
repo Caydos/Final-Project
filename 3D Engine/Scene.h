@@ -77,11 +77,12 @@ namespace Scene
 
 			glm::mat4* GetMatrix();
 
-			bool IsUsingOffsets();
-			void SetOffsetUsage(bool _usage = true);
-			glm::vec3 GetOffset();
-			void SetOffset(glm::vec3 _offset);
-			virtual void ApplyOffset(glm::vec3 _offset) = 0;
+			glm::vec3 GetPosition();
+			void SetPosition(glm::vec3 _position);
+			void Move(glm::vec3 _offset);
+			glm::vec3 GetRotation();
+			void SetRotation(glm::vec3 _rotation);
+			void Rotate(glm::vec3 _rotation);
 
 			bool IsInstanced();
 			void SetInstanced(bool _instanced);
@@ -93,6 +94,9 @@ namespace Scene
 			Bounds::Box GetBoundingBox();
 			void SetBoundingBox(Bounds::Box _box);
 
+
+			bool IsUpdated();
+			void SetUpdated(bool _updated);
 		private:
 			Cube* raycastHit;
 
@@ -105,11 +109,12 @@ namespace Scene
 
 			glm::mat4* matrix;
 			bool useOffset;
-			glm::vec3 offset;
+			glm::vec3 position;
 			glm::vec3 rotation;
 
 			bool showBounds;
 			Bounds::Box boundingBox;
+			bool updated;
 		};
 
 		void InsertComponent(Component* _component);

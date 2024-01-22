@@ -37,7 +37,7 @@ void Collisions::Tick()
 
 		objects[1] = new Decors::Decor("SecondBox");
 		objects[1]->LoadFromFile("SecondBox");
-		objects[1]->ApplyOffset(glm::vec3(1.0f, .0f, .0f));
+		//objects[1]->ApplyOffset(glm::vec3(1.0f, .0f, .0f));
 		objects[1]->CalculateBoundingBox();
 		objects[1]->ShowBounds(true);
 		Scene::World::InsertComponent(objects[1]);
