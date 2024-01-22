@@ -166,6 +166,7 @@
     <ClCompile Include="ObjectsMenu.cpp" />
     <ClCompile Include="Peds.cpp" />
     <ClCompile Include="Reading.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Sync.cpp" />
     <ClCompile Include="WorldScene.cpp" />
     <ClCompile Include="Clock.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="RayCasting.h" />
     <ClInclude Include="Reading.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="Sync.h" />
     <ClInclude Include="TexturePicker.h" />
     <ClInclude Include="Vectors.h" />

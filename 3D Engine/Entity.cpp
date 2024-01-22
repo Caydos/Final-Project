@@ -39,14 +39,6 @@ void Entities::Entity::ApplyOffset(glm::vec3 _offset)
 {
 }
 
-bool Entities::Entity::IsInstanced()
-{
-	return false;
-}
-
-void Entities::Entity::SetInstanced(bool _instanced)
-{
-}
 
 void Entities::Entity::LoadInstances()
 {
@@ -57,10 +49,6 @@ void Entities::Entity::CalculateBoundingBox()
 {
 }
 
-Bounds::Box Entities::Entity::GetBoundingBox()
-{
-	return Bounds::Box();
-}
 
 
 static bool initialized = false;

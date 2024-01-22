@@ -75,33 +75,41 @@ namespace Scene
 			float GetScale();
 			void SetScale(float _scale);
 
+			glm::mat4* GetMatrix();
+
 			bool IsUsingOffsets();
 			void SetOffsetUsage(bool _usage = true);
 			glm::vec3 GetOffset();
 			void SetOffset(glm::vec3 _offset);
 			virtual void ApplyOffset(glm::vec3 _offset) = 0;
-			virtual bool IsInstanced() = 0;
-			virtual void SetInstanced(bool _instanced) = 0;
+
+			bool IsInstanced();
+			void SetInstanced(bool _instanced);
 			virtual void LoadInstances() = 0;
 
 			bool AreBoundsVisible();
 			void ShowBounds(bool _displayed);
 			virtual void CalculateBoundingBox() = 0;
-			virtual Bounds::Box GetBoundingBox() = 0;
-
+			Bounds::Box GetBoundingBox();
+			void SetBoundingBox(Bounds::Box _box);
 
 		private:
 			Cube* raycastHit;
 
 			bool visible;
+			bool instanced;
+
 			std::string name;
 			ComponentType type;
 			float scale;
 
+			glm::mat4* matrix;
 			bool useOffset;
 			glm::vec3 offset;
+			glm::vec3 rotation;
 
 			bool showBounds;
+			Bounds::Box boundingBox;
 		};
 
 		void InsertComponent(Component* _component);

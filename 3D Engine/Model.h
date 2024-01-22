@@ -24,19 +24,13 @@ namespace Models
 		void Save() override;
 
 		void ApplyOffset(glm::vec3 _offset) override;
-		bool IsInstanced() override;
-		void SetInstanced(bool _instanced) override;
 		void LoadInstances() override;
 
 		void CalculateBoundingBox() override;
-		Bounds::Box GetBoundingBox() override;
 	private:
 		std::vector<Cube> objects;
 		std::vector<glm::mat4*> models;
 		std::vector<Instances::Cube> instances;
-		bool instanced;
-
-		Bounds::BoundingBox boundingBox;
 	};
 }
 

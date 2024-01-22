@@ -26,12 +26,9 @@ namespace Entities
 		void Save() override;
 
 		void ApplyOffset(glm::vec3 _offset) override;
-		bool IsInstanced() override;
-		void SetInstanced(bool _instanced) override;
 		void LoadInstances() override;
 
 		void CalculateBoundingBox() override;
-		Bounds::Box GetBoundingBox() override;
 
 		Skeleton* GetSkeleton()
 		{

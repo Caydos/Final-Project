@@ -26,16 +26,23 @@ enum Gamestate
 #include "Window.h"
 #include "Shader.h"
 #include "Logger.h"
+#include "Settings.h"
+
 struct GameData
 {
 	float dt;
 	Camera* camera;
+
 	float resolution[2];
 	Window window;
+
 	Shaders::Shader* shaders[3];
 	Shaders::Shader* actualShader;
+
 	Gamestate gameState;
 	void (*gameStates[5])(GameData* _gameData);
+
+	Settings::Profile settings;
 };
 
 GameData* GetGameData();

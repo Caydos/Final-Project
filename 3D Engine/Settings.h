@@ -1,10 +1,18 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
+struct GameData;
 
+#define SETTINGS_DIRECTORY "../"
+#define SETTINGS_FILE_EXTENSION ".json"
 
-struct Settings
+namespace Settings
 {
-	float sentivity;
-};
+	struct Profile
+	{
+		float sentivity;
+	};
+	void Load(GameData* _gameData);
+	void Save(GameData* _gameData);
+}
 
 #endif // !SETTINGS_H

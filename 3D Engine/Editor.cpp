@@ -54,6 +54,27 @@ void Editor::Menu(GameData* _gameData)
 
 	if (ImGui::BeginMainMenuBar())
 	{
+		if (ImGui::BeginMenu("Tool"))
+		{
+			if (ImGui::BeginMenu("Settings##ToolBar"))
+			{
+				if (ImGui::SliderFloat("Sensitivity##ToolBar", &_gameData->settings.sentivity, 0.01f, 1.5f))
+				{
+					_gameData->camera->MouseSensitivity = _gameData->settings.sentivity;
+				}
+				if (ImGui::MenuItem("Save##ToolBar"))
+				{
+					Settings::Save(_gameData);
+				}
+				ImGui::EndMenu();
+			}
+			if (ImGui::MenuItem("Close##ToolBar"))
+			{
+				_gameData->window.Close();
+			}
+			ImGui::EndMenu();
+
+		}
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::BeginMenu("New", ""))
@@ -234,7 +255,7 @@ void Editor::Menu(GameData* _gameData)
 					}
 					if (node_open)
 					{
-						if (ImGui::Button((std::string("Select##") + std::to_string((int) it)).c_str()))
+						if (ImGui::Button((std::string("Select##") + std::to_string((int)it)).c_str()))
 						{
 							activeComponent = it;
 						}
@@ -354,7 +375,7 @@ void Editor::Tick(GameData* _gameData)
 	{
 		rayCastHit = activeComponent->Raycast();
 	}
-	if (!Editor::IsDisplayed() && !TexturePicker::IsActive() 
+	if (!Editor::IsDisplayed() && !TexturePicker::IsActive()
 		&& activeComponent != nullptr && rayCastHit != nullptr
 		&& activeComponent->IsVisible())
 	{

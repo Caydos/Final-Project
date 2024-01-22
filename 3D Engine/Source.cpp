@@ -18,7 +18,6 @@ GameData* GetGameData() { return &gameData; }
 
 int main()
 {
-	//Audio::Initialize();
 	bool running = true;
 	Network::Events::CreateEvents();
 	std::thread eventThread(&Network::Events::Thread, running);
@@ -30,6 +29,8 @@ int main()
 	gameData.camera = &cam;
 	gameData.resolution[0] = SCREEN_WIDTH;
 	gameData.resolution[1] = SCREEN_HEIGHT;
+	Settings::Load(&gameData);
+
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();

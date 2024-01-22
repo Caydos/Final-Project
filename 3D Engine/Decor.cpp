@@ -19,7 +19,7 @@ void Decors::Decor::InsertObject(Cube _object)
 	float scale = this->GetScale();
 	_object.SetScale(scale, scale, scale);
 	_object.SetId(this->objects.size());
-
+	_object.SetAttachment(this->GetMatrix());
 	this->objects.push_back(_object);
 }
 
@@ -251,15 +251,6 @@ void Decors::Decor::ApplyOffset(glm::vec3 _offset)
 	this->CalculateBoundingBox();
 }
 
-bool Decors::Decor::IsInstanced()
-{
-	return this->instanced;
-}
-
-void Decors::Decor::SetInstanced(bool _instanced)
-{
-	this->instanced = _instanced;
-}
 
 void Decors::Decor::LoadInstances()
 {
@@ -280,12 +271,6 @@ void Decors::Decor::CalculateBoundingBox()
 		globalMin = glm::min(globalMin, localMin);
 		globalMax = glm::max(globalMax, localMax);
 	}
-	std::cout << globalMin.x << " " << globalMin.y << " " << globalMin.z << " " << std::endl;
-	std::cout << globalMax.x << " " << globalMax.y << " " << globalMax.z << " " << std::endl;
-	this->boundingBox.SetBox({ globalMin, globalMax });
-}
 
-Bounds::Box Decors::Decor::GetBoundingBox()
-{
-	return this->boundingBox.GetBox();
+	this->SetBoundingBox({ globalMin, globalMax });
 }

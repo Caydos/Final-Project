@@ -88,7 +88,6 @@ void Scene::Initialize(GameData* _gameData)
 
 	TexturePicker::Initialize(_gameData, &materials);
 	//Maze::Generate();
-	Crosshairs::Get()->Initialize();
 
 	initialized = true;
 }
@@ -246,11 +245,14 @@ Scene::World::Component::Component()
 	this->scale = 1.0f;
 	this->visible = true;
 	this->raycastHit = nullptr;
-	useOffset = false;
+	this->useOffset = false;
+	this->matrix = new glm::mat4;
+	*this->matrix = glm::mat4(1.0f);
 }
 
 Scene::World::Component::~Component()
 {
+	delete this->matrix;
 }
 
 bool Scene::World::Component::IsVisible()
@@ -293,6 +295,11 @@ void Scene::World::Component::SetScale(float _scale)
 	this->scale = _scale;
 }
 
+glm::mat4* Scene::World::Component::GetMatrix()
+{
+	return this->matrix;
+}
+
 bool Scene::World::Component::IsUsingOffsets()
 {
 	return this->useOffset;
@@ -313,6 +320,16 @@ void Scene::World::Component::SetOffset(glm::vec3 _offset)
 	this->offset = _offset;
 }
 
+bool Scene::World::Component::IsInstanced()
+{
+	return this->instanced;
+}
+
+void Scene::World::Component::SetInstanced(bool _instanced)
+{
+	this->instanced = _instanced;
+}
+
 
 bool Scene::World::Component::AreBoundsVisible()
 {
@@ -321,4 +338,14 @@ bool Scene::World::Component::AreBoundsVisible()
 void Scene::World::Component::ShowBounds(bool _displayed)
 {
 	this->showBounds = _displayed;
+}
+
+Bounds::Box Scene::World::Component::GetBoundingBox()
+{
+	return this->boundingBox;
+}
+
+void Scene::World::Component::SetBoundingBox(Bounds::Box _box)
+{
+	this->boundingBox = _box;
 }

@@ -145,6 +145,9 @@
     <Filter Include="Source Files\Rendering Engine\Optimizations\Instances">
       <UniqueIdentifier>{4bab4039-d4ee-43a8-bbea-631e99de1a4d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utils\Settings">
+      <UniqueIdentifier>{9ad962b9-e469-4307-a610-0224068cac80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -269,6 +272,9 @@
     </ClCompile>
     <ClCompile Include="Audio.cpp">
       <Filter>Source Files\Audio Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Source Files\Utils\Settings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -436,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="FrustrumCulling.h">
       <Filter>Source Files\Rendering Engine\Optimizations</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Source Files\Utils\Settings</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

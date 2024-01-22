@@ -224,16 +224,6 @@ void Models::Model::ApplyOffset(glm::vec3 _offset)
 	this->SetOffset(_offset);
 }
 
-bool Models::Model::IsInstanced()
-{
-	return this->instanced;
-}
-
-void Models::Model::SetInstanced(bool _instanced)
-{
-	this->instanced = _instanced;
-}
-
 void Models::Model::LoadInstances()
 {
 	this->instances = Instances::Generate(&this->objects);
@@ -252,12 +242,6 @@ void Models::Model::CalculateBoundingBox()
 		globalMin = glm::min(globalMin, localMin);
 		globalMax = glm::max(globalMax, localMax);
 	}
-	std::cout << globalMin.x << " " << globalMin.y << " " << globalMin.z << " " << std::endl;
-	std::cout << globalMax.x << " " << globalMax.y << " " << globalMax.z << " " << std::endl;
-	this->boundingBox.SetBox({ globalMin, globalMax });
-}
 
-Bounds::Box Models::Model::GetBoundingBox()
-{
-	return this->boundingBox.GetBox();
+	this->SetBoundingBox({ globalMin, globalMax });
 }
