@@ -54,6 +54,7 @@ void Decors::Decor::Draw()
 		}
 		this->CalculateBoundingBox();
 		this->LoadInstances();
+		this->SetUpdated(false);
 	}
 	if (this->IsInstanced())
 	{
@@ -182,7 +183,7 @@ bool Decors::Decor::LoadFromFile(const char* _name)
 		if (strcmp(typeStr.c_str(), "Cube") == 0)
 		{
 			Cube obj;
-			obj.Initialize();
+			obj.GenerateGraphicsBuffers();
 
 			if (object.contains("position") && !object["position"].is_null())
 			{
@@ -224,7 +225,7 @@ bool Decors::Decor::LoadFromFile(const char* _name)
 				obj.SetLight(light);
 			}
 			obj.BindShader(gameData->shaders[Shaders::WORLD_OBJECT]);
-			this->objects.push_back(obj);
+			this->InsertObject(obj);
 		}
 	}
 	this->CalculateBoundingBox();

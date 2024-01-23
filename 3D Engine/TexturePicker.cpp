@@ -57,7 +57,7 @@ void TexturePicker::Initialize(GameData* _gameData, std::vector<Material>* _mate
 		hotBar[i].SetColor(UIColor);
 		hotBar[i].SetOpacity(0.8f);
 
-		hotBarCubes[i].Initialize();
+		hotBarCubes[i].GenerateGraphicsBuffers();
 		hotBarCubes[i].BindShader(_gameData->shaders[Shaders::UI_OBJECT]);
 		//hotBarCubes[i].SetMaterial(&_materials->at(i), true);
 		hotBarCubes[i].SetScale(defaultHotBarCubeScale, defaultHotBarCubeScale, defaultHotBarCubeScale);
@@ -74,7 +74,7 @@ void TexturePicker::Initialize(GameData* _gameData, std::vector<Material>* _mate
 		invColliders[index].SetTexture(((*_materials)[index].GetTexture()));
 		invColliders[index].SetScale(scale.x * 0.1, scale.x * 0.1, 0.0f);
 
-		invCubes[index].Initialize();
+		invCubes[index].GenerateGraphicsBuffers();
 		invCubes[index].BindShader(_gameData->shaders[Shaders::UI_OBJECT]);
 
 		invCubes[index].SetMaterial(&_materials->at(index), true);

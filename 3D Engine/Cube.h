@@ -26,60 +26,8 @@ public:
 
 	}
 
-	void Initialize(void)
+	void GenerateGraphicsBuffers(void)
 	{
-		this->vertexCount = CUBE_VERTEX_COUNT;
-		float vertices[CUBE_VERTEX_COUNT] = {
-			//front face			//Texture				//Lightning normal
-			-0.5f, -0.5f,  0.5f,	0.0f, 1.0f,				0.0f,  0.0f,  1.0f,
-			 0.5f, -0.5f,  0.5f,	1.0f / 6, 1.0f,			0.0f,  0.0f,  1.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f / 6, 0.0f,			0.0f,  0.0f,  1.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f / 6, 0.0f,			0.0f,  0.0f,  1.0f,
-			-0.5f,  0.5f,  0.5f,	0.0f, 0.0f,				0.0f,  0.0f,  1.0f,
-			-0.5f, -0.5f,  0.5f,	0.0f, 1.0f,				0.0f,  0.0f,  1.0f,
-
-			 // right face
-			 0.5f, -0.5f,  0.5f,	1.0f / 6, 1.0f,			1.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,	1.0f / 6 * 2, 0.0f,		1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,	1.0f / 6 * 2, 0.0f,		1.0f,  0.0f,  0.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f / 6, 0.0f,			1.0f,  0.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,	1.0f / 6, 1.0f,			1.0f,  0.0f,  0.0f,
-	
-			//back face
-			 0.5f, -0.5f, -0.5f,	1.0f / 6 * 3, 1.0f,		0.0f,  0.0f, -1.0f,
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f,  0.0f, -1.0f,
-			-0.5f,  0.5f, -0.5f,	1.0f / 6 * 4, 0.0f,		0.0f,  0.0f, -1.0f,
-			-0.5f,  0.5f, -0.5f,	1.0f / 6 * 4, 0.0f,		0.0f,  0.0f, -1.0f,
-			 0.5f,  0.5f, -0.5f,	1.0f / 6 * 3, 0.0f,		0.0f,  0.0f, -1.0f,
-			 0.5f, -0.5f, -0.5f,	1.0f / 6 * 3, 1.0f,		0.0f,  0.0f, -1.0f,
-			
-			// left face
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		-1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f,	1.0f / 6 * 3, 1.0f,		-1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f,	1.0f / 6 * 3, 0.0f,		-1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f,  0.5f,	1.0f / 6 * 3, 0.0f,		-1.0f,  0.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,	1.0f / 6 * 2, 0.0f,		-1.0f,  0.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		-1.0f,  0.0f,  0.0f,
-			
-			// top face
-			-0.5f,  0.5f,  0.5f,	1.0f / 6 * 5, 1.0f,		0.0f,  1.0f,  0.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f / 6 * 6, 1.0f,		0.0f,  1.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,	1.0f / 6 * 6, 0.0f,		0.0f,  1.0f,  0.0f,
-			 0.5f,  0.5f, -0.5f,	1.0f / 6 * 6, 0.0f,		0.0f,  1.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,	1.0f / 6 * 5, 0.0f,		0.0f,  1.0f,  0.0f,			
-			-0.5f,  0.5f,  0.5f,	1.0f / 6 * 5, 1.0f,		0.0f,  1.0f,  0.0f,
-			
-			 //bottom
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f,  0.0f,
-			 0.5f, -0.5f, -0.5f,	1.0f / 6 * 5, 1.0f,		0.0f, -1.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,	1.0f / 6 * 5, 0.0f,		0.0f, -1.0f,  0.0f,
-			 0.5f, -0.5f,  0.5f,	1.0f / 6 * 5, 0.0f,		0.0f, -1.0f,  0.0f,
-			-0.5f, -0.5f,  0.5f,	1.0f / 6 * 4, 0.0f,		0.0f, -1.0f,  0.0f,
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f,  0.0f,
-
-		};
-		std::memcpy(this->vertices, vertices, this->vertexCount * sizeof(float));
 		SetInitialize(true);
 
 		glGenVertexArrays(1, this->GetVAOAddress());
@@ -108,11 +56,13 @@ public:
 	void SetAttachment(glm::mat4* _attachment)
 	{
 		this->attachment = _attachment;
+		this->RemoveGraphicsBuffers();
 		this->SetUpdated(true);
 	}
 	void RemoveAttachment()
 	{
 		this->attachment = nullptr;
+		this->GenerateGraphicsBuffers();
 		this->SetUpdated(true);
 	}
 
@@ -172,6 +122,12 @@ public:
 
 	void Draw() override
 	{
+		if (!this->IsInitialized())
+		{
+			Logger::Write("Cube graphics not initalized\n");
+			this->GenerateGraphicsBuffers();
+			return;
+		}
 		int mode = 0;
 		Texture* texture = this->GetTexture();
 		Colors::Color color = this->GetColor();
@@ -201,7 +157,11 @@ public:
 
 		// create transformations
 		glBindVertexArray(this->GetVAO());
-		this->Update();
+
+		if (this->IsUpdated())
+		{
+			this->Update();
+		}
 		shader->setMat4("model", this->model);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -209,23 +169,16 @@ public:
 
 	void Update()
 	{
-		if (this->IsUpdated())
-		{
-			this->model = (this->attachment != nullptr) ? *this->attachment : glm::mat4(1.0f);
-			this->model = glm::translate(this->model, this->GetPosition());
-			/*(float)glfwGetTime()*/
-			glm::vec3 rotation = this->GetRotation();
-			this->model = glm::rotate(this->model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-			this->model = glm::rotate(this->model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-			this->model = glm::rotate(this->model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-			this->model = glm::scale(this->model, this->GetScale());
-			this->SetUpdated(false);
-		}
+		this->model = (this->attachment != nullptr) ? *this->attachment : glm::mat4(1.0f);
+		this->model = glm::translate(this->model, this->GetPosition());
+		/*(float)glfwGetTime()*/
+		glm::vec3 rotation = this->GetRotation();
+		this->model = glm::rotate(this->model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		this->model = glm::rotate(this->model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		this->model = glm::rotate(this->model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		this->model = glm::scale(this->model, this->GetScale());
+		this->SetUpdated(false);
 	}
-
-	float GetDurability() { return this->durability; }
-	void SetDurability(float _durability) { this->durability = _durability; }
-	void AdjustDurability(float _adjustment) { this->durability += _adjustment; }
 
 
 	float* GetVertices()
@@ -284,13 +237,61 @@ public:
 private:
 	glm::mat4 model;
 	glm::mat4* attachment;
-	float durability;
 	Lightning::Light* light;
 	Colors::Color color;
 	Material* material;
 	bool lightDependent;
-	float vertices[CUBE_VERTEX_COUNT];
-	int vertexCount;
+	float vertices[CUBE_VERTEX_COUNT] = {
+		//front face			//Texture				//Lightning normal
+		-0.5f, -0.5f, 0.5f,		0.0f, 1.0f,				0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			0.0f, 0.0f, 1.0f,
+		0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			0.0f, 0.0f, 1.0f,
+		0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			0.0f, 0.0f, 1.0f,
+		-0.5f, 0.5f, 0.5f,		0.0f, 0.0f,				0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f,		0.0f, 1.0f,				0.0f, 0.0f, 1.0f,
+
+		// right face
+		0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,		1.0f / 6 * 2, 1.0f,		1.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		1.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		1.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			1.0f, 0.0f, 0.0f,
+
+		//back face
+		0.5f, -0.5f, -0.5f,		1.0f / 6 * 3, 1.0f,		0.0f, 0.0f, -1.0f,
+		-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, 0.0f, -1.0f,
+		-0.5f, 0.5f, -0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, 0.0f, -1.0f,
+		-0.5f, 0.5f, -0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, 0.0f, -1.0f,
+		0.5f, 0.5f, -0.5f,		1.0f / 6 * 3, 0.0f,		0.0f, 0.0f, -1.0f,
+		0.5f, -0.5f, -0.5f,		1.0f / 6 * 3, 1.0f,		0.0f, 0.0f, -1.0f,
+
+		// left face
+		-0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		-1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f,		1.0f / 6 * 3, 1.0f,		-1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f,		1.0f / 6 * 3, 0.0f,		-1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f,		1.0f / 6 * 3, 0.0f,		-1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		-1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		-1.0f, 0.0f, 0.0f,
+
+		// top face
+		-0.5f, 0.5f, 0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f,		1.0f / 6 * 6, 1.0f,		0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f,		1.0f / 6 * 6, 0.0f,		0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f,		1.0f / 6 * 6, 0.0f,		0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, 1.0f, 0.0f,
+
+		//bottom
+		-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f, 0.0f,
+
+	};
+	int vertexCount = CUBE_VERTEX_COUNT;
 	int id;
 
 };

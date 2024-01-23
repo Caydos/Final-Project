@@ -81,5 +81,6 @@ namespace Instances
 
 	std::vector<Cube> Generate(std::vector<::Cube>* _objects);
 
+
 }
 #endif // !INSTANCES_H

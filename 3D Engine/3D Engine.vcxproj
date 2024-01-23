@@ -148,6 +148,7 @@
     <ClCompile Include="..\Libs\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="..\Libs\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="Bounds.cpp" />
     <ClCompile Include="Collisions.cpp" />
     <ClCompile Include="Commands.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="..\Libs\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\Libs\IMGUI\imstb_truetype.h" />
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="Blocks.h" />
     <ClInclude Include="Bones.h" />
     <ClInclude Include="Bounds.h" />
     <ClInclude Include="Collisions.h" />

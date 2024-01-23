@@ -148,6 +148,9 @@
     <Filter Include="Source Files\Utils\Settings">
       <UniqueIdentifier>{9ad962b9-e469-4307-a610-0224068cac80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering Engine\Blocks">
+      <UniqueIdentifier>{61b29eda-86d2-468b-8842-64cca62f238c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -275,6 +278,9 @@
     </ClCompile>
     <ClCompile Include="Settings.cpp">
       <Filter>Source Files\Utils\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Blocks.cpp">
+      <Filter>Source Files\Rendering Engine\Blocks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -445,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="Settings.h">
       <Filter>Source Files\Utils\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Blocks.h">
+      <Filter>Source Files\Rendering Engine\Blocks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

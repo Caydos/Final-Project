@@ -26,7 +26,7 @@ public:
     {
         GameData* _gameData = GetGameData();
         Cube cube;
-        cube.Initialize();
+        cube.GenerateGraphicsBuffers();
         cube.SetColor(Colors::Black);
         cube.BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
         cube.SetAttachment(this->matrice);

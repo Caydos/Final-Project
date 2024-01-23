@@ -27,7 +27,19 @@ public:
 	}
 	~Drawable()
 	{
+	}
 
+	void RemoveGraphicsBuffers()
+	{
+		if (this->IsInitialized())
+		{
+			this->SetInitialize(false);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glDeleteBuffers(1, this->GetVBOAddress());
+
+			glBindVertexArray(0);
+			glDeleteVertexArrays(1, this->GetVAOAddress());
+		}
 	}
 
 	virtual void Draw() = 0;

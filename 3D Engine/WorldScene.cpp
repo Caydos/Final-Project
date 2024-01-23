@@ -4,10 +4,12 @@
 #include <algorithm>
 #include "Files.h"
 #include "FrustrumCulling.h"
+#include "Instances.h"
 
 static std::vector<Camera> cameras;
 static unsigned int focusedCamera = 0;
 static std::vector <Scene::World::Component*> components;
+
 static std::shared_mutex loadingMutex;
 static std::vector<Scene::World::Component*> loadingQueue;
 

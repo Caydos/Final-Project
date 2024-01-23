@@ -297,6 +297,7 @@ void Scene::World::Component::SetScale(float _scale)
 
 glm::mat4* Scene::World::Component::GetMatrix()
 {
+	std::cout << "Init matrix : " << this->matrix << std::endl;
 	return this->matrix;
 }
 

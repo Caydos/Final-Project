@@ -319,7 +319,7 @@ void Editor::Menu(GameData* _gameData)
 				Decors::Decor* decor = new Decors::Decor(filename);
 				Scene::World::InsertComponent(decor);
 				Cube testCube;
-				testCube.Initialize();
+				testCube.GenerateGraphicsBuffers();
 				testCube.SetColor(Colors::Black);
 				testCube.BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
 				decor->InsertObject(testCube);
@@ -332,7 +332,7 @@ void Editor::Menu(GameData* _gameData)
 				Models::Model* model = new Models::Model(filename);
 				Scene::World::InsertComponent(model);
 				Cube testCube;
-				testCube.Initialize();
+				testCube.GenerateGraphicsBuffers();
 				testCube.SetColor(Colors::Black);
 				testCube.BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
 				model->InsertObject(testCube);
@@ -381,7 +381,7 @@ void Editor::Tick(GameData* _gameData)
 			if (material != nullptr)
 			{
 				Cube insertedObj;
-				insertedObj.Initialize();
+				insertedObj.GenerateGraphicsBuffers();
 				insertedObj.BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
 				insertedObj.SetMaterial(material, true);
 				insertedObj.SetPosition(rayCastHit->GetPosition());

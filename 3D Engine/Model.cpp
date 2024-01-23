@@ -52,7 +52,7 @@ Cube* Models::Model::Raycast()
 	if (!ghostCube.IsInitialized())
 	{
 		GameData* gameData = GetGameData();
-		ghostCube.Initialize();
+		ghostCube.GenerateGraphicsBuffers();
 		ghostCube.BindShader(gameData->shaders[Shaders::WORLD_OBJECT]);
 		float scale = this->GetScale();
 		ghostCube.SetScale(scale, scale, scale);
@@ -153,7 +153,7 @@ bool Models::Model::LoadFromFile(const char* _name)
 		if (strcmp(typeStr.c_str(), "Cube") == 0)
 		{
 			Cube obj;
-			obj.Initialize();
+			obj.GenerateGraphicsBuffers();
 
 			if (object.contains("position") && !object["position"].is_null())
 			{
