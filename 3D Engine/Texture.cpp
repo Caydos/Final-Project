@@ -16,6 +16,7 @@ void Texture::LoadFromFile(const char* _path)
 	// set texture filtering parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 	stbi_set_flip_vertically_on_load(true);
 
 	unsigned char* data = stbi_load(_path, &this->width, &this->height, &this->nrChannels, 0);

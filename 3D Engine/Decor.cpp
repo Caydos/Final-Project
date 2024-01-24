@@ -82,7 +82,7 @@ Cube* Decors::Decor::Raycast()
 	if (!ghostCube.IsInitialized())
 	{
 		GameData* gameData = GetGameData();
-		ghostCube.Initialize();
+		ghostCube.GenerateGraphicsBuffers();
 		ghostCube.BindShader(gameData->shaders[Shaders::WORLD_OBJECT]);
 		float scale = this->GetScale();
 		ghostCube.SetScale(scale, scale, scale);
