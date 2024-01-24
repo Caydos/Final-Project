@@ -8,6 +8,7 @@
 #include "Decor.h"
 #include "Crosshair.h"
 #include "Maze.h"
+#include "Blocks.h"
 
 static bool initialized = false;
 static unsigned int FPVCam;
@@ -88,7 +89,7 @@ void Scene::Initialize(GameData* _gameData)
 
 	TexturePicker::Initialize(_gameData, &materials);
 	//Maze::Generate();
-
+	Blocks::Initialize();
 	initialized = true;
 }
 

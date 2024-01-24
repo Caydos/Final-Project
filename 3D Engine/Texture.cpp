@@ -25,12 +25,31 @@ void Texture::LoadFromFile(const char* _path)
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(data);
 	}
 	else
 	{
+		this->path = _path;
 		std::cout << "Unable to find texture at path : " << _path << std::endl;
 	}
-	stbi_image_free(data);
+}
+
+void Texture::Refresh()
+{
+	glBindTexture(GL_TEXTURE_2D, this->id);
+
+	unsigned char* data = stbi_load(this->path.c_str(), &this->width, &this->height, &this->nrChannels, 0);
+	if (data)
+	{
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(data);
+	}
+	else
+	{
+		std::cout << "Unable to find texture at path : " << this->path << std::endl;
+	}
 }
 
 Texture::Texture()
