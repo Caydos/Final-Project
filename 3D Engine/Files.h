@@ -11,6 +11,10 @@ namespace Files
 	std::vector<std::string> GetAllAtPath(const char* _path);
 	std::string GetFileContent(const char* _path);
 	void Create(const char* _path, const char* _name, const char* _extension, const char* _content);
+
+	char* GetFolderPath(const char* _searchTitle);
+	char* GetFilePath(const char* _filters);
+
 }
 
 #endif // !FILES_H

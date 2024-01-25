@@ -148,7 +148,9 @@
     <ClCompile Include="..\Libs\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="..\Libs\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Blocks.cpp" />
+    <ClCompile Include="BlockType.cpp" />
     <ClCompile Include="Bounds.cpp" />
     <ClCompile Include="Collisions.cpp" />
     <ClCompile Include="Commands.cpp" />

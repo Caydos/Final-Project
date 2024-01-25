@@ -14,7 +14,7 @@ namespace Decors
 	class Decor : public Scene::World::Component
 	{
 	public:
-		Decor(std::string _name);
+		Decor(std::string _name);                 
 		~Decor();
 
 		void Draw() override;

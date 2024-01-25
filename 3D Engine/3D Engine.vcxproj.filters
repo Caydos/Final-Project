@@ -151,6 +151,9 @@
     <Filter Include="Source Files\Rendering Engine\Blocks">
       <UniqueIdentifier>{61b29eda-86d2-468b-8842-64cca62f238c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering Engine\Blocks\Classes">
+      <UniqueIdentifier>{61682fc7-5654-4a5a-945d-0dfacbe524ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -281,6 +284,12 @@
     </ClCompile>
     <ClCompile Include="Blocks.cpp">
       <Filter>Source Files\Rendering Engine\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Source Files\Rendering Engine\Blocks\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockType.cpp">
+      <Filter>Source Files\Rendering Engine\Blocks\Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

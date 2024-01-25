@@ -76,3 +76,103 @@ void Files::Create(const char* _path, const char* _name, const char* _extension,
 		std::cerr << "Unable to open file: " << fileName << std::endl;
 	}
 }
+
+
+#include <tchar.h>
+#include <ShlObj_core.h>
+#include <atlcore.h>
+
+std::wstring GetProcessName()
+{
+	std::wstring wstrPath;
+	TCHAR buffer[MAX_PATH] = { 0 };  // Buffer to hold the path
+
+	// Get the full path of the executable
+	if (GetModuleFileName(NULL, buffer, MAX_PATH) > 0)
+	{
+		// Convert TCHAR array to std::wstring
+		std::wstring wstrPath(buffer);
+
+		// Extract the file name from the path
+		size_t pos = wstrPath.find_last_of(L"\\/");
+		if (pos != std::wstring::npos)
+		{
+			std::wstring exeName = wstrPath.substr(pos + 1);
+
+			return exeName;
+		}
+		else
+		{
+			std::cout << "Failed to extract executable name" << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "GetModuleFileName failed" << std::endl;
+	}
+	return wstrPath;
+}
+
+char* Files::GetFolderPath(const char* _searchTitle)
+{
+	TCHAR szDir[MAX_PATH];
+	BROWSEINFO bInfo;
+	bInfo.hwndOwner = FindWindowA(NULL, (LPCSTR) GetProcessName().c_str());
+	bInfo.pidlRoot = NULL;
+	bInfo.pszDisplayName = szDir; // Address of a buffer to receive the display name of the folder selected by the user
+	//bInfo.lpszTitle = (LPCWSTR) _searchTitle; // Title of the dialog
+	bInfo.lpszTitle = (LPCWSTR)_searchTitle; // Title of the dialog
+	bInfo.ulFlags = 0;
+	bInfo.lpfn = NULL;
+	bInfo.lParam = 0;
+	bInfo.iImage = -1;
+
+	LPITEMIDLIST lpItem = SHBrowseForFolder(&bInfo);
+	if (lpItem != NULL)
+	{
+		SHGetPathFromIDList(lpItem, szDir);
+		char path[MAX_PATH];
+		wcstombs(path, szDir, wcslen(szDir) + 1);
+
+		// Replace backslashes with forward slashes in the folder path
+		for (int i = 0; path[i]; i++)
+		{
+			if (path[i] == '\\')
+			{
+				path[i] = '/';
+			}
+		}
+
+		return path;
+	}
+	return NULL;
+}
+
+
+
+char* Files::GetFilePath(const char* _filters)
+{
+	OPENFILENAME ofn = { 0 };
+	TCHAR szFile[260] = { 0 };
+	// Initialize remaining fields of OPENFILENAME structure
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = FindWindowA(NULL, (LPCSTR)GetProcessName().c_str());
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = (LPCWSTR)_filters;
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+	if (GetOpenFileName(&ofn) == TRUE)
+	{
+		char path[MAX_PATH];
+		wcstombs(path, ofn.lpstrFile, wcslen(ofn.lpstrFile) + 1);
+
+		return path;
+	}
+	return NULL;
+
+}

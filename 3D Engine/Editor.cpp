@@ -56,6 +56,10 @@ void Editor::Menu(GameData* _gameData)
 	{
 		if (ImGui::BeginMenu("Tool"))
 		{
+			if (ImGui::MenuItem("Test##ToolBar"))
+			{
+				Files::GetFilePath("");
+			}
 			if (ImGui::BeginMenu("Settings##ToolBar"))
 			{
 				if (ImGui::SliderFloat("Sensitivity##ToolBar", &_gameData->settings.sentivity, 0.01f, 1.5f))
@@ -197,6 +201,7 @@ void Editor::Menu(GameData* _gameData)
 				{
 					Scene::SetClearColor(Colors::Color(actualColor.x, actualColor.y, actualColor.z, actualColor.w));
 				}
+				ImGui::TreePop();
 			}
 
 			LightMenu::Basic(_gameData);
