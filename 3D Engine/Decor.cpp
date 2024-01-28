@@ -163,13 +163,17 @@ bool Decors::Decor::LoadFromFile(const char* _name)
 {
 	this->SetName(_name);
 	std::string path = DECOR_DIRECTORY;
-	path += this->GetName();
+	path += _name;
 	path += DECOR_FILE_EXTENSION;
 
 	//Make sure the previous scene is cleared out
-	this->objects.clear();
+	for (int i = this->blocks.size() - 1; i >= 0; --i)
+	{
+		this->blocks[i].RemoveFromScene();
+		this->blocks[i].EraseModel();
+		this->blocks.erase(this->blocks.begin() + i);
+	}
 
-	std::vector<Material>* materials = Scene::GetMaterials();
 	GameData* gameData = GetGameData();
 
 	//Load new scene
@@ -179,54 +183,25 @@ bool Decors::Decor::LoadFromFile(const char* _name)
 	json jsonParsed = json::parse(sceneFileContent);
 	for (auto& object : jsonParsed["objects"])
 	{
-		std::string typeStr = object["type"];
-		if (strcmp(typeStr.c_str(), "Cube") == 0)
+		Blocks::Block block;
+		block.GenerateModel();
+		block.SetScale(DECOR_SCALE);
+
+		if (object.contains("position"))
 		{
-			Cube obj;
-			obj.GenerateGraphicsBuffers();
-
-			if (object.contains("position") && !object["position"].is_null())
-			{
-				obj.SetPosition(object["position"][0], object["position"][1], object["position"][2]);
-			}
-			if (object.contains("rotation") && !object["rotation"].is_null())
-			{
-				obj.SetRotation(object["rotation"][0], object["rotation"][1], object["rotation"][2]);
-			}
-
-			obj.SetScale(DECOR_SCALE, DECOR_SCALE, DECOR_SCALE);
-
-			if (object.contains("material") && !object["material"].is_null())
-			{
-				std::string materialStr = object["material"].get<std::string>();
-				if (materialStr.size() > 3)
-				{
-					for (size_t i = 0; i < materials->size(); i++)
-					{
-						if (strcmp(materialStr.c_str(), materials->at(i).GetName().c_str()) == 0)
-						{
-							obj.SetMaterial(&materials->at(i), true);
-							break;
-						}
-					}
-				}
-			}
-			if (object.contains("colors") && !object["colors"].is_null())
-			{
-				obj.SetColor(Colors::Color(object["colors"][0], object["colors"][1], object["colors"][2], object["colors"][3]));
-			}
-
-			if (object.contains("light") && !object["light"].is_null())
-			{
-				Lightning::Light lightT;
-				lightT.LoadFromJson(object["light"]);
-				GameData* gameData = GetGameData();
-				Lightning::Light* light = Scene::Lights::InsertLight(gameData, lightT);
-				obj.SetLight(light);
-			}
-			obj.BindShader(gameData->shaders[Shaders::WORLD_OBJECT]);
-			this->InsertObject(obj);
+			block.SetPosition(glm::vec3(object["position"][0], object["position"][1], object["position"][2]));
 		}
+		if (object.contains("rotation"))
+		{
+			block.SetRotation(glm::vec3(object["rotation"][0], object["rotation"][1], object["rotation"][2]));
+		}
+		if (object.contains("material"))
+		{
+			std::string materialName = object["material"];
+			Blocks::MaterialCheck(&block, materialName.c_str());
+		}
+		block.InsertInScene();
+		this->blocks.push_back(block);
 	}
 	this->CalculateBoundingBox();
 	return true;
@@ -256,10 +231,10 @@ void Decors::Decor::CalculateBoundingBox()
 	glm::vec3 globalMin = glm::vec3(FLT_MAX);
 	glm::vec3 globalMax = glm::vec3(-FLT_MAX);
 
-	for (Cube& cube : objects)
+	for (Blocks::Block& block : blocks)
 	{
-		glm::vec3 localMin = cube.GetPosition() - cube.GetScale() / 2.0f;
-		glm::vec3 localMax = cube.GetPosition() + cube.GetScale() / 2.0f;
+		glm::vec3 localMin = block.GetPosition() - block.GetScale() / 2.0f;
+		glm::vec3 localMax = block.GetPosition() + block.GetScale() / 2.0f;
 
 		globalMin = glm::min(globalMin, localMin);
 		globalMax = glm::max(globalMax, localMax);

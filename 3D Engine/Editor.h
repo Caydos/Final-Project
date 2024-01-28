@@ -12,7 +12,8 @@ namespace Editor
 		SCENE,
 		DECOR,
 		MODEL,
-		ENTITY
+		ENTITY,
+		SET
 	};
 	void Initialize(GameData* _gameData);
 

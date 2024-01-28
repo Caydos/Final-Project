@@ -25,12 +25,12 @@ namespace Blocks
 		std::string GetName();
 		void SetName(std::string _name);
 
-		void SetVertices(std::vector<float>* _vertices);
+		void SetVertices();
 		void RegenerateMatrices();
 
 
 
-		void AddModel(glm::mat4* _model);
+		void InsertModel(glm::mat4* _model);
 
 		void RemoveModel(glm::mat4* _model);
 
@@ -67,10 +67,60 @@ namespace Blocks
 
 		bool graphicsLoaded;
 		unsigned int VAO;
-		unsigned int VBO;
+		unsigned int vertexVBO;
+		unsigned int instanceVBO;
 		std::string name;
 
-		std::vector<float> vertices;
+		float vertices[288] = {
+			//front face			//Texture				//Lightning normal
+			-0.5f, -0.5f, 0.5f,		0.0f, 1.0f,				0.0f, 0.0f, 1.0f,
+			0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			0.0f, 0.0f, 1.0f,
+			0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			0.0f, 0.0f, 1.0f,
+			0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			0.0f, 0.0f, 1.0f,
+			-0.5f, 0.5f, 0.5f,		0.0f, 0.0f,				0.0f, 0.0f, 1.0f,
+			-0.5f, -0.5f, 0.5f,		0.0f, 1.0f,				0.0f, 0.0f, 1.0f,
+
+			// right face
+			0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			1.0f, 0.0f, 0.0f,
+			0.5f, -0.5f, -0.5f,		1.0f / 6 * 2, 1.0f,		1.0f, 0.0f, 0.0f,
+			0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		1.0f, 0.0f, 0.0f,
+			0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		1.0f, 0.0f, 0.0f,
+			0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			1.0f, 0.0f, 0.0f,
+			0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			1.0f, 0.0f, 0.0f,
+
+			//back face
+			0.5f, -0.5f, -0.5f,		1.0f / 6 * 3, 1.0f,		0.0f, 0.0f, -1.0f,
+			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, 0.0f, -1.0f,
+			-0.5f, 0.5f, -0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, 0.0f, -1.0f,
+			-0.5f, 0.5f, -0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, 0.0f, -1.0f,
+			0.5f, 0.5f, -0.5f,		1.0f / 6 * 3, 0.0f,		0.0f, 0.0f, -1.0f,
+			0.5f, -0.5f, -0.5f,		1.0f / 6 * 3, 1.0f,		0.0f, 0.0f, -1.0f,
+
+			// left face
+			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		-1.0f, 0.0f, 0.0f,
+			-0.5f, -0.5f, 0.5f,		1.0f / 6 * 3, 1.0f,		-1.0f, 0.0f, 0.0f,
+			-0.5f, 0.5f, 0.5f,		1.0f / 6 * 3, 0.0f,		-1.0f, 0.0f, 0.0f,
+			-0.5f, 0.5f, 0.5f,		1.0f / 6 * 3, 0.0f,		-1.0f, 0.0f, 0.0f,
+			-0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		-1.0f, 0.0f, 0.0f,
+			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		-1.0f, 0.0f, 0.0f,
+
+			// top face
+			-0.5f, 0.5f, 0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, 0.5f,		1.0f / 6 * 6, 1.0f,		0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, -0.5f,		1.0f / 6 * 6, 0.0f,		0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, -0.5f,		1.0f / 6 * 6, 0.0f,		0.0f, 1.0f, 0.0f,
+			-0.5f, 0.5f, -0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, 1.0f, 0.0f,
+
+			//bottom
+			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f, 0.0f,
+			0.5f, -0.5f, -0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, -1.0f, 0.0f,
+			0.5f, -0.5f, 0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, -1.0f, 0.0f,
+			0.5f, -0.5f, 0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, -1.0f, 0.0f,
+			-0.5f, -0.5f, 0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, -1.0f, 0.0f,
+			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f, 0.0f,
+
+		};
 		std::vector<glm::mat4> models;
 		std::vector<glm::mat4*> modelsAddresses;
 
@@ -93,6 +143,17 @@ namespace Blocks
 	public:
 		Block();
 		~Block();
+
+		BlockType* GetType();
+		void SetType(BlockType* _type);
+
+		void InsertInScene();
+		void RemoveFromScene();
+
+		void GenerateModel();
+		void EraseModel();
+
+		void ApplyTransformation();
 
 		glm::vec3 GetPosition();
 		void SetPosition(float _x, float _y, float _z);
@@ -117,9 +178,12 @@ namespace Blocks
 		void Scale(float _x, float _y, float _z);
 
 	private:
+		bool inScene;
+
 		BlockType* type;
 		glm::mat4* parent;
 		glm::mat4* model;
+
 
 		glm::vec3 position;
 		glm::vec3 rotation;
@@ -128,6 +192,7 @@ namespace Blocks
 
 	void Initialize();
 	void Load(std::string _name);
+	void MaterialCheck(Block* _block, const char* _materialName);
 	void Refresh();
 	void Draw();
 }

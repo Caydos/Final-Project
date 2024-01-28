@@ -154,6 +154,15 @@
     <Filter Include="Source Files\Rendering Engine\Blocks\Classes">
       <UniqueIdentifier>{61682fc7-5654-4a5a-945d-0dfacbe524ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering Engine\Set">
+      <UniqueIdentifier>{1d9f4203-3b73-4a7d-8723-015c578eff62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Set\Classes">
+      <UniqueIdentifier>{1bf93266-9c66-4a5e-ab79-482356e31152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Set\Menu">
+      <UniqueIdentifier>{a29cb63a-69b5-460c-a71d-17b155231d87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -290,6 +299,18 @@
     </ClCompile>
     <ClCompile Include="BlockType.cpp">
       <Filter>Source Files\Rendering Engine\Blocks\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files\Rendering Engine\Scene\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Set.cpp">
+      <Filter>Source Files\Rendering Engine\Set</Filter>
+    </ClCompile>
+    <ClCompile Include="SetClass.cpp">
+      <Filter>Source Files\Rendering Engine\Set\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="SetMenu.cpp">
+      <Filter>Source Files\Rendering Engine\Set\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,5 +485,13 @@
     <ClInclude Include="Blocks.h">
       <Filter>Source Files\Rendering Engine\Blocks</Filter>
     </ClInclude>
+    <ClInclude Include="Set.h">
+      <Filter>Source Files\Rendering Engine\Set</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Arrows.h">
+      <Filter>Source Files\Rendering Engine\Drawables</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -62,6 +62,7 @@ namespace Scene
 			std::string GetName();
 			void SetName(std::string _name);
 
+			void CheckVisibility();
 			virtual void Draw() = 0;
 			virtual void Save() = 0;
 			virtual Cube* Raycast() = 0;

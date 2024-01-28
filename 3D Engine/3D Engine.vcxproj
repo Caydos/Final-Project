@@ -154,6 +154,7 @@
     <ClCompile Include="Bounds.cpp" />
     <ClCompile Include="Collisions.cpp" />
     <ClCompile Include="Commands.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="Decor.cpp" />
@@ -169,6 +170,9 @@
     <ClCompile Include="ObjectsMenu.cpp" />
     <ClCompile Include="Peds.cpp" />
     <ClCompile Include="Reading.cpp" />
+    <ClCompile Include="Set.cpp" />
+    <ClCompile Include="SetClass.cpp" />
+    <ClCompile Include="SetMenu.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Sync.cpp" />
     <ClCompile Include="WorldScene.cpp" />
@@ -230,6 +234,7 @@
     <ClInclude Include="RayCasting.h" />
     <ClInclude Include="Reading.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Set.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Sync.h" />
     <ClInclude Include="TexturePicker.h" />
@@ -244,6 +249,9 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Triangle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Arrows.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

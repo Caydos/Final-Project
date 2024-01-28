@@ -291,7 +291,7 @@ private:
 		-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f, 0.0f,
 
 	};
-	int vertexCount = CUBE_VERTEX_COUNT;
+	int vertexCount = 288;
 	int id;
 
 };

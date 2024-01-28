@@ -3,8 +3,9 @@
 #include "Lightning.h"
 #include <algorithm>
 #include "Files.h"
-#include "FrustrumCulling.h"
 #include "Instances.h"
+#include "Blocks.h"
+#include "Set.h"
 
 static std::vector<Camera> cameras;
 static unsigned int focusedCamera = 0;
@@ -161,14 +162,16 @@ void Scene::World::Render(GameData* _gameData)
 
 	glm::vec3 position = camera->Position;
 
-	for (size_t objId = 0; objId < components.size(); objId++)
-	{
-		Bounds::Box boundingBox = components[objId]->GetBoundingBox();
-		if (FrustrumCulling::IsBoxInFrustum(projection,view, boundingBox.min, boundingBox.max))
-		{
-			components[objId]->Draw();
-		}
-	}
+	//for (size_t objId = 0; objId < components.size(); objId++)
+	//{
+	//	Bounds::Box boundingBox = components[objId]->GetBoundingBox();
+	//	if (FrustrumCulling::IsBoxInFrustum(projection,view, boundingBox.min, boundingBox.max))
+	//	{
+	//		components[objId]->Draw();
+	//	}
+	//}
+	Sets::UpdateVisibility();
+	Blocks::Draw();
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 }

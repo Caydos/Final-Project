@@ -10,38 +10,46 @@ Blocks::BlockType::~BlockType() {}
 void Blocks::BlockType::GenerateGraphicsBuffers()
 {
 	glGenVertexArrays(1, &this->VAO);
-	glGenBuffers(1, &this->VBO);
+	glGenBuffers(1, &this->vertexVBO);
+	glGenBuffers(1, &this->instanceVBO);
 	this->graphicsLoaded = true;
 }
 void Blocks::BlockType::RemoveGraphicsBuffers()
 {
-	glDeleteBuffers(1, &this->VBO);
+	glDeleteBuffers(1, &this->vertexVBO);
+	glDeleteBuffers(1, &this->instanceVBO);
 	glDeleteVertexArrays(1, &this->VAO);
 	this->graphicsLoaded = false;
 }
 
 void Blocks::BlockType::BindGraphicsBuffers()
 {
-	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-	glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::mat4), &models[0], GL_STATIC_DRAW);
+	glBindVertexArray(this->VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->instanceVBO);
+	glBufferData(GL_ARRAY_BUFFER, this->models.size() * sizeof(glm::mat4), &this->models[0], GL_STATIC_DRAW);
+
+	for (unsigned int i = 0; i < 4; i++)
+	{
+		glEnableVertexAttribArray(i + 3); // 4 is an offset, assuming 0, 1, 2, 3 are used for the cube's vertex data
+		glVertexAttribPointer(i + 3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
+		glVertexAttribDivisor(i + 3, 1); // Tell OpenGL this is an instanced vertex attribute.
+	}
 }
 
 std::string Blocks::BlockType::GetName()
 {
-	return this->GetName();
+	return this->name;
 }
 void Blocks::BlockType::SetName(std::string _name)
 {
 	this->name = _name;
 }
 
-void Blocks::BlockType::SetVertices(std::vector<float>* _vertices)
+void Blocks::BlockType::SetVertices()
 {
-	this->vertices = *_vertices;
 	glBindVertexArray(this->VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, this->VAO);
-	glBufferData(GL_ARRAY_BUFFER, (this->vertices.size() / 8) * sizeof(float), &this->vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO);
+	glBufferData(GL_ARRAY_BUFFER, 288 * sizeof(float), &this->vertices, GL_STATIC_DRAW);
 
 	// Position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -55,12 +63,6 @@ void Blocks::BlockType::SetVertices(std::vector<float>* _vertices)
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	for (unsigned int i = 0; i < 4; i++)
-	{
-		glEnableVertexAttribArray(i + 4); // 4 is an offset, assuming 0, 1, 2, 3 are used for the cube's vertex data
-		glVertexAttribPointer(i + 4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
-		glVertexAttribDivisor(i + 4, 1); // Tell OpenGL this is an instanced vertex attribute.
-	}
 }
 void Blocks::BlockType::RegenerateMatrices()
 {
@@ -70,13 +72,15 @@ void Blocks::BlockType::RegenerateMatrices()
 	{
 		models[i] = *modelsAddresses[i];
 	}
+	BindGraphicsBuffers();
 }
 
 
 
-void Blocks::BlockType::AddModel(glm::mat4* _model)
+void Blocks::BlockType::InsertModel(glm::mat4* _model)
 {
 	modelsAddresses.push_back(_model);
+	this->AskForRefresh();
 }
 
 void Blocks::BlockType::RemoveModel(glm::mat4* _model)
@@ -86,6 +90,7 @@ void Blocks::BlockType::RemoveModel(glm::mat4* _model)
 		if (modelsAddresses[i] == _model)
 		{
 			modelsAddresses.erase(modelsAddresses.begin() + i);
+			this->AskForRefresh();
 			return;
 		}
 	}
@@ -144,9 +149,10 @@ void Blocks::BlockType::Draw()
 {
 	if (this->graphicsLoaded)
 	{
-		if (refreshInQueue)
+		if (this->refreshInQueue)
 		{
 			RegenerateMatrices();
+			this->refreshInQueue = false;
 		}
 		this->shader->setBool("instanceUsage", true);
 
@@ -172,7 +178,7 @@ void Blocks::BlockType::Draw()
 		// create transformations
 		glBindVertexArray(this->VAO);
 
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, models.size());
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, this->models.size());
 
 		glBindVertexArray(0);
 		this->shader->setBool("instanceUsage", false);

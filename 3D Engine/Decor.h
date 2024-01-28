@@ -2,6 +2,8 @@
 #define DECOR_H
 #include "Scene.h"
 #include <glm/fwd.hpp>
+#include "Blocks.h"
+
 #include "Instances.h"
 #include "Bounds.h"
 
@@ -33,6 +35,9 @@ namespace Decors
 		std::vector<Cube> objects;
 		std::vector<glm::mat4*> models;
 		std::vector<Instances::Cube> instances;
+
+
+		std::vector<Blocks::Block> blocks;
 	};
 
 }
