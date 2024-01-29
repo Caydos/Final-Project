@@ -147,6 +147,9 @@ namespace Blocks
 		BlockType* GetType();
 		void SetType(BlockType* _type);
 
+		glm::mat4* GetParent();
+		void SetParent(glm::mat4* _parent);
+
 		void InsertInScene();
 		void RemoveFromScene();
 

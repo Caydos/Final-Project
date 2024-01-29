@@ -18,6 +18,7 @@ void Sets::Set::Initialize()
 	if (this->bone == nullptr)
 	{
 		this->bone = new glm::mat4(1.0f);
+		this->SetScale(1.0f);
 	}
 }
 
@@ -244,7 +245,7 @@ void Sets::Set::PlaceOriginBlock()
 
 	Blocks::MaterialCheck(&originBlock, nullptr);
 	originBlock.InsertInScene();
-
+	originBlock.SetParent(this->bone);
 	this->blocks.push_back(originBlock);
 }
 
