@@ -120,3 +120,8 @@ void Blocks::Draw()
 		blocks[i]->Draw();
 	}
 }
+
+std::vector<Blocks::BlockType*> Blocks::GetAll()
+{
+	return blocks;
+}

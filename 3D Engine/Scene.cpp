@@ -9,6 +9,7 @@
 #include "Crosshair.h"
 #include "Maze.h"
 #include "Blocks.h"
+#include "Inventory.h"
 
 static bool initialized = false;
 static unsigned int FPVCam;
@@ -87,7 +88,7 @@ void Scene::Initialize(GameData* _gameData)
 	Lights::InsertLight(_gameData, dirLight);
 	Scene::Lights::UpdateShader(_gameData);
 
-	TexturePicker::Initialize(_gameData, &materials);
+	//TexturePicker::Initialize(_gameData, &materials);
 	//Maze::Generate();
 	Blocks::Initialize();
 	initialized = true;
@@ -95,7 +96,7 @@ void Scene::Initialize(GameData* _gameData)
 
 void Scene::Inputs(GameData* _gameData)
 {
-	if ((!Editor::IsDisplayed() && !TexturePicker::IsActive()) || _gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_MIDDLE))
+	if ((!Editor::IsDisplayed() && !Inventory::IsActive()) || _gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_MIDDLE))
 	{
 		if (!_gameData->window.IsFocused())
 		{
@@ -129,41 +130,22 @@ void Scene::Inputs(GameData* _gameData)
 	}
 	else
 	{
-		if ((Editor::IsDisplayed() || TexturePicker::IsActive()) && _gameData->window.IsFocused())
+		if ((Editor::IsDisplayed() || Inventory::IsActive()) && _gameData->window.IsFocused())
 		{
 			_gameData->window.Focus(false);
 		}
 	}
 
-	if (!Editor::IsDisplayed() && _gameData->window.IsKeyPressed(Keys::E) && inputClock.GetElapsedTime() > 125)
-	{
-		if (TexturePicker::IsActive())
-		{
-			TexturePicker::SetActive(false);
-			_gameData->window.Focus(true);
-		}
-		else
-		{
-			TexturePicker::SetActive(true);
-			_gameData->window.Focus(false);
-		}
-		inputClock.Restart();
-	}
 	if (_gameData->window.IsKeyPressed(Keys::ESCAPE) && inputClock.GetElapsedTime() > 125)
 	{
-		if (TexturePicker::IsActive())
-		{
-			TexturePicker::SetActive(false);
-			_gameData->window.Focus(true);
-		}
-		else if (Editor::IsDisplayed())
+		if (Editor::IsDisplayed())
 		{
 			Editor::SetDisplay(false);
 			_gameData->window.Focus(true);
 		}
 		inputClock.Restart();
 	}
-	if (!TexturePicker::IsActive() && _gameData->window.IsKeyPressed(Keys::F1) && inputClock.GetElapsedTime() > 125)
+	if (!Inventory::IsActive() && _gameData->window.IsKeyPressed(Keys::F1) && inputClock.GetElapsedTime() > 125)
 	{
 		if (Editor::IsDisplayed())
 		{
@@ -195,7 +177,7 @@ void Scene::Tick(GameData* _gameData)
 		{
 			Editor::Menu(_gameData);
 		}
-
+		Inventory::Menu(_gameData);
 		ImGui::Render();
 	}
 
@@ -203,11 +185,6 @@ void Scene::Tick(GameData* _gameData)
 	_gameData->window.Clear(clearColor);
 	Scene::World::Render(_gameData);
 
-	if (!Editor::IsDisplayed())
-	{
-		TexturePicker::Inputs(_gameData);
-		TexturePicker::Render(_gameData);
-	}
 	Editor::Tick(_gameData);
 	std::vector<Lightning::Light>* lights = Lights::GetLights();
 	for (size_t i = 0; i < lights->size(); i++)

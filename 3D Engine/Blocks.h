@@ -198,6 +198,7 @@ namespace Blocks
 	void MaterialCheck(Block* _block, const char* _materialName);
 	void Refresh();
 	void Draw();
+	std::vector<Blocks::BlockType*> GetAll();
 }
 
 #endif // !BLOCKS_H

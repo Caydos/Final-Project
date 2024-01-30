@@ -161,6 +161,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="Instances.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="LightMenu.cpp" />
     <ClCompile Include="LightScene.cpp" />
     <ClCompile Include="Editor.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Files.h" />
     <ClInclude Include="FrustrumCulling.h" />
     <ClInclude Include="Instances.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LightMenu.h" />
     <ClInclude Include="Lightning.h" />
