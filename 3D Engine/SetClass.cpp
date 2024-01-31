@@ -1,6 +1,7 @@
 #include "Set.h"
 #include "FrustrumCulling.h"
 #include "Scene.h"
+#include "Inventory.h"
 
 Sets::Set::Set()
 {
@@ -42,6 +43,11 @@ std::string Sets::Set::GetName()
 void Sets::Set::SetName(std::string _name)
 {
 	this->name = _name;
+}
+
+bool Sets::Set::IsVisible()
+{
+	return this->visible;
 }
 
 void Sets::Set::CheckVisibility()
@@ -124,6 +130,11 @@ void Sets::Set::ApplyTransformation()
 	{
 		this->blocks[i].ApplyTransformation();
 	}
+}
+
+std::vector<Blocks::Block> Sets::Set::GetBlocks()
+{
+	return this->blocks;
 }
 
 glm::vec3 Sets::Set::GetPosition() { return this->position; }

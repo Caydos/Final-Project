@@ -6,9 +6,18 @@ static Clock inputClock;
 static bool opened = false;
 static std::vector<Blocks::BlockType*> blocks;
 static Blocks::BlockType* hotBar[8] = { nullptr };
-static ImVec2 containerSize(100, 100);
+static int hotBarHovered = 0;
 
-void Container(ImDrawList* _drawList, ImVec2 _position, GLuint _textureID, const char* _itemName)
+struct GlobalDragState
+{
+	bool isDragging = false;
+	std::string payload;
+	void* blockType = nullptr;
+};
+GlobalDragState draggedItem;
+
+static ImVec2 containerSize(100, 100);
+void Container(ImDrawList* _drawList, ImVec2 _position, GLuint _textureID, const char* _itemName, void* _pointer)
 {
 	ImVec2 rect_min = _position;
 	ImVec2 rect_max = ImVec2(_position.x + containerSize.x, _position.y + containerSize.y);
@@ -34,11 +43,14 @@ void Container(ImDrawList* _drawList, ImVec2 _position, GLuint _textureID, const
 	// Drag source
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
-		// Set the payload to the container's identifier (could be an index or a pointer)
-		ImGui::SetDragDropPayload("CONTAINER_PAYLOAD", "my_draggable_container", sizeof(char) * 24);
+		// Update global drag state
+		draggedItem.isDragging = true;
+		draggedItem.payload = "my_draggable_container";
+		draggedItem.blockType = _pointer;
 
-		ImGui::Text("Dragging Container");
+		ImGui::SetDragDropPayload("CONTAINER_PAYLOAD", &draggedItem.payload, sizeof(char) * draggedItem.payload.size());
 
+		ImGui::Text(_itemName);
 		ImGui::EndDragDropSource();
 	}
 
@@ -53,13 +65,33 @@ void Container(ImDrawList* _drawList, ImVec2 _position, GLuint _textureID, const
 		ImGui::EndDragDropTarget();
 	}
 }
+Keys::Keys keys[8] = {
+	Keys::NUMBER_ROW_1,
+	Keys::NUMBER_ROW_2,
+	Keys::NUMBER_ROW_3,
+	Keys::NUMBER_ROW_4,
+	Keys::NUMBER_ROW_5,
+	Keys::NUMBER_ROW_6,
+	Keys::NUMBER_ROW_7,
+	Keys::NUMBER_ROW_8,
+};
 
 void Inventory::Menu(GameData* _gameData)
 {
+	for (size_t i = 0; i < 8; i++)
+	{
+		if (_gameData->window.IsKeyPressed(keys[i]) && inputClock.GetElapsedTime() > 125)
+		{
+			hotBarHovered = i;
+			inputClock.Restart();
+		}
+	}
 	if (_gameData->window.IsKeyPressed(Keys::E) && inputClock.GetElapsedTime() > 125)
 	{
 		if (opened)
 		{
+			draggedItem.blockType = nullptr;
+			draggedItem.isDragging = false;
 			_gameData->window.Focus(true);
 			opened = false;
 		}
@@ -90,31 +122,57 @@ void Inventory::Menu(GameData* _gameData)
 			name = hotBar[i]->GetName();
 		}
 		ImVec2 containerPos = ImVec2(windowDimensions.x - containerSize.x, startY + i * containerSize.y * 1.10);
+		ImVec2 containerEndPos = ImVec2(containerPos.x + containerSize.x, containerPos.y + containerSize.y);
 
-		Container(draw_list, containerPos, textureId, name.c_str());
+		bool isMouseOver = io.MousePos.x >= containerPos.x && io.MousePos.x <= containerEndPos.x &&
+			io.MousePos.y >= containerPos.y && io.MousePos.y <= containerEndPos.y;
+
+		// Render the container
+		Container(draw_list, containerPos, textureId, name.c_str(), hotBar[i]);
+
+		// Start drag
+		if (isMouseOver && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		{
+			draggedItem.isDragging = true;
+			draggedItem.payload = name;
+		}
+
+		// Handle drop (you might need additional logic to determine valid drop targets)
+		if (draggedItem.isDragging && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+		{
+			if (isMouseOver)
+			{
+				// Handle drop logic here
+				draggedItem.isDragging = false;
+				// Other drop logic here
+				if (draggedItem.blockType != nullptr)
+				{
+					hotBar[i] = (Blocks::BlockType*) draggedItem.blockType;
+					draggedItem.blockType = nullptr;
+				}
+			}
+		}
 	}
 	if (opened)
 	{
 		ImVec2 windowSize(windowDimensions.x * 0.75, windowDimensions.y * 0.75);
 		ImGui::SetNextWindowSize(windowSize, ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSizeConstraints(containerSize, windowSize);
+		ImGui::SetNextWindowSizeConstraints(ImVec2(containerSize.x * 1.25f, containerSize.y), windowSize);
 
-		// Start ImGui window
 		ImGui::Begin("Inventory");
 		ImVec2 currentWindowSize = ImGui::GetWindowSize();
-		int columns = currentWindowSize.x / containerSize.x;
+		int columns = currentWindowSize.x / (containerSize.x * 1.1);
 		if (columns == 0) { return; } // Security when reducing the window
 
-		// Loop through items and create a button for each
 		for (int i = 0; i < blocks.size(); ++i)
 		{
-			ImGui::PushID(i); // Ensure unique ID for items
+			ImGui::PushID(i);
 
 			if (i % columns != 0)
 			{
 				ImGui::SameLine();
 			}
-			// Create an invisible button to act as our draggable item
+
 			if (ImGui::InvisibleButton("##container", containerSize))
 			{//Left click
 
@@ -126,7 +184,7 @@ void Inventory::Menu(GameData* _gameData)
 			ImVec2 rect_min = ImGui::GetItemRectMin();
 			ImVec2 rect_max = ImGui::GetItemRectMax();
 			ImDrawList* scopeDrawList = ImGui::GetWindowDrawList();
-			Container(scopeDrawList, rect_min, blocks[i]->GetTexture()->id, blocks[i]->GetName().c_str());
+			Container(scopeDrawList, rect_min, blocks[i]->GetTexture()->id, blocks[i]->GetName().c_str(), blocks[i]);
 
 			ImGui::PopID();
 		}

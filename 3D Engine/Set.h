@@ -17,10 +17,15 @@ namespace Sets
 		std::string GetName();
 		void SetName(std::string _name);
 
+		bool IsVisible();
 		void CheckVisibility();
 		void AppplyVisibility();
 
 		void ApplyTransformation();
+
+
+
+		std::vector<Blocks::Block> GetBlocks();
 
 		glm::vec3 GetPosition();
 		void SetPosition(float _x, float _y, float _z);
@@ -73,6 +78,7 @@ namespace Sets
 	std::vector<Set*>* GetAll();
 
 	void Menu(GameData* _gameData);
+	void Edition();
 }
 
 #endif // !SET_H

@@ -312,6 +312,9 @@
     <ClCompile Include="SetMenu.cpp">
       <Filter>Source Files\Rendering Engine\Set\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">
@@ -487,6 +490,9 @@
     </ClInclude>
     <ClInclude Include="Set.h">
       <Filter>Source Files\Rendering Engine\Set</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

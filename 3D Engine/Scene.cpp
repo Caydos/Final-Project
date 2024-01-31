@@ -160,12 +160,13 @@ void Scene::Inputs(GameData* _gameData)
 		inputClock.Restart();
 	}
 }
-
+#include "Set.h"
 void Scene::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
 	Inputs(_gameData);
 
+	Sets::Edition();
 	// Needs to be called after the inputs that enables it
 	//if (!_gameData->window.IsFocused())
 	{
