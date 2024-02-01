@@ -31,6 +31,11 @@ void Blocks::Load(std::string _name)
 				content = json::parse(fileContent);
 				if (content.contains("attributes"))
 				{
+					if (content["attributes"].contains("scale"))
+					{
+						glm::vec3 scale(content["attributes"]["scale"]);
+						block->SetScale(scale);
+					}
 					if (content["attributes"].contains("lightDependent"))
 					{
 						block->SetLightDependency(content["attributes"]["lightDependent"]);

@@ -4,6 +4,7 @@
 Blocks::BlockType::BlockType()
 {
 	this->graphicsLoaded = false;
+	std::memcpy(this->vertices, cubeVertices, 288 * sizeof(float));
 }
 Blocks::BlockType::~BlockType() {}
 
@@ -125,6 +126,16 @@ Colors::Color Blocks::BlockType::GetColor()
 void Blocks::BlockType::SetColor(Colors::Color _color)
 {
 	this->color = _color;
+}
+
+glm::vec3 Blocks::BlockType::GetScale()
+{
+	return this->scale;
+}
+
+void Blocks::BlockType::SetScale(glm::vec3 _scale)
+{
+	this->scale = _scale;
 }
 
 bool Blocks::BlockType::GetLightDependency()

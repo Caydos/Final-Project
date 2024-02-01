@@ -3,7 +3,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include "Exploration.h"
 #include "Viewer.h"
 #include "Scene.h"
 #include "Commands.h"
@@ -49,8 +48,6 @@ int main()
 	gameData.shaders[Shaders::UI_OBJECT] = &uiObject;
 	gameData.shaders[Shaders::WORLD_OBJECT] = &worldObjectShader;
 
-	gameData.gameStates[EXPLORATION] = &Exploration::Tick;
-	//gameData.gameStates[VIEWER] = &Viewer::Tick;
 	gameData.gameStates[SCENE] = &Scene::Tick;
 	gameData.gameState = SCENE;
 

@@ -17,8 +17,6 @@
 enum Gamestate
 {
 	MAIN_MENU,
-	EXPLORATION,
-	VIEWER,
 	SCENE,
 };
 

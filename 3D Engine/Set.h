@@ -13,6 +13,8 @@ namespace Sets
 		~Set();
 		void Initialize();
 		void Erase();
+		void Save();
+		void LoadFromJson(json _content);
 
 		std::string GetName();
 		void SetName(std::string _name);
@@ -24,8 +26,9 @@ namespace Sets
 		void ApplyTransformation();
 
 
-
-		std::vector<Blocks::Block> GetBlocks();
+		void InsertBlock(Blocks::Block _block);
+		void RemoveBlock(Blocks::Block* _block);
+		std::vector<Blocks::Block>* GetBlocks();
 
 		glm::vec3 GetPosition();
 		void SetPosition(float _x, float _y, float _z);
@@ -51,7 +54,8 @@ namespace Sets
 
 		void CalculateBoundingBox();
 
-		void PlaceOriginBlock();
+		void SetOriginBlockScale(float _scale = 0.2f);
+		void PlaceOriginBlock(float _scale = 0.2f);
 
 		void MoveOrigin(glm::vec3 _offset);
 		void MoveOrigin(float _x, float _y, float _z);
@@ -78,7 +82,7 @@ namespace Sets
 	std::vector<Set*>* GetAll();
 
 	void Menu(GameData* _gameData);
-	void Edition();
+	void Edition(GameData* _gameData);
 }
 
 #endif // !SET_H

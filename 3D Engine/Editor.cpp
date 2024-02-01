@@ -2,10 +2,7 @@
 #include "Files.h"
 #include "Colors.h"
 #include "Scene.h"
-#include "Decor.h"
-#include "Model.h"
 #include "Clock.h"
-#include "TexturePicker.h"
 #include "ObjectsMenu.h"
 #include "LightMenu.h"
 #include "Crosshair.h"
@@ -186,37 +183,29 @@ void Editor::Menu(GameData* _gameData)
 void Editor::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
-
-	if (!Editor::IsDisplayed() && !TexturePicker::IsActive())
+	if (displayed)
 	{
-		if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_LEFT) && inputClock.GetElapsedTime() > 125)
-		{
-		
-			inputClock.Restart();
-		}
-		else if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_RIGHT) && inputClock.GetElapsedTime() > 125)
-		{
-
-			inputClock.Restart();
-		}
+		Menu(_gameData);
 	}
-	if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT) && inputClock.GetElapsedTime() > 125)
+	if (_gameData->window.IsKeyPressed(Keys::F1) && inputClock.GetElapsedTime() > 125)
 	{
-		if (_gameData->window.yScroll > 0)
+		_gameData->window.Focus(displayed);
+		SetDisplay(!displayed);
+		inputClock.Restart();
+	}
+	else if (_gameData->window.IsKeyPressed(Keys::ESCAPE) && inputClock.GetElapsedTime() > 125)
+	{
+		if (displayed)
 		{
-			//activeComponent->Move(glm::vec3(.0f, .0f, activeComponent->GetScale()));
-			inputClock.Restart();
+			SetDisplay(false);
+			_gameData->window.Focus(true);
 		}
-		else if (_gameData->window.yScroll < 0)
-		{
-			//activeComponent->Move(glm::vec3(.0f, .0f, -activeComponent->GetScale()));
-			inputClock.Restart();
-		}
+		inputClock.Restart();
 	}
 }
 
 void Editor::Close()
 {
-	ObjectsMenu::CleanUp();
+	//ObjectsMenu::CleanUp();
 	LightMenu::CleanUp();
 }

@@ -4,7 +4,6 @@
 #include "Common.h"
 #include <glm/vec3.hpp>
 #include "Lightning.h"
-#include "Cube.h"
 #include "Bounds.h"
 
 #define SCENE_DIRECTORY "../Scenes/"
@@ -19,10 +18,6 @@ namespace Scene
 		LEVEL_EDITOR,
 		VFX_EDITOR
 	};
-
-	const char** GetMaterialsAsStringArray();
-	int GetMaterialsCount();
-	std::vector<Material>* GetMaterials();
 
 	Colors::Color GetClearColor();
 	void SetClearColor(Colors::Color _color);
@@ -50,78 +45,8 @@ namespace Scene
 			ENTITY
 		};
 
-		class Component
-		{
-		public:
-			Component();
-			~Component();
 
-			bool IsVisible();
-			void SetVisible(bool _state = true);
-
-			std::string GetName();
-			void SetName(std::string _name);
-
-			void CheckVisibility();
-			virtual void Draw() = 0;
-			virtual void Save() = 0;
-			virtual Cube* Raycast() = 0;
-			virtual void InsertObject(Cube _cube) = 0;
-			virtual void RemoveObject(Cube* _cube) = 0;
-			virtual bool LoadFromFile(const char* _name) = 0;
-
-			Cube* GetRaycastHit();
-			void SetRaycastHit(Cube* _hit);
-
-			float GetScale();
-			void SetScale(float _scale);
-
-			glm::mat4* GetMatrix();
-
-			glm::vec3 GetPosition();
-			void SetPosition(glm::vec3 _position);
-			void Move(glm::vec3 _offset);
-			glm::vec3 GetRotation();
-			void SetRotation(glm::vec3 _rotation);
-			void Rotate(glm::vec3 _rotation);
-
-			bool IsInstanced();
-			void SetInstanced(bool _instanced);
-			virtual void LoadInstances() = 0;
-
-			bool AreBoundsVisible();
-			void ShowBounds(bool _displayed);
-			virtual void CalculateBoundingBox() = 0;
-			Bounds::Box GetBoundingBox();
-			void SetBoundingBox(Bounds::Box _box);
-
-
-			bool IsUpdated();
-			void SetUpdated(bool _updated);
-		private:
-			Cube* raycastHit;
-
-			bool visible;
-			bool instanced;
-
-			std::string name;
-			ComponentType type;
-			float scale;
-
-			glm::mat4* matrix;
-			bool useOffset;
-			glm::vec3 position;
-			glm::vec3 rotation;
-
-			bool showBounds;
-			Bounds::Box boundingBox;
-			bool updated;
-		};
-
-		void InsertComponent(Component* _component);
-		void RemoveComponent(Component* _component);
-		std::vector <Component*>* GetComponents();
-		void QueueLoading(Component* _component, std::string _fileName);
+		//void QueueLoading(Component* _component, std::string _fileName); // for later sync
 
 		void ConsiderLightning(bool _value = true);
 		bool IsConsideringLightning();

@@ -54,6 +54,11 @@ void Blocks::Block::GenerateModel()
 	*this->model = glm::mat4(1.0f);
 }
 
+glm::mat4 Blocks::Block::GetModel()
+{
+	return *this->model;
+}
+
 void Blocks::Block::EraseModel()
 {
 	if (this->model != nullptr)

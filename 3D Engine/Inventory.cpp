@@ -17,7 +17,7 @@ struct GlobalDragState
 GlobalDragState draggedItem;
 
 static ImVec2 containerSize(100, 100);
-void Container(ImDrawList* _drawList, ImVec2 _position, GLuint _textureID, const char* _itemName, void* _pointer)
+void Container(ImDrawList* _drawList, ImVec2 _position, GLuint _textureID, const char* _itemName, const char* _itemId, void* _pointer, bool _border)
 {
 	ImVec2 rect_min = _position;
 	ImVec2 rect_max = ImVec2(_position.x + containerSize.x, _position.y + containerSize.y);
@@ -25,7 +25,6 @@ void Container(ImDrawList* _drawList, ImVec2 _position, GLuint _textureID, const
 	ImVec4 defaultTextColor = ImGui::GetStyle().Colors[ImGuiCol_Header];
 
 	_drawList->AddRectFilled(rect_min, rect_max, IM_COL32(defaultTextColor.x * 255, defaultTextColor.y * 255, defaultTextColor.z * 255, /*defaultTextColor.w * 255*/ 100)); // color rectangle
-
 	ImVec2 containerPos = _position;
 
 	ImVec2 imageSize = ImVec2(containerSize.x, containerSize.y - 20); // 20px space for the name
@@ -38,6 +37,19 @@ void Container(ImDrawList* _drawList, ImVec2 _position, GLuint _textureID, const
 		// Draw the name below the image
 		ImVec2 textPos = ImVec2(containerPos.x, containerPos.y + imageSize.y);
 		_drawList->AddText(textPos, IM_COL32_WHITE, _itemName);
+	}
+
+	if (_itemId != nullptr)
+	{
+		ImVec2 textPos = ImVec2(containerPos.x + containerSize.x - 12.5f, containerPos.y + 2.0f);
+		_drawList->AddText(textPos, IM_COL32_WHITE, _itemId);
+	}
+
+	if (_border)
+	{
+		ImU32 borderColor = IM_COL32(255, 255, 255, 255); // White border, fully opaque
+		float borderWidth = 2.0f; // Border width in pixels
+		_drawList->AddRect(rect_min, rect_max, borderColor, 0.0f, 0, borderWidth);
 	}
 
 	// Drag source
@@ -121,14 +133,14 @@ void Inventory::Menu(GameData* _gameData)
 			}
 			name = hotBar[i]->GetName();
 		}
-		ImVec2 containerPos = ImVec2(windowDimensions.x - containerSize.x, startY + i * containerSize.y * 1.10);
+		ImVec2 containerPos = ImVec2(windowDimensions.x - containerSize.x - 10, startY + i * containerSize.y * 1.10);
 		ImVec2 containerEndPos = ImVec2(containerPos.x + containerSize.x, containerPos.y + containerSize.y);
 
 		bool isMouseOver = io.MousePos.x >= containerPos.x && io.MousePos.x <= containerEndPos.x &&
 			io.MousePos.y >= containerPos.y && io.MousePos.y <= containerEndPos.y;
 
 		// Render the container
-		Container(draw_list, containerPos, textureId, name.c_str(), hotBar[i]);
+		Container(draw_list, containerPos, textureId, name.c_str(), std::to_string(i).c_str(), hotBar[i], (hotBarHovered == i) ? true : false);
 
 		// Start drag
 		if (isMouseOver && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
@@ -184,7 +196,7 @@ void Inventory::Menu(GameData* _gameData)
 			ImVec2 rect_min = ImGui::GetItemRectMin();
 			ImVec2 rect_max = ImGui::GetItemRectMax();
 			ImDrawList* scopeDrawList = ImGui::GetWindowDrawList();
-			Container(scopeDrawList, rect_min, blocks[i]->GetTexture()->id, blocks[i]->GetName().c_str(), blocks[i]);
+			Container(scopeDrawList, rect_min, blocks[i]->GetTexture()->id, blocks[i]->GetName().c_str(), nullptr, blocks[i], false);
 
 			ImGui::PopID();
 		}
@@ -197,4 +209,10 @@ void Inventory::Menu(GameData* _gameData)
 bool Inventory::IsActive()
 {
 	return opened;
+}
+
+Blocks::BlockType* Inventory::GetHotBarBlock()
+{
+	if (blocks.size() <= hotBarHovered) { return nullptr; }
+	return hotBar[hotBarHovered];
 }

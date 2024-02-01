@@ -1,45 +1,19 @@
 #include "Scene.h"
-#include "Material.h"
 #include "Clock.h"
 #include "Editor.h"
-#include "Line.h"
-#include "RayCasting.h"
-#include "TexturePicker.h"
-#include "Decor.h"
 #include "Crosshair.h"
 #include "Maze.h"
 #include "Blocks.h"
 #include "Inventory.h"
+#include "Set.h"
 
 static bool initialized = false;
 static unsigned int FPVCam;
-static std::vector<Material> materials;
 static Scene::Type type = Scene::Type::MODEL_EDITOR;
 static Clock inputClock;
 static Colors::Color clearColor = Colors::LimedSpruce;
 static Lightning::Light* flashLight;
 
-const char** Scene::GetMaterialsAsStringArray()
-{
-	const char** items = new const char* [materials.size()];
-	for (size_t i = 0; i < materials.size(); ++i) {
-		std::string materialName = materials[i].GetName();
-		char* nameCopy = new char[materialName.length() + 1];
-		strcpy(nameCopy, materialName.c_str());
-		items[i] = nameCopy;
-	}
-	return items;
-}
-
-int Scene::GetMaterialsCount()
-{
-	return materials.size();
-}
-
-std::vector<Material>* Scene::GetMaterials()
-{
-	return &materials;
-}
 
 Colors::Color Scene::GetClearColor()
 {
@@ -56,13 +30,6 @@ void Scene::Initialize(GameData* _gameData)
 	inputClock.Restart();
 	FPVCam = Scene::World::NewCamera(glm::vec3(0.0f, 0.0f, 1.0f));
 	Scene::World::FocusCamera(_gameData, FPVCam);
-
-	std::vector<std::string> materialsPaths = Files::GetAllAtPath(MATERIAL_DIRECTORY);
-	materials.resize(materialsPaths.size());
-	for (size_t i = 0; i < materials.size(); i++)
-	{
-		materials[i].LoadFromFile(materialsPaths[i].c_str());
-	}
 
 	Lightning::Light flashLight2;
 	flashLight2.SetType(Lightning::LightType::SPOT);
@@ -88,9 +55,8 @@ void Scene::Initialize(GameData* _gameData)
 	Lights::InsertLight(_gameData, dirLight);
 	Scene::Lights::UpdateShader(_gameData);
 
-	//TexturePicker::Initialize(_gameData, &materials);
-	//Maze::Generate();
 	Blocks::Initialize();
+	//Maze::Generate();
 	initialized = true;
 }
 
@@ -135,38 +101,15 @@ void Scene::Inputs(GameData* _gameData)
 			_gameData->window.Focus(false);
 		}
 	}
-
-	if (_gameData->window.IsKeyPressed(Keys::ESCAPE) && inputClock.GetElapsedTime() > 125)
-	{
-		if (Editor::IsDisplayed())
-		{
-			Editor::SetDisplay(false);
-			_gameData->window.Focus(true);
-		}
-		inputClock.Restart();
-	}
-	if (!Inventory::IsActive() && _gameData->window.IsKeyPressed(Keys::F1) && inputClock.GetElapsedTime() > 125)
-	{
-		if (Editor::IsDisplayed())
-		{
-			Editor::SetDisplay(false);
-			_gameData->window.Focus(true);
-		}
-		else
-		{
-			Editor::SetDisplay(true);
-			_gameData->window.Focus(false);
-		}
-		inputClock.Restart();
-	}
 }
-#include "Set.h"
+
 void Scene::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
 	Inputs(_gameData);
 
-	Sets::Edition();
+	_gameData->window.Clear(clearColor);
+	Scene::World::Render(_gameData);
 	// Needs to be called after the inputs that enables it
 	//if (!_gameData->window.IsFocused())
 	{
@@ -174,19 +117,19 @@ void Scene::Tick(GameData* _gameData)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		if (Editor::IsDisplayed())
+		Editor::Tick(_gameData);
+
+		if (!Editor::IsDisplayed())
 		{
-			Editor::Menu(_gameData);
+			Inventory::Menu(_gameData);
+			if (!Inventory::IsActive())
+			{
+				Sets::Edition(_gameData);
+			}
 		}
-		Inventory::Menu(_gameData);
 		ImGui::Render();
 	}
 
-
-	_gameData->window.Clear(clearColor);
-	Scene::World::Render(_gameData);
-
-	Editor::Tick(_gameData);
 	std::vector<Lightning::Light>* lights = Lights::GetLights();
 	for (size_t i = 0; i < lights->size(); i++)
 	{

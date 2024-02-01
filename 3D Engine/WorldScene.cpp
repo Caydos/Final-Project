@@ -3,52 +3,27 @@
 #include "Lightning.h"
 #include <algorithm>
 #include "Files.h"
-#include "Instances.h"
 #include "Blocks.h"
 #include "Set.h"
 
 static std::vector<Camera> cameras;
 static unsigned int focusedCamera = 0;
-static std::vector <Scene::World::Component*> components;
 
 static std::shared_mutex loadingMutex;
-static std::vector<Scene::World::Component*> loadingQueue;
 
 static glm::mat4 projection;
 static glm::mat4 view;
 static std::string sceneName;
 static bool considerLightning = false;
 
-void Scene::World::InsertComponent(Component* _component)
-{
-	components.push_back(_component);
-}
 
-void Scene::World::RemoveComponent(Component* _component)
-{
-	for (int i = 0; i < components.size(); i++)
-	{
-		if (components[i] == _component)
-		{
-			delete components[i];
-			components.erase(components.begin() + i);
-			return;
-		}
-	}
-	std::cout << "Unable to remove component" << std::endl;
-}
-
-std::vector<Scene::World::Component*>* Scene::World::GetComponents()
-{
-	return &components;
-}
-
-void Scene::World::QueueLoading(Component* _component, std::string _fileName)
-{
-	std::unique_lock<std::shared_mutex> lock(loadingMutex);
-	_component->SetName(_fileName.c_str());
-	loadingQueue.push_back(_component);
-}
+// For later sync
+//void Scene::World::QueueLoading(Component* _component, std::string _fileName)
+//{
+//	std::unique_lock<std::shared_mutex> lock(loadingMutex);
+//	_component->SetName(_fileName.c_str());
+//	loadingQueue.push_back(_component);
+//}
 
 
 
@@ -131,16 +106,17 @@ void Scene::World::MouseInputs(GameData* _gameData)
 
 void Scene::World::Render(GameData* _gameData)
 {
-	{
-		std::unique_lock<std::shared_mutex> lock(loadingMutex);
-		while (!loadingQueue.empty())
-		{
-			auto& item = loadingQueue.front();
-			item->LoadFromFile(item->GetName().c_str());
-			loadingQueue.erase(loadingQueue.begin());
-			InsertComponent(item);
-		}
-	}
+	//For later sync
+	//{
+	//	std::unique_lock<std::shared_mutex> lock(loadingMutex);
+	//	while (!loadingQueue.empty())
+	//	{
+	//		auto& item = loadingQueue.front();
+	//		item->LoadFromFile(item->GetName().c_str());
+	//		loadingQueue.erase(loadingQueue.begin());
+	//		InsertComponent(item);
+	//	}
+	//}
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -162,14 +138,6 @@ void Scene::World::Render(GameData* _gameData)
 
 	glm::vec3 position = camera->Position;
 
-	//for (size_t objId = 0; objId < components.size(); objId++)
-	//{
-	//	Bounds::Box boundingBox = components[objId]->GetBoundingBox();
-	//	if (FrustrumCulling::IsBoxInFrustum(projection,view, boundingBox.min, boundingBox.max))
-	//	{
-	//		components[objId]->Draw();
-	//	}
-	//}
 	Sets::UpdateVisibility();
 	Blocks::Draw();
 	glDisable(GL_CULL_FACE);

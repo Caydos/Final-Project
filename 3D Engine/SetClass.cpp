@@ -2,6 +2,7 @@
 #include "FrustrumCulling.h"
 #include "Scene.h"
 #include "Inventory.h"
+#include <glm/gtx/matrix_decompose.hpp>
 
 Sets::Set::Set()
 {
@@ -35,6 +36,15 @@ void Sets::Set::Erase()
 	}
 }
 
+void Sets::Set::Save()
+{//save here
+
+}
+
+void Sets::Set::LoadFromJson(json _content)
+{//load here
+}
+
 std::string Sets::Set::GetName()
 {
 	return this->name;
@@ -52,7 +62,6 @@ bool Sets::Set::IsVisible()
 
 void Sets::Set::CheckVisibility()
 {
-
 	if (FrustrumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.min, this->boundingBox.max))
 	{
 		if (this->visible) { return; }
@@ -130,11 +139,41 @@ void Sets::Set::ApplyTransformation()
 	{
 		this->blocks[i].ApplyTransformation();
 	}
+	CalculateBoundingBox();
 }
 
-std::vector<Blocks::Block> Sets::Set::GetBlocks()
+void Sets::Set::InsertBlock(Blocks::Block _block)
 {
-	return this->blocks;
+	if (this->visible)
+	{
+		_block.InsertInScene();
+	}
+	_block.SetParent(this->bone);
+	this->blocks.push_back(_block);
+	this->CalculateBoundingBox();
+}
+
+void Sets::Set::RemoveBlock(Blocks::Block* _block)
+{
+	for (size_t i = 0; i < this->blocks.size(); i++)
+	{
+		if (&this->blocks[i] == _block)
+		{
+			if (this->visible)
+			{
+				this->blocks[i].RemoveFromScene();
+			}
+			this->blocks[i].EraseModel();
+
+			this->blocks.erase(this->blocks.begin() + i);
+			return;
+		}
+	}
+}
+
+std::vector<Blocks::Block>* Sets::Set::GetBlocks()
+{
+	return &this->blocks;
 }
 
 glm::vec3 Sets::Set::GetPosition() { return this->position; }
@@ -231,8 +270,15 @@ void Sets::Set::CalculateBoundingBox()
 
 	for (Blocks::Block& block : blocks)
 	{
-		glm::vec3 localMin = block.GetPosition() - block.GetScale() / 2.0f;
-		glm::vec3 localMax = block.GetPosition() + block.GetScale() / 2.0f;
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
+		glm::decompose(block.GetModel(), scale, rotation, translation, skew, perspective);
+
+		glm::vec3 localMin = translation - scale / 2.0f;
+		glm::vec3 localMax = translation + scale / 2.0f;
 
 		globalMin = glm::min(globalMin, localMin);
 		globalMax = glm::max(globalMax, localMax);
@@ -241,7 +287,18 @@ void Sets::Set::CalculateBoundingBox()
 	this->boundingBox = { globalMin, globalMax };
 }
 
-void Sets::Set::PlaceOriginBlock()
+void Sets::Set::SetOriginBlockScale(float _scale)
+{
+	for (size_t i = 0; i < this->blocks.size(); i++)
+	{
+		if (this->blocks[i].GetPosition() == glm::vec3(.0f))
+		{
+			this->blocks[i].SetScale(_scale);
+		}
+	}
+}
+
+void Sets::Set::PlaceOriginBlock(float _scale)
 {
 	for (size_t i = 0; i < this->blocks.size(); i++)
 	{
@@ -252,12 +309,11 @@ void Sets::Set::PlaceOriginBlock()
 	}
 	Blocks::Block originBlock;
 	originBlock.GenerateModel();
-	originBlock.SetScale(0.2f);
+	originBlock.SetScale(_scale);
 
 	Blocks::MaterialCheck(&originBlock, nullptr);
-	originBlock.InsertInScene();
-	originBlock.SetParent(this->bone);
-	this->blocks.push_back(originBlock);
+
+	this->InsertBlock(originBlock);
 }
 
 void Sets::Set::MoveOrigin(glm::vec3 _offset)
@@ -266,6 +322,7 @@ void Sets::Set::MoveOrigin(glm::vec3 _offset)
 	{
 		this->blocks[i].Move(_offset);
 	}
+	CalculateBoundingBox();
 }
 
 void Sets::Set::MoveOrigin(float _x, float _y, float _z)
@@ -275,4 +332,5 @@ void Sets::Set::MoveOrigin(float _x, float _y, float _z)
 	{
 		this->blocks[i].Move(offset);
 	}
+	CalculateBoundingBox();
 }

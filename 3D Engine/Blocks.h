@@ -1,7 +1,8 @@
 #ifndef BLOCKS_H
 #define BLOCKS_H
 #include "Common.h"
-#include "Material.h"
+#include "DefaultVertices.h"
+#include "Texture.h"
 //#include <glm/ext/matrix_float4x4.hpp>
 
 #define BLOCKS_DIRECTORY "../Blocks/"
@@ -47,6 +48,10 @@ namespace Blocks
 		Colors::Color GetColor();
 		void SetColor(Colors::Color _color);
 
+
+		glm::vec3 GetScale();
+		void SetScale(glm::vec3 _scale);
+
 		bool GetLightDependency();
 		void SetLightDependency(bool _lightDependency);
 
@@ -71,56 +76,8 @@ namespace Blocks
 		unsigned int instanceVBO;
 		std::string name;
 
-		float vertices[288] = {
-			//front face			//Texture				//Lightning normal
-			-0.5f, -0.5f, 0.5f,		0.0f, 1.0f,				0.0f, 0.0f, 1.0f,
-			0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			0.0f, 0.0f, 1.0f,
-			0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			0.0f, 0.0f, 1.0f,
-			0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			0.0f, 0.0f, 1.0f,
-			-0.5f, 0.5f, 0.5f,		0.0f, 0.0f,				0.0f, 0.0f, 1.0f,
-			-0.5f, -0.5f, 0.5f,		0.0f, 1.0f,				0.0f, 0.0f, 1.0f,
+		float vertices[288];
 
-			// right face
-			0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			1.0f, 0.0f, 0.0f,
-			0.5f, -0.5f, -0.5f,		1.0f / 6 * 2, 1.0f,		1.0f, 0.0f, 0.0f,
-			0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		1.0f, 0.0f, 0.0f,
-			0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		1.0f, 0.0f, 0.0f,
-			0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			1.0f, 0.0f, 0.0f,
-			0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			1.0f, 0.0f, 0.0f,
-
-			//back face
-			0.5f, -0.5f, -0.5f,		1.0f / 6 * 3, 1.0f,		0.0f, 0.0f, -1.0f,
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, 0.0f, -1.0f,
-			-0.5f, 0.5f, -0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, 0.0f, -1.0f,
-			-0.5f, 0.5f, -0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, 0.0f, -1.0f,
-			0.5f, 0.5f, -0.5f,		1.0f / 6 * 3, 0.0f,		0.0f, 0.0f, -1.0f,
-			0.5f, -0.5f, -0.5f,		1.0f / 6 * 3, 1.0f,		0.0f, 0.0f, -1.0f,
-
-			// left face
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		-1.0f, 0.0f, 0.0f,
-			-0.5f, -0.5f, 0.5f,		1.0f / 6 * 3, 1.0f,		-1.0f, 0.0f, 0.0f,
-			-0.5f, 0.5f, 0.5f,		1.0f / 6 * 3, 0.0f,		-1.0f, 0.0f, 0.0f,
-			-0.5f, 0.5f, 0.5f,		1.0f / 6 * 3, 0.0f,		-1.0f, 0.0f, 0.0f,
-			-0.5f, 0.5f, -0.5f,		1.0f / 6 * 2, 0.0f,		-1.0f, 0.0f, 0.0f,
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 2, 1.0f,		-1.0f, 0.0f, 0.0f,
-
-			// top face
-			-0.5f, 0.5f, 0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, 1.0f, 0.0f,
-			0.5f, 0.5f, 0.5f,		1.0f / 6 * 6, 1.0f,		0.0f, 1.0f, 0.0f,
-			0.5f, 0.5f, -0.5f,		1.0f / 6 * 6, 0.0f,		0.0f, 1.0f, 0.0f,
-			0.5f, 0.5f, -0.5f,		1.0f / 6 * 6, 0.0f,		0.0f, 1.0f, 0.0f,
-			-0.5f, 0.5f, -0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, 1.0f, 0.0f,
-			-0.5f, 0.5f, 0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, 1.0f, 0.0f,
-
-			//bottom
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f, 0.0f,
-			0.5f, -0.5f, -0.5f,		1.0f / 6 * 5, 1.0f,		0.0f, -1.0f, 0.0f,
-			0.5f, -0.5f, 0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, -1.0f, 0.0f,
-			0.5f, -0.5f, 0.5f,		1.0f / 6 * 5, 0.0f,		0.0f, -1.0f, 0.0f,
-			-0.5f, -0.5f, 0.5f,		1.0f / 6 * 4, 0.0f,		0.0f, -1.0f, 0.0f,
-			-0.5f, -0.5f, -0.5f,	1.0f / 6 * 4, 1.0f,		0.0f, -1.0f, 0.0f,
-
-		};
 		std::vector<glm::mat4> models;
 		std::vector<glm::mat4*> modelsAddresses;
 
@@ -129,6 +86,7 @@ namespace Blocks
 		Texture* texture;
 		Colors::Color color;
 
+		glm::vec3 scale;
 		bool lightDependent;
 		glm::vec3 diffuse;
 		glm::vec3 specular;
@@ -153,6 +111,7 @@ namespace Blocks
 		void InsertInScene();
 		void RemoveFromScene();
 
+		glm::mat4 GetModel();
 		void GenerateModel();
 		void EraseModel();
 
@@ -199,6 +158,14 @@ namespace Blocks
 	void Refresh();
 	void Draw();
 	std::vector<Blocks::BlockType*> GetAll();
+
+	namespace Ghost
+	{
+		void Draw(GameData* _gameData);
+		void CalculateTransformations();
+		void SetScale(glm::vec3 _scale);
+		void SetPosition(glm::vec3 _position);
+	}
 }
 
 #endif // !BLOCKS_H

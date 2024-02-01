@@ -12,6 +12,7 @@ public:
 	{
 		this->lightDependent = false;
 		this->id = -1;
+		this->model = glm::mat4(1.0f);
 	}
 	~Arrow()
 	{

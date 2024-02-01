@@ -1,31 +1,11 @@
 #include "Set.h"
 #include "Arrows.h"
-static Arrow arrows[3];
-static bool initialized = false;
-static bool isSetsMenuOpen = true;
 
+static bool isSetsMenuOpen = true;
+static float originScale = 1.0f;
 
 void Sets::Menu(GameData* _gameData)
 {
-	if (!initialized)
-	{
-		arrows[0].GenerateGraphicsBuffers();
-		arrows[0].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
-		arrows[0].SetColor(Colors::Red);
-
-		arrows[1].GenerateGraphicsBuffers();
-		arrows[1].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
-		arrows[1].SetColor(Colors::Green);
-
-		arrows[2].GenerateGraphicsBuffers();
-		arrows[2].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
-		arrows[2].SetColor(Colors::Blue);
-		initialized = true;
-	}
-	arrows[0].Draw();
-	//arrows[1].Draw();
-	//arrows[2].Draw();
-
 	glm::ivec2 windowDimensions = _gameData->window.GetDimensions();
 	ImGui::SetNextWindowPos(ImVec2(windowDimensions.x - windowDimensions.x * 0.2, 0));
 	ImGui::SetNextWindowSize(ImVec2(windowDimensions.x * 0.2, windowDimensions.y));
@@ -70,7 +50,13 @@ void Sets::Menu(GameData* _gameData)
 
 				if (ImGui::Button(std::string("Place Origin Block##OriginBlock" + name).c_str()))
 				{
-					sets->at(parentSetId)->PlaceOriginBlock();
+					sets->at(parentSetId)->PlaceOriginBlock(originScale);
+				}
+
+				
+				if (ImGui::SliderFloat("Origin Block Scale##OriginBlock", &originScale, 0.01f, 1.0f))
+				{
+					sets->at(parentSetId)->SetOriginBlockScale(originScale);
 				}
 
 				ImGui::Text("Move Origin : ");
