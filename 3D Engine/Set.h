@@ -3,6 +3,10 @@
 #include "Common.h"
 #include "Blocks.h"
 #include "Bounds.h"
+#include "Files.h"
+
+#define SETS_DIRECTORY "../Sets/"
+#define SETS_FILE_EXTENSION ".json"
 
 namespace Sets
 {

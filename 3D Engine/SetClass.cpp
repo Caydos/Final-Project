@@ -38,11 +38,54 @@ void Sets::Set::Erase()
 
 void Sets::Set::Save()
 {//save here
-
+	json resultObject;
+	json blocks;
+	for (size_t i = 0; i < blocks.size(); i++)
+	{
+		json objetAttributes;
+		glm::vec3 position = this->blocks[i].GetPosition();
+		objetAttributes["position"] = { position.x, position.y, position.z };
+		glm::vec3 rotation = this->blocks[i].GetRotation();
+		objetAttributes["rotation"] = { rotation.x, rotation.y, rotation.z };
+		if (this->blocks[i].GetType() == nullptr) { continue; }
+		objetAttributes["type"] = this->blocks[i].GetType()->GetName();
+	}
+	resultObject["blocks"] = blocks;
+	Files::Create(SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
 }
 
 void Sets::Set::LoadFromJson(json _content)
 {//load here
+	if (_content.contains("blocks"))
+	{
+		for (auto& object : _content["blocks"])
+		{
+			Blocks::Block block;
+			block.GenerateModel();
+			if (object.contains("type"))
+			{
+				std::string name = object["type"];
+				Blocks::MaterialCheck(&block, name.c_str());
+				Blocks::BlockType* type = block.GetType();
+				if (type == nullptr)
+				{
+					continue;
+				}
+				block.SetScale(type->GetScale());
+			}
+			if (object.contains("position"))
+			{
+				glm::vec3 position(object["position"][0], object["position"][1], object["position"][2]);
+				block.SetPosition(position);
+			}
+			if (object.contains("rotation"))
+			{
+				glm::vec3 rotation(object["rotation"][0], object["rotation"][1], object["rotation"][2]);
+				block.SetRotation(rotation);
+			}
+			this->InsertBlock(block);
+		}
+	}
 }
 
 std::string Sets::Set::GetName()
@@ -327,7 +370,7 @@ void Sets::Set::MoveOrigin(glm::vec3 _offset)
 
 void Sets::Set::MoveOrigin(float _x, float _y, float _z)
 {
-	glm::vec3 offset(_x,_y,_z);
+	glm::vec3 offset(_x, _y, _z);
 	for (size_t i = 0; i < this->blocks.size(); i++)
 	{
 		this->blocks[i].Move(offset);
