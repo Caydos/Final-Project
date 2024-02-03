@@ -12,9 +12,15 @@ namespace Files
 	std::string GetFileContent(const char* _path);
 	void Create(const char* _path, const char* _name, const char* _extension, const char* _content);
 
-	char* GetFolderPath(const char* _searchTitle);
-	char* GetFilePath(const char* _filters);
-
+	struct FileSearch
+	{
+		bool achieved;
+		std::string name;
+		std::string extension;
+		std::string originalPath;
+		std::string path;
+	};
+	FileSearch OpenSearchDialog();
 }
 
 #endif // !FILES_H

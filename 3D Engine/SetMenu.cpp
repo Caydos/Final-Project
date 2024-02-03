@@ -48,22 +48,34 @@ void Sets::Menu(GameData* _gameData)
 					}
 				}
 
-				if (ImGui::Button(std::string("Place Origin Block##OriginBlock" + name).c_str()))
+				if (ImGui::Button(std::string("Place Origin Block##OriginBlock" + parentSetId).c_str()))
 				{
 					sets->at(parentSetId)->PlaceOriginBlock(originScale);
 				}
 
 				
-				if (ImGui::SliderFloat("Origin Block Scale##OriginBlock", &originScale, 0.01f, 1.0f))
+				if (ImGui::SliderFloat(std::string("Origin Block Scale##OriginBlock" + parentSetId).c_str(), &originScale, 0.01f, 1.0f))
 				{
 					sets->at(parentSetId)->SetOriginBlockScale(originScale);
 				}
 
 				ImGui::Text("Move Origin : ");
 				glm::vec3 originPos(0);
-				if (ImGui::DragFloat3(std::string("##MoveOrigin" + name).c_str(), &originPos.x, 0.05f))
+				if (ImGui::DragFloat3(std::string("##MoveOrigin" + parentSetId).c_str(), &originPos.x, 0.05f))
 				{
 					sets->at(parentSetId)->MoveOrigin(originPos);
+				}
+
+				if (ImGui::Button(std::string("Save##SaveSet" + parentSetId).c_str()))
+				{
+					sets->at(parentSetId)->Save();
+				}
+
+				if (ImGui::Button(std::string("Close##CloseSet" + parentSetId).c_str()))
+				{
+					sets->at(parentSetId)->Erase();
+					sets->erase(sets->begin() + parentSetId);
+					break;
 				}
 
 				ImGui::TreePop();

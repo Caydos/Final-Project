@@ -26,6 +26,11 @@ void Sets::Set::Initialize()
 
 void Sets::Set::Erase()
 {
+	if (this->visible)
+	{
+		this->visible = false;
+		this->AppplyVisibility();
+	}
 	if (this->bone != nullptr)
 	{
 		delete this->bone;
@@ -39,8 +44,8 @@ void Sets::Set::Erase()
 void Sets::Set::Save()
 {//save here
 	json resultObject;
-	json blocks;
-	for (size_t i = 0; i < blocks.size(); i++)
+	json blocksArray;
+	for (size_t i = 0; i < this->blocks.size(); i++)
 	{
 		json objetAttributes;
 		glm::vec3 position = this->blocks[i].GetPosition();
@@ -49,9 +54,10 @@ void Sets::Set::Save()
 		objetAttributes["rotation"] = { rotation.x, rotation.y, rotation.z };
 		if (this->blocks[i].GetType() == nullptr) { continue; }
 		objetAttributes["type"] = this->blocks[i].GetType()->GetName();
+		blocksArray.push_back(objetAttributes);
 	}
-	resultObject["blocks"] = blocks;
-	Files::Create(SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
+	resultObject["blocks"] = blocksArray;
+	Files::Create((this->path.size() > 2) ? this->path.c_str() : SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
 }
 
 void Sets::Set::LoadFromJson(json _content)
@@ -69,6 +75,7 @@ void Sets::Set::LoadFromJson(json _content)
 				Blocks::BlockType* type = block.GetType();
 				if (type == nullptr)
 				{
+					block.EraseModel();
 					continue;
 				}
 				block.SetScale(type->GetScale());
@@ -96,6 +103,16 @@ std::string Sets::Set::GetName()
 void Sets::Set::SetName(std::string _name)
 {
 	this->name = _name;
+}
+
+std::string Sets::Set::GetPath()
+{
+	return this->path;
+}
+
+void Sets::Set::SetPath(std::string _path)
+{
+	this->path = _path;
 }
 
 bool Sets::Set::IsVisible()

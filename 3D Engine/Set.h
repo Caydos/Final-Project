@@ -22,6 +22,8 @@ namespace Sets
 
 		std::string GetName();
 		void SetName(std::string _name);
+		std::string GetPath();
+		void SetPath(std::string _path);
 
 		bool IsVisible();
 		void CheckVisibility();
@@ -66,6 +68,7 @@ namespace Sets
 
 	private:
 		std::string name;
+		std::string path;
 
 		bool visible;
 		glm::mat4* parent;

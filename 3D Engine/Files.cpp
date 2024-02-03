@@ -77,102 +77,124 @@ void Files::Create(const char* _path, const char* _name, const char* _extension,
 	}
 }
 
+#include <windows.h>
+#include <direct.h> // For _wgetcwd and _wchdir
+#include <commdlg.h> // Common dialogs
+#include <string>
+// Function to convert const char* to std::wstring
+// Function to convert const char* to std::wstring
+std::wstring ConvertToWideString(const char* str) {
+	// Calculate the size of the destination wide string
+	int len = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
+	if (len == 0) {
+		return L"";
+	}
 
-#include <tchar.h>
-#include <ShlObj_core.h>
-#include <atlcore.h>
+	// Allocate a buffer for the wide string
+	std::wstring wstr(len, L'\0'); // Allocate space for characters including the null terminator
+	// Perform the conversion
+	MultiByteToWideChar(CP_UTF8, 0, str, -1, &wstr[0], len);
 
-std::wstring GetProcessName()
+	return wstr;
+}
+// Function to convert std::wstring to std::string (UTF-8)
+std::string ConvertToNarrowString(const std::wstring& wstr)
 {
-	std::wstring wstrPath;
-	TCHAR buffer[MAX_PATH] = { 0 };  // Buffer to hold the path
-
-	// Get the full path of the executable
-	if (GetModuleFileName(NULL, buffer, MAX_PATH) > 0)
+	if (wstr.empty())
 	{
-		// Convert TCHAR array to std::wstring
-		std::wstring wstrPath(buffer);
+		return "";
+	}
 
-		// Extract the file name from the path
-		size_t pos = wstrPath.find_last_of(L"\\/");
+	// Calculate the length of the buffer needed for the narrow string (including null terminator)
+	int len = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
+	if (len == 0)
+	{
+		// Conversion failed
+		return "";
+	}
+
+	// Allocate a buffer for the narrow string
+	std::string str(len, '\0');
+	// Perform the conversion
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], len, NULL, NULL);
+
+	// Remove the null terminator inserted by WideCharToMultiByte
+	str.pop_back();
+
+	return str;
+}
+std::wstring RemoveInitialDirectory(const std::wstring& initialDir, const std::wstring& finalPath)
+{
+	// Check if the final path starts with the initial directory
+	if (finalPath.substr(0, initialDir.length()) == initialDir) {
+		// If so, remove the initial directory (and potentially the slash) from the final path
+		size_t startPos = initialDir.length();
+
+		// Remove the separator if present
+		if (finalPath[startPos] == L'\\' || finalPath[startPos] == L'/') {
+			startPos++;
+		}
+
+		return finalPath.substr(startPos);
+	}
+	// If the initial directory is not at the start of the final path, return the final path as is
+	return finalPath;
+}
+
+Files::FileSearch Files::OpenSearchDialog()
+{
+	FileSearch searchResults;
+	std::string returnValue;
+	std::wstring outFilePath;
+	std::wstring filter = L"\0";
+
+	OPENFILENAMEW ofn;
+	WCHAR szFile[260];
+	WCHAR initialDir[260];
+	HWND hwnd = NULL;
+
+	WCHAR savedCwd[260];
+	_wgetcwd(savedCwd, 260);
+
+	// Get the full path name of the executable
+	GetModuleFileNameW(NULL, initialDir, 260);
+	// Extract the directory
+	for (size_t i = 0; i < 2; i++)
+	{
+		std::wstring::size_type pos = std::wstring(initialDir).find_last_of(L"\\/");
 		if (pos != std::wstring::npos)
 		{
-			std::wstring exeName = wstrPath.substr(pos + 1);
-
-			return exeName;
-		}
-		else
-		{
-			std::cout << "Failed to extract executable name" << std::endl;
+			initialDir[pos] = '\0'; // Remove the executable name, leaving the directory
 		}
 	}
-	else
-	{
-		std::cout << "GetModuleFileName failed" << std::endl;
-	}
-	return wstrPath;
-}
 
-char* Files::GetFolderPath(const char* _searchTitle)
-{
-	TCHAR szDir[MAX_PATH];
-	BROWSEINFO bInfo;
-	bInfo.hwndOwner = FindWindowA(NULL, (LPCSTR) GetProcessName().c_str());
-	bInfo.pidlRoot = NULL;
-	bInfo.pszDisplayName = szDir; // Address of a buffer to receive the display name of the folder selected by the user
-	//bInfo.lpszTitle = (LPCWSTR) _searchTitle; // Title of the dialog
-	bInfo.lpszTitle = (LPCWSTR)_searchTitle; // Title of the dialog
-	bInfo.ulFlags = 0;
-	bInfo.lpfn = NULL;
-	bInfo.lParam = 0;
-	bInfo.iImage = -1;
-
-	LPITEMIDLIST lpItem = SHBrowseForFolder(&bInfo);
-	if (lpItem != NULL)
-	{
-		SHGetPathFromIDList(lpItem, szDir);
-		char path[MAX_PATH];
-		wcstombs(path, szDir, wcslen(szDir) + 1);
-
-		// Replace backslashes with forward slashes in the folder path
-		for (int i = 0; path[i]; i++)
-		{
-			if (path[i] == '\\')
-			{
-				path[i] = '/';
-			}
-		}
-
-		return path;
-	}
-	return NULL;
-}
-
-
-
-char* Files::GetFilePath(const char* _filters)
-{
-	OPENFILENAME ofn = { 0 };
-	TCHAR szFile[260] = { 0 };
-	// Initialize remaining fields of OPENFILENAME structure
+	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = FindWindowA(NULL, (LPCSTR)GetProcessName().c_str());
+	ofn.hwndOwner = hwnd;
 	ofn.lpstrFile = szFile;
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = (LPCWSTR)_filters;
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = sizeof(szFile) / sizeof(WCHAR);
+	ofn.lpstrFilter = filter.c_str();
 	ofn.nFilterIndex = 1;
 	ofn.lpstrFileTitle = NULL;
 	ofn.nMaxFileTitle = 0;
-	ofn.lpstrInitialDir = NULL;
+	ofn.lpstrInitialDir = initialDir; // Use the directory path
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-	if (GetOpenFileName(&ofn) == TRUE)
+	if (GetOpenFileNameW(&ofn) == TRUE)
 	{
-		char path[MAX_PATH];
-		wcstombs(path, ofn.lpstrFile, wcslen(ofn.lpstrFile) + 1);
-
-		return path;
+		outFilePath = ofn.lpstrFile;
 	}
-	return NULL;
+	_wchdir(savedCwd);
 
+	searchResults.originalPath = "../" + ConvertToNarrowString(RemoveInitialDirectory(initialDir, outFilePath));
+	std::filesystem::path pathObj(searchResults.originalPath);
+
+	searchResults.path = pathObj.parent_path().string();
+
+	searchResults.name = pathObj.filename().string();
+
+	searchResults.extension = pathObj.extension().string();
+	searchResults.achieved = true;
+	return searchResults;
 }

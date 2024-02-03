@@ -61,19 +61,22 @@ void Editor::Menu(GameData* _gameData)
 		}
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::BeginMenu("New"))
+			if (ImGui::MenuItem("New"))
 			{
-				if (ImGui::MenuItem("Set"))
-				{
-					outputFileType = Editor::SET;
-					showFilenameInput = true;
-				}
-				ImGui::EndMenu();
+				outputFileType = Editor::SET;
+				showFilenameInput = true;
 			}
-			if (ImGui::BeginMenu("Open"))
+			if (ImGui::MenuItem("Open"))
 			{
-
-				ImGui::EndMenu();
+				Files::FileSearch fileSearch = Files::OpenSearchDialog();
+				if (fileSearch.achieved && fileSearch.extension == SETS_FILE_EXTENSION)
+				{
+					Sets::Set* set = Sets::Create();
+					std::string content = Files::GetFileContent(fileSearch.originalPath.c_str());
+					set->LoadFromJson(json::parse(content));
+					set->SetName(fileSearch.name);
+					set->SetPath(fileSearch.path);
+				}
 			}
 			ImGui::EndMenu();
 		}
