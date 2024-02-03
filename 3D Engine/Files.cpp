@@ -190,9 +190,9 @@ Files::FileSearch Files::OpenSearchDialog()
 	searchResults.originalPath = "../" + ConvertToNarrowString(RemoveInitialDirectory(initialDir, outFilePath));
 	std::filesystem::path pathObj(searchResults.originalPath);
 
-	searchResults.path = pathObj.parent_path().string();
+	searchResults.path = pathObj.parent_path().string() + "/";
 
-	searchResults.name = pathObj.filename().string();
+	searchResults.name = pathObj.stem().string();
 
 	searchResults.extension = pathObj.extension().string();
 	searchResults.achieved = true;

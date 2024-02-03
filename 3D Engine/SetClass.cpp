@@ -57,7 +57,13 @@ void Sets::Set::Save()
 		blocksArray.push_back(objetAttributes);
 	}
 	resultObject["blocks"] = blocksArray;
-	Files::Create((this->path.size() > 2) ? this->path.c_str() : SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
+	if (this->path.size() > 2)
+	{
+		Files::Create(this->path.c_str(), this->GetName().c_str(), ".json", resultObject.dump().c_str());
+		std::cout << path << std::endl;
+		return;
+	}
+	Files::Create(SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
 }
 
 void Sets::Set::LoadFromJson(json _content)
