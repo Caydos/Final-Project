@@ -3,6 +3,8 @@
 
 static bool isSetsMenuOpen = true;
 static float originScale = 1.0f;
+static const char** blocksName = nullptr;
+static int blockCount = 0;
 
 void Sets::Menu(GameData* _gameData)
 {
@@ -21,6 +23,7 @@ void Sets::Menu(GameData* _gameData)
 			std::string name = std::string(sets->at(parentSetId)->GetName() + std::string("##sets-") + std::to_string(parentSetId));
 			if (ImGui::TreeNode(name.c_str()))
 			{
+				ImGui::Text(std::string("Block count : " + std::to_string(sets->at(parentSetId)->GetBlocks()->size())).c_str());
 				ImGui::Text("Position : ");
 				glm::vec3 position = sets->at(parentSetId)->GetPosition();
 				if (ImGui::DragFloat3(std::string("##Position" + name).c_str(), &position.x, 0.05f))
@@ -47,16 +50,39 @@ void Sets::Menu(GameData* _gameData)
 						sets->at(parentSetId)->SetRotation(rotation);
 					}
 				}
-
-				if (ImGui::Button(std::string("Place Origin Block##OriginBlock" + parentSetId).c_str()))
+				if (blocksName == nullptr)
 				{
-					sets->at(parentSetId)->PlaceOriginBlock(originScale);
+					std::vector<Blocks::BlockType*> blocks = Blocks::GetAll();
+					blockCount = blocks.size();
+					blocksName = new const char* [blockCount];
+					for (size_t i = 0; i < blockCount; ++i)
+					{
+						std::string materialName = blocks[i]->GetName();
+						char* nameCopy = new char[materialName.length() + 1];
+						strcpy(nameCopy, materialName.c_str());
+						blocksName[i] = nameCopy;
+					}
 				}
-
-				
-				if (ImGui::SliderFloat(std::string("Origin Block Scale##OriginBlock" + parentSetId).c_str(), &originScale, 0.01f, 1.0f))
+				if (!sets->at(parentSetId)->HasOrigin())
 				{
-					sets->at(parentSetId)->SetOriginBlockScale(originScale);
+					int marker = 0;
+					ImGui::Text("Origin block :");
+					if (ImGui::Combo("##Originblocks", &marker, blocksName, blockCount))
+					{
+						Blocks::Block block;
+						block.GenerateModel();
+						Blocks::MaterialCheck(&block, blocksName[marker]);
+						Blocks::BlockType* type = block.GetType();
+						if (type != nullptr)
+						{
+							block.SetScale(type->GetScale());
+							sets->at(parentSetId)->InsertBlock(block);
+						}
+						else
+						{
+							block.EraseModel();
+						}
+					}
 				}
 
 				ImGui::Text("Move Origin : ");

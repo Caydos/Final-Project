@@ -60,6 +60,7 @@ namespace Sets
 
 		void CalculateBoundingBox();
 
+		bool HasOrigin();
 		void SetOriginBlockScale(float _scale = 0.2f);
 		void PlaceOriginBlock(float _scale = 0.2f);
 

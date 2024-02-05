@@ -353,6 +353,18 @@ void Sets::Set::CalculateBoundingBox()
 	this->boundingBox = { globalMin, globalMax };
 }
 
+bool Sets::Set::HasOrigin()
+{
+	for (size_t i = 0; i < this->blocks.size(); i++)
+	{
+		if (this->blocks[i].GetPosition() == glm::vec3(.0f))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void Sets::Set::SetOriginBlockScale(float _scale)
 {
 	for (size_t i = 0; i < this->blocks.size(); i++)
