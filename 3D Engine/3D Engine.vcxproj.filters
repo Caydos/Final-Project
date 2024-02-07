@@ -267,6 +267,9 @@
     <ClCompile Include="GhostBlocks.cpp">
       <Filter>Source Files\Rendering Engine\Blocks</Filter>
     </ClCompile>
+    <ClCompile Include="Occlusion.cpp">
+      <Filter>Source Files\Rendering Engine\Optimizations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">

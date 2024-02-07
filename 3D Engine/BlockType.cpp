@@ -5,6 +5,7 @@ Blocks::BlockType::BlockType()
 {
 	this->graphicsLoaded = false;
 	std::memcpy(this->vertices, cubeVertices, 288 * sizeof(float));
+	this->graphicsBufferSize = 0;
 }
 Blocks::BlockType::~BlockType() {}
 
@@ -13,6 +14,17 @@ void Blocks::BlockType::GenerateGraphicsBuffers()
 	glGenVertexArrays(1, &this->VAO);
 	glGenBuffers(1, &this->vertexVBO);
 	glGenBuffers(1, &this->instanceVBO);
+
+	glBindVertexArray(this->VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->instanceVBO);
+
+	for (unsigned int i = 0; i < 4; i++)
+	{
+		glEnableVertexAttribArray(i + 3);
+		glVertexAttribPointer(i + 3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
+		glVertexAttribDivisor(i + 3, 1);
+	}
+
 	this->graphicsLoaded = true;
 }
 void Blocks::BlockType::RemoveGraphicsBuffers()
@@ -25,16 +37,15 @@ void Blocks::BlockType::RemoveGraphicsBuffers()
 
 void Blocks::BlockType::BindGraphicsBuffers()
 {
+	int oldSize = this->models.size();
 	glBindVertexArray(this->VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->instanceVBO);
-	glBufferData(GL_ARRAY_BUFFER, this->models.size() * sizeof(glm::mat4), &this->models[0], GL_STATIC_DRAW);
-
-	for (unsigned int i = 0; i < 4; i++)
+	if (this->models.size() > this->graphicsBufferSize)
 	{
-		glEnableVertexAttribArray(i + 3); // 4 is an offset, assuming 0, 1, 2, 3 are used for the cube's vertex data
-		glVertexAttribPointer(i + 3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
-		glVertexAttribDivisor(i + 3, 1); // Tell OpenGL this is an instanced vertex attribute.
+		glBufferData(GL_ARRAY_BUFFER, this->models.size() * sizeof(glm::mat4), &this->models[0], GL_STATIC_DRAW);
+		return;
 	}
+	glBufferSubData(GL_ARRAY_BUFFER, 0, this->models.size() * sizeof(glm::mat4), &this->models[0]);
 }
 
 std::string Blocks::BlockType::GetName()
@@ -67,13 +78,33 @@ void Blocks::BlockType::SetVertices()
 }
 void Blocks::BlockType::RegenerateMatrices()
 {
-	models.clear();
-	models.resize(modelsAddresses.size());
-	for (size_t i = 0; i < models.size(); i++)
+	// models -> static resize
+	// modelsAddresses -> constant resize
+
+	glBindVertexArray(this->VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->instanceVBO);
+	if (this->modelsAddresses.size() > this->graphicsBufferSize)
 	{
-		models[i] = *modelsAddresses[i];
+		this->graphicsBufferSize = this->models.size();
+
+		this->models.resize(this->graphicsBufferSize);
+		//std::memcpy(this->models.data(), this->modelsAddresses.data(), this->graphicsBufferSize * sizeof(glm::mat4)); // not working cuz we're using pointers
+		glBufferData(GL_ARRAY_BUFFER, this->models.size() * sizeof(glm::mat4), &this->models[0], GL_STATIC_DRAW);
+		return;
 	}
-	BindGraphicsBuffers();
+	std::memcpy(this->models.data(), this->modelsAddresses.data(), this->graphicsBufferSize * sizeof(glm::mat4)); // not working cuz we're using pointers
+	//size_t numBytes = (vec.size() - startIndex) * sizeof(vec[0]);
+	// Use std::memset to set the specified range to zero
+	//std::memset(vec.data() + startIndex, 0, numBytes);
+
+	glBufferSubData(GL_ARRAY_BUFFER, 0, this->models.size() * sizeof(glm::mat4), &this->models[0]);
+	//models.clear();
+	//models.resize(modelsAddresses.size());
+	//for (size_t i = 0; i < models.size(); i++)
+	//{
+	//	models[i] = *modelsAddresses[i];
+	//}
+	//BindGraphicsBuffers();
 }
 
 
