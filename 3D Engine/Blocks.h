@@ -78,6 +78,7 @@ namespace Blocks
 
 		float vertices[288];
 
+		unsigned int unmappedBufferLastId;
 		unsigned int graphicsBufferSize;
 		std::vector<glm::mat4> models;
 		std::vector<glm::mat4*> modelsAddresses;

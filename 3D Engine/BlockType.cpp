@@ -5,6 +5,7 @@ Blocks::BlockType::BlockType()
 {
 	this->graphicsLoaded = false;
 	std::memcpy(this->vertices, cubeVertices, 288 * sizeof(float));
+	this->unmappedBufferLastId = 0;
 	this->graphicsBufferSize = 0;
 }
 Blocks::BlockType::~BlockType() {}
@@ -80,7 +81,6 @@ void Blocks::BlockType::RegenerateMatrices()
 {
 	// models -> static resize
 	// modelsAddresses -> constant resize
-	std::cout << "Regeneration" << std::endl;
 	glBindVertexArray(this->VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->instanceVBO);
 	if (this->modelsAddresses.size() > this->models.size())
@@ -92,6 +92,7 @@ void Blocks::BlockType::RegenerateMatrices()
 		}
 		glBufferData(GL_ARRAY_BUFFER, this->models.size() * sizeof(glm::mat4), &this->models[0], GL_STATIC_DRAW);
 		std::cout << "Reallocating with : " << this->models.size() << std::endl;
+		this->unmappedBufferLastId = this->models.size();
 		return;
 	}
 	for (size_t i = 0; i < this->modelsAddresses.size(); i++)
@@ -102,20 +103,58 @@ void Blocks::BlockType::RegenerateMatrices()
 	{
 		this->models[i] = glm::mat4(.0f);
 	}
-	//glBufferSubData(GL_ARRAY_BUFFER, 0, this->modelsAddresses.size() * sizeof(glm::mat4), &this->models[0]);
-	glm::mat4* bufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-	if (bufferPtr) {
-		for (size_t i = 0; i < this->modelsAddresses.size(); ++i)
+
+	//Update gpu
+	size_t startMatrixIndex = 0;
+	size_t numMatrices = this->modelsAddresses.size();
+	size_t offset = startMatrixIndex * sizeof(glm::mat4);
+	size_t length = numMatrices * sizeof(glm::mat4);
+	glm::mat4* bufferPtr = (glm::mat4*)glMapBufferRange(GL_ARRAY_BUFFER, offset, length, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT);
+
+	if (bufferPtr)
+	{
+		for (size_t i = 0; i < numMatrices; i++)
 		{
-			bufferPtr[i] = *this->modelsAddresses[i]; // Set to identity matrix
+			bufferPtr[i] = *this->modelsAddresses[i];
 		}
-		for (size_t i = this->modelsAddresses.size(); i < this->models.size(); i++)
-		{
-			bufferPtr[i] = glm::mat4(.0f);
-		}
-		//std::fill_n(bufferPtr, this->modelsAddresses.size(), glm::mat4(0.0f)); // Fill with zeroes
+
 		glUnmapBuffer(GL_ARRAY_BUFFER);
 	}
+	if (this->unmappedBufferLastId > this->modelsAddresses.size())
+	{
+		size_t startMatrixIndex = this->modelsAddresses.size();
+		size_t numMatrices = this->models.size();
+		size_t offset = startMatrixIndex * sizeof(glm::mat4);
+		size_t length = numMatrices * sizeof(glm::mat4);
+		glm::mat4* bufferPtr = (glm::mat4*)glMapBufferRange(GL_ARRAY_BUFFER, offset, length, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT);
+
+		if (bufferPtr)
+		{
+			for (size_t i = 0; i < numMatrices; i++)
+			{
+				bufferPtr[i] = glm::mat4(.0f);
+			}
+
+			glUnmapBuffer(GL_ARRAY_BUFFER);
+		}
+	}
+
+	this->unmappedBufferLastId = this->modelsAddresses.size();
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, this->modelsAddresses.size() * sizeof(glm::mat4), &this->models[0]);
+	//glm::mat4* bufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+	//if (bufferPtr) {
+	//	for (size_t i = 0; i < this->modelsAddresses.size(); ++i)
+	//	{
+	//		bufferPtr[i] = *this->modelsAddresses[i]; // Set to identity matrix
+	//	}
+	//	for (size_t i = this->modelsAddresses.size(); i < this->models.size(); i++)
+	//	{
+	//		bufferPtr[i] = glm::mat4(.0f);
+	//	}
+	//	//std::fill_n(bufferPtr, this->modelsAddresses.size(), glm::mat4(0.0f)); // Fill with zeroes
+	//	glUnmapBuffer(GL_ARRAY_BUFFER);
+	//}
+
 	//models.clear();
 	//models.resize(modelsAddresses.size());
 	//for (size_t i = 0; i < models.size(); i++)
