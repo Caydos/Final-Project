@@ -412,3 +412,8 @@ void Sets::Set::MoveOrigin(float _x, float _y, float _z)
 	}
 	CalculateBoundingBox();
 }
+
+Bounds::Box Sets::Set::GetBoundingBox()
+{
+	return this->boundingBox;
+}

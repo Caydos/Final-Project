@@ -74,30 +74,48 @@ void Blocks::BlockType::SetVertices()
 	// Lightning normal attribute
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(2);
-
 }
+
 void Blocks::BlockType::RegenerateMatrices()
 {
 	// models -> static resize
 	// modelsAddresses -> constant resize
-
+	std::cout << "Regeneration" << std::endl;
 	glBindVertexArray(this->VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->instanceVBO);
-	if (this->modelsAddresses.size() > this->graphicsBufferSize)
+	if (this->modelsAddresses.size() > this->models.size())
 	{
-		this->graphicsBufferSize = this->models.size();
-
-		this->models.resize(this->graphicsBufferSize);
-		//std::memcpy(this->models.data(), this->modelsAddresses.data(), this->graphicsBufferSize * sizeof(glm::mat4)); // not working cuz we're using pointers
+		this->models.resize(this->modelsAddresses.size());
+		for (size_t i = 0; i < this->modelsAddresses.size(); i++)
+		{
+			this->models[i] = *this->modelsAddresses.at(i);
+		}
 		glBufferData(GL_ARRAY_BUFFER, this->models.size() * sizeof(glm::mat4), &this->models[0], GL_STATIC_DRAW);
+		std::cout << "Reallocating with : " << this->models.size() << std::endl;
 		return;
 	}
-	std::memcpy(this->models.data(), this->modelsAddresses.data(), this->graphicsBufferSize * sizeof(glm::mat4)); // not working cuz we're using pointers
-	//size_t numBytes = (vec.size() - startIndex) * sizeof(vec[0]);
-	// Use std::memset to set the specified range to zero
-	//std::memset(vec.data() + startIndex, 0, numBytes);
-
-	glBufferSubData(GL_ARRAY_BUFFER, 0, this->models.size() * sizeof(glm::mat4), &this->models[0]);
+	for (size_t i = 0; i < this->modelsAddresses.size(); i++)
+	{
+		this->models[i] = *this->modelsAddresses.at(i);
+	}
+	for (size_t i = this->modelsAddresses.size(); i < this->models.size(); i++)
+	{
+		this->models[i] = glm::mat4(.0f);
+	}
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, this->modelsAddresses.size() * sizeof(glm::mat4), &this->models[0]);
+	glm::mat4* bufferPtr = (glm::mat4*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+	if (bufferPtr) {
+		for (size_t i = 0; i < this->modelsAddresses.size(); ++i)
+		{
+			bufferPtr[i] = *this->modelsAddresses[i]; // Set to identity matrix
+		}
+		for (size_t i = this->modelsAddresses.size(); i < this->models.size(); i++)
+		{
+			bufferPtr[i] = glm::mat4(.0f);
+		}
+		//std::fill_n(bufferPtr, this->modelsAddresses.size(), glm::mat4(0.0f)); // Fill with zeroes
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+	}
 	//models.clear();
 	//models.resize(modelsAddresses.size());
 	//for (size_t i = 0; i < models.size(); i++)

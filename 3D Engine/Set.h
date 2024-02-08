@@ -67,6 +67,8 @@ namespace Sets
 		void MoveOrigin(glm::vec3 _offset);
 		void MoveOrigin(float _x, float _y, float _z);
 
+
+		Bounds::Box GetBoundingBox();
 	private:
 		std::string name;
 		std::string path;
