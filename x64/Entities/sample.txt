@@ -1,3 +1,0 @@
-json structure with : 
-- skull (bones & childs) -> blocks having the entities ratio scale
-

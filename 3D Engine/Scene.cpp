@@ -56,7 +56,7 @@ void Scene::Initialize(GameData* _gameData)
 	Scene::Lights::UpdateShader(_gameData);
 
 	Blocks::Initialize();
-	Maze::Generate();
+	//Maze::Generate();
 	initialized = true;
 }
 

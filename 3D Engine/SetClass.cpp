@@ -49,6 +49,7 @@ void Sets::Set::Save()
 	{
 		json objetAttributes;
 		glm::vec3 position = this->blocks[i].GetPosition();
+
 		objetAttributes["position"] = { position.x, position.y, position.z };
 		glm::vec3 rotation = this->blocks[i].GetRotation();
 		objetAttributes["rotation"] = { rotation.x, rotation.y, rotation.z };
@@ -63,6 +64,7 @@ void Sets::Set::Save()
 		std::cout << path << std::endl;
 		return;
 	}
+
 	Files::Create(SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
 }
 
@@ -82,6 +84,7 @@ void Sets::Set::LoadFromJson(json _content)
 				if (type == nullptr)
 				{
 					block.EraseModel();
+					std::cout << "Invalid block name : " << name << std::endl;
 					continue;
 				}
 				block.SetScale(type->GetScale());
@@ -216,7 +219,7 @@ void Sets::Set::InsertBlock(Blocks::Block _block)
 	}
 	_block.SetParent(this->bone);
 	this->blocks.push_back(_block);
-	this->CalculateBoundingBox();
+	this->ApplyTransformation();
 }
 
 void Sets::Set::RemoveBlock(Blocks::Block* _block)
