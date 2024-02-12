@@ -1,2 +1,2 @@
 # Game engine
->>> Work in progress
+> Work in progress
