@@ -57,10 +57,6 @@ void Blocks::Load(std::string _name)
 						block->SetShininess(content["attributes"]["shininess"]);
 					}
 				}
-
-				block->GenerateGraphicsBuffers();
-				block->SetVertices();
-				block->BindGraphicsBuffers();
 			}
 			catch (nlohmann::json::parse_error& e)
 			{

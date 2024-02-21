@@ -31,10 +31,17 @@ namespace Sets
 
 		void ApplyTransformation();
 
+		glm::mat4 GetBone();
+
 
 		void InsertBlock(Blocks::Block _block);
 		void RemoveBlock(Blocks::Block* _block);
 		std::vector<Blocks::Block>* GetBlocks();
+		
+		void GenerateRenderingInstance();
+		void EraseRenderingInstance();
+		void SetRenderingInstance(std::vector<Blocks::BlockType*>* _instance);
+
 
 		glm::vec3 GetPosition();
 		void SetPosition(float _x, float _y, float _z);
@@ -74,10 +81,13 @@ namespace Sets
 		std::string path;
 
 		bool visible;
-		glm::mat4* parent;
+		Set* parent;
 		glm::mat4* bone;
-		std::vector<Set> sets;
+		std::vector<Set*> sets;
+
 		std::vector<Blocks::Block> blocks;
+		std::vector<Blocks::BlockType*>* typesInstances;
+		bool useParentRendering;
 
 		glm::vec3 position;
 		glm::vec3 rotation;

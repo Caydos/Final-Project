@@ -270,6 +270,9 @@
     <ClCompile Include="Occlusion.cpp">
       <Filter>Source Files\Rendering Engine\Optimizations</Filter>
     </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>Source Files\Rendering Engine\Blocks\Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">

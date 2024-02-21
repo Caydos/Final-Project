@@ -35,7 +35,7 @@ void Blocks::Block::InsertInScene()
 	if (!this->inScene && this->type != nullptr)
 	{
 		this->inScene = true;
-		this->type->InsertModel(this->model);
+		//this->type->InsertModel(this->model);
 	}
 }
 
@@ -44,7 +44,7 @@ void Blocks::Block::RemoveFromScene()
 	if (this->inScene && this->type != nullptr)
 	{
 		this->inScene = false;
-		this->type->RemoveModel(this->model);
+		//this->type->RemoveModel(this->model);
 	}
 }
 
@@ -57,6 +57,11 @@ void Blocks::Block::GenerateModel()
 glm::mat4 Blocks::Block::GetModel()
 {
 	return *this->model;
+}
+
+glm::mat4* Blocks::Block::GetModelAddress()
+{
+	return this->model;
 }
 
 void Blocks::Block::EraseModel()
@@ -87,7 +92,7 @@ void Blocks::Block::ApplyTransformation()
 	*this->model = glm::scale(*this->model, this->scale);
 	if (this->type != nullptr)
 	{
-		this->type->AskForRefresh();
+		//this->type->AskForRefresh();
 	}
 }
 

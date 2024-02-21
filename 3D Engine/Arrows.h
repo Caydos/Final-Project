@@ -83,7 +83,7 @@ public:
 
 		Shaders::Shader* shader = this->GetShader();
 		shader->use();
-
+		shader->setBool("instanceUsage", false);
 		shader->setVec4("color", glm::vec4(color.values[0], color.values[1], color.values[2], color.values[3]));
 		shader->setBool("lightDependent", this->lightDependent);
 		shader->setInt("mode", 0);

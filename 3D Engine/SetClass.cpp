@@ -8,7 +8,9 @@ Sets::Set::Set()
 {
 	this->visible = false;
 	this->parent = nullptr;
+	this->typesInstances = nullptr;
 	this->bone = nullptr;
+	this->useParentRendering = false;
 }
 
 Sets::Set::~Set()
@@ -144,17 +146,12 @@ void Sets::Set::CheckVisibility()
 
 void Sets::Set::AppplyVisibility()
 {
-	if (this->visible)
+	if (this->typesInstances != nullptr && !this->useParentRendering)
 	{
-		for (size_t i = 0; i < this->blocks.size(); i++)
+		for (size_t i = 0; i < this->typesInstances->size(); i++)
 		{
-			this->blocks[i].InsertInScene();
+			this->typesInstances->at(i)->SetInstanceVisibility(this->typesInstances, this->visible);
 		}
-		return;
-	}
-	for (size_t i = 0; i < this->blocks.size(); i++)
-	{
-		this->blocks[i].RemoveFromScene();
 	}
 }
 
@@ -186,7 +183,7 @@ void Sets::Set::ApplyTransformation()
 {
 	if (this->parent != nullptr)
 	{
-		*this->bone = *parent;
+		*this->bone = parent->GetBone();
 	}
 	else
 	{
@@ -204,34 +201,69 @@ void Sets::Set::ApplyTransformation()
 	for (size_t i = 0; i < this->blocks.size(); i++)
 	{
 		this->blocks[i].ApplyTransformation();
+		if (this->typesInstances != nullptr)
+		{
+			this->blocks[i].GetType()->AskForRefresh(this->typesInstances);
+		}
 	}
 	CalculateBoundingBox();
 }
 
+glm::mat4 Sets::Set::GetBone()
+{
+	return *this->bone;
+}
+
+
 void Sets::Set::InsertBlock(Blocks::Block _block)
 {
-	if (this->visible)
+	if (_block.GetType() == nullptr)
 	{
-		_block.InsertInScene();
+		Logger::Write("Unable to insert a block without type.\n");
+		return;
 	}
 	_block.SetParent(this->bone);
 	this->blocks.push_back(_block);
 	this->CalculateBoundingBox();
+
+	if (this->typesInstances != nullptr)
+	{
+		for (size_t instanceId = 0; instanceId < this->typesInstances->size(); instanceId++)
+		{
+			if (this->typesInstances->at(instanceId) == _block.GetType())
+			{
+				this->typesInstances->at(instanceId)->InsertInInstance(this->typesInstances, _block.GetModelAddress());
+				return;
+			}
+		}
+		//else like
+		this->typesInstances->push_back(_block.GetType());
+		Blocks::Instance* instance = _block.GetType()->AddInstance(this->typesInstances);
+		instance->InsertModel(_block.GetModelAddress());
+	}
 }
 
 void Sets::Set::RemoveBlock(Blocks::Block* _block)
 {
-	for (size_t i = 0; i < this->blocks.size(); i++)
+	for (size_t blockId = 0; blockId < this->blocks.size(); blockId++)
 	{
-		if (&this->blocks[i] == _block)
+		if (&this->blocks[blockId] == _block)
 		{
-			if (this->visible)
+			if (this->typesInstances != nullptr)
 			{
-				this->blocks[i].RemoveFromScene();
+				for (size_t instanceId = 0; instanceId < this->typesInstances->size(); instanceId++)
+				{
+					if (this->typesInstances->at(instanceId) == _block->GetType())
+					{
+						this->typesInstances->at(instanceId)->InsertInInstance(this->typesInstances, _block->GetModelAddress());
+						break;
+					}
+				}
 			}
-			this->blocks[i].EraseModel();
 
-			this->blocks.erase(this->blocks.begin() + i);
+			this->blocks[blockId].EraseModel();
+
+			this->blocks.erase(this->blocks.begin() + blockId);
 			return;
 		}
 	}
@@ -241,6 +273,34 @@ std::vector<Blocks::Block>* Sets::Set::GetBlocks()
 {
 	return &this->blocks;
 }
+
+void Sets::Set::GenerateRenderingInstance()
+{
+	this->typesInstances = new std::vector<Blocks::BlockType*>;
+}
+
+void Sets::Set::EraseRenderingInstance()
+{
+	if (this->typesInstances != nullptr && !this->useParentRendering)
+	{
+		delete this->typesInstances;
+	}
+}
+
+void Sets::Set::SetRenderingInstance(std::vector<Blocks::BlockType*>* _instance)
+{
+	if (!this->useParentRendering && this->typesInstances != nullptr)
+	{
+		for (size_t i = 0; i < this->typesInstances->size(); i++)
+		{
+			this->typesInstances->at(i)->RemoveInstance(this->typesInstances);
+		}
+		delete this->typesInstances;
+	}
+	this->typesInstances = _instance;
+	this->useParentRendering = true;
+}
+
 
 glm::vec3 Sets::Set::GetPosition() { return this->position; }
 void Sets::Set::SetPosition(float _x, float _y, float _z)

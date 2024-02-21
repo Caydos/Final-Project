@@ -1,9 +1,7 @@
 #ifndef BLOCKS_H
 #define BLOCKS_H
 #include "Common.h"
-#include "DefaultVertices.h"
 #include "Texture.h"
-//#include <glm/ext/matrix_float4x4.hpp>
 
 #define BLOCKS_DIRECTORY "../Blocks/"
 #define BLOCKS_FILE_EXTENSION ".json"
@@ -12,19 +10,19 @@
 
 namespace Blocks
 {
-	class BlockType
+	class Instance
 	{
 	public:
-		BlockType();
-		~BlockType();
+		Instance();
+		~Instance();
+
+		void* GetId();
+		void SetId(void* _id);
 
 		void GenerateGraphicsBuffers();
 		void RemoveGraphicsBuffers();
 
 		void BindGraphicsBuffers();
-
-		std::string GetName();
-		void SetName(std::string _name);
 
 		void SetVertices();
 		void RegenerateMatrices();
@@ -35,8 +33,31 @@ namespace Blocks
 
 		void RemoveModel(glm::mat4* _model);
 
+		void Draw();
 
+		void AskForRefresh();
+		void SetVisibility(bool _visible);
+	private:
+		void* id;
+		bool graphicsLoaded;
+		unsigned int VAO;
+		unsigned int vertexVBO;
+		unsigned int instanceVBO;
 
+		std::vector<glm::mat4> models;
+		std::vector<glm::mat4*> modelsAddresses;
+
+		bool refreshInQueue;
+		bool visible;
+	};
+	class BlockType
+	{
+	public:
+		BlockType();
+		~BlockType();
+
+		std::string GetName();
+		void SetName(std::string _name);
 
 
 		Shaders::Shader* GetShader();
@@ -63,26 +84,19 @@ namespace Blocks
 
 		float GetShininess();
 		void SetShininess(float _shininess);
+
+
+		Instance* AddInstance(void* _instanceId);
+		void RemoveInstance(void* _instance);
+		void SetInstanceVisibility(void* _instanceId, bool _visible);
+		void InsertInInstance(void* _instanceId, glm::mat4* _model);
+		void RemoveFromInstance(void* _instanceId, glm::mat4* _model);
+		void AskForRefresh(void* _instanceId);
+
 		void Draw();
 
-
-		void AskForRefresh();
-
 	private:
-
-		bool graphicsLoaded;
-		unsigned int VAO;
-		unsigned int vertexVBO;
-		unsigned int instanceVBO;
 		std::string name;
-
-		float vertices[288];
-
-		unsigned int unmappedBufferLastId;
-		unsigned int graphicsBufferSize;
-		std::vector<glm::mat4> models;
-		std::vector<glm::mat4*> modelsAddresses;
-
 
 		Shaders::Shader* shader;
 		Texture* texture;
@@ -94,8 +108,7 @@ namespace Blocks
 		glm::vec3 specular;
 		float shininess;
 
-
-		bool refreshInQueue;
+		std::vector<Instance*> instances;
 	};
 
 	class Block
@@ -114,6 +127,7 @@ namespace Blocks
 		void RemoveFromScene();
 
 		glm::mat4 GetModel();
+		glm::mat4* GetModelAddress();
 		void GenerateModel();
 		void EraseModel();
 

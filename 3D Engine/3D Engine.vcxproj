@@ -158,6 +158,7 @@
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="GhostBlocks.cpp" />
+    <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="LightMenu.cpp" />
     <ClCompile Include="LightScene.cpp" />

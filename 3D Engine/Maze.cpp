@@ -131,6 +131,7 @@ void Maze::Generate()
 						Decor ground;
 
 						ground.decor = Sets::Create();
+						ground.decor->GenerateRenderingInstance();
 						ground.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 						ground.decor->SetName("Wall");
 						ground.decor->SetPath("../Sets/");
@@ -149,6 +150,7 @@ void Maze::Generate()
 										Decor balconyBridge;
 
 										balconyBridge.decor = Sets::Create();
+										balconyBridge.decor->GenerateRenderingInstance();
 										balconyBridge.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 										balconyBridge.decor->SetName("Wall");
 										balconyBridge.decor->SetPath("../Sets/");
@@ -167,6 +169,7 @@ void Maze::Generate()
 							Decor roof;
 
 							roof.decor = Sets::Create();
+							roof.decor->GenerateRenderingInstance();
 							roof.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 							roof.decor->SetName("Wall");
 							roof.decor->SetPath("../Sets/");
@@ -185,6 +188,7 @@ void Maze::Generate()
 									Decor tower;
 
 									tower.decor = Sets::Create();
+									tower.decor->GenerateRenderingInstance();
 									tower.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 									tower.decor->SetName("Wall");
 									tower.decor->SetPath("../Sets/");
@@ -200,6 +204,7 @@ void Maze::Generate()
 						{
 							Decor exit;
 							exit.decor = Sets::Create();
+							exit.decor->GenerateRenderingInstance();
 							exit.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 							exit.decor->SetName("Wall");
 							exit.decor->SetPath("../Sets/");
@@ -214,6 +219,7 @@ void Maze::Generate()
 							Decor balcony;
 
 							balcony.decor = Sets::Create();
+							balcony.decor->GenerateRenderingInstance();
 							balcony.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 							balcony.decor->SetName("Wall");
 							balcony.decor->SetPath("../Sets/");
@@ -232,6 +238,7 @@ void Maze::Generate()
 								if (i == BOTTOM) //BOTTOM WALL
 								{
 									wall.decor = Sets::Create();
+									wall.decor->GenerateRenderingInstance();
 									wall.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 									wall.decor->SetName("Wall");
 									wall.decor->SetPath("../Sets/");
@@ -240,6 +247,7 @@ void Maze::Generate()
 								else if (i == LEFT) //LEFT WALL
 								{
 									wall.decor = Sets::Create();
+									wall.decor->GenerateRenderingInstance();
 									wall.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 									wall.decor->SetName("Wall");
 									wall.decor->SetPath("../Sets/");
@@ -262,6 +270,7 @@ void Maze::Generate()
 								if (mapLine == 0 && line == 0) //BOTTOM WALL
 								{
 									wallMissing.decor = Sets::Create();
+									wallMissing.decor->GenerateRenderingInstance();
 									wallMissing.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 									wallMissing.decor->SetName("Wall");
 									wallMissing.decor->SetPath("../Sets/");
@@ -270,6 +279,7 @@ void Maze::Generate()
 								if (mapColumn == 0 && column == 0) //LEFT WALL
 								{
 									wallMissing.decor = Sets::Create();
+									wallMissing.decor->GenerateRenderingInstance();
 									wallMissing.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
 									wallMissing.decor->SetName("Wall");
 									wallMissing.decor->SetPath("../Sets/");
