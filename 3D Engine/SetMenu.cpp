@@ -18,11 +18,24 @@ void Sets::Menu(GameData* _gameData)
 		{
 			ImGui::Text("No sets available.");
 		}
+		Sets::Set* selectedSet = Sets::GetEditionSet();
 		for (size_t parentSetId = 0; parentSetId < sets->size(); parentSetId++)
 		{
+			ImGui::PushID(parentSetId);
 			std::string name = std::string(sets->at(parentSetId)->GetName() + std::string("##sets-") + std::to_string(parentSetId));
+
+
+			if (selectedSet == sets->at(parentSetId))
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 0, 1)); // Yellow color for the active component
+			}
 			if (ImGui::TreeNode(name.c_str()))
 			{
+				if (ImGui::Button(std::string("Select##SelectSet" + std::to_string(parentSetId)).c_str()))
+				{
+					Sets::SetEditionSet(sets->at(parentSetId));
+				}
+				ImGui::PopStyleColor();
 				ImGui::Text(std::string("Block count : " + std::to_string(sets->at(parentSetId)->GetBlocks()->size())).c_str());
 				ImGui::Text("Position : ");
 				glm::vec3 position = sets->at(parentSetId)->GetPosition();
@@ -31,7 +44,7 @@ void Sets::Menu(GameData* _gameData)
 					sets->at(parentSetId)->SetPosition(position);
 				}
 
-				//Rotations
+				ImGui::Text("Rotation : ");
 				{
 					glm::vec3 rotation = sets->at(parentSetId)->GetRotation();
 					if (ImGui::SliderFloat("X Axis", &rotation.x, 0.0f, 360.0f, "%.0f"))
@@ -87,17 +100,17 @@ void Sets::Menu(GameData* _gameData)
 
 				ImGui::Text("Move Origin : ");
 				glm::vec3 originPos(0);
-				if (ImGui::DragFloat3(std::string("##MoveOrigin" + parentSetId).c_str(), &originPos.x, 0.05f))
+				if (ImGui::DragFloat3(std::string("##MoveOrigin" + std::to_string(parentSetId)).c_str(), &originPos.x, 0.05f))
 				{
 					sets->at(parentSetId)->MoveOrigin(originPos);
 				}
 
-				if (ImGui::Button(std::string("Save##SaveSet" + parentSetId).c_str()))
+				if (ImGui::Button(std::string("Save##SaveSet" + std::to_string(parentSetId)).c_str()))
 				{
 					sets->at(parentSetId)->Save();
 				}
 
-				if (ImGui::Button(std::string("Close##CloseSet" + parentSetId).c_str()))
+				if (ImGui::Button(std::string("Close##CloseSet" + std::to_string(parentSetId)).c_str()))
 				{
 					sets->at(parentSetId)->Erase();
 					sets->erase(sets->begin() + parentSetId);

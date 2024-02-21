@@ -11,6 +11,7 @@ static Clock inputClock;
 static Arrow arrows[3];
 static bool initialized = false;
 static Sets::Set* parentSet;
+static Sets::Set* editionSet = nullptr;
 
 
 void Sets::UpdateVisibility()
@@ -108,7 +109,7 @@ void Sets::Edition(GameData* _gameData)
 
 	for (size_t setId = 0; setId < sets.size(); setId++)
 	{
-		if (sets[setId]->IsVisible())
+		if (sets[setId]->IsVisible() && editionSet == sets[setId])
 		{
 			std::vector<Blocks::Block>* setBlocks = sets[setId]->GetBlocks();
 			for (size_t i = 0; i < setBlocks->size(); i++)
@@ -183,7 +184,8 @@ void Sets::Edition(GameData* _gameData)
 			Blocks::Block originBlock;
 			originBlock.GenerateModel();
 			originBlock.SetScale(blockType->GetScale());
-			originBlock.SetPosition(position);
+
+			originBlock.SetPosition(position - parentSet->GetPosition());
 
 			Blocks::MaterialCheck(&originBlock, blockType->GetName().c_str());
 
@@ -191,4 +193,14 @@ void Sets::Edition(GameData* _gameData)
 			inputClock.Restart();
 		}
 	}
+}
+
+Sets::Set* Sets::GetEditionSet()
+{
+	return editionSet;
+}
+
+void Sets::SetEditionSet(Set* _set)
+{
+	editionSet = _set;
 }

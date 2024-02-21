@@ -103,6 +103,8 @@ namespace Sets
 
 	void Menu(GameData* _gameData);
 	void Edition(GameData* _gameData);
+	Set* GetEditionSet();
+	void SetEditionSet(Set* _set);
 }
 
 #endif // !SET_H
