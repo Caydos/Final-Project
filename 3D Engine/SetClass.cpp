@@ -51,7 +51,6 @@ void Sets::Set::Save()
 	{
 		json objetAttributes;
 		glm::vec3 position = this->blocks[i].GetPosition();
-
 		objetAttributes["position"] = { position.x, position.y, position.z };
 		glm::vec3 rotation = this->blocks[i].GetRotation();
 		objetAttributes["rotation"] = { rotation.x, rotation.y, rotation.z };
@@ -66,7 +65,6 @@ void Sets::Set::Save()
 		std::cout << path << std::endl;
 		return;
 	}
-
 	Files::Create(SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
 }
 
@@ -86,7 +84,6 @@ void Sets::Set::LoadFromJson(json _content)
 				if (type == nullptr)
 				{
 					block.EraseModel();
-					std::cout << "Invalid block name : " << name << std::endl;
 					continue;
 				}
 				block.SetScale(type->GetScale());
@@ -228,6 +225,22 @@ void Sets::Set::InsertBlock(Blocks::Block _block)
 	_block.SetParent(this->bone);
 	this->blocks.push_back(_block);
 	this->CalculateBoundingBox();
+
+	if (this->typesInstances != nullptr)
+	{
+		for (size_t instanceId = 0; instanceId < this->typesInstances->size(); instanceId++)
+		{
+			if (this->typesInstances->at(instanceId) == _block.GetType())
+			{
+				this->typesInstances->at(instanceId)->InsertInInstance(this->typesInstances, _block.GetModelAddress());
+				return;
+			}
+		}
+		//else like
+		this->typesInstances->push_back(_block.GetType());
+		Blocks::Instance* instance = _block.GetType()->AddInstance(this->typesInstances);
+		instance->InsertModel(_block.GetModelAddress());
+	}
 }
 
 void Sets::Set::RemoveBlock(Blocks::Block* _block)

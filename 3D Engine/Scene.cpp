@@ -57,6 +57,14 @@ void Scene::Initialize(GameData* _gameData)
 
 	Blocks::Initialize();
 	Maze::Generate();
+
+
+	//Sets::Set* set = Sets::Create();
+	//set->GenerateRenderingInstance();
+	//set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
+	//set->SetName("Wall");
+	//set->SetPath("../Sets/");
+
 	initialized = true;
 }
 
