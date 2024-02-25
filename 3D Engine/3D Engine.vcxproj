@@ -166,13 +166,13 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
-    <ClCompile Include="Occlusion.cpp" />
     <ClCompile Include="Peds.cpp" />
     <ClCompile Include="Reading.cpp" />
     <ClCompile Include="Set.cpp" />
     <ClCompile Include="SetClass.cpp" />
     <ClCompile Include="SetMenu.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="SSAO.cpp" />
     <ClCompile Include="Sync.cpp" />
     <ClCompile Include="WorldScene.cpp" />
     <ClCompile Include="Clock.cpp" />
@@ -224,6 +224,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Set.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="SSAO.h" />
     <ClInclude Include="Sync.h" />
     <ClInclude Include="Vectors.h" />
     <ClInclude Include="Viewer.h" />

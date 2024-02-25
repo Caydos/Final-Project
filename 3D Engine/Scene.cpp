@@ -37,12 +37,13 @@ void Scene::Initialize(GameData* _gameData)
 	flashLight2.SetDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
 	flashLight2.SetSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
 	flashLight2.SetConstant(1.0f);
-	flashLight2.SetLinear(0.09f);
-	flashLight2.SetQuadratic(0.032f);
+	flashLight2.SetLinear(0.0f);
+	flashLight2.SetQuadratic(0.0f);
 
-	flashLight2.SetCutOff(12.5f);
-	flashLight2.SetOuterCutOff(15.5f);
+	flashLight2.SetCutOff(90.5f);
+	flashLight2.SetOuterCutOff(90.5f);
 	flashLight2.SetName("FlashLight");
+	flashLight2.SetActive(true);
 	Lights::InsertLight(_gameData, flashLight2);
 
 	Lightning::Light dirLight;
@@ -56,14 +57,53 @@ void Scene::Initialize(GameData* _gameData)
 	Scene::Lights::UpdateShader(_gameData);
 
 	Blocks::Initialize();
-	Maze::Generate();
+	//Maze::Generate();
 
 
-	//Sets::Set* set = Sets::Create();
-	//set->GenerateRenderingInstance();
-	//set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-	//set->SetName("Wall");
-	//set->SetPath("../Sets/");
+	Sets::Set* set = Sets::Create();
+	set->GenerateRenderingInstance();
+	/*set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));*/
+	for (size_t rowId = 0; rowId < 50; rowId++)
+	{
+		for (size_t columnId = 0; columnId < 50; columnId++)
+		{
+			Blocks::Block block;
+			block.GenerateModel();
+			Blocks::MaterialCheck(&block, "Sol_CarelageMagasin");
+			glm::vec3 scale = block.GetType()->GetScale();
+			block.SetScale(scale);
+			block.SetPosition(glm::vec3(scale.x *  rowId, .0f, scale.z * columnId));
+			set->InsertBlock(block);
+			if (!rowId || rowId == 49)
+			{
+				for (size_t heightId = 1; heightId < 20; heightId++)
+				{
+					Blocks::Block block;
+					block.GenerateModel();
+					Blocks::MaterialCheck(&block, (heightId < 7) ? "Mur_Hopital1" : "Mur_Hopital2");
+					glm::vec3 scale = block.GetType()->GetScale();
+					block.SetScale(scale);
+					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+					set->InsertBlock(block);
+				}
+			}
+			else if (columnId == 49)
+			{
+				for (size_t heightId = 1; heightId < 20; heightId++)
+				{
+					Blocks::Block block;
+					block.GenerateModel();
+					Blocks::MaterialCheck(&block, (heightId < 7) ? "Mur_Hopital1" : "Mur_Hopital2");
+					glm::vec3 scale = block.GetType()->GetScale();
+					block.SetScale(scale);
+					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+					set->InsertBlock(block);
+				}
+			}
+		}
+	}
+	set->SetName("Wall");
+	set->SetPath("../Sets/");
 
 	initialized = true;
 }

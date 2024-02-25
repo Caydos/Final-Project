@@ -14,7 +14,7 @@ static std::shared_mutex loadingMutex;
 static glm::mat4 projection;
 static glm::mat4 view;
 static std::string sceneName;
-static bool considerLightning = false;
+static bool considerLightning = true;
 
 
 // For later sync
@@ -96,7 +96,7 @@ void Scene::World::MouseInputs(GameData* _gameData)
 	try
 	{
 		Camera* camera = &cameras.at(focusedCamera);
-		camera->ProcessMouseMovement(_gameData->window.xoffset, _gameData->window.yoffset);
+		camera->ProcessMouseMovement(_gameData->window.xoffset, _gameData->window.yoffset, true, _gameData->dt);
 	}
 	catch (const std::out_of_range& e)
 	{

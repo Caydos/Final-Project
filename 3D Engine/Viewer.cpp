@@ -170,7 +170,7 @@
 //	_gameData->window.Clear();
 //	if (!TexturePicker::IsActive())
 //	{
-//		_gameData->camera.ProcessMouseMovement(_gameData->window.xoffset, _gameData->window.yoffset);
+//		_gameData->camera.ProcessMouseMovement(_gameData->window.xoffset, _gameData->window.yoffset, true, _gameData->dt);
 //		_gameData->window.xoffset = .0f;
 //		_gameData->window.yoffset = .0f;
 //	}

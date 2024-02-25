@@ -6,6 +6,7 @@
 #include <shared_mutex>
 #include <thread>
 #include <chrono>
+#include <cmath>
 
 #include <IMGUI/imgui.h>
 #include <IMGUI/backends/imgui_impl_opengl3.h>

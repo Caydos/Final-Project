@@ -22,7 +22,7 @@ enum Camera_Movement {
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
-const float SENSITIVITY = 0.1f;
+const float SENSITIVITY = 100.0f;
 const float FOV = 60.0f;
 
 enum MovementType
@@ -110,10 +110,10 @@ public:
 
 
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
+    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true, float _dt = .0f)
     {
-        xoffset *= MouseSensitivity;
-        yoffset *= MouseSensitivity;
+        xoffset *= MouseSensitivity * _dt;
+        yoffset *= MouseSensitivity * _dt;
 
         //Yaw += xoffset;
         Yaw = std::fmod((Yaw + xoffset), (GLfloat)360.0f);

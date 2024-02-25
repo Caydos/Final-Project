@@ -109,9 +109,6 @@
     <Filter Include="Source Files\Audio Engine">
       <UniqueIdentifier>{268709e6-c977-4f7b-a188-e2b11ca9e3b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Rendering Engine\Optimizations">
-      <UniqueIdentifier>{0dca8719-eb90-49e6-8659-d537b14d2ad9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Utils\Settings">
       <UniqueIdentifier>{9ad962b9-e469-4307-a610-0224068cac80}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,12 @@
     </Filter>
     <Filter Include="Source Files\Rendering Engine\UI\Editor\Objects">
       <UniqueIdentifier>{8e867d6d-54e1-4d93-be0f-dbb5f26d0ebd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Graphics components">
+      <UniqueIdentifier>{0dca8719-eb90-49e6-8659-d537b14d2ad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering Engine\Graphics components\SSAO">
+      <UniqueIdentifier>{f1dd51a7-531a-44ca-902a-d11d8dc8a8d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -267,11 +270,11 @@
     <ClCompile Include="GhostBlocks.cpp">
       <Filter>Source Files\Rendering Engine\Blocks</Filter>
     </ClCompile>
-    <ClCompile Include="Occlusion.cpp">
-      <Filter>Source Files\Rendering Engine\Optimizations</Filter>
-    </ClCompile>
     <ClCompile Include="Instance.cpp">
       <Filter>Source Files\Rendering Engine\Blocks\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="SSAO.cpp">
+      <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -408,7 +411,7 @@
       <Filter>Source Files\Audio Engine</Filter>
     </ClInclude>
     <ClInclude Include="FrustrumCulling.h">
-      <Filter>Source Files\Rendering Engine\Optimizations</Filter>
+      <Filter>Source Files\Rendering Engine\Graphics components</Filter>
     </ClInclude>
     <ClInclude Include="Settings.h">
       <Filter>Source Files\Utils\Settings</Filter>
@@ -421,6 +424,9 @@
     </ClInclude>
     <ClInclude Include="Inventory.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SSAO.h">
+      <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

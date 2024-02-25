@@ -4,9 +4,20 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#ifndef GL_TEXTURE_MAX_ANISOTROPY_EXT
+#define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+#endif
+
+#ifndef GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT
+#define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
+#endif
+
 void Texture::LoadFromFile(const char* _path)
 {
 	glGenTextures(1, &this->id);
+	GLfloat maxAnisotropy;
+	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+
 	glBindTexture(GL_TEXTURE_2D, this->id);
 
 	// set texture wrapping to GL_REPEAT (default wrapping method)
@@ -16,6 +27,8 @@ void Texture::LoadFromFile(const char* _path)
 	// set texture filtering parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+
 
 	stbi_set_flip_vertically_on_load(true);
 

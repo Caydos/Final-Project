@@ -61,7 +61,6 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
-
 void main()
 {
     vec4 textureColor = texture(texture1, TexCoord); // Texture color
@@ -83,7 +82,7 @@ void main()
     if (considerLightning && lightDependent)
     {
         vec3 norm = normalize(Normal);
-        vec3 viewDir = normalize(viewPos - FragPos);
+        vec3 viewDir = normalize(/*viewPos -*/ FragPos);/* View pos if we want it to be tracked down by the camera position*/
 
         // vec3 result = vec3(FragColor.x, FragColor.y, FragColor.z);
         vec3 result;
@@ -160,7 +159,7 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
     // spotlight intensity
-    float theta = dot(lightDir, normalize(-light.direction)); 
+    float theta = dot(lightDir, normalize(-light.direction));
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
     // combine results
