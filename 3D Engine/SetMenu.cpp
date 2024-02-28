@@ -80,6 +80,7 @@ void Sets::Menu(GameData* _gameData)
 						}
 						else
 						{
+							std::cout << "No texture" << std::endl;
 							block.EraseModel();
 						}
 					}

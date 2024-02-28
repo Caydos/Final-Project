@@ -161,6 +161,7 @@ void Editor::Menu(GameData* _gameData)
 			{
 				Sets::Set* newSet = Sets::Create();
 				newSet->SetName(filename);
+				newSet->GenerateRenderingInstance();
 				break;
 			}
 			default:

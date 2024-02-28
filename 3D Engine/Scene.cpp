@@ -60,50 +60,50 @@ void Scene::Initialize(GameData* _gameData)
 	//Maze::Generate();
 
 
-	Sets::Set* set = Sets::Create();
-	set->GenerateRenderingInstance();
-	/*set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));*/
-	for (size_t rowId = 0; rowId < 50; rowId++)
-	{
-		for (size_t columnId = 0; columnId < 50; columnId++)
-		{
-			Blocks::Block block;
-			block.GenerateModel();
-			Blocks::MaterialCheck(&block, "Sol_CarelageMagasin");
-			glm::vec3 scale = block.GetType()->GetScale();
-			block.SetScale(scale);
-			block.SetPosition(glm::vec3(scale.x *  rowId, .0f, scale.z * columnId));
-			set->InsertBlock(block);
-			if (!rowId || rowId == 49)
-			{
-				for (size_t heightId = 1; heightId < 20; heightId++)
-				{
-					Blocks::Block block;
-					block.GenerateModel();
-					Blocks::MaterialCheck(&block, (heightId < 7) ? "Mur_Hopital1" : "Mur_Hopital2");
-					glm::vec3 scale = block.GetType()->GetScale();
-					block.SetScale(scale);
-					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block);
-				}
-			}
-			else if (columnId == 49)
-			{
-				for (size_t heightId = 1; heightId < 20; heightId++)
-				{
-					Blocks::Block block;
-					block.GenerateModel();
-					Blocks::MaterialCheck(&block, (heightId < 7) ? "Mur_Hopital1" : "Mur_Hopital2");
-					glm::vec3 scale = block.GetType()->GetScale();
-					block.SetScale(scale);
-					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block);
-				}
-			}
-		}
-	}
-	set->SetName("Wall");
-	set->SetPath("../Sets/");
+	//Sets::Set* set = Sets::Create();
+	//set->GenerateRenderingInstance();
+	///*set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));*/
+	//for (size_t rowId = 0; rowId < 50; rowId++)
+	//{
+	//	for (size_t columnId = 0; columnId < 50; columnId++)
+	//	{
+	//		Blocks::Block block;
+	//		block.GenerateModel();
+	//		Blocks::MaterialCheck(&block, "Sol_CarelageMagasin");
+	//		glm::vec3 scale = block.GetType()->GetScale();
+	//		block.SetScale(scale);
+	//		block.SetPosition(glm::vec3(scale.x *  rowId, .0f, scale.z * columnId));
+	//		set->InsertBlock(block);
+	//		if (!rowId || rowId == 49)
+	//		{
+	//			for (size_t heightId = 1; heightId < 20; heightId++)
+	//			{
+	//				Blocks::Block block;
+	//				block.GenerateModel();
+	//				Blocks::MaterialCheck(&block, (heightId < 7) ? "Mur_Hopital1" : "Mur_Hopital2");
+	//				glm::vec3 scale = block.GetType()->GetScale();
+	//				block.SetScale(scale);
+	//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//				set->InsertBlock(block);
+	//			}
+	//		}
+	//		else if (columnId == 49)
+	//		{
+	//			for (size_t heightId = 1; heightId < 20; heightId++)
+	//			{
+	//				Blocks::Block block;
+	//				block.GenerateModel();
+	//				Blocks::MaterialCheck(&block, (heightId < 7) ? "Mur_Hopital1" : "Mur_Hopital2");
+	//				glm::vec3 scale = block.GetType()->GetScale();
+	//				block.SetScale(scale);
+	//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//				set->InsertBlock(block);
+	//			}
+	//		}
+	//	}
+	//}
+	//set->SetName("Wall");
+	//set->SetPath("../Sets/");
 
 	initialized = true;
 }

@@ -222,6 +222,7 @@ void Sets::Set::InsertBlock(Blocks::Block _block)
 		Logger::Write("Unable to insert a block without type.\n");
 		return;
 	}
+	std::cout << "Insertion" << std::endl;
 	_block.SetParent(this->bone);
 	this->blocks.push_back(_block);
 	this->CalculateBoundingBox();
