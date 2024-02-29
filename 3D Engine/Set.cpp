@@ -10,6 +10,7 @@ static std::vector<Sets::Set*> sets;
 static Clock inputClock;
 static Arrow arrows[3];
 static bool initialized = false;
+static bool selecting = false;
 static Sets::Set* parentSet;
 
 
@@ -158,12 +159,37 @@ void Sets::Edition(GameData* _gameData)
 		}
 		switch (hittedFace)
 		{
-		case RayCasting::FRONT: {position.z += (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f); break; }
-		case RayCasting::BACK: {position.z -= (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f); break; }
-		case RayCasting::LEFT: {position.x -= (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f); break; }
-		case RayCasting::RIGHT: {position.x += (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f); break; }
-		case RayCasting::TOP: {position.y += (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f); break; }
-		case RayCasting::BOTTOM: {position.y -= (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f); break; }
+		case RayCasting::FRONT:
+		{
+			//Blocks::Ghost::RestrictAxis()
+			position.z += (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f);
+			break;
+		}
+		case RayCasting::BACK:
+		{
+			position.z -= (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f);
+			break;
+		}
+		case RayCasting::LEFT:
+		{
+			position.x -= (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f);
+			break;
+		}
+		case RayCasting::RIGHT:
+		{
+			position.x += (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f);
+			break;
+		}
+		case RayCasting::TOP:
+		{
+			position.y += (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f);
+			break;
+		}
+		case RayCasting::BOTTOM:
+		{
+			position.y -= (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f);
+			break;
+		}
 		default: break;
 		}
 		std::vector<Blocks::Block>* setBlocks = parentSet->GetBlocks();
@@ -176,8 +202,9 @@ void Sets::Edition(GameData* _gameData)
 		}
 		Blocks::Ghost::Draw(_gameData);
 		Blocks::Ghost::SetScale(blockType->GetScale());
-		Blocks::Ghost::SetPosition(position);
-		//Block placement
+
+
+		Blocks::Ghost::SetStartPosition(position);
 		if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_RIGHT) && inputClock.GetElapsedTime() > 125)
 		{
 			Blocks::Block originBlock;
@@ -190,5 +217,22 @@ void Sets::Edition(GameData* _gameData)
 			parentSet->InsertBlock(originBlock);
 			inputClock.Restart();
 		}
+		//if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_RIGHT))
+		//{
+		//	if (!selecting)
+		//	{
+		//		Blocks::Ghost::SetStartPosition(position);
+		//		selecting = true;
+		//	}
+		//	if (inputClock.GetElapsedTime() > 125)
+		//	{
+		//		inputClock.Restart();
+		//		selecting = true;
+		//	}
+		//}
+		//else
+		//{
+		//	selecting = false;
+		//}
 	}
 }

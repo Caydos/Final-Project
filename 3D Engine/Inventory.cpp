@@ -87,7 +87,7 @@ Keys::Keys keys[8] = {
 	Keys::NUMBER_ROW_7,
 	Keys::NUMBER_ROW_8,
 };
-
+static Clock scrollClock;
 void Inventory::Menu(GameData* _gameData)
 {
 	for (size_t i = 0; i < 8; i++)
@@ -98,6 +98,25 @@ void Inventory::Menu(GameData* _gameData)
 			inputClock.Restart();
 		}
 	}
+	if (_gameData->window.yScroll < 0 && scrollClock.GetElapsedTime() > 50)
+	{
+		scrollClock.Restart();
+		hotBarHovered++;
+		if (hotBarHovered >= 8)
+		{
+			hotBarHovered = 7;
+		}
+	}
+	else if (_gameData->window.yScroll > 0 && scrollClock.GetElapsedTime() > 50)
+	{
+		scrollClock.Restart();
+		hotBarHovered--;
+		if (hotBarHovered < 0)
+		{
+			hotBarHovered = 0;
+		}
+	}
+
 	if (_gameData->window.IsKeyPressed(Keys::E) && inputClock.GetElapsedTime() > 125)
 	{
 		if (opened)
@@ -140,7 +159,7 @@ void Inventory::Menu(GameData* _gameData)
 			io.MousePos.y >= containerPos.y && io.MousePos.y <= containerEndPos.y;
 
 		// Render the container
-		Container(draw_list, containerPos, textureId, name.c_str(), std::to_string(i).c_str(), hotBar[i], (hotBarHovered == i) ? true : false);
+		Container(draw_list, containerPos, textureId, name.c_str(), std::to_string(i + 1).c_str(), hotBar[i], (hotBarHovered == i) ? true : false);
 
 		// Start drag
 		if (isMouseOver && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
@@ -159,7 +178,7 @@ void Inventory::Menu(GameData* _gameData)
 				// Other drop logic here
 				if (draggedItem.blockType != nullptr)
 				{
-					hotBar[i] = (Blocks::BlockType*) draggedItem.blockType;
+					hotBar[i] = (Blocks::BlockType*)draggedItem.blockType;
 					draggedItem.blockType = nullptr;
 				}
 			}

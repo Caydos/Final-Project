@@ -51,6 +51,7 @@ void Scene::World::FocusCamera(GameData* _gameData, unsigned int _cameraId)
 	projection = glm::perspective(glm::radians(camera->Fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 	_gameData->shaders[Shaders::WORLD_OBJECT]->setMat4("projection", projection);
 	_gameData->camera = camera;
+	camera->MouseSensitivity = _gameData->settings.sentivity;
 }
 
 void Scene::World::SetCameraPosition(unsigned int _cameraId, glm::vec3 _position)

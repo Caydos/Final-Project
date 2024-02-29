@@ -42,7 +42,7 @@ void Editor::Menu(GameData* _gameData)
 		{
 			if (ImGui::BeginMenu("Settings##ToolBar"))
 			{
-				if (ImGui::SliderFloat("Sensitivity##ToolBar", &_gameData->settings.sentivity, 0.01f, 1.5f))
+				if (ImGui::SliderFloat("Sensitivity##ToolBar", &_gameData->settings.sentivity, 0.01f, 150.5f))
 				{
 					_gameData->camera->MouseSensitivity = _gameData->settings.sentivity;
 				}
@@ -162,6 +162,7 @@ void Editor::Menu(GameData* _gameData)
 				Sets::Set* newSet = Sets::Create();
 				newSet->SetName(filename);
 				newSet->GenerateRenderingInstance();
+				newSet->AppplyVisibility();
 				break;
 			}
 			default:

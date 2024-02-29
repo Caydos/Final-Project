@@ -130,6 +130,7 @@ bool Sets::Set::IsVisible()
 
 void Sets::Set::CheckVisibility()
 {
+	if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
 	if (FrustrumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.min, this->boundingBox.max))
 	{
 		if (this->visible) { return; }
@@ -222,7 +223,6 @@ void Sets::Set::InsertBlock(Blocks::Block _block)
 		Logger::Write("Unable to insert a block without type.\n");
 		return;
 	}
-	std::cout << "Insertion" << std::endl;
 	_block.SetParent(this->bone);
 	this->blocks.push_back(_block);
 	this->CalculateBoundingBox();
@@ -241,6 +241,7 @@ void Sets::Set::InsertBlock(Blocks::Block _block)
 		this->typesInstances->push_back(_block.GetType());
 		Blocks::Instance* instance = _block.GetType()->AddInstance(this->typesInstances);
 		instance->InsertModel(_block.GetModelAddress());
+		instance->SetVisibility(this->visible);
 	}
 }
 

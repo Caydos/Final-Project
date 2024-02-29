@@ -177,10 +177,18 @@ namespace Blocks
 
 	namespace Ghost
 	{
+		enum Axis
+		{
+			X,
+			Y,
+			Z
+		};
 		void Draw(GameData* _gameData);
 		void CalculateTransformations();
 		void SetScale(glm::vec3 _scale);
-		void SetPosition(glm::vec3 _position);
+		void SetStartPosition(glm::vec3 _position);
+		void SetDestination(glm::vec3 _destination);
+		void RestrictAxis(Axis _axis, int _value);
 	}
 }
 

@@ -1,5 +1,6 @@
 #include "Blocks.h"
 #include "DefaultVertices.h"
+#include "Arrows.h"
 
 static unsigned int VAO;
 static unsigned int vertexVBO;
@@ -9,13 +10,23 @@ static Colors::Color color = Colors::Color(1.0f, 1.0f, 1.0f, 0.3f);
 static glm::vec3 scale;
 static glm::vec3 position;
 static bool ghostInitialized = false;
-
-
+static Arrow arrows[2];
+static int AxisRestrictions[3];
 
 void Blocks::Ghost::Draw(GameData* _gameData)
 {
 	if (!ghostInitialized)
 	{
+		arrows[0].GenerateGraphicsBuffers();
+		arrows[0].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
+		arrows[0].SetColor(Colors::Grey);
+		arrows[0].SetRotation(glm::vec3(180.0f, 0.0f, .0f));
+
+		arrows[1].GenerateGraphicsBuffers();
+		arrows[1].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
+		arrows[1].SetColor(Colors::Grey);
+		arrows[1].SetRotation(glm::vec3(90.0f, 0.0f, .0f));
+
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &vertexVBO);
 		glGenBuffers(1, &instanceVBO);
@@ -55,7 +66,8 @@ void Blocks::Ghost::Draw(GameData* _gameData)
 
 	glBindVertexArray(0);
 	shader->setBool("instanceUsage", false);
-
+	arrows[0].Draw();
+	arrows[1].Draw();
 }
 
 void Blocks::Ghost::CalculateTransformations()
@@ -81,13 +93,27 @@ void Blocks::Ghost::CalculateTransformations()
 void Blocks::Ghost::SetScale(glm::vec3 _scale)
 {
 	scale = _scale;
+	arrows[0].SetScale(_scale);
+	arrows[1].SetScale(_scale);
 	CalculateTransformations();
 }
 
-void Blocks::Ghost::SetPosition(glm::vec3 _position)
+void Blocks::Ghost::SetStartPosition(glm::vec3 _position)
 {
 	position = _position;
+	arrows[0].SetPosition(_position);
+	arrows[1].SetPosition(_position);
 	CalculateTransformations();
+}
+
+void Blocks::Ghost::SetDestination(glm::vec3 _destination)
+{
+
+}
+
+void Blocks::Ghost::RestrictAxis(Axis _axis, int _value)
+{
+	AxisRestrictions[_axis] = _value;
 }
 
 
