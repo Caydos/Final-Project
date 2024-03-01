@@ -73,6 +73,7 @@ void Editor::Menu(GameData* _gameData)
 				{
 					Sets::Set* set = Sets::Create();
 					std::string content = Files::GetFileContent(fileSearch.originalPath.c_str());
+					set->GenerateRenderingInstance();
 					set->LoadFromJson(json::parse(content));
 					set->SetName(fileSearch.name);
 					set->SetPath(fileSearch.path);

@@ -257,7 +257,7 @@ void Sets::Set::RemoveBlock(Blocks::Block* _block)
 				{
 					if (this->typesInstances->at(instanceId) == _block->GetType())
 					{
-						this->typesInstances->at(instanceId)->InsertInInstance(this->typesInstances, _block->GetModelAddress());
+						this->typesInstances->at(instanceId)->RemoveFromInstance(this->typesInstances, _block->GetModelAddress());
 						break;
 					}
 				}
