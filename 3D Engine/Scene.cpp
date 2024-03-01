@@ -306,7 +306,7 @@ void Scene::Tick(GameData* _gameData)
 			Inventory::Menu(_gameData);
 			if (!Inventory::IsActive())
 			{
-				Sets::Edition(_gameData);
+				Sets::Edition(_gameData, true);
 			}
 		}
 		ImGui::Render();

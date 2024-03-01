@@ -5,6 +5,8 @@ static bool isSetsMenuOpen = true;
 static float originScale = 1.0f;
 static const char** blocksName = nullptr;
 static int blockCount = 0;
+static Sets::Set* selectedSet = nullptr;
+
 
 void Sets::Menu(GameData* _gameData)
 {
@@ -23,6 +25,16 @@ void Sets::Menu(GameData* _gameData)
 			std::string name = std::string(sets->at(parentSetId)->GetName() + std::string("##sets-") + std::to_string(parentSetId));
 			if (ImGui::TreeNode(name.c_str()))
 			{
+				bool selected = false;
+				if (sets->at(parentSetId) == selectedSet)
+				{
+					selected = true;
+					Sets::SetEditedSet(sets->at(parentSetId));
+				}
+				if (ImGui::Checkbox(std::string("Select##Selection" + name).c_str(), &selected))
+				{
+					selectedSet = sets->at(parentSetId);
+				}
 				ImGui::Text(std::string("Block count : " + std::to_string(sets->at(parentSetId)->GetBlocks()->size())).c_str());
 				ImGui::Text("Position : ");
 				glm::vec3 position = sets->at(parentSetId)->GetPosition();

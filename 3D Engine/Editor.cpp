@@ -36,6 +36,7 @@ static bool isLeftSideMenuOpen = true;
 
 void Editor::Menu(GameData* _gameData)
 {
+	Sets::Edition(_gameData, false);
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("Tool"))

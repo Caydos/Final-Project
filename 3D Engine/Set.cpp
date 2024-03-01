@@ -50,7 +50,7 @@ std::vector<Sets::Set*>* Sets::GetAll()
 }
 
 
-void Sets::Edition(GameData* _gameData)
+void Sets::Edition(GameData* _gameData, bool _allowControls)
 {
 	if (!initialized)
 	{
@@ -104,45 +104,41 @@ void Sets::Edition(GameData* _gameData)
 	RayCasting::Face hittedFace;
 	float closest = 100.0f;
 	Blocks::Block* hittedOne = nullptr;
-	parentSet = nullptr;
 	glm::vec3 position;
 
-	for (size_t setId = 0; setId < sets.size(); setId++)
+
+	if (parentSet != nullptr && parentSet->IsVisible())
 	{
-		if (sets[setId]->IsVisible())
+		std::vector<Blocks::Block>* setBlocks = parentSet->GetBlocks();
+		for (size_t i = 0; i < setBlocks->size(); i++)
 		{
-			std::vector<Blocks::Block>* setBlocks = sets[setId]->GetBlocks();
-			for (size_t i = 0; i < setBlocks->size(); i++)
+			auto it = &setBlocks->at(i);
+			float halfSize = it->GetScale().x / 2.0f; // Since scale is 1.0, half-size on each axis is 0.5
+
+			glm::mat4 transformation = it->GetModel();
+			glm::vec3 scale;
+			glm::quat rotation;
+			glm::vec3 translation;
+			glm::vec3 skew;
+			glm::vec4 perspective;
+			glm::decompose(transformation, scale, rotation, translation, skew, perspective);
+
+			Bounds::Box boxAABB;
+			boxAABB.min = translation - glm::vec3(halfSize, halfSize, halfSize);
+			boxAABB.max = translation + glm::vec3(halfSize, halfSize, halfSize);
+			float rslt = RayCasting::Intersect(ray, boxAABB);
+			if (rslt > .0f && rslt < closest)
 			{
-				auto it = &setBlocks->at(i);
-				float halfSize = it->GetScale().x / 2.0f; // Since scale is 1.0, half-size on each axis is 0.5
-
-				glm::mat4 transformation = it->GetModel();
-				glm::vec3 scale;
-				glm::quat rotation;
-				glm::vec3 translation;
-				glm::vec3 skew;
-				glm::vec4 perspective;
-				glm::decompose(transformation, scale, rotation, translation, skew, perspective);
-
-				Bounds::Box boxAABB;
-				boxAABB.min = translation - glm::vec3(halfSize, halfSize, halfSize);
-				boxAABB.max = translation + glm::vec3(halfSize, halfSize, halfSize);
-				float rslt = RayCasting::Intersect(ray, boxAABB);
-				if (rslt > .0f && rslt < closest)
-				{
-					parentSet = sets[setId];
-					hittedOne = it;
-					RayCasting::Cube cube = { translation, scale.x };
-					hittedFace = IntersectedFace(ray, cube);
-					closest = rslt;
-					position = translation;
-				}
+				hittedOne = it;
+				RayCasting::Cube cube = { translation, scale.x };
+				hittedFace = IntersectedFace(ray, cube);
+				closest = rslt;
+				position = translation;
 			}
 		}
 	}
 
-	if (hittedOne != nullptr && parentSet != nullptr)
+	if (hittedOne != nullptr && parentSet != nullptr && _allowControls)
 	{
 		const char* blockTypeName = nullptr;
 		Blocks::BlockType* blockType = Inventory::GetHotBarBlock();
@@ -161,32 +157,49 @@ void Sets::Edition(GameData* _gameData)
 		{
 		case RayCasting::FRONT:
 		{
-			//Blocks::Ghost::RestrictAxis()
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, -1);
 			position.z += (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f);
 			break;
 		}
 		case RayCasting::BACK:
 		{
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 1);
 			position.z -= (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f);
 			break;
 		}
 		case RayCasting::LEFT:
 		{
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 1);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
 			position.x -= (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f);
 			break;
 		}
 		case RayCasting::RIGHT:
 		{
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, -1);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
 			position.x += (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f);
 			break;
 		}
 		case RayCasting::TOP:
 		{
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, -1);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
 			position.y += (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f);
 			break;
 		}
 		case RayCasting::BOTTOM:
 		{
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 1);
+			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
 			position.y -= (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f);
 			break;
 		}
@@ -205,6 +218,7 @@ void Sets::Edition(GameData* _gameData)
 
 
 		Blocks::Ghost::SetStartPosition(position);
+
 		if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_RIGHT) && inputClock.GetElapsedTime() > 125)
 		{
 			Blocks::Block originBlock;
@@ -235,4 +249,9 @@ void Sets::Edition(GameData* _gameData)
 		//	selecting = false;
 		//}
 	}
+}
+
+void Sets::SetEditedSet(Set* _set)
+{
+	parentSet = _set;
 }

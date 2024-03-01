@@ -102,7 +102,9 @@ namespace Sets
 	std::vector<Set*>* GetAll();
 
 	void Menu(GameData* _gameData);
-	void Edition(GameData* _gameData);
+	void Edition(GameData* _gameData, bool _allowControls = true);
+
+	void SetEditedSet(Set* _set);
 }
 
 #endif // !SET_H
