@@ -192,7 +192,6 @@ void Sets::Set::ApplyTransformation()
 	}
 
 	*this->bone = glm::translate(*this->bone, this->position);
-
 	*this->bone = glm::rotate(*this->bone, glm::radians(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	*this->bone = glm::rotate(*this->bone, glm::radians(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	*this->bone = glm::rotate(*this->bone, glm::radians(this->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -207,6 +206,14 @@ void Sets::Set::ApplyTransformation()
 			this->blocks[i].GetType()->AskForRefresh(this->typesInstances);
 		}
 	}
+	if (this->typesInstances != nullptr)
+	{
+		for (size_t i = 0; i < this->typesInstances->size(); i++)
+		{
+			this->typesInstances->at(i)->AskForRefresh(this->typesInstances);
+		}
+	}
+
 	CalculateBoundingBox();
 }
 
@@ -216,7 +223,7 @@ glm::mat4 Sets::Set::GetBone()
 }
 
 
-void Sets::Set::InsertBlock(Blocks::Block _block)
+void Sets::Set::InsertBlock(Blocks::Block _block, bool _boundsCalculation)
 {
 	if (_block.GetType() == nullptr)
 	{
@@ -225,7 +232,10 @@ void Sets::Set::InsertBlock(Blocks::Block _block)
 	}
 	_block.SetParent(this->bone);
 	this->blocks.push_back(_block);
-	this->CalculateBoundingBox();
+	if (_boundsCalculation)
+	{
+		this->CalculateBoundingBox();
+	}
 
 	if (this->typesInstances != nullptr)
 	{
@@ -462,6 +472,15 @@ void Sets::Set::MoveOrigin(glm::vec3 _offset)
 	{
 		this->blocks[i].Move(_offset);
 	}
+
+	if (this->typesInstances != nullptr)
+	{
+		for (size_t i = 0; i < this->typesInstances->size(); i++)
+		{
+			this->typesInstances->at(i)->AskForRefresh(this->typesInstances);
+		}
+	}
+	
 	CalculateBoundingBox();
 }
 

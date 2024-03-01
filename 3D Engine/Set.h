@@ -34,7 +34,7 @@ namespace Sets
 		glm::mat4 GetBone();
 
 
-		void InsertBlock(Blocks::Block _block);
+		void InsertBlock(Blocks::Block _block, bool _boundsCalculation = true);
 		void RemoveBlock(Blocks::Block* _block);
 		std::vector<Blocks::Block>* GetBlocks();
 		

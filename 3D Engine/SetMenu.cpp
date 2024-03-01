@@ -88,17 +88,17 @@ void Sets::Menu(GameData* _gameData)
 
 				ImGui::Text("Move Origin : ");
 				glm::vec3 originPos(0);
-				if (ImGui::DragFloat3(std::string("##MoveOrigin" + parentSetId).c_str(), &originPos.x, 0.05f))
+				if (ImGui::DragFloat3(std::string("##MoveOrigin" + name).c_str(), &originPos.x, 0.05f))
 				{
 					sets->at(parentSetId)->MoveOrigin(originPos);
 				}
 
-				if (ImGui::Button(std::string("Save##SaveSet" + parentSetId).c_str()))
+				if (ImGui::Button(std::string("Save##SaveSet" + name).c_str()))
 				{
 					sets->at(parentSetId)->Save();
 				}
 
-				if (ImGui::Button(std::string("Close##CloseSet" + parentSetId).c_str()))
+				if (ImGui::Button(std::string("Close##CloseSet" + name).c_str()))
 				{
 					sets->at(parentSetId)->Erase();
 					sets->erase(sets->begin() + parentSetId);
