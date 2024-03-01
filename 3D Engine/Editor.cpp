@@ -7,6 +7,7 @@
 #include "LightMenu.h"
 #include "Crosshair.h"
 #include "Set.h"
+#include "Animation.h"
 
 static bool initialized = false;
 static bool displayed = false;
@@ -141,6 +142,7 @@ void Editor::Menu(GameData* _gameData)
 			ImGui::TreePop();
 		}
 		Crosshairs::Menu(_gameData);
+		Animation::Menu(_gameData);
 
 		ImGui::End();
 	}

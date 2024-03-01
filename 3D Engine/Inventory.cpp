@@ -90,6 +90,10 @@ Keys::Keys keys[8] = {
 static Clock scrollClock;
 void Inventory::Menu(GameData* _gameData)
 {
+	if (_gameData->window.IsKeyPressed(Keys::ESCAPE))
+	{
+		opened = false;
+	}
 	for (size_t i = 0; i < 8; i++)
 	{
 		if (_gameData->window.IsKeyPressed(keys[i]) && inputClock.GetElapsedTime() > 125)

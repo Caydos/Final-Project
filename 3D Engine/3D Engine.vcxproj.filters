@@ -142,6 +142,9 @@
     <Filter Include="Source Files\Rendering Engine\Graphics components\SSAO">
       <UniqueIdentifier>{f1dd51a7-531a-44ca-902a-d11d8dc8a8d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering Engine\UI\Editor\Animation">
+      <UniqueIdentifier>{c0f54fb7-601c-491c-8bc0-6c1115570339}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -275,6 +278,9 @@
     </ClCompile>
     <ClCompile Include="SSAO.cpp">
       <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files\Rendering Engine\UI\Editor\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -427,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="SSAO.h">
       <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Source Files\Rendering Engine\UI\Editor\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
