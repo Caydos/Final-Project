@@ -55,17 +55,17 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 	if (!initialized)
 	{
 		arrows[0].GenerateGraphicsBuffers();
-		arrows[0].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
+		arrows[0].BindShader(_gameData->shaders[Shaders::SINGLE_DRAW]);
 		arrows[0].SetColor(Colors::Red);
 		arrows[0].SetRotation(glm::vec3(180.0f, 0.0f, .0f));
 
 		arrows[1].GenerateGraphicsBuffers();
-		arrows[1].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
+		arrows[1].BindShader(_gameData->shaders[Shaders::SINGLE_DRAW]);
 		arrows[1].SetColor(Colors::Green);
 		arrows[1].SetRotation(glm::vec3(90.0f, 0.0f, .0f));
 
 		arrows[2].GenerateGraphicsBuffers();
-		arrows[2].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
+		arrows[2].BindShader(_gameData->shaders[Shaders::SINGLE_DRAW]);
 		arrows[2].SetColor(Colors::Blue);
 		arrows[2].SetRotation(glm::vec3(90.0f, 0.0f, 90.0f));
 		initialized = true;
@@ -110,6 +110,7 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 	if (parentSet != nullptr && parentSet->IsVisible())
 	{
 		std::vector<Blocks::Block>* setBlocks = parentSet->GetBlocks();
+
 		for (size_t i = 0; i < setBlocks->size(); i++)
 		{
 			auto it = &setBlocks->at(i);
@@ -127,6 +128,7 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 			boxAABB.min = translation - glm::vec3(halfSize, halfSize, halfSize);
 			boxAABB.max = translation + glm::vec3(halfSize, halfSize, halfSize);
 			float rslt = RayCasting::Intersect(ray, boxAABB);
+
 			if (rslt > .0f && rslt < closest)
 			{
 				hittedOne = it;

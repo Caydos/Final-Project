@@ -292,6 +292,7 @@ void Scene::Tick(GameData* _gameData)
 
 	_gameData->window.Clear(clearColor);
 	Scene::World::Render(_gameData);
+	
 	// Needs to be called after the inputs that enables it
 	//if (!_gameData->window.IsFocused())
 	{
@@ -332,6 +333,7 @@ void Scene::Tick(GameData* _gameData)
 	{
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
+	
 	_gameData->window.Events();
 }
 

@@ -1,5 +1,5 @@
 #version 330 core
-out vec4 FragColor;
+// out vec4 FragColor;
 
 #define DIRECTIONAL 0
 #define POINT 1
@@ -61,6 +61,11 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
+// Outputs for the G-Buffer (position, normal, albedo, etc.)
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out vec4 gPosition;
+
+
 void main()
 {
     vec4 textureColor = texture(texture1, TexCoord); // Texture color
@@ -79,34 +84,36 @@ void main()
         FragColor = mixedColor;
     }
 
-    if (considerLightning && lightDependent)
-    {
-        vec3 norm = normalize(Normal);
-        vec3 viewDir = normalize(/*viewPos -*/ FragPos);/* View pos if we want it to be tracked down by the camera position*/
+    // if (considerLightning && lightDependent)
+    // {
+    //     vec3 norm = normalize(Normal);
+    //     vec3 viewDir = normalize(/*viewPos -*/ FragPos);/* View pos if we want it to be tracked down by the camera position*/
 
-        // vec3 result = vec3(FragColor.x, FragColor.y, FragColor.z);
-        vec3 result;
-        for (int i = 0; i < lightCount; i++)
-        {
-            if (lights[i].activated)
-            {
-                if (lights[i].type == DIRECTIONAL)
-                {
-                    result += CalcDirLight(lights[i], norm, viewDir);
-                }
-                else if (lights[i].type == POINT)
-                {
-                    result += CalcPointLight(lights[i], norm, FragPos, viewDir);
-                }
-                else if (lights[i].type == SPOT)
-                {
-                    result += CalcSpotLight(lights[i], norm, FragPos, viewDir);
-                }
-            }
-        }
+    //     // vec3 result = vec3(FragColor.x, FragColor.y, FragColor.z);
+    //     vec3 result;
+    //     for (int i = 0; i < lightCount; i++)
+    //     {
+    //         if (lights[i].activated)
+    //         {
+    //             if (lights[i].type == DIRECTIONAL)
+    //             {
+    //                 result += CalcDirLight(lights[i], norm, viewDir);
+    //             }
+    //             else if (lights[i].type == POINT)
+    //             {
+    //                 result += CalcPointLight(lights[i], norm, FragPos, viewDir);
+    //             }
+    //             else if (lights[i].type == SPOT)
+    //             {
+    //                 result += CalcSpotLight(lights[i], norm, FragPos, viewDir);
+    //             }
+    //         }
+    //     }
         
-        FragColor = vec4(result, 1.0);
-    }
+    //     FragColor = vec4(result, 1.0);
+    // }
+    gPosition = vec4(FragPos, 1.0);
+    
 }
 
 

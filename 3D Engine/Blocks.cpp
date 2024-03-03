@@ -72,7 +72,7 @@ void Blocks::Load(std::string _name)
 			block->SetTexture(texture);
 		}
 	}
-	block->SetShader(GetGameData()->shaders[Shaders::WORLD_OBJECT]);
+	block->SetShader(GetGameData()->shaders[Shaders::GEOMETRY]);
 	block->SetName(_name);
 	blocks.push_back(block);
 }

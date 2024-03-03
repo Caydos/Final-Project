@@ -5,6 +5,7 @@
 #include "Files.h"
 #include "Blocks.h"
 #include "Set.h"
+#include "DeferredShading.h"
 
 static std::vector<Camera> cameras;
 static unsigned int focusedCamera = 0;
@@ -47,9 +48,15 @@ void Scene::World::FocusCamera(GameData* _gameData, unsigned int _cameraId)
 {
 	focusedCamera = _cameraId;
 	Camera* camera = &cameras.at(focusedCamera);
-	_gameData->shaders[Shaders::WORLD_OBJECT]->use();
+
 	projection = glm::perspective(glm::radians(camera->Fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-	_gameData->shaders[Shaders::WORLD_OBJECT]->setMat4("projection", projection);
+
+	_gameData->shaders[Shaders::SINGLE_DRAW]->use();
+	_gameData->shaders[Shaders::SINGLE_DRAW]->setMat4("projection", projection);
+	_gameData->shaders[Shaders::GEOMETRY]->use();
+	_gameData->shaders[Shaders::GEOMETRY]->setMat4("projection", projection);
+
+
 	_gameData->camera = camera;
 	camera->MouseSensitivity = _gameData->settings.sentivity;
 }
@@ -105,45 +112,27 @@ void Scene::World::MouseInputs(GameData* _gameData)
 	}
 }
 
+
 void Scene::World::Render(GameData* _gameData)
 {
-	//For later sync
-	//{
-	//	std::unique_lock<std::shared_mutex> lock(loadingMutex);
-	//	while (!loadingQueue.empty())
-	//	{
-	//		auto& item = loadingQueue.front();
-	//		item->LoadFromFile(item->GetName().c_str());
-	//		loadingQueue.erase(loadingQueue.begin());
-	//		InsertComponent(item);
-	//	}
-	//}
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-
-
-	Camera* camera = &cameras.at(focusedCamera);
-
-	_gameData->shaders[Shaders::WORLD_OBJECT]->use();
-
-	projection = glm::perspective(glm::radians(camera->Fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-	_gameData->shaders[Shaders::WORLD_OBJECT]->setMat4("projection", projection);
-
-	_gameData->shaders[Shaders::WORLD_OBJECT]->setBool("considerLightning", considerLightning);
-	_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("viewPos", camera->Position);
-
+    Camera* camera = &cameras.at(focusedCamera);
+    glm::mat4 projection = glm::perspective(glm::radians(camera->Fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 	view = camera->GetViewMatrix();
-	_gameData->shaders[Shaders::WORLD_OBJECT]->setMat4("view", view);
+    {
 
-	glm::vec3 position = camera->Position;
+		_gameData->shaders[Shaders::SINGLE_DRAW]->use();
+        _gameData->shaders[Shaders::SINGLE_DRAW]->setMat4("projection", projection);
+        _gameData->shaders[Shaders::SINGLE_DRAW]->setMat4("view", view);
+        _gameData->shaders[Shaders::SINGLE_DRAW]->setBool("instanceUsage", false);
 
-	Sets::UpdateVisibility();
-	Blocks::Draw();
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
+		_gameData->shaders[Shaders::GEOMETRY]->use();
+        _gameData->shaders[Shaders::GEOMETRY]->setMat4("projection", projection);
+        _gameData->shaders[Shaders::GEOMETRY]->setMat4("view", view);
+        _gameData->shaders[Shaders::GEOMETRY]->setBool("instanceUsage", true);
+    }
+	DeferredShading::Draw(_gameData);
 }
+
 
 void Scene::World::CleanUp()
 {

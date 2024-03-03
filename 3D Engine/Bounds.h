@@ -38,7 +38,7 @@ namespace Bounds
 			// Unbind
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindVertexArray(0);
-			this->shader = GetGameData()->shaders[Shaders::WORLD_OBJECT];
+			this->shader = GetGameData()->shaders[Shaders::GEOMETRY];
 			this->initialized = true;
 		}
 

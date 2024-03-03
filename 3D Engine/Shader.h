@@ -13,7 +13,9 @@ namespace Shaders
     {
         UI,
         UI_OBJECT,
-        WORLD_OBJECT
+        SINGLE_DRAW,
+        GEOMETRY,
+        RENDER,
     };
 
     class Shader

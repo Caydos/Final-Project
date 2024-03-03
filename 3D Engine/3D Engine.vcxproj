@@ -157,6 +157,7 @@
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="Crosshair.cpp" />
+    <ClCompile Include="DeferredShading.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="GhostBlocks.cpp" />
     <ClCompile Include="Instance.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="Clock.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DefaultVertices.h" />
+    <ClInclude Include="DeferredShading.h" />
     <ClInclude Include="EventListing.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="FrustrumCulling.h" />
@@ -226,6 +228,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Set.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="SidesArrows.h" />
     <ClInclude Include="SSAO.h" />
     <ClInclude Include="Sync.h" />
     <ClInclude Include="Vectors.h" />

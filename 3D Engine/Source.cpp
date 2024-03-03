@@ -43,11 +43,16 @@ int main()
 
 	Shaders::Shader uiShader("../Shaders/ui.vs", "../Shaders/ui.fs");
 	Shaders::Shader uiObject("../Shaders/UIObject.vs", "../Shaders/UIObject.fs");
-	Shaders::Shader worldObjectShader("../Shaders/worldObject.vs", "../Shaders/worldObject.fs");
+	Shaders::Shader worldObjectShader("../Shaders/WorldObject.vs", "../Shaders/WorldObject.fs");
+	Shaders::Shader geometryShader("../Shaders/geometry.vs", "../Shaders/geometry.fs");
+	Shaders::Shader renderShader("../Shaders/render.vs", "../Shaders/render.fs");
+
 
 	gameData.shaders[Shaders::UI] = &uiShader;
 	gameData.shaders[Shaders::UI_OBJECT] = &uiObject;
-	gameData.shaders[Shaders::WORLD_OBJECT] = &worldObjectShader;
+	gameData.shaders[Shaders::SINGLE_DRAW] = &worldObjectShader;
+	gameData.shaders[Shaders::GEOMETRY] = &geometryShader;
+	gameData.shaders[Shaders::RENDER] = &renderShader;
 
 	gameData.gameStates[SCENE] = &Scene::Tick;
 	gameData.gameState = SCENE;
@@ -66,7 +71,7 @@ int main()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(gameData.window.GetWindow(), true);
-	ImGui_ImplOpenGL3_Init("#version 330 core"); // Replace with your OpenGL version
+	ImGui_ImplOpenGL3_Init("#version 330 core");
 
 	// Initialize variables
 	float lastFPSCalculationTime = 0.0f;

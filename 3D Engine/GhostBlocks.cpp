@@ -1,6 +1,7 @@
 #include "Blocks.h"
 #include "DefaultVertices.h"
-#include "Arrows.h"
+#include "SidesArrows.h"
+#include "Clock.h"
 
 static unsigned int VAO;
 static unsigned int vertexVBO;
@@ -10,22 +11,30 @@ static Colors::Color color = Colors::Color(1.0f, 1.0f, 1.0f, 0.3f);
 static glm::vec3 scale;
 static glm::vec3 position;
 static bool ghostInitialized = false;
-static Arrow arrows[2];
+
+static Clock scrollClock;
+static SideArrow arrows[2];
 static int AxisRestrictions[3];
+static int axisId = 0;
+glm::vec3 rotations[3][2] = {
+	{glm::vec3(0.0f, 0.0f, .0f), glm::vec3(0.0f, 90.0f, .0f)},//flat
+	{glm::vec3(90.0f, 0.0f, .0f), glm::vec3(90.0f, 90.0f, .0f)},//Up 1
+	{glm::vec3(0.0f, 0.0f, 90.0f), glm::vec3(90.0f, 0.0f, 90.0f)},//Up 2
+};
 
 void Blocks::Ghost::Draw(GameData* _gameData)
 {
 	if (!ghostInitialized)
 	{
 		arrows[0].GenerateGraphicsBuffers();
-		arrows[0].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
-		arrows[0].SetColor(Colors::Grey);
-		arrows[0].SetRotation(glm::vec3(180.0f, 0.0f, .0f));
+		arrows[0].BindShader(_gameData->shaders[Shaders::SINGLE_DRAW]);
+		arrows[0].SetColor(Colors::Color(TO_RGBA(35), TO_RGBA(77), TO_RGBA(168), 0.7f));
+		arrows[0].SetRotation(rotations[axisId][0]);
 
 		arrows[1].GenerateGraphicsBuffers();
-		arrows[1].BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
-		arrows[1].SetColor(Colors::Grey);
-		arrows[1].SetRotation(glm::vec3(90.0f, 0.0f, .0f));
+		arrows[1].BindShader(_gameData->shaders[Shaders::SINGLE_DRAW]);
+		arrows[1].SetColor(Colors::Color(TO_RGBA(35), TO_RGBA(77), TO_RGBA(168), 0.7f));
+		arrows[1].SetRotation(rotations[axisId][1]);
 
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &vertexVBO);
@@ -50,16 +59,39 @@ void Blocks::Ghost::Draw(GameData* _gameData)
 		models.push_back(glm::mat4(1.0f));
 		ghostInitialized = true;
 	}
-
-	Shaders::Shader* shader = _gameData->shaders[Shaders::WORLD_OBJECT];
+	if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
+	{
+		if (_gameData->window.yScroll < 0 && scrollClock.GetElapsedTime() > 50)
+		{
+			scrollClock.Restart();
+			axisId++;
+			if (axisId >= 3)
+			{
+				axisId = 0;
+			}
+			arrows[0].SetRotation(rotations[axisId][0]);
+			arrows[1].SetRotation(rotations[axisId][1]);
+		}
+		else if (_gameData->window.yScroll > 0 && scrollClock.GetElapsedTime() > 50)
+		{
+			scrollClock.Restart();
+			axisId--;
+			if (axisId < 0)
+			{
+				axisId = 2;
+			}
+			arrows[0].SetRotation(rotations[axisId][0]);
+			arrows[1].SetRotation(rotations[axisId][1]);
+		}
+	}
+	Shaders::Shader* shader = _gameData->shaders[Shaders::SINGLE_DRAW];
 	shader->use();
-	shader->setBool("instanceUsage", true);
 
+	shader->setBool("instanceUsage", true);
 	shader->setVec4("color", glm::vec4(color.values[0], color.values[1], color.values[2], color.values[3]));
 	shader->setBool("lightDependent", false);
 	shader->setInt("mode", 0);
 	shader->setFloat("opacity", 1.0f);
-
 	glBindVertexArray(VAO);
 
 	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, models.size());

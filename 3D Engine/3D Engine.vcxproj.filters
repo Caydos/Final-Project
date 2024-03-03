@@ -145,6 +145,9 @@
     <Filter Include="Source Files\Rendering Engine\UI\Editor\Animation">
       <UniqueIdentifier>{c0f54fb7-601c-491c-8bc0-6c1115570339}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering Engine\Graphics components\Deferred Shading">
+      <UniqueIdentifier>{c1c7c516-d26d-4fbc-a008-f22a427e4b1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -281,6 +284,9 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files\Rendering Engine\UI\Editor\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredShading.cpp">
+      <Filter>Source Files\Rendering Engine\Graphics components\Deferred Shading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -436,6 +442,12 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Source Files\Rendering Engine\UI\Editor\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredShading.h">
+      <Filter>Source Files\Rendering Engine\Graphics components\Deferred Shading</Filter>
+    </ClInclude>
+    <ClInclude Include="SidesArrows.h">
+      <Filter>Source Files\Rendering Engine\Drawables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

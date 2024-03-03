@@ -26,9 +26,9 @@
 //
 //void Viewer::Initialize(GameData* _gameData)
 //{
-//	_gameData->shaders[Shaders::WORLD_OBJECT]->use();
-//	_gameData->shaders[Shaders::WORLD_OBJECT]->setInt("material.diffuse", 0);
-//	_gameData->shaders[Shaders::WORLD_OBJECT]->setInt("material.specular", 1);
+//	_gameData->shaders[Shaders::GEOMETRY]->use();
+//	_gameData->shaders[Shaders::GEOMETRY]->setInt("material.diffuse", 0);
+//	_gameData->shaders[Shaders::GEOMETRY]->setInt("material.specular", 1);
 //
 //
 //	inputClock.Restart();
@@ -59,14 +59,14 @@
 //	defaultObj.Initialize();
 //	defaultObj.scale = { editorScale,editorScale,editorScale };
 //	defaultObj.position = { 0.0,0.0,-5.0 };
-//	defaultObj.BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
+//	defaultObj.BindShader(_gameData->shaders[Shaders::GEOMETRY]);
 //	defaultObj.SetTexture(&textures[5]);
 //	objects.push_back(defaultObj);
 //	defaultObjectVAO = objects[0].VAO;
 //
 //	ghostObject.Initialize();
 //	ghostObject.scale = { editorScale,editorScale,editorScale };
-//	ghostObject.BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
+//	ghostObject.BindShader(_gameData->shaders[Shaders::GEOMETRY]);
 //	ghostObject.SetColor(Colors::White);
 //	ghostObject.opacity = 0.5f;
 //	ghostObject.SetLightDependency(false);
@@ -130,7 +130,7 @@
 //					case RayCasting::BOTTOM: {defaultObj.position.y -= editorScale; break; }
 //					default: break;
 //					}
-//					defaultObj.BindShader(_gameData->shaders[Shaders::WORLD_OBJECT]);
+//					defaultObj.BindShader(_gameData->shaders[Shaders::GEOMETRY]);
 //					defaultObj.SetTexture(inHand->texture);
 //					objects.push_back(defaultObj);
 //				}
@@ -177,36 +177,36 @@
 //#pragma region 3D Objects
 //
 //	{
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->use();
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("viewPos", _gameData->camera.Position);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setFloat("material.shininess", 32.0f);
+//		_gameData->shaders[Shaders::GEOMETRY]->use();
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("viewPos", _gameData->camera.Position);
+//		_gameData->shaders[Shaders::GEOMETRY]->setFloat("material.shininess", 32.0f);
 //
 //		Colors::Color lightColor(0.4f, 0.4f, 0.4f);
 //
 //		// directional light
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("dirLight.diffuse", lightColor.values[0], lightColor.values[1], lightColor.values[2]);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("dirLight.diffuse", lightColor.values[0], lightColor.values[1], lightColor.values[2]);
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 //
 //		// spotLight
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("spotLight.position", _gameData->camera.Position);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("spotLight.direction", _gameData->camera.Front);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setFloat("spotLight.constant", 1.0f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setFloat("spotLight.linear", 0.09f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setFloat("spotLight.quadratic", 0.032f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("spotLight.position", _gameData->camera.Position);
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("spotLight.direction", _gameData->camera.Front);
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setFloat("spotLight.constant", 1.0f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setFloat("spotLight.linear", 0.09f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setFloat("spotLight.quadratic", 0.032f);
+//		_gameData->shaders[Shaders::GEOMETRY]->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+//		_gameData->shaders[Shaders::GEOMETRY]->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 //
 //		// pass projection matrix to shader (note that in this case it could change every frame)
 //		glm::mat4 projection = glm::perspective(glm::radians(_gameData->camera.Fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setMat4("projection", projection);
+//		_gameData->shaders[Shaders::GEOMETRY]->setMat4("projection", projection);
 //		// camera/view transformation
 //		glm::mat4 view = _gameData->camera.GetViewMatrix();
-//		_gameData->shaders[Shaders::WORLD_OBJECT]->setMat4("view", view);
+//		_gameData->shaders[Shaders::GEOMETRY]->setMat4("view", view);
 //
 //		// Assuming your crosshair is at the center of the screen
 //		glm::vec4 ray_clip = glm::vec4(0.0, 0.0, -1.0, 1.0);

@@ -102,22 +102,25 @@ void Inventory::Menu(GameData* _gameData)
 			inputClock.Restart();
 		}
 	}
-	if (_gameData->window.yScroll < 0 && scrollClock.GetElapsedTime() > 50)
+	if (!_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
 	{
-		scrollClock.Restart();
-		hotBarHovered++;
-		if (hotBarHovered >= 8)
+		if (_gameData->window.yScroll < 0 && scrollClock.GetElapsedTime() > 50)
 		{
-			hotBarHovered = 7;
+			scrollClock.Restart();
+			hotBarHovered++;
+			if (hotBarHovered >= 8)
+			{
+				hotBarHovered = 7;
+			}
 		}
-	}
-	else if (_gameData->window.yScroll > 0 && scrollClock.GetElapsedTime() > 50)
-	{
-		scrollClock.Restart();
-		hotBarHovered--;
-		if (hotBarHovered < 0)
+		else if (_gameData->window.yScroll > 0 && scrollClock.GetElapsedTime() > 50)
 		{
-			hotBarHovered = 0;
+			scrollClock.Restart();
+			hotBarHovered--;
+			if (hotBarHovered < 0)
+			{
+				hotBarHovered = 0;
+			}
 		}
 	}
 

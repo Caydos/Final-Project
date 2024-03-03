@@ -150,7 +150,7 @@ void Blocks::BlockType::AskForRefresh(void* _instanceId)
 
 void Blocks::BlockType::Draw()
 {
-	this->shader->setBool("instanceUsage", true);
+	//this->shader->setBool("instanceUsage", true);
 
 	int mode = 0;
 	if (this->texture != nullptr)
