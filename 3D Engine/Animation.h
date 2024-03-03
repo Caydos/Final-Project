@@ -5,8 +5,8 @@
 
 namespace Animation
 {
+	void SubMenu(GameData* _gameData);
 	void Menu(GameData* _gameData);
-
 }
 
 #endif

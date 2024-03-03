@@ -49,7 +49,7 @@ void Scene::World::FocusCamera(GameData* _gameData, unsigned int _cameraId)
 	focusedCamera = _cameraId;
 	Camera* camera = &cameras.at(focusedCamera);
 
-	projection = glm::perspective(glm::radians(camera->Fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(camera->Fov), (float)_gameData->resolution[0] / (float)_gameData->resolution[1], 0.1f, 100.0f);
 
 	_gameData->shaders[Shaders::SINGLE_DRAW]->use();
 	_gameData->shaders[Shaders::SINGLE_DRAW]->setMat4("projection", projection);
@@ -116,7 +116,7 @@ void Scene::World::MouseInputs(GameData* _gameData)
 void Scene::World::Render(GameData* _gameData)
 {
     Camera* camera = &cameras.at(focusedCamera);
-    glm::mat4 projection = glm::perspective(glm::radians(camera->Fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(camera->Fov), (float)_gameData->resolution[0] / (float)_gameData->resolution[1], 0.1f, 100.0f);
 	view = camera->GetViewMatrix();
     {
 

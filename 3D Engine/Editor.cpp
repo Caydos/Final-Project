@@ -134,7 +134,7 @@ void Editor::Menu(GameData* _gameData)
 			ImGui::Text("Speed :");
 			ImGui::SliderFloat("##CamSpeed", &cam->MovementSpeed, 0.01f, 20.0f);
 
-			if (ImGui::Button("Respawn"))
+			if (ImGui::Button("Respawn", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
 			{
 				cam->Position = glm::vec3(.0f);
 			}
@@ -142,12 +142,13 @@ void Editor::Menu(GameData* _gameData)
 			ImGui::TreePop();
 		}
 		Crosshairs::Menu(_gameData);
-		Animation::Menu(_gameData);
+		Animation::SubMenu(_gameData);
 
 		ImGui::End();
 	}
 
-	Sets::Menu(_gameData);
+	Sets::Menu(_gameData, mainMenuBarHeight);
+	Animation::Menu(_gameData);
 
 	if (showFilenameInput)
 	{

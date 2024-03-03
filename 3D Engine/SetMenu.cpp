@@ -8,11 +8,11 @@ static int blockCount = 0;
 static Sets::Set* selectedSet = nullptr;
 
 
-void Sets::Menu(GameData* _gameData)
+void Sets::Menu(GameData* _gameData, float _yOffset)
 {
 	glm::ivec2 windowDimensions = _gameData->window.GetDimensions();
-	ImGui::SetNextWindowPos(ImVec2(windowDimensions.x - windowDimensions.x * 0.2, 0));
-	ImGui::SetNextWindowSize(ImVec2(windowDimensions.x * 0.2, windowDimensions.y));
+	ImGui::SetNextWindowPos(ImVec2(windowDimensions.x - windowDimensions.x * 0.2, _yOffset));
+	ImGui::SetNextWindowSize(ImVec2(windowDimensions.x * 0.2, windowDimensions.y - _yOffset));
 	if (ImGui::Begin("Projects", &isSetsMenuOpen, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysVerticalScrollbar))
 	{
 		std::vector<Set*>* sets = Sets::GetAll();
@@ -104,13 +104,12 @@ void Sets::Menu(GameData* _gameData)
 				{
 					sets->at(parentSetId)->MoveOrigin(originPos);
 				}
-
-				if (ImGui::Button(std::string("Save##SaveSet" + name).c_str()))
+				if (ImGui::Button(std::string("Save##SaveSet" + name).c_str(), ImVec2(ImGui::GetContentRegionAvail().x,0)))
 				{
 					sets->at(parentSetId)->Save();
 				}
 
-				if (ImGui::Button(std::string("Close##CloseSet" + name).c_str()))
+				if (ImGui::Button(std::string("Close##CloseSet" + name).c_str(), ImVec2(ImGui::GetContentRegionAvail().x,0)))
 				{
 					sets->at(parentSetId)->Erase();
 					sets->erase(sets->begin() + parentSetId);

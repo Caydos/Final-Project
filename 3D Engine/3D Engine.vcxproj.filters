@@ -434,9 +434,6 @@
     <ClInclude Include="Set.h">
       <Filter>Source Files\Rendering Engine\Set</Filter>
     </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SSAO.h">
       <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
     </ClInclude>
@@ -448,6 +445,9 @@
     </ClInclude>
     <ClInclude Include="SidesArrows.h">
       <Filter>Source Files\Rendering Engine\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Source Files\Rendering Engine\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

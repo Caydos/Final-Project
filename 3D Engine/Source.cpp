@@ -38,6 +38,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
 	gameData.window.Create("3D Rendering Engine", gameData.resolution[0], gameData.resolution[1]);
 
@@ -62,9 +63,9 @@ int main()
 #endif // _DEBUG
 
 	gameData.window.Focus();
+	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	glEnable(GL_MULTISAMPLE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 

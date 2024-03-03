@@ -204,7 +204,7 @@ void Crosshairs::Menu(GameData* _gameData)
 			crosshair.SetColor(Colors::Color(color.x, color.y, color.z, color.w));
 		}
 
-		if (ImGui::Button("Save##crosshair"))
+		if (ImGui::Button("Save##crosshair", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
 		{
 			crosshair.Save();
 		}

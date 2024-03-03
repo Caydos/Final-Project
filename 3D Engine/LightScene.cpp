@@ -18,47 +18,47 @@ Lightning::Light* Scene::Lights::InsertLight(GameData* _gameData, Lightning::Lig
 	{
 	case Lightning::DIRECTIONAL:
 	{
-		_gameData->shaders[Shaders::GEOMETRY]->setInt(std::string(str + ".type"), Lightning::DIRECTIONAL);
-		_gameData->shaders[Shaders::GEOMETRY]->setBool(std::string(str + ".activated"), _light.IsActive());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".direction"), _light.GetDirection());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".ambient"), _light.GetAmbient());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".diffuse"), _light.GetDiffuse());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".specular"), _light.GetSpecular());
+		_gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lightning::DIRECTIONAL);
+		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), _light.IsActive());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), _light.GetDirection());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), _light.GetAmbient());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), _light.GetDiffuse());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), _light.GetSpecular());
 		break;
 	}
 	case Lightning::POINT:
 	{
-		_gameData->shaders[Shaders::GEOMETRY]->setInt(std::string(str + ".type"), Lightning::POINT);
-		_gameData->shaders[Shaders::GEOMETRY]->setBool(std::string(str + ".activated"), _light.IsActive());
+		_gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lightning::POINT);
+		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), _light.IsActive());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".position"), _light.GetPosition());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), _light.GetPosition());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".constant"), _light.GetConstant());
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".linear"), _light.GetLinear());
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".quadratic"), _light.GetQuadratic());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".constant"), _light.GetConstant());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".linear"), _light.GetLinear());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".quadratic"), _light.GetQuadratic());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".ambient"), _light.GetAmbient());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".diffuse"), _light.GetDiffuse());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".specular"), _light.GetSpecular());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), _light.GetAmbient());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), _light.GetDiffuse());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), _light.GetSpecular());
 		break;
 	}
 	case Lightning::SPOT:
 	{
-		_gameData->shaders[Shaders::GEOMETRY]->setInt(std::string(str + ".type"), Lightning::SPOT);
-		_gameData->shaders[Shaders::GEOMETRY]->setBool(std::string(str + ".activated"), _light.IsActive());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".direction"), _light.GetDirection());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".position"), _light.GetPosition());
+		_gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lightning::SPOT);
+		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), _light.IsActive());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), _light.GetDirection());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), _light.GetPosition());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".cutOff"), glm::cos(glm::radians(_light.GetCutOff())));
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".outerCutOff"), glm::cos(glm::radians(_light.GetOuterCutOff())));
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".cutOff"), glm::cos(glm::radians(_light.GetCutOff())));
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".outerCutOff"), glm::cos(glm::radians(_light.GetOuterCutOff())));
 
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".constant"), _light.GetConstant());
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".linear"), _light.GetLinear());
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".quadratic"), _light.GetQuadratic());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".constant"), _light.GetConstant());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".linear"), _light.GetLinear());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".quadratic"), _light.GetQuadratic());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".ambient"), _light.GetAmbient());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".diffuse"), _light.GetDiffuse());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".specular"), _light.GetSpecular());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), _light.GetAmbient());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), _light.GetDiffuse());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), _light.GetSpecular());
 		break;
 	}
 	default:
@@ -79,43 +79,43 @@ void Scene::Lights::UpdateLight(GameData* _gameData, unsigned int _id)
 	{
 	case Lightning::DIRECTIONAL:
 	{
-		_gameData->shaders[Shaders::GEOMETRY]->setBool(std::string(str + ".activated"), light->IsActive());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".direction"), light->GetDirection());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".ambient"), light->GetAmbient());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".diffuse"), light->GetDiffuse());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".specular"), light->GetSpecular());
+		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), light->IsActive());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), light->GetDirection());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), light->GetAmbient());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), light->GetDiffuse());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), light->GetSpecular());
 		break;
 	}
 	case Lightning::POINT:
 	{
-		_gameData->shaders[Shaders::GEOMETRY]->setBool(std::string(str + ".activated"), light->IsActive());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".position"), light->GetPosition());
+		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), light->IsActive());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), light->GetPosition());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".constant"), light->GetConstant());
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".linear"), light->GetLinear());
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".quadratic"), light->GetQuadratic());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".constant"), light->GetConstant());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".linear"), light->GetLinear());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".quadratic"), light->GetQuadratic());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".ambient"), light->GetAmbient());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".diffuse"), light->GetDiffuse());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".specular"), light->GetSpecular());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), light->GetAmbient());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), light->GetDiffuse());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), light->GetSpecular());
 		break;
 	}
 	case Lightning::SPOT:
 	{
-		_gameData->shaders[Shaders::GEOMETRY]->setBool(std::string(str + ".activated"), light->IsActive());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".direction"), light->GetDirection());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".position"), light->GetPosition());
+		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), light->IsActive());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), light->GetDirection());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), light->GetPosition());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".cutOff"), glm::cos(glm::radians(light->GetCutOff())));
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".outerCutOff"), glm::cos(glm::radians(light->GetOuterCutOff())));
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".cutOff"), glm::cos(glm::radians(light->GetCutOff())));
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".outerCutOff"), glm::cos(glm::radians(light->GetOuterCutOff())));
 
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".constant"), light->GetConstant());
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".linear"), light->GetLinear());
-		_gameData->shaders[Shaders::GEOMETRY]->setFloat(std::string(str + ".quadratic"), light->GetQuadratic());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".constant"), light->GetConstant());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".linear"), light->GetLinear());
+		_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".quadratic"), light->GetQuadratic());
 
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".ambient"), light->GetAmbient());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".diffuse"), light->GetDiffuse());
-		_gameData->shaders[Shaders::GEOMETRY]->setVec3(std::string(str + ".specular"), light->GetSpecular());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), light->GetAmbient());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), light->GetDiffuse());
+		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), light->GetSpecular());
 		break;
 	}
 	default:
@@ -127,8 +127,8 @@ void Scene::Lights::UpdateLight(GameData* _gameData, unsigned int _id)
 
 void Scene::Lights::UpdateShader(GameData* _gameData)
 {
-	_gameData->shaders[Shaders::GEOMETRY]->use();
-	_gameData->shaders[Shaders::GEOMETRY]->setInt("lightCount", lights.size());
+	_gameData->shaders[Shaders::RENDER]->use();
+	_gameData->shaders[Shaders::RENDER]->setInt("lightCount", lights.size());
 	for (size_t i = 0; i < lights.size(); i++)
 	{
 		UpdateLight(_gameData, i);
