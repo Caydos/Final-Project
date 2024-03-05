@@ -148,6 +148,9 @@
     <Filter Include="Source Files\Rendering Engine\Graphics components\Deferred Shading">
       <UniqueIdentifier>{c1c7c516-d26d-4fbc-a008-f22a427e4b1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Entity">
+      <UniqueIdentifier>{e33d3bca-5aff-48f9-8b6b-0569f00842c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -287,6 +290,9 @@
     </ClCompile>
     <ClCompile Include="DeferredShading.cpp">
       <Filter>Source Files\Rendering Engine\Graphics components\Deferred Shading</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -448,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="Inventory.h">
       <Filter>Source Files\Rendering Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
