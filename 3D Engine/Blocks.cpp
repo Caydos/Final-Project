@@ -20,6 +20,7 @@ void Blocks::Load(std::string _name)
 	{
 		size_t lastindex = files[fileId].find_last_of(".");
 		std::string extension = files[fileId].substr(lastindex);
+		std::string filename_without_extension = files[fileId].substr(0, lastindex);
 
 		if (extension == BLOCKS_FILE_EXTENSION)
 		{
@@ -65,11 +66,18 @@ void Blocks::Load(std::string _name)
 				continue;
 			}
 		}
-		else if (extension == BLOCKS_TEXTURE_EXTENSION)
+		else if (extension == BLOCKS_TEXTURE_EXTENSION || extension == ".png")
 		{
 			Texture* texture = new Texture;
 			texture->LoadFromFile((std::string(BLOCKS_DIRECTORY) + _name + "/" + files[fileId]).c_str());
-			block->SetTexture(texture);
+			if (filename_without_extension == "texture")
+			{
+				block->SetTexture(texture);
+			}
+			else
+			{
+				block->SetEffectsTexture(texture);
+			}
 		}
 	}
 	block->SetShader(GetGameData()->shaders[Shaders::GEOMETRY]);

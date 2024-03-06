@@ -66,7 +66,7 @@ void Scene::Initialize(GameData* _gameData)
 	std::vector<Blocks::BlockType*> types = Blocks::GetAll();
 	for (size_t i = 0; i < types.size(); i++)
 	{
-		if (types[i]->GetName() == "Sol_CarelageMagasin")
+		if (types[i]->GetName() == "Sol_Carelage")
 		{
 			blType[0] = types[i];
 		}

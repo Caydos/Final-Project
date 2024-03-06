@@ -66,6 +66,9 @@ namespace Blocks
 		Texture* GetTexture();
 		void SetTexture(Texture* _texture);
 
+		Texture* GetEffectsTexture();
+		void SetEffectsTexture(Texture* _effectsTexture);
+
 		Colors::Color GetColor();
 		void SetColor(Colors::Color _color);
 
@@ -100,6 +103,7 @@ namespace Blocks
 
 		Shaders::Shader* shader;
 		Texture* texture;
+		Texture* effects;
 		Colors::Color color;
 
 		glm::vec3 scale;

@@ -55,6 +55,7 @@ int main()
 	gameData.shaders[Shaders::GEOMETRY] = &geometryShader;
 	gameData.shaders[Shaders::RENDER] = &renderShader;
 
+
 	gameData.gameStates[SCENE] = &Scene::Tick;
 	gameData.gameState = SCENE;
 

@@ -36,6 +36,16 @@ void Blocks::BlockType::SetTexture(Texture* _texture)
 	this->texture = _texture;
 }
 
+Texture* Blocks::BlockType::GetEffectsTexture()
+{
+	return this->effects;
+}
+
+void Blocks::BlockType::SetEffectsTexture(Texture* _effectsTexture)
+{
+	this->effects = _effectsTexture;
+}
+
 Colors::Color Blocks::BlockType::GetColor()
 {
 	return this->color;
@@ -156,7 +166,11 @@ void Blocks::BlockType::Draw()
 	if (this->texture != nullptr)
 	{
 		mode++;
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, this->texture->id);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, this->effects->id);
+
 		if (this->color.values[3] > 0.0f)
 		{
 			mode++;

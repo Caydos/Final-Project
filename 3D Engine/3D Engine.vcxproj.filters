@@ -292,7 +292,7 @@
       <Filter>Source Files\Rendering Engine\Graphics components\Deferred Shading</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Game\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -456,7 +456,7 @@
       <Filter>Source Files\Rendering Engine\UI</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Game\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

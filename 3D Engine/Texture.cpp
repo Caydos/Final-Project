@@ -14,6 +14,15 @@
 
 void Texture::LoadFromFile(const char* _path)
 {
+	std::string path = _path;
+	size_t lastindex = path.find_last_of(".");
+	std::string extension = path.substr(lastindex);
+	GLenum format = GL_RGB;
+	if (extension == ".png")
+	{
+		format = GL_RGBA;
+	}
+
 	glGenTextures(1, &this->id);
 	GLfloat maxAnisotropy;
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
@@ -36,7 +45,7 @@ void Texture::LoadFromFile(const char* _path)
 	if (data)
 	{
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, this->width, this->height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
 	}

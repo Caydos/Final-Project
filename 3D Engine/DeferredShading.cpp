@@ -6,9 +6,8 @@ static bool initialized = false;
 static unsigned int quadVAO = 0;
 static unsigned int quadVBO;
 static GLuint gBuffer;
-static GLuint gPosition, gNormal, gAlbedoSpec;
+static GLuint gPosition, gNormal, gAlbedoSpec, gEffects;
 static GLuint rboDepth;
-
 
 void DeferredShading::Initialize(GameData* _gameData)
 {
@@ -38,8 +37,15 @@ void DeferredShading::Initialize(GameData* _gameData)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedoSpec, 0);
 
-	unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
-	glDrawBuffers(3, attachments);
+	glGenTextures(1, &gEffects);
+	glBindTexture(GL_TEXTURE_2D, gEffects);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gEffects, 0);
+
+	unsigned int attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+	glDrawBuffers(4, attachments);
 
 
 	glGenRenderbuffers(1, &rboDepth);
@@ -52,11 +58,15 @@ void DeferredShading::Initialize(GameData* _gameData)
 	{
 		std::cout << "Framebuffer is not complete!" << std::endl;
 	}
+	_gameData->shaders[Shaders::GEOMETRY]->use();
+	_gameData->shaders[Shaders::GEOMETRY]->setInt("textureX", 0);
+	_gameData->shaders[Shaders::GEOMETRY]->setInt("effectsTexture", 1);
 
 	_gameData->shaders[Shaders::RENDER]->use();
 	_gameData->shaders[Shaders::RENDER]->setInt("gPosition", 0);
 	_gameData->shaders[Shaders::RENDER]->setInt("gNormal", 1);
 	_gameData->shaders[Shaders::RENDER]->setInt("gAlbedoSpec", 2);
+	_gameData->shaders[Shaders::RENDER]->setInt("gEffects", 3);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	initialized = true;
@@ -98,7 +108,6 @@ void DeferredShading::Draw(GameData* _gameData)
 	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Sets::UpdateVisibility();
-	glActiveTexture(GL_TEXTURE0);
 	Blocks::Draw();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -111,6 +120,8 @@ void DeferredShading::Draw(GameData* _gameData)
 	glBindTexture(GL_TEXTURE_2D, gNormal);
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, gEffects);
 
 	RenderQuad();
 	glDisable(GL_CULL_FACE);
