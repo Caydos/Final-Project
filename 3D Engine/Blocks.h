@@ -2,6 +2,7 @@
 #define BLOCKS_H
 #include "Common.h"
 #include "Texture.h"
+#include "RayCasting.h"
 
 #define BLOCKS_DIRECTORY "../Blocks/"
 #define BLOCKS_FILE_EXTENSION ".json"
@@ -127,9 +128,6 @@ namespace Blocks
 		glm::mat4* GetParent();
 		void SetParent(glm::mat4* _parent);
 
-		void InsertInScene();
-		void RemoveFromScene();
-
 		glm::mat4 GetModel();
 		glm::mat4* GetModelAddress();
 		void GenerateModel();
@@ -191,8 +189,9 @@ namespace Blocks
 		void CalculateTransformations();
 		void SetScale(glm::vec3 _scale);
 		void SetStartPosition(glm::vec3 _position);
-		void SetDestination(glm::vec3 _destination);
+		void SetRay(RayCasting::Ray _ray);
 		void RestrictAxis(Axis _axis, int _value);
+		std::vector<glm::mat4> GetModels();
 	}
 }
 

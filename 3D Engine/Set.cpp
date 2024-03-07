@@ -49,6 +49,9 @@ std::vector<Sets::Set*>* Sets::GetAll()
 	return &sets;
 }
 
+static bool holding = false;
+static Blocks::Block* hittedOne = nullptr;
+static glm::vec3 position;
 
 void Sets::Edition(GameData* _gameData, bool _allowControls)
 {
@@ -103,11 +106,13 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 
 	RayCasting::Face hittedFace;
 	float closest = 100.0f;
-	Blocks::Block* hittedOne = nullptr;
-	glm::vec3 position;
 
+	if (!holding)
+	{
+		hittedOne = nullptr;
+	}
 
-	if (parentSet != nullptr && parentSet->IsVisible())
+	if (parentSet != nullptr && parentSet->IsVisible() && !holding)
 	{
 		std::vector<Blocks::Block>* setBlocks = parentSet->GetBlocks();
 
@@ -142,70 +147,72 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 
 	if (hittedOne != nullptr && parentSet != nullptr && _allowControls)
 	{
-		const char* blockTypeName = nullptr;
 		Blocks::BlockType* blockType = Inventory::GetHotBarBlock();
 
-		if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_LEFT) && inputClock.GetElapsedTime() > 125)
+		if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_LEFT) && inputClock.GetElapsedTime() > 125 && !holding)
 		{
 			parentSet->RemoveBlock(hittedOne);
 			inputClock.Restart();
 			return;
 		}
-		if (blockType == nullptr)
+		if (blockType == nullptr) { return; }
+		if (!holding)
 		{
-			return;
-		}
-		switch (hittedFace)
-		{
-		case RayCasting::FRONT:
-		{
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, -1);
-			position.z += (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f);
-			break;
-		}
-		case RayCasting::BACK:
-		{
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 1);
-			position.z -= (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f);
-			break;
-		}
-		case RayCasting::LEFT:
-		{
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 1);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
-			position.x -= (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f);
-			break;
-		}
-		case RayCasting::RIGHT:
-		{
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, -1);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
-			position.x += (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f);
-			break;
-		}
-		case RayCasting::TOP:
-		{
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, -1);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
-			position.y += (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f);
-			break;
-		}
-		case RayCasting::BOTTOM:
-		{
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 1);
-			Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
-			position.y -= (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f);
-			break;
-		}
-		default: break;
+			switch (hittedFace)
+			{
+			case RayCasting::FRONT:
+			{
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, -1);
+				position.z += (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f);
+				break;
+			}
+			case RayCasting::BACK:
+			{
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 1);
+				position.z -= (hittedOne->GetScale().z / 2.0f + blockType->GetScale().z / 2.0f);
+				break;
+			}
+			case RayCasting::LEFT:
+			{
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 1);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
+				position.x -= (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f);
+				break;
+			}
+			case RayCasting::RIGHT:
+			{
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, -1);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 0);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
+				position.x += (hittedOne->GetScale().x / 2.0f + blockType->GetScale().x / 2.0f);
+				break;
+			}
+			case RayCasting::TOP:
+			{
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, -1);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
+				position.y += (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f);
+				break;
+			}
+			case RayCasting::BOTTOM:
+			{
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::X, 0);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Y, 1);
+				Blocks::Ghost::RestrictAxis(Blocks::Ghost::Z, 0);
+				position.y -= (hittedOne->GetScale().y / 2.0f + blockType->GetScale().y / 2.0f);
+				break;
+			}
+			default: break;
+			}
+			Blocks::Ghost::SetScale(blockType->GetScale());
+
+			Blocks::Ghost::SetStartPosition(position);
 		}
 		std::vector<Blocks::Block>* setBlocks = parentSet->GetBlocks();
 		for (size_t i = 0; i < setBlocks->size(); i++)
@@ -216,40 +223,60 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 			}
 		}
 		Blocks::Ghost::Draw(_gameData);
-		Blocks::Ghost::SetScale(blockType->GetScale());
 
-
-		Blocks::Ghost::SetStartPosition(position);
-
-		if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_RIGHT) && inputClock.GetElapsedTime() > 125)
+		if (holding)
 		{
-			Blocks::Block originBlock;
-			originBlock.GenerateModel();
-			originBlock.SetScale(blockType->GetScale());
-			originBlock.SetPosition(position);
+			if (!_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_RIGHT) && inputClock.GetElapsedTime() > 125)
+			{
+				holding = false;
+				inputClock.Restart();
+				std::vector<Blocks::BlockType*> types = Blocks::GetAll();
+				Blocks::BlockType* finalType = nullptr;
+				for (size_t typeId = 0; typeId < types.size(); typeId++)
+				{
+					if (types[typeId]->GetName() == blockType->GetName().c_str())
+					{
+						finalType = types[typeId];
+						break;
+					}
+				}
 
-			Blocks::MaterialCheck(&originBlock, blockType->GetName().c_str());
 
-			parentSet->InsertBlock(originBlock);
+				std::vector<glm::mat4> models = Blocks::Ghost::GetModels();
+				glm::vec3 setPosition = parentSet->GetPosition();
+				std::cout << "Placing : " << models.size() << std::endl;
+				for (size_t modelId = 0; modelId < models.size(); modelId++)
+				{
+					glm::vec3 scale;
+					glm::quat rotation;
+					glm::vec3 translation;
+					glm::vec3 skew;
+					glm::vec4 perspective;
+					glm::decompose(models[modelId], scale, rotation, translation, skew, perspective);
+
+					Blocks::Block originBlock;
+					originBlock.GenerateModel();
+					originBlock.SetScale(blockType->GetScale());
+
+					glm::vec3 localPosition = translation - setPosition;
+
+					originBlock.SetPosition(localPosition);
+
+					originBlock.SetType(finalType);
+
+					parentSet->InsertBlock(originBlock, false);
+				}
+				parentSet->CalculateBoundingBox();
+				return;
+			}
+
+			Blocks::Ghost::SetRay(ray);
+		}
+		else if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_RIGHT) && inputClock.GetElapsedTime() > 125)
+		{
+			holding = true;
 			inputClock.Restart();
 		}
-		//if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_RIGHT))
-		//{
-		//	if (!selecting)
-		//	{
-		//		Blocks::Ghost::SetStartPosition(position);
-		//		selecting = true;
-		//	}
-		//	if (inputClock.GetElapsedTime() > 125)
-		//	{
-		//		inputClock.Restart();
-		//		selecting = true;
-		//	}
-		//}
-		//else
-		//{
-		//	selecting = false;
-		//}
 	}
 }
 

@@ -2,6 +2,7 @@
 #include "DefaultVertices.h"
 #include "SidesArrows.h"
 #include "Clock.h"
+#include <glm/gtx/matrix_decompose.hpp>
 
 static unsigned int VAO;
 static unsigned int vertexVBO;
@@ -16,10 +17,15 @@ static Clock scrollClock;
 static SideArrow arrows[2];
 static int AxisRestrictions[3];
 static int axisId = 0;
-glm::vec3 rotations[3][2] = {
+static glm::vec3 rotations[3][2] = {
 	{glm::vec3(0.0f, 0.0f, .0f), glm::vec3(0.0f, 90.0f, .0f)},//flat
 	{glm::vec3(90.0f, 0.0f, .0f), glm::vec3(90.0f, 90.0f, .0f)},//Up 1
 	{glm::vec3(0.0f, 0.0f, 90.0f), glm::vec3(90.0f, 0.0f, 90.0f)},//Up 2
+};
+static glm::vec3 planeNormals[3] = {
+	glm::vec3(0, 1, 0),
+	glm::vec3(0, 0, 1),
+	glm::vec3(1, 0, 0),
 };
 
 void Blocks::Ghost::Draw(GameData* _gameData)
@@ -135,17 +141,78 @@ void Blocks::Ghost::SetStartPosition(glm::vec3 _position)
 	position = _position;
 	arrows[0].SetPosition(_position);
 	arrows[1].SetPosition(_position);
+
+	models.clear();
+	models.push_back(glm::mat4(1.0f));
+
+
 	CalculateTransformations();
 }
 
-void Blocks::Ghost::SetDestination(glm::vec3 _destination)
+void Blocks::Ghost::SetRay(RayCasting::Ray _ray)
 {
+	glm::vec3 planeNormal = planeNormals[axisId];
+	// Find the dominant axis
+	glm::vec3 absNormal = glm::abs(planeNormal);
+	int dominantAxis = 0; // 0 for X, 1 for Y, 2 for Z
+	if (absNormal.y > absNormal.x && absNormal.y > absNormal.z) {
+		dominantAxis = 1;
+	}
+	else if (absNormal.z > absNormal.x && absNormal.z > absNormal.y) {
+		dominantAxis = 2;
+	}
 
+	float planeDistance = -glm::dot(planeNormal, position);
+	float denom = glm::dot(planeNormal, _ray.direction);
+
+	if (abs(denom) > 1e-8) {
+		float t = -(glm::dot(planeNormal, _ray.origin) + planeDistance) / denom;
+		if (t >= 0) {
+			glm::vec3 destination = _ray.origin + t * _ray.direction;
+			models.clear();
+
+			// Determine the range based on the intersection point and the original position
+			glm::ivec3 gridNumbers = glm::ivec3((destination - position) / scale);
+			glm::ivec3 minGrid = glm::min(glm::ivec3(0), gridNumbers);
+			glm::ivec3 maxGrid = glm::max(glm::ivec3(0), gridNumbers);
+
+			for (int xId = minGrid.x; xId <= maxGrid.x; ++xId) {
+				for (int yId = minGrid.y; yId <= maxGrid.y; ++yId) {
+					for (int zId = minGrid.z; zId <= maxGrid.z; ++zId) {
+						if (dominantAxis == 0 && xId != 0) continue;
+						if (dominantAxis == 1 && yId != 0) continue;
+						if (dominantAxis == 2 && zId != 0) continue;
+
+						glm::vec3 offset = glm::vec3(xId, yId, zId) * scale;
+						glm::mat4 model = glm::mat4(1.0f);
+						model = glm::translate(model, position + offset);
+						model = glm::scale(model, scale);
+						models.push_back(model);
+					}
+				}
+			}
+			glBindVertexArray(VAO);
+			glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+			glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::mat4), &models[0], GL_STATIC_DRAW);
+
+			for (unsigned int i = 0; i < 4; i++)
+			{
+				glEnableVertexAttribArray(i + 3); // 4 is an offset, assuming 0, 1, 2, 3 are used for the cube's vertex data
+				glVertexAttribPointer(i + 3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
+				glVertexAttribDivisor(i + 3, 1); // Tell OpenGL this is an instanced vertex attribute.
+			}
+		}
+	}
 }
 
 void Blocks::Ghost::RestrictAxis(Axis _axis, int _value)
 {
 	AxisRestrictions[_axis] = _value;
+}
+
+std::vector<glm::mat4> Blocks::Ghost::GetModels()
+{
+	return models;
 }
 
 

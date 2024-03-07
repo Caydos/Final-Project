@@ -28,24 +28,7 @@ glm::mat4* Blocks::Block::GetParent()
 void Blocks::Block::SetParent(glm::mat4* _parent)
 {
 	this->parent = _parent;
-}
-
-void Blocks::Block::InsertInScene()
-{
-	if (!this->inScene && this->type != nullptr)
-	{
-		this->inScene = true;
-		//this->type->InsertModel(this->model);
-	}
-}
-
-void Blocks::Block::RemoveFromScene()
-{
-	if (this->inScene && this->type != nullptr)
-	{
-		this->inScene = false;
-		//this->type->RemoveModel(this->model);
-	}
+	this->ApplyTransformation();
 }
 
 void Blocks::Block::GenerateModel()
