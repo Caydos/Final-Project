@@ -1,6 +1,7 @@
 #include "DeferredShading.h"
 #include "Set.h"
 #include "SSAO.h"
+#include "Scene.h"
 
 static bool initialized = false;
 static unsigned int quadVAO = 0;
@@ -114,6 +115,7 @@ void DeferredShading::Draw(GameData* _gameData)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	_gameData->shaders[Shaders::RENDER]->use();
+	Scene::Lights::UpdateShader(_gameData);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
 	glActiveTexture(GL_TEXTURE1);

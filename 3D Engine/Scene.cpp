@@ -6,6 +6,8 @@
 #include "Blocks.h"
 #include "Inventory.h"
 #include "Set.h"
+#include "Physics.h"
+#include "Collisions.h"
 
 static bool initialized = false;
 static unsigned int FPVCam;
@@ -13,7 +15,13 @@ static Scene::Type type = Scene::Type::MODEL_EDITOR;
 static Clock inputClock;
 static Colors::Color clearColor = Colors::LimedSpruce;
 static Lightning::Light* flashLight;
-
+static Sets::Set* playerSet;
+static Physics::Body body;
+static float RunningMultiplier = 2.5f;
+static float MovementSpeed = 2.25f;
+static const float JumpVelocity = 0.125f;
+static bool falling = false;
+static bool running = true;
 
 Colors::Color Scene::GetClearColor()
 {
@@ -31,7 +39,7 @@ std::vector<int> ints3;
 void Scene::Initialize(GameData* _gameData)
 {
 	inputClock.Restart();
-	FPVCam = Scene::World::NewCamera(glm::vec3(0.0f, 0.0f, 1.0f));
+	FPVCam = Scene::World::NewCamera(glm::vec3(3.0f, 1.2f, 3.0f));
 	Scene::World::FocusCamera(_gameData, FPVCam);
 
 	Lightning::Light flashLight2;
@@ -49,18 +57,9 @@ void Scene::Initialize(GameData* _gameData)
 	flashLight2.SetActive(true);
 	Lights::InsertLight(_gameData, flashLight2);
 
-	Lightning::Light dirLight;
-	dirLight.SetType(Lightning::LightType::DIRECTIONAL);
-	dirLight.SetDirection(glm::vec3(-0.2f, -1.0f, -0.3f));
-	dirLight.SetAmbient(glm::vec3(0.05f, 0.05f, 0.05f));
-	dirLight.SetDiffuse(glm::vec3(0.4f, 0.4f, 0.4f));
-	dirLight.SetSpecular(glm::vec3(0.5f, 0.5f, 0.5f));
-	dirLight.SetName("Directional Light");
-	Lights::InsertLight(_gameData, dirLight);
 	Scene::Lights::UpdateShader(_gameData);
 
 	Blocks::Initialize();
-	//Maze::Generate();
 
 	Blocks::BlockType* blType[3] = { nullptr };
 	std::vector<Blocks::BlockType*> types = Blocks::GetAll();
@@ -80,10 +79,9 @@ void Scene::Initialize(GameData* _gameData)
 		}
 	}
 
-
-	Sets::Set* set = Sets::Create();
-	set->GenerateRenderingInstance();
-	///*set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));*/
+	Maze::Generate();
+	//Sets::Set* set = Sets::Create();
+	//set->GenerateRenderingInstance();
 
 	//const int meters = 50;
 	//const int dimensions = meters / 0.2f;
@@ -194,56 +192,66 @@ void Scene::Initialize(GameData* _gameData)
 	//		}
 	//	}
 	//}
-	for (size_t rowId = 0; rowId < 50; rowId++)
-	{
-		for (size_t columnId = 0; columnId < 50; columnId++)
-		{
-			Blocks::Block block;
-			block.GenerateModel();
-			//Blocks::MaterialCheck(&block, "Sol_CarelageMagasin");
-			block.SetType(blType[0]);
-			glm::vec3 scale = block.GetType()->GetScale();
-			block.SetScale(scale);
-			block.SetPosition(glm::vec3(scale.x *  rowId, .0f, scale.z * columnId));
-			set->InsertBlock(block);
-			if (!rowId || rowId == 49)
-			{
-				for (size_t heightId = 1; heightId < 20; heightId++)
-				{
-					Blocks::Block block;
-					block.GenerateModel();
-					block.SetType((heightId < 7) ? blType[1] : blType[2]);
-					//Blocks::MaterialCheck(&block, (heightId < 7) ? "Mur_Hopital1" : "Mur_Hopital2");
-					glm::vec3 scale = block.GetType()->GetScale();
-					block.SetScale(scale);
-					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block);
-				}
-			}
-			else if (columnId == 49)
-			{
-				for (size_t heightId = 1; heightId < 20; heightId++)
-				{
-					Blocks::Block block;
-					block.GenerateModel();
-					block.SetType((heightId < 7) ? blType[1] : blType[2]);
-					//Blocks::MaterialCheck(&block, (heightId < 7) ? "Mur_Hopital1" : "Mur_Hopital2");
-					glm::vec3 scale = block.GetType()->GetScale();
-					block.SetScale(scale);
-					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block);
-				}
-			}
-		}
-	}
-	set->SetName("Wall");
-	set->SetPath("../Sets/");
+	//for (size_t rowId = 0; rowId < 50; rowId++)
+	//{
+	//	for (size_t columnId = 0; columnId < 50; columnId++)
+	//	{
+	//		Blocks::Block block;
+	//		block.GenerateModel();
+	//		block.SetType(blType[0]);
+	//		glm::vec3 scale = block.GetType()->GetScale();
+	//		block.SetScale(scale);
+	//		block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
+	//		set->InsertBlock(block);
+	//		if (!rowId || rowId == 49)
+	//		{
+	//			for (size_t heightId = 1; heightId < 20; heightId++)
+	//			{
+	//				Blocks::Block block;
+	//				block.GenerateModel();
+	//				block.SetType((heightId < 7) ? blType[1] : blType[2]);
+	//				glm::vec3 scale = block.GetType()->GetScale();
+	//				block.SetScale(scale);
+	//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//				set->InsertBlock(block);
+	//			}
+	//		}
+	//		else if (columnId == 49)
+	//		{
+	//			for (size_t heightId = 1; heightId < 20; heightId++)
+	//			{
+	//				Blocks::Block block;
+	//				block.GenerateModel();
+	//				block.SetType((heightId < 7) ? blType[1] : blType[2]);
+	//				glm::vec3 scale = block.GetType()->GetScale();
+	//				block.SetScale(scale);
+	//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//				set->InsertBlock(block);
+	//			}
+	//		}
+	//	}
+	//}
+	//set->SetName("Wall");
+	//set->SetPath("../Sets/");
 
+
+	playerSet = Sets::Create();
+	playerSet->GenerateRenderingInstance();
+	playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Character.json")));
+	playerSet->SetName("Player");
+	playerSet->SetPath("../Sets/");
+	playerSet->SetPosition(_gameData->camera->Position);
+	playerSet->CalculateBoundingBox();
+
+	body.boundingBox = playerSet->GetBoundingBox();
 	initialized = true;
 }
 
 void Scene::Inputs(GameData* _gameData)
 {
+	glm::vec3 horizontalFront = glm::normalize(glm::vec3(_gameData->camera->Front.x, 0.0f, _gameData->camera->Front.z));
+	float velocity = MovementSpeed * _gameData->dt;
+
 	if ((!Editor::IsDisplayed() && !Inventory::IsActive()) || _gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_MIDDLE))
 	{
 		if (!_gameData->window.IsFocused())
@@ -253,23 +261,42 @@ void Scene::Inputs(GameData* _gameData)
 		World::MouseInputs(_gameData);
 		if (_gameData->window.IsKeyPressed(Keys::W))
 		{
-			World::ProcessCameraInput(_gameData, FPVCam, FORWARD);
+			//World::ProcessCameraInput(_gameData, FPVCam, FORWARD);
+			body.velocity -= horizontalFront * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::S))
 		{
-			World::ProcessCameraInput(_gameData, FPVCam, BACKWARD);
+			//World::ProcessCameraInput(_gameData, FPVCam, BACKWARD);
+			body.velocity += horizontalFront * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::A))
 		{
-			World::ProcessCameraInput(_gameData, FPVCam, LEFT);
+			//World::ProcessCameraInput(_gameData, FPVCam, LEFT);
+			body.velocity += glm::normalize(glm::vec3(_gameData->camera->Right.x, 0.0f, _gameData->camera->Right.z)) * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::D))
 		{
-			World::ProcessCameraInput(_gameData, FPVCam, RIGHT);
+			//World::ProcessCameraInput(_gameData, FPVCam, RIGHT);
+			body.velocity -= glm::normalize(glm::vec3(_gameData->camera->Right.x, 0.0f, _gameData->camera->Right.z)) * velocity;
+		}
+		if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
+		{
+			if (!falling)
+			{
+				running = true;
+			}
+		}
+		else
+		{
+			running = false;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::SPACE))
 		{
-			World::ProcessCameraInput(_gameData, FPVCam, UP);
+			//World::ProcessCameraInput(_gameData, FPVCam, UP);
+			if (!falling)
+			{
+				body.velocity.y += JumpVelocity;
+			}
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_CONTROL))
 		{
@@ -290,9 +317,43 @@ void Scene::Tick(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 	Inputs(_gameData);
 
+	glm::vec3 normalizedVelocity = glm::normalize(body.velocity);
+	std::vector<Sets::Set*>* sets = Sets::GetAll();
+	float t;
+	for (size_t i = 0; i < sets->size(); i++)
+	{
+		Bounds::Box box = sets->at(i)->GetBoundingBox();
+		if (Collisions::IntersectRayWithBox(_gameData->camera->Position, normalizedVelocity, box.min, box.max, t) && t <= glm::length(body.velocity))
+		{
+			body.velocity.x = -body.velocity.x;
+			body.velocity.z = -body.velocity.z;
+			break;
+		}
+	}
+
+	body.Update(_gameData->dt);
+	if (running)
+	{
+		body.velocity.x *= RunningMultiplier;
+		body.velocity.z *= RunningMultiplier;
+	}
+	//playerSet->CalculateBoundingBox();
+	//if (playerSet->GetBoundingBox().min.y <= 1.0f)
+	//{
+		body.velocity.y = 0;
+	//	falling = false;
+	//}
+	_gameData->camera->Position += body.velocity;
+	playerSet->SetRotation(glm::vec3(.0f, -_gameData->camera->Yaw + 90.0, .0f));
+	playerSet->SetPosition(_gameData->camera->Position);
+	playerSet->CalculateBoundingBox();
+	body.boundingBox = playerSet->GetBoundingBox();
+	body.velocity.x = 0;
+	body.velocity.z = 0;
+
 	_gameData->window.Clear(clearColor);
 	Scene::World::Render(_gameData);
-	
+
 	// Needs to be called after the inputs that enables it
 	//if (!_gameData->window.IsFocused())
 	{
@@ -333,7 +394,7 @@ void Scene::Tick(GameData* _gameData)
 	{
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
-	
+
 	_gameData->window.Events();
 }
 

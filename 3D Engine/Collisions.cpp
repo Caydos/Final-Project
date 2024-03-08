@@ -22,6 +22,26 @@ bool Collisions::BoxColliding(Bounds::Box _firstBox, Bounds::Box _secondBox)
 	//return false;
 }
 
+bool Collisions::IntersectRayWithBox(glm::vec3 rayOrigin, glm::vec3 rayDirection, glm::vec3 boxMin, glm::vec3 boxMax, float& t)
+{
+	glm::vec3 invDir = 1.0f / rayDirection;
+	glm::vec3 tMin = (boxMin - rayOrigin) * invDir;
+	glm::vec3 tMax = (boxMax - rayOrigin) * invDir;
+
+	glm::vec3 t1 = glm::min(tMin, tMax);
+	glm::vec3 t2 = glm::max(tMin, tMax);
+
+	float tNear = glm::max(glm::max(t1.x, t1.y), t1.z);
+	float tFar = glm::min(glm::min(t2.x, t2.y), t2.z);
+
+	if (tNear > tFar || tFar < 0.0f) {
+		return false;
+	}
+
+	t = tNear;  // t will hold the distance at which the intersection occurs
+	return true;
+}
+
 static bool initialized = false;
 
 void Collisions::Tick()

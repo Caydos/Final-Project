@@ -170,6 +170,7 @@
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
     <ClCompile Include="Peds.cpp" />
+    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Reading.cpp" />
     <ClCompile Include="Set.cpp" />
     <ClCompile Include="SetClass.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="Network.h" />
     <ClInclude Include="ObjectsMenu.h" />
     <ClInclude Include="Peds.h" />
+    <ClInclude Include="Physics.h" />
     <ClInclude Include="RayCasting.h" />
     <ClInclude Include="Reading.h" />
     <ClInclude Include="Scene.h" />

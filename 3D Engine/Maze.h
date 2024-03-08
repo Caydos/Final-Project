@@ -11,10 +11,10 @@
 #define NB_CELL_BRICK 10
 #define BRICK_W (CELL_W/NB_CELL_BRICK)
 //////////////////////////////////////// STAGE PRESET ////////////////////////////////////////
-#define NB_STAGE_H 8
+#define NB_STAGE_H 1
 #define OFFSET_STAGE 1
 //////////////////////////////////////// MAP PRESET ////////////////////////////////////////
-#define NB_MAP_H 4
+#define NB_MAP_H 3
 #define MAP_W (CELL_W*NB_CELL)
 //////////////////////////////////////// DENSITY ////////////////////////////////////////
 #define SHORTCUT_LUCK 75
@@ -50,10 +50,10 @@ namespace Maze
 
 	enum StageEnum
 	{
+		HOSPITALS,
 		FACTORY,
 		LABO,
 		FIELDS,
-		HOSPITALS,
 	};
 
 	enum TextEnum
@@ -68,18 +68,14 @@ namespace Maze
 
 	struct Decor
 	{
-		//Scene::Component* decor;
 		Sets::Set* decor;
 		bool isVisible;
+		const char* name;
+		glm::vec3 pos;
 	};
 
 	struct Cell
 	{
-		//Scene::Component* ground;
-		//Scene::Component* roof;
-		//Sets::Set* ground;
-		//Sets::Set* roof;
-
 		bool isVisited;
 		int lastCase;
 		std::vector<Decor> wallMissingList;
@@ -90,8 +86,6 @@ namespace Maze
 	struct Chunck
 	{
 		std::vector<Cell> cellList;
-		//Scene::Component* decor;
-		//Sets::Set* decor;
 		std::vector<Decor> decor;
 
 		int type;
@@ -112,21 +106,22 @@ namespace Maze
 
 	struct ManagmentText
 	{
-		std::vector<std::string> hallRoomList;
-		std::vector<std::string> hospitalRoomList;
-		std::vector<std::string> fieldsRoomList;
-		std::vector<std::string> laboRoomList;
+		std::vector<const char*> hallRoomList;
+		std::vector<const char*> hospitalRoomList;
+		std::vector<const char*> fieldsRoomList;
+		std::vector<const char*> laboRoomList;
 
-		std::vector<std::string> hallCellList;
-		std::vector<std::string> hospitalCellList;
-		std::vector<std::string> fieldsCellList;
-		std::vector<std::string> laboCellList;
+		std::vector<const char*> hallCellList;
+		std::vector<const char*> hospitalCellList;
+		std::vector<const char*> fieldsCellList;
+		std::vector<const char*> laboCellList;
 
-		std::vector<std::string> exitRoomList;
-		std::vector<std::string> propsBuildingRoomList;
+		std::vector<const char*> exitRoomList;
+		std::vector<const char*> propsBuildingRoomList;
 	};
 
 	void Generate();
+	void Create();
 }
 
 #endif // !OBSTACLE_H

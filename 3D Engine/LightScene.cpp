@@ -13,7 +13,7 @@ Lightning::Light* Scene::Lights::InsertLight(GameData* _gameData, Lightning::Lig
 	}
 
 	std::string str = "lights[" + std::to_string(lights.size()) + ']';
-
+	//_gameData->shaders[Shaders::RENDER]->use();
 	switch (_light.GetType())
 	{
 	case Lightning::DIRECTIONAL:
@@ -74,11 +74,13 @@ void Scene::Lights::UpdateLight(GameData* _gameData, unsigned int _id)
 {
 	std::string str = "lights[" + std::to_string(_id) + ']';
 	Lightning::Light* light = &lights.at(_id);
-
+	 
+	//_gameData->shaders[Shaders::RENDER]->use();
 	switch (light->GetType())
 	{
 	case Lightning::DIRECTIONAL:
 	{
+		_gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lightning::DIRECTIONAL);
 		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), light->IsActive());
 		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), light->GetDirection());
 		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), light->GetAmbient());
@@ -88,6 +90,7 @@ void Scene::Lights::UpdateLight(GameData* _gameData, unsigned int _id)
 	}
 	case Lightning::POINT:
 	{
+		_gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lightning::POINT);
 		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), light->IsActive());
 		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), light->GetPosition());
 
@@ -102,6 +105,7 @@ void Scene::Lights::UpdateLight(GameData* _gameData, unsigned int _id)
 	}
 	case Lightning::SPOT:
 	{
+		_gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lightning::SPOT);
 		_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), light->IsActive());
 		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), light->GetDirection());
 		_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), light->GetPosition());
@@ -128,7 +132,9 @@ void Scene::Lights::UpdateLight(GameData* _gameData, unsigned int _id)
 void Scene::Lights::UpdateShader(GameData* _gameData)
 {
 	_gameData->shaders[Shaders::RENDER]->use();
+	_gameData->shaders[Shaders::RENDER]->setBool("considerLightning", Scene::World::IsConsideringLightning());
 	_gameData->shaders[Shaders::RENDER]->setInt("lightCount", lights.size());
+
 	for (size_t i = 0; i < lights.size(); i++)
 	{
 		UpdateLight(_gameData, i);

@@ -12,7 +12,7 @@ void LightMenu::Basic(GameData* _gameData)
 	{
 		if (ImGui::Checkbox("Consider lightning", &isSceneLightningEnabled))
 		{
-			Scene::World::ConsiderLightning(isSceneLightningEnabled);
+			Scene::World::ConsiderLightning(isSceneLightningEnabled, _gameData);
 		}
 
 		std::vector<Lightning::Light>* lights = Scene::Lights::GetLights();

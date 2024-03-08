@@ -28,7 +28,7 @@ static bool considerLightning = true;
 
 
 
-void Scene::World::ConsiderLightning(bool _value)
+void Scene::World::ConsiderLightning(bool _value, GameData* _gameData)
 {
 	considerLightning = _value;
 }

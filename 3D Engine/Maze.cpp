@@ -7,58 +7,58 @@ void Maze::Generate()
 {
 	/////////////////////////////////////////////////////// INIT TEXT ////////////////////////////////////////////////////////
 	ManagmentText text;
-	text.hallRoomList.push_back("Room");
-	text.hallRoomList.push_back("Room");
-	text.hallRoomList.push_back("Room");
-	text.hallRoomList.push_back("Room");
+	text.hallRoomList.push_back("../Sets/Room.json");
+	text.hallRoomList.push_back("../Sets/Room.json");
+	text.hallRoomList.push_back("../Sets/Room.json");
+	text.hallRoomList.push_back("../Sets/Room.json");
 
-	text.fieldsRoomList.push_back("Room");
-	text.fieldsRoomList.push_back("Room");
-	text.fieldsRoomList.push_back("Room");
-	text.fieldsRoomList.push_back("Room");
+	text.fieldsRoomList.push_back("../Sets/Room.json");
+	text.fieldsRoomList.push_back("../Sets/Room.json");
+	text.fieldsRoomList.push_back("../Sets/Room.json");
+	text.fieldsRoomList.push_back("../Sets/Room.json");
 
-	text.hospitalRoomList.push_back("Room");
-	text.hospitalRoomList.push_back("Room");
-	text.hospitalRoomList.push_back("Room");
-	text.hospitalRoomList.push_back("Room");
+	text.hospitalRoomList.push_back("../Sets/Room.json");
+	text.hospitalRoomList.push_back("../Sets/Room.json");
+	text.hospitalRoomList.push_back("../Sets/Room.json");
+	text.hospitalRoomList.push_back("../Sets/Room.json");
 
-	text.laboRoomList.push_back("Room");
-	text.laboRoomList.push_back("Room");
-	text.laboRoomList.push_back("Room");
-	text.laboRoomList.push_back("Room");
+	text.laboRoomList.push_back("../Sets/Room.json");
+	text.laboRoomList.push_back("../Sets/Room.json");
+	text.laboRoomList.push_back("../Sets/Room.json");
+	text.laboRoomList.push_back("../Sets/Room.json");
 
-	text.exitRoomList.push_back("Room");
-	text.exitRoomList.push_back("Room");
-	text.exitRoomList.push_back("Room");
-	text.exitRoomList.push_back("Room");
+	text.exitRoomList.push_back("../Sets/Room.json");
+	text.exitRoomList.push_back("../Sets/Room.json");
+	text.exitRoomList.push_back("../Sets/Room.json");
+	text.exitRoomList.push_back("../Sets/Room.json");
 
-	text.hallCellList.push_back("Wall");
-	text.hallCellList.push_back("Ground");
-	text.hallCellList.push_back("WallRot");
-	text.hallCellList.push_back("Roof");
-	text.hallCellList.push_back("Wall");
-	text.hallCellList.push_back("WallRot");
+	text.hallCellList.push_back("../Sets/Wall.json");
+	text.hallCellList.push_back("../Sets/Ground.json");
+	text.hallCellList.push_back("../Sets/WallRot.json");
+	text.hallCellList.push_back("../Sets/Roof.json");
+	text.hallCellList.push_back("../Sets/Wall.json");
+	text.hallCellList.push_back("../Sets/WallRot.json");
 
-	text.laboCellList.push_back("Wall");
-	text.laboCellList.push_back("Ground");
-	text.laboCellList.push_back("WallRot");
-	text.laboCellList.push_back("Roof");
-	text.laboCellList.push_back("Wall");
-	text.laboCellList.push_back("WallRot");
+	text.laboCellList.push_back("../Sets/Wall.json");
+	text.laboCellList.push_back("../Sets/Ground.json");
+	text.laboCellList.push_back("../Sets/WallRot.json");
+	text.laboCellList.push_back("../Sets/Roof.json");
+	text.laboCellList.push_back("../Sets/Wall.json");
+	text.laboCellList.push_back("../Sets/WallRot.json");
 
-	text.hospitalCellList.push_back("Wall");
-	text.hospitalCellList.push_back("Ground");
-	text.hospitalCellList.push_back("WallRot");
-	text.hospitalCellList.push_back("Roof");
-	text.hospitalCellList.push_back("Wall");
-	text.hospitalCellList.push_back("WallRot");
+	text.hospitalCellList.push_back("../Sets/Wall.json");
+	text.hospitalCellList.push_back("../Sets/Ground.json");
+	text.hospitalCellList.push_back("../Sets/WallRot.json");
+	text.hospitalCellList.push_back("../Sets/Roof.json");
+	text.hospitalCellList.push_back("../Sets/Wall.json");
+	text.hospitalCellList.push_back("../Sets/WallRot.json");
 
-	text.fieldsCellList.push_back("Wall");
-	text.fieldsCellList.push_back("Ground");
-	text.fieldsCellList.push_back("WallRot");
-	text.fieldsCellList.push_back("Roof");
-	text.fieldsCellList.push_back("Wall");
-	text.fieldsCellList.push_back("WallRot");
+	text.fieldsCellList.push_back("../Sets/Wall.json");
+	text.fieldsCellList.push_back("../Sets/Ground.json");
+	text.fieldsCellList.push_back("../Sets/WallRot.json");
+	text.fieldsCellList.push_back("../Sets/Roof.json");
+	text.fieldsCellList.push_back("../Sets/Wall.json");
+	text.fieldsCellList.push_back("../Sets/WallRot.json");
 
 	for (int mapLine = 0; mapLine < NB_MAP_H; mapLine++)
 	{
@@ -130,13 +130,9 @@ void Maze::Generate()
 						Cell cell;
 						Decor ground;
 
-						ground.decor = Sets::Create();
-						ground.decor->GenerateRenderingInstance();
-						ground.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-						ground.decor->SetName("Wall");
-						ground.decor->SetPath("../Sets/");
-						ground.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W + mapColumn * MAP_W, 0 + CELL_W * stageNb, CELL_W * line + BRICK_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+						ground.pos = (glm::vec3(CELL_W * column + BRICK_W + mapColumn * MAP_W, 0 + CELL_W * stageNb, CELL_W * line + BRICK_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
 						ground.isVisible = true;
+						ground.name = "../Sets/Ground.json";
 						if (chunk.type == GARDEN && stageNb != 0)
 						{
 							ground.isVisible = false;
@@ -149,12 +145,8 @@ void Maze::Generate()
 									{
 										Decor balconyBridge;
 
-										balconyBridge.decor = Sets::Create();
-										balconyBridge.decor->GenerateRenderingInstance();
-										balconyBridge.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-										balconyBridge.decor->SetName("Wall");
-										balconyBridge.decor->SetPath("../Sets/");
-										balconyBridge.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W - CELL_W, CELL_W + CELL_W * stageNb - CELL_W + BRICK_W, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+										balconyBridge.pos = (glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W - CELL_W, CELL_W + CELL_W * stageNb - CELL_W + BRICK_W, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+										balconyBridge.name = "../Sets/Wall.json";
 										balconyBridge.isVisible = true;
 										chunk.decor.push_back(balconyBridge);
 									}
@@ -168,13 +160,9 @@ void Maze::Generate()
 						{
 							Decor roof;
 
-							roof.decor = Sets::Create();
-							roof.decor->GenerateRenderingInstance();
-							roof.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-							roof.decor->SetName("Wall");
-							roof.decor->SetPath("../Sets/");
-							roof.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W + mapColumn * MAP_W, CELL_W /*/ 2*/ + CELL_W * stageNb, CELL_W * line + BRICK_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+							roof.pos = (glm::vec3(CELL_W * column + BRICK_W + mapColumn * MAP_W, CELL_W /*/ 2*/ + CELL_W * stageNb, CELL_W * line + BRICK_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
 							roof.isVisible = true;
+							roof.name = "../Sets/Ground.json";
 							cell.ground.push_back(roof);
 						}
 
@@ -187,12 +175,8 @@ void Maze::Generate()
 								{
 									Decor tower;
 
-									tower.decor = Sets::Create();
-									tower.decor->GenerateRenderingInstance();
-									tower.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-									tower.decor->SetName("Wall");
-									tower.decor->SetPath("../Sets/");
-									tower.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W + mapColumn * MAP_W, CELL_W /*/ 2*/ + CELL_W * stageNb, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									tower.name = "../Sets/Wall.json";
+									tower.pos = (glm::vec3(CELL_W * column + BRICK_W + mapColumn * MAP_W, CELL_W /*/ 2*/ + CELL_W * stageNb, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
 									tower.isVisible = true;
 									chunk.decor.push_back(tower);
 								}
@@ -203,13 +187,10 @@ void Maze::Generate()
 						if (chunk.type == EXIT && column == NB_CELL - 1 && line == 0)
 						{
 							Decor exit;
-							exit.decor = Sets::Create();
-							exit.decor->GenerateRenderingInstance();
-							exit.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-							exit.decor->SetName("Wall");
-							exit.decor->SetPath("../Sets/");
-							exit.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, CELL_W + CELL_W * stageNb - CELL_W, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+
+							exit.pos = (glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, CELL_W + CELL_W * stageNb - CELL_W, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
 							exit.isVisible = true;
+							exit.name = "../Sets/Wall.json";
 							chunk.decor.push_back(exit);
 						}
 
@@ -218,13 +199,9 @@ void Maze::Generate()
 						{
 							Decor balcony;
 
-							balcony.decor = Sets::Create();
-							balcony.decor->GenerateRenderingInstance();
-							balcony.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-							balcony.decor->SetName("Wall");
-							balcony.decor->SetPath("../Sets/");
-							balcony.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, CELL_W + CELL_W * stageNb - CELL_W + BRICK_W, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+							balcony.pos = (glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, CELL_W + CELL_W * stageNb - CELL_W + BRICK_W, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
 							balcony.isVisible = true;
+							balcony.name = "../Sets/Wall.json";
 							chunk.decor.push_back(balcony);
 						}
 
@@ -237,23 +214,16 @@ void Maze::Generate()
 
 								if (i == BOTTOM) //BOTTOM WALL
 								{
-									wall.decor = Sets::Create();
-									wall.decor->GenerateRenderingInstance();
-									wall.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-									wall.decor->SetName("Wall");
-									wall.decor->SetPath("../Sets/");
-									wall.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + BRICK_W + CELL_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									wall.pos = (glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + BRICK_W + CELL_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									wall.name = "../Sets/Wall.json";
+									wall.isVisible = true;
 								}
 								else if (i == LEFT) //LEFT WALL
 								{
-									wall.decor = Sets::Create();
-									wall.decor->GenerateRenderingInstance();
-									wall.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-									wall.decor->SetName("Wall");
-									wall.decor->SetPath("../Sets/");
-									wall.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									wall.pos = (glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									wall.name = "../Sets/WallRot.json";
+									wall.isVisible = true;
 								}
-								wall.isVisible = true;
 								/////////////////////////////////////////////////////// INIT WALL PRESET ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 								if (chunk.type == GARDEN || chunk.type == BALCONY || chunk.type == PARCEL) //GARDEN PRESET
 								{
@@ -269,34 +239,27 @@ void Maze::Generate()
 
 								if (mapLine == 0 && line == 0) //BOTTOM WALL
 								{
-									wallMissing.decor = Sets::Create();
-									wallMissing.decor->GenerateRenderingInstance();
-									wallMissing.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-									wallMissing.decor->SetName("Wall");
-									wallMissing.decor->SetPath("../Sets/");
-									wallMissing.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, BRICK_W + CELL_W * stageNb, 2.5 * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									wallMissing.pos = (glm::vec3(CELL_W * column + BRICK_W / 2 + mapColumn * MAP_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W * 2 + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									wallMissing.isVisible = true;
+									wallMissing.name = "../Sets/Wall.json";
+									cell.wallMissingList.push_back(wallMissing);
 								}
 								if (mapColumn == 0 && column == 0) //LEFT WALL
 								{
-									wallMissing.decor = Sets::Create();
-									wallMissing.decor->GenerateRenderingInstance();
-									wallMissing.decor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Wall.json")));
-									wallMissing.decor->SetName("Wall");
-									wallMissing.decor->SetPath("../Sets/");
-									wallMissing.decor->SetPosition(glm::vec3(CELL_W * column + BRICK_W / 2 - CELL_W + mapColumn * MAP_W, BRICK_W + CELL_W * stageNb, 2.5 * line + BRICK_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									wallMissing.pos = (glm::vec3(CELL_W * column + BRICK_W / 2 - CELL_W + mapColumn * MAP_W, BRICK_W + CELL_W * stageNb, CELL_W * line + BRICK_W + mapLine * MAP_W + (OFFSET_STAGE * MAP_W * stageNb)));
+									wallMissing.isVisible = true;
+									wallMissing.name = "../Sets/WallRot.json";
+									cell.wallMissingList.push_back(wallMissing);
 								}
-
-								cell.wallMissingList.push_back(wallMissing);
 							}
 							//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 							cell.isVisited = false;
 
-							chunk.cellList.push_back(cell);
 						}
+						chunk.cellList.push_back(cell);
 					}
 				}
-
 				/////////////////////////////////////////////////////// LABY CREATION ///////////////////////////////////////////////////////
 				if (chunk.type == LABY)
 				{
@@ -606,10 +569,8 @@ void Maze::Generate()
 					{
 						if (maze[mapNb + NB_MAP_H].stageList[stageNb - 1].chunk.type == EXIT) // Stage +1 Border
 						{
-							//maze[mapNb].stageList[stageNb].chunk.type == ROOM;
 							maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[LEFT].isVisible = false;
 							maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[BOTTOM].isVisible = false;
-							//maze[mapNb].stageList[stageNb].chunk.cellList[cell].roof->SetVisible(false);
 							maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[BOTTOM].isVisible = false;
 							if (mapNb - NB_MAP_H >= 0 && cell >= NB_CELL * NB_CELL - NB_CELL && cell < NB_CELL * NB_CELL)
 							{
@@ -654,39 +615,70 @@ void Maze::Generate()
 			}
 		}
 	}
+	Create();
+}
 
+void Maze::Create()
+{
 	for (int mapNb = 0; mapNb < maze.size(); mapNb++)
 	{
 		for (int stageNb = 0; stageNb < maze[mapNb].stageList.size(); stageNb++)
 		{
+			//chunk load
 			for (int decor = 0; decor < maze[mapNb].stageList[stageNb].chunk.decor.size(); decor++)
 			{
-				if (!maze[mapNb].stageList[stageNb].chunk.decor[decor].isVisible)
+				if (maze[mapNb].stageList[stageNb].chunk.decor[decor].isVisible)
 				{
-					Sets::Erase(maze[mapNb].stageList[stageNb].chunk.decor[decor].decor);
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor = Sets::Create();
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->GenerateRenderingInstance();
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.decor[decor].name)));
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetName("Wall");
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetPath("../Sets/");
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.decor[decor].pos);
 				}
 			}
+
 			for (int cell = 0; cell < maze[mapNb].stageList[stageNb].chunk.cellList.size(); cell++)
 			{
-				for (int wall = 0; wall < maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList.size(); wall++)
-				{
-					if (!maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].isVisible)
-					{
-						Sets::Erase(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor);
-					}
-				}
-				for (int wallMissing = 0; wallMissing < maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList.size(); wallMissing++)
-				{
-					if (!maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].isVisible)
-					{
-						Sets::Erase(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor);
-					}
-				}
+				//ground load
 				for (int ground = 0; ground < maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground.size(); ground++)
 				{
-					if (!maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].isVisible)
+					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].isVisible)
 					{
-						Sets::Erase(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor = Sets::Create();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->GenerateRenderingInstance();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].name)));
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetName("Ground");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetPath("../Sets/");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].pos);
+					}
+				}
+
+				for (int wall = 0; wall < maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList.size(); wall++)
+				{
+					//wall load
+					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].isVisible)
+					{
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor = Sets::Create();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->GenerateRenderingInstance();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].name)));
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetName("Wall");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetPath("../Sets/");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].pos);
+					}
+				}
+
+				for (int wallMissing = 0; wallMissing < maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList.size(); wallMissing++)
+				{
+					//wallMissing load
+					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].isVisible)
+					{
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor = Sets::Create();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->GenerateRenderingInstance();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].name)));
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetName("Wall");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetPath("../Sets/");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].pos);
 					}
 				}
 			}

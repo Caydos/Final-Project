@@ -244,7 +244,7 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 
 				std::vector<glm::mat4> models = Blocks::Ghost::GetModels();
 				glm::vec3 setPosition = parentSet->GetPosition();
-				std::cout << "Placing : " << models.size() << std::endl;
+
 				for (size_t modelId = 0; modelId < models.size(); modelId++)
 				{
 					glm::vec3 scale;
