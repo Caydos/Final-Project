@@ -62,22 +62,22 @@ void Scene::Initialize(GameData* _gameData)
 	Blocks::Initialize();
 
 	Blocks::BlockType* blType[3] = { nullptr };
-	std::vector<Blocks::BlockType*> types = Blocks::GetAll();
-	for (size_t i = 0; i < types.size(); i++)
-	{
-		if (types[i]->GetName() == "Sol_Carelage")
-		{
-			blType[0] = types[i];
-		}
-		else if (types[i]->GetName() == "Mur_Hopital1")
-		{
-			blType[1] = types[i];
-		}
-		else if (types[i]->GetName() == "Mur_Hopital2")
-		{
-			blType[2] = types[i];
-		}
-	}
+	//std::vector<Blocks::BlockType*> types = Blocks::GetAll();
+	//for (size_t i = 0; i < types.size(); i++)
+	//{
+	//	if (types[i]->GetName() == "Sol_Carelage")
+	//	{
+	//		blType[0] = types[i];
+	//	}
+	//	else if (types[i]->GetName() == "Mur_Hopital1")
+	//	{
+	//		blType[1] = types[i];
+	//	}
+	//	else if (types[i]->GetName() == "Mur_Hopital2")
+	//	{
+	//		blType[2] = types[i];
+	//	}
+	//}
 
 	Maze::Generate();
 	//Sets::Set* set = Sets::Create();
@@ -235,15 +235,15 @@ void Scene::Initialize(GameData* _gameData)
 	//set->SetPath("../Sets/");
 
 
-	playerSet = Sets::Create();
-	playerSet->GenerateRenderingInstance();
-	playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Character.json")));
-	playerSet->SetName("Player");
-	playerSet->SetPath("../Sets/");
-	playerSet->SetPosition(_gameData->camera->Position);
-	playerSet->CalculateBoundingBox();
+	//playerSet = Sets::Create();
+	//playerSet->GenerateRenderingInstance();
+	//playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Character.json")));
+	//playerSet->SetName("Player");
+	//playerSet->SetPath("../Sets/");
+	//playerSet->SetPosition(_gameData->camera->Position);
+	//playerSet->CalculateBoundingBox();
 
-	body.boundingBox = playerSet->GetBoundingBox();
+	//body.boundingBox = playerSet->GetBoundingBox();
 	initialized = true;
 }
 
@@ -261,23 +261,23 @@ void Scene::Inputs(GameData* _gameData)
 		World::MouseInputs(_gameData);
 		if (_gameData->window.IsKeyPressed(Keys::W))
 		{
-			//World::ProcessCameraInput(_gameData, FPVCam, FORWARD);
-			body.velocity -= horizontalFront * velocity;
+			World::ProcessCameraInput(_gameData, FPVCam, FORWARD);
+			//body.velocity -= horizontalFront * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::S))
 		{
-			//World::ProcessCameraInput(_gameData, FPVCam, BACKWARD);
-			body.velocity += horizontalFront * velocity;
+			World::ProcessCameraInput(_gameData, FPVCam, BACKWARD);
+			//body.velocity += horizontalFront * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::A))
 		{
-			//World::ProcessCameraInput(_gameData, FPVCam, LEFT);
-			body.velocity += glm::normalize(glm::vec3(_gameData->camera->Right.x, 0.0f, _gameData->camera->Right.z)) * velocity;
+			World::ProcessCameraInput(_gameData, FPVCam, LEFT);
+			//body.velocity += glm::normalize(glm::vec3(_gameData->camera->Right.x, 0.0f, _gameData->camera->Right.z)) * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::D))
 		{
-			//World::ProcessCameraInput(_gameData, FPVCam, RIGHT);
-			body.velocity -= glm::normalize(glm::vec3(_gameData->camera->Right.x, 0.0f, _gameData->camera->Right.z)) * velocity;
+			World::ProcessCameraInput(_gameData, FPVCam, RIGHT);
+			//body.velocity -= glm::normalize(glm::vec3(_gameData->camera->Right.x, 0.0f, _gameData->camera->Right.z)) * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
 		{
@@ -292,10 +292,10 @@ void Scene::Inputs(GameData* _gameData)
 		}
 		if (_gameData->window.IsKeyPressed(Keys::SPACE))
 		{
-			//World::ProcessCameraInput(_gameData, FPVCam, UP);
+			World::ProcessCameraInput(_gameData, FPVCam, UP);
 			if (!falling)
 			{
-				body.velocity.y += JumpVelocity;
+				//body.velocity.y += JumpVelocity;
 			}
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_CONTROL))
@@ -317,39 +317,39 @@ void Scene::Tick(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 	Inputs(_gameData);
 
-	glm::vec3 normalizedVelocity = glm::normalize(body.velocity);
-	std::vector<Sets::Set*>* sets = Sets::GetAll();
-	float t;
-	for (size_t i = 0; i < sets->size(); i++)
-	{
-		Bounds::Box box = sets->at(i)->GetBoundingBox();
-		if (Collisions::IntersectRayWithBox(_gameData->camera->Position, normalizedVelocity, box.min, box.max, t) && t <= glm::length(body.velocity))
-		{
-			body.velocity.x = -body.velocity.x;
-			body.velocity.z = -body.velocity.z;
-			break;
-		}
-	}
-
-	body.Update(_gameData->dt);
-	if (running)
-	{
-		body.velocity.x *= RunningMultiplier;
-		body.velocity.z *= RunningMultiplier;
-	}
-	//playerSet->CalculateBoundingBox();
-	//if (playerSet->GetBoundingBox().min.y <= 1.0f)
+	//glm::vec3 normalizedVelocity = glm::normalize(body.velocity);
+	//std::vector<Sets::Set*>* sets = Sets::GetAll();
+	//float t;
+	//for (size_t i = 0; i < sets->size(); i++)
 	//{
-		body.velocity.y = 0;
-	//	falling = false;
+	//	Bounds::Box box = sets->at(i)->GetBoundingBox();
+	//	if (Collisions::IntersectRayWithBox(_gameData->camera->Position, normalizedVelocity, box.min, box.max, t) && t <= glm::length(body.velocity))
+	//	{
+	//		body.velocity.x = -body.velocity.x;
+	//		body.velocity.z = -body.velocity.z;
+	//		break;
+	//	}
 	//}
-	_gameData->camera->Position += body.velocity;
-	playerSet->SetRotation(glm::vec3(.0f, -_gameData->camera->Yaw + 90.0, .0f));
-	playerSet->SetPosition(_gameData->camera->Position);
-	playerSet->CalculateBoundingBox();
-	body.boundingBox = playerSet->GetBoundingBox();
-	body.velocity.x = 0;
-	body.velocity.z = 0;
+
+	//body.Update(_gameData->dt);
+	//if (running)
+	//{
+	//	body.velocity.x *= RunningMultiplier;
+	//	body.velocity.z *= RunningMultiplier;
+	//}
+	////playerSet->CalculateBoundingBox();
+	////if (playerSet->GetBoundingBox().min.y <= 1.0f)
+	////{
+	//	body.velocity.y = 0;
+	////	falling = false;
+	////}
+	//_gameData->camera->Position += body.velocity;
+	//playerSet->SetRotation(glm::vec3(.0f, -_gameData->camera->Yaw + 90.0, .0f));
+	//playerSet->SetPosition(_gameData->camera->Position);
+	//playerSet->CalculateBoundingBox();
+	//body.boundingBox = playerSet->GetBoundingBox();
+	//body.velocity.x = 0;
+	//body.velocity.z = 0;
 
 	_gameData->window.Clear(clearColor);
 	Scene::World::Render(_gameData);
