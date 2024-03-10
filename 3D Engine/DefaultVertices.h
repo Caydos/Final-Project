@@ -19,7 +19,7 @@ static float quadVertices[32] = {
 };
 
 static float cubeVertices[288] = {
-	//front face			//Texture				//Lightning normal
+	//front face			//Texture				//Lighting normal
 	-0.5f, -0.5f, 0.5f,		0.0f, 1.0f,				0.0f, 0.0f, 1.0f,
 	0.5f, -0.5f, 0.5f,		1.0f / 6, 1.0f,			0.0f, 0.0f, 1.0f,
 	0.5f, 0.5f, 0.5f,		1.0f / 6, 0.0f,			0.0f, 0.0f, 1.0f,

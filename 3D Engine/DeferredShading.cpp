@@ -17,7 +17,7 @@ void DeferredShading::Initialize(GameData* _gameData)
 
 	glGenTextures(1, &gPosition);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -26,21 +26,21 @@ void DeferredShading::Initialize(GameData* _gameData)
 
 	glGenTextures(1, &gNormal);
 	glBindTexture(GL_TEXTURE_2D, gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
 
 	glGenTextures(1, &gAlbedoSpec);
 	glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedoSpec, 0);
 
 	glGenTextures(1, &gEffects);
 	glBindTexture(GL_TEXTURE_2D, gEffects);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gEffects, 0);
@@ -51,7 +51,7 @@ void DeferredShading::Initialize(GameData* _gameData)
 
 	glGenRenderbuffers(1, &rboDepth);
 	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _gameData->resolution[0], _gameData->resolution[1]);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
 
 
@@ -107,6 +107,7 @@ void DeferredShading::Draw(GameData* _gameData)
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
 	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Sets::UpdateVisibility();
 	Blocks::Draw();
@@ -115,7 +116,20 @@ void DeferredShading::Draw(GameData* _gameData)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	_gameData->shaders[Shaders::RENDER]->use();
-	Scene::Lights::UpdateShader(_gameData);
+	_gameData->shaders[Shaders::RENDER]->setVec3("viewPos", _gameData->camera->Position);
+	_gameData->shaders[Shaders::RENDER]->setVec3("light.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
+	_gameData->shaders[Shaders::RENDER]->setVec3("light.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
+	_gameData->shaders[Shaders::RENDER]->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+	_gameData->shaders[Shaders::RENDER]->setFloat("light.constant", 1.0f);
+	_gameData->shaders[Shaders::RENDER]->setFloat("light.linear", 0.09f);
+	_gameData->shaders[Shaders::RENDER]->setFloat("light.quadratic", 0.032f);
+	_gameData->shaders[Shaders::RENDER]->setFloat("light.cutOff", 12.5f);
+	_gameData->shaders[Shaders::RENDER]->setFloat("light.outerCutOff", 15.5f);
+
+
+	_gameData->shaders[Shaders::RENDER]->setVec3("light.position", _gameData->camera->Position);
+	_gameData->shaders[Shaders::RENDER]->setVec3("light.direction", _gameData->camera->Front);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
 	glActiveTexture(GL_TEXTURE1);
