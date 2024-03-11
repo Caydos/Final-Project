@@ -129,6 +129,7 @@ void Scene::World::Render(GameData* _gameData)
         _gameData->shaders[Shaders::GEOMETRY]->setMat4("projection", projection);
         _gameData->shaders[Shaders::GEOMETRY]->setMat4("view", view);
         _gameData->shaders[Shaders::GEOMETRY]->setBool("instanceUsage", true);
+
     }
 	DeferredShading::Draw(_gameData);
 }

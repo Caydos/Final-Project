@@ -113,23 +113,29 @@ void DeferredShading::Draw(GameData* _gameData)
 	Blocks::Draw();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	Camera* cam = Scene::World::GetCamera();
 	_gameData->shaders[Shaders::RENDER]->use();
-	_gameData->shaders[Shaders::RENDER]->setVec3("viewPos", _gameData->camera->Position);
-	_gameData->shaders[Shaders::RENDER]->setVec3("light.ambient", glm::vec3(0.0f, 0.0f, 0.0f));
-	_gameData->shaders[Shaders::RENDER]->setVec3("light.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
-	_gameData->shaders[Shaders::RENDER]->setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-	_gameData->shaders[Shaders::RENDER]->setFloat("light.constant", 1.0f);
-	_gameData->shaders[Shaders::RENDER]->setFloat("light.linear", 0.09f);
-	_gameData->shaders[Shaders::RENDER]->setFloat("light.quadratic", 0.032f);
-	_gameData->shaders[Shaders::RENDER]->setFloat("light.cutOff", 12.5f);
-	_gameData->shaders[Shaders::RENDER]->setFloat("light.outerCutOff", 15.5f);
+	_gameData->shaders[Shaders::RENDER]->setVec3("viewPos", cam->Position);
+	std::string str = "lights[0]";
+	_gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lightning::SPOT);
+	_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), true);
+	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), cam->Front);
+	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), cam->Position);
 
 
-	_gameData->shaders[Shaders::RENDER]->setVec3("light.position", _gameData->camera->Position);
-	_gameData->shaders[Shaders::RENDER]->setVec3("light.direction", _gameData->camera->Front);
 
+	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".cutOff"), glm::cos(glm::radians(12.5f)));
+	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".outerCutOff"), glm::cos(glm::radians(15.5f)));
+
+	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".constant"), 1.0f);
+	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".linear"), 0.09f);
+	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".quadratic"), 0.032f);
+
+	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), glm::vec3(0.0f, 0.0f, 0.0f));
+	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), glm::vec3(1.0f, 1.0f, 1.0f));
+	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), glm::vec3(1.0f, 1.0f, 1.0f));
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
 	glActiveTexture(GL_TEXTURE1);

@@ -87,100 +87,100 @@ void Shader::setFloat(const std::string& name, float value)
 
 void Shader::setVec2(const std::string& name, const glm::vec2& value)
 {
-    for (int i = 0; i < this->vector2.size(); i++)
-    {
-        if (this->vector2[i].second == name)
-        {
-            if (this->vector2[i].first == value) { return; }
-            this->vector2[i].first = value;
-            glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
-            return;
-        }
-    }
-    this->vector2.push_back(std::make_pair(value, name));
+    //for (int i = 0; i < this->vector2.size(); i++)
+    //{
+    //    if (this->vector2[i].second == name)
+    //    {
+    //        if (this->vector2[i].first == value) { return; }
+    //        this->vector2[i].first = value;
+    //        glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    //        return;
+    //    }
+    //}
+    //this->vector2.push_back(std::make_pair(value, name));
     glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
 
 void Shader::setVec2(const std::string& name, float x, float y)
 {
-    glm::vec2 vec2(x, y);
-    for (int i = 0; i < this->vector2.size(); i++)
-    {
-        if (this->vector2[i].second == name)
-        {
-            if (this->vector2[i].first == vec2) { return; }
-            this->vector2[i].first = vec2;
-            glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
-            return;
-        }
-    }
-    this->vector2.push_back(std::make_pair(vec2, name));
+    //glm::vec2 vec2(x, y);
+    //for (int i = 0; i < this->vector2.size(); i++)
+    //{
+    //    if (this->vector2[i].second == name)
+    //    {
+    //        if (this->vector2[i].first == vec2) { return; }
+    //        this->vector2[i].first = vec2;
+    //        glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+    //        return;
+    //    }
+    //}
+    //this->vector2.push_back(std::make_pair(vec2, name));
     glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
 }
 
 void Shader::setVec3(const std::string& name, const glm::vec3& value)
 {
-    for (int i = 0; i < this->vector3.size(); i++)
-    {
-        if (this->vector3[i].second == name)
-        {
-            if (this->vector3[i].first == value) { return; }
-            this->vector3[i].first = value;
-            glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
-            return;
-        }
-    }
-    this->vector3.push_back(std::make_pair(value, name));
+    //for (int i = 0; i < this->vector3.size(); i++)
+    //{
+    //    if (this->vector3[i].second == name)
+    //    {
+    //        if (this->vector3[i].first == value) { return; }
+    //        this->vector3[i].first = value;
+    //        glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    //        return;
+    //    }
+    //}
+    //this->vector3.push_back(std::make_pair(value, name));
     glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
 
 void Shader::setVec3(const std::string& name, float x, float y, float z)
 {
-    glm::vec3 vec3(x, y, z);
-    for (int i = 0; i < this->vector3.size(); i++)
-    {
-        if (this->vector3[i].second == name)
-        {
-            if (this->vector3[i].first == vec3) { return; }
-            this->vector3[i].first = vec3;
-            glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
-            return;
-        }
-    }
-    this->vector3.push_back(std::make_pair(vec3, name));
+    //glm::vec3 vec3(x, y, z);
+    //for (int i = 0; i < this->vector3.size(); i++)
+    //{
+    //    if (this->vector3[i].second == name)
+    //    {
+    //        if (this->vector3[i].first == vec3) { return; }
+    //        this->vector3[i].first = vec3;
+    //        glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+    //        return;
+    //    }
+    //}
+    //this->vector3.push_back(std::make_pair(vec3, name));
     glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
 }
 
 void Shader::setVec4(const std::string& name, const glm::vec4& value)
 {
-    for (int i = 0; i < this->vector4.size(); i++)
-    {
-        if (this->vector4[i].second == name)
-        {
-            if (this->vector4[i].first == value) { return; }
-            this->vector4[i].first = value;
-            glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
-            return;
-        }
-    }
-    this->vector4.push_back(std::make_pair(value, name));
+    //for (int i = 0; i < this->vector4.size(); i++)
+    //{
+    //    if (this->vector4[i].second == name)
+    //    {
+    //        if (this->vector4[i].first == value) { return; }
+    //        this->vector4[i].first = value;
+    //        glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+    //        return;
+    //    }
+    //}
+    //this->vector4.push_back(std::make_pair(value, name));
     glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
 
 void Shader::setVec4(const std::string& name, float x, float y, float z, float w)
 {
-    glm::vec4 vec4(x, y, z, w);
-    for (int i = 0; i < this->vector4.size(); i++)
-    {
-        if (this->vector4[i].second == name)
-        {
-            if (this->vector4[i].first == vec4) { return; }
-            this->vector4[i].first = vec4;
-            glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
-            return;
-        }
-    }
-    this->vector4.push_back(std::make_pair(vec4, name));
+    //glm::vec4 vec4(x, y, z, w);
+    //for (int i = 0; i < this->vector4.size(); i++)
+    //{
+    //    if (this->vector4[i].second == name)
+    //    {
+    //        if (this->vector4[i].first == vec4) { return; }
+    //        this->vector4[i].first = vec4;
+    //        glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+    //        return;
+    //    }
+    //}
+    //this->vector4.push_back(std::make_pair(vec4, name));
     glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
 }
 

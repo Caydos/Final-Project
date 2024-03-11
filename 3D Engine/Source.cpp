@@ -54,7 +54,7 @@ int main()
 	gameData.shaders[Shaders::SINGLE_DRAW] = &worldObjectShader;
 	gameData.shaders[Shaders::GEOMETRY] = &geometryShader;
 	gameData.shaders[Shaders::RENDER] = &renderShader;
-
+	//std::cout << glm::cos(glm::radians(15.5f)) <<  " " << glm::cos(glm::radians((12.5f))) << std::endl;
 
 	gameData.gameStates[SCENE] = &Scene::Tick;
 	gameData.gameState = SCENE;

@@ -42,22 +42,22 @@ void Scene::Initialize(GameData* _gameData)
 	FPVCam = Scene::World::NewCamera(glm::vec3(/*3.0f, 1.2f, 3.0f*/1.0, 0.1, 1.0));
 	Scene::World::FocusCamera(_gameData, FPVCam);
 
-	//Lightning::Light flashLight2;
-	//flashLight2.SetType(Lightning::LightType::SPOT);
-	//flashLight2.SetAmbient(glm::vec3(0.0f, 0.0f, 0.0f));
-	//flashLight2.SetDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
-	//flashLight2.SetSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
-	//flashLight2.SetConstant(1.0f);
-	//flashLight2.SetLinear(0.0f);
-	//flashLight2.SetQuadratic(0.0f);
+	Lightning::Light flashLight2;
+	flashLight2.SetType(Lightning::LightType::SPOT);
+	flashLight2.SetAmbient(glm::vec3(0.0f, 0.0f, 0.0f));
+	flashLight2.SetDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
+	flashLight2.SetSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
+	flashLight2.SetConstant(1.0f);
+	flashLight2.SetLinear(0.0f);
+	flashLight2.SetQuadratic(0.0f);
 
-	//flashLight2.SetCutOff(90.5f);
-	//flashLight2.SetOuterCutOff(90.5f);
-	//flashLight2.SetName("FlashLight");
-	//flashLight2.SetActive(true);
-	//Lights::InsertLight(_gameData, flashLight2);
+	flashLight2.SetCutOff(90.5f);
+	flashLight2.SetOuterCutOff(90.5f);
+	flashLight2.SetName("FlashLight");
+	flashLight2.SetActive(true);
+	Lights::InsertLight(_gameData, flashLight2);
 
-	//Scene::Lights::UpdateShader(_gameData);
+	Scene::Lights::UpdateShader(_gameData);
 
 	Blocks::Initialize();
 
@@ -318,6 +318,19 @@ void Scene::Tick(GameData* _gameData)
 	Inputs(_gameData);
 
 	_gameData->window.Clear(clearColor);
+
+	//std::vector<Lightning::Light>* lights = Lights::GetLights();
+	//for (size_t i = 0; i < lights->size(); i++)
+	//{
+	//	if (lights->at(i).GetName() == "FlashLight")
+	//	{
+	//		Camera* cam = World::GetCamera();
+	//		flashLight = &lights->at(i);
+	//		flashLight->SetPosition(cam->Position);
+	//		flashLight->SetDirection(cam->Front);
+	//		Lights::UpdateShader(_gameData);
+	//	}
+	//}
 	Scene::World::Render(_gameData);
 
 	// Needs to be called after the inputs that enables it
@@ -339,7 +352,6 @@ void Scene::Tick(GameData* _gameData)
 		}
 		ImGui::Render();
 	}
-
 	glDisable(GL_DEPTH_TEST);
 	Crosshairs::Draw();
 
