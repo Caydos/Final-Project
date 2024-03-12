@@ -76,6 +76,7 @@ namespace Sets
 
 
 		Bounds::Box GetBoundingBox();
+		void DrawBoundingBox();
 	private:
 		std::string name;
 		std::string path;

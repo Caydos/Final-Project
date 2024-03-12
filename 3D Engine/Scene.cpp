@@ -13,7 +13,7 @@ static bool initialized = false;
 static unsigned int FPVCam;
 static Scene::Type type = Scene::Type::MODEL_EDITOR;
 static Clock inputClock;
-static Colors::Color clearColor = Colors::LimedSpruce;
+static Colors::Color clearColor = Colors::Black;
 static Lightning::Light* flashLight;
 static Sets::Set* playerSet;
 static Physics::Body body;
@@ -35,7 +35,7 @@ void Scene::SetClearColor(Colors::Color _color)
 std::vector<int> ints;
 std::vector<int> ints2;
 std::vector<int> ints3;
-
+static Sets::Set* set = nullptr;
 void Scene::Initialize(GameData* _gameData)
 {
 	inputClock.Restart();
@@ -48,8 +48,8 @@ void Scene::Initialize(GameData* _gameData)
 	flashLight2.SetDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
 	flashLight2.SetSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
 	flashLight2.SetConstant(1.0f);
-	flashLight2.SetLinear(0.0f);
-	flashLight2.SetQuadratic(0.0f);
+	flashLight2.SetLinear(0.09f);
+	flashLight2.SetQuadratic(0.0032f);
 
 	flashLight2.SetCutOff(90.5f);
 	flashLight2.SetOuterCutOff(90.5f);
@@ -80,7 +80,7 @@ void Scene::Initialize(GameData* _gameData)
 	}
 
 	//Maze::Generate();
-	Sets::Set* set = Sets::Create();
+	/*Sets::Set**/ set = Sets::Create();
 	set->GenerateRenderingInstance();
 
 	//const int meters = 50;
@@ -262,41 +262,26 @@ void Scene::Inputs(GameData* _gameData)
 		if (_gameData->window.IsKeyPressed(Keys::W))
 		{
 			World::ProcessCameraInput(_gameData, FPVCam, FORWARD);
-			//body.velocity -= horizontalFront * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::S))
 		{
 			World::ProcessCameraInput(_gameData, FPVCam, BACKWARD);
-			//body.velocity += horizontalFront * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::A))
 		{
 			World::ProcessCameraInput(_gameData, FPVCam, LEFT);
-			//body.velocity += glm::normalize(glm::vec3(_gameData->camera->Right.x, 0.0f, _gameData->camera->Right.z)) * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::D))
 		{
 			World::ProcessCameraInput(_gameData, FPVCam, RIGHT);
-			//body.velocity -= glm::normalize(glm::vec3(_gameData->camera->Right.x, 0.0f, _gameData->camera->Right.z)) * velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
 		{
-			if (!falling)
-			{
-				running = true;
-			}
-		}
-		else
-		{
-			running = false;
+
 		}
 		if (_gameData->window.IsKeyPressed(Keys::SPACE))
 		{
 			World::ProcessCameraInput(_gameData, FPVCam, UP);
-			if (!falling)
-			{
-				//body.velocity.y += JumpVelocity;
-			}
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_CONTROL))
 		{
@@ -319,18 +304,18 @@ void Scene::Tick(GameData* _gameData)
 
 	_gameData->window.Clear(clearColor);
 
-	//std::vector<Lightning::Light>* lights = Lights::GetLights();
-	//for (size_t i = 0; i < lights->size(); i++)
-	//{
-	//	if (lights->at(i).GetName() == "FlashLight")
-	//	{
-	//		Camera* cam = World::GetCamera();
-	//		flashLight = &lights->at(i);
-	//		flashLight->SetPosition(cam->Position);
-	//		flashLight->SetDirection(cam->Front);
-	//		Lights::UpdateShader(_gameData);
-	//	}
-	//}
+	std::vector<Lightning::Light>* lights = Lights::GetLights();
+	for (size_t i = 0; i < lights->size(); i++)
+	{
+		if (lights->at(i).GetName() == "FlashLight")
+		{
+			Camera* cam = World::GetCamera();
+			flashLight = &lights->at(i);
+			flashLight->SetPosition(cam->Position);
+			flashLight->SetDirection(cam->Front);
+			Lights::UpdateShader(_gameData);
+		}
+	}
 	Scene::World::Render(_gameData);
 
 	// Needs to be called after the inputs that enables it

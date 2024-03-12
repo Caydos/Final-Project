@@ -65,12 +65,12 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 		arrows[1].GenerateGraphicsBuffers();
 		arrows[1].BindShader(_gameData->shaders[Shaders::SINGLE_DRAW]);
 		arrows[1].SetColor(Colors::Green);
-		arrows[1].SetRotation(glm::vec3(90.0f, 0.0f, .0f));
+		arrows[1].SetRotation(glm::vec3(-90.0f, 0.0f, .0f));
 
 		arrows[2].GenerateGraphicsBuffers();
 		arrows[2].BindShader(_gameData->shaders[Shaders::SINGLE_DRAW]);
 		arrows[2].SetColor(Colors::Blue);
-		arrows[2].SetRotation(glm::vec3(90.0f, 0.0f, 90.0f));
+		arrows[2].SetRotation(glm::vec3(90.0f, 0.0f, -90.0f));
 		initialized = true;
 	}
 	if (parentSet != nullptr)
@@ -83,6 +83,17 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 
 		arrows[2].SetPosition(parentSet->GetPosition());
 		arrows[2].Draw();
+
+		Colors::Color color = Colors::White;
+		Shaders::Shader* shader = _gameData->shaders[Shaders::SINGLE_DRAW];
+		shader->use();
+		shader->setBool("instanceUsage", false);
+		shader->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		shader->setBool("lightDependent", false);
+		shader->setInt("mode", 0);
+		shader->setMat4("model", glm::mat4(1.0f));
+		shader->setFloat("opacity", 1.0f);
+		parentSet->DrawBoundingBox();
 	}
 
 	// Assuming your crosshair is at the center of the screen

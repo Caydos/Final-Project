@@ -498,3 +498,8 @@ Bounds::Box Sets::Set::GetBoundingBox()
 {
 	return this->boundingBox;
 }
+
+void Sets::Set::DrawBoundingBox()
+{
+	this->boundingBox.Draw();
+}

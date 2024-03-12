@@ -34,27 +34,26 @@ struct Light
 #define MAX_LIGHTS 40
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 viewPos;
-vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
+
+vec3 CalcSpotLight(Light _light, vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, float _specular, float _shininess)
 {
-    float outerCutOff = 0.96363;
-    float cutOff = 0.976296;
-    vec3 lightDir = normalize(light.position - fragPos);
+    vec3 lightDir = normalize(_light.position - _worldPos);
     // diffuse shading
-    float diff = max(dot(normal, lightDir), 0.0);
+    float diff = max(dot(_normal, lightDir), 0.0);
     // specular shading
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+    vec3 reflectDir = reflect(-lightDir, _normal);
+    float spec = pow(max(dot(_viewDir, reflectDir), 0.0), 32.0);
     // attenuation
-    float distance = length(light.position - fragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
+    float distance = length(_light.position - _worldPos);
+    float attenuation = 1.0 / (_light.constant + _light.linear * distance + _light.quadratic * (distance * distance));    
     // spotlight intensity
-    float theta = dot(lightDir, normalize(-light.direction)); 
-    float epsilon = cutOff - outerCutOff;
-    float intensity = clamp((theta - outerCutOff) / epsilon, 0.0, 1.0);
+    float theta = dot(lightDir, normalize(-_light.direction)); 
+    float epsilon = _light.cutOff - _light.outerCutOff;
+    float intensity = clamp((theta - _light.outerCutOff) / epsilon, 0.0, 1.0);
     // combine results
-    vec3 ambient = vec3(0.0f, 0.0f, 0.0f) * vec3(0.5,0.5,0.5);
-    vec3 diffuse = vec3(1.0f, 1.0f, 1.0f) * diff * vec3(0.5,0.5,0.5);
-    vec3 specular = vec3(1.0f, 1.0f, 1.0f) * spec * vec3(1.0,1.0,1.0);
+    vec3 ambient = _light.ambient * _albedo;
+    vec3 diffuse = _light.diffuse * diff * _albedo;
+    vec3 specular = _light.specular * spec * vec3(_specular,_specular,_specular);
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
@@ -63,18 +62,17 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 void main()
 {
-    vec3 FragPos = texture(gPosition, TexCoords).rgb;
+    vec3 WorldPos = texture(gPosition, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec3 Albedo = texture(gAlbedoSpec, TexCoords).rgb;
-    // float Specular = texture(gEffects, TexCoords).a;
-    float Specular = 1.0;
+    float Specular = texture(gEffects, TexCoords).a;
+    float Shininess = 32.0;
+    // if (Normal == vec3(0.0, 0.0, 0.0)){ discard; }
+    vec3 norm = normalize(Normal);
+    vec3 viewDir = normalize(/*viewPos -*/ WorldPos);
 
-    // vec3 norm = normalize(Normal);
-    // vec3 viewDir = normalize(viewPos - FragPos);
-
-    // vec3 result = CalcSpotLight(lights[0], norm, FragPos, viewDir);
-    vec3 color = normalize(Normal) * 0.5 + 0.5;
-    FragColor = vec4(color.x, color.y, color.z, 1.0);
+    vec3 result = CalcSpotLight(lights[0], norm, WorldPos, viewDir, Albedo, Specular, Shininess);
+    FragColor = vec4(result.x, result.y, result.z, 1.0);
     // FragColor = vec4(Albedo.x, Albedo.y, Albedo.z, 1.0);
 }
 

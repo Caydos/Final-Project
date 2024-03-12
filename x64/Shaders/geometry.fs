@@ -5,7 +5,7 @@ layout (location = 2) out vec4 gAlbedoSpec;
 layout (location = 3) out vec4 gEffects;
 
 in vec2 TexCoords;
-in vec3 FragPos;
+in vec3 WorldPos;
 in vec3 Normal;
 
 
@@ -20,7 +20,7 @@ uniform float opacity;
 
 void main()
 {    
-    gPosition = FragPos;
+    gPosition = WorldPos;
     gNormal = normalize(Normal);
 
     gAlbedoSpec.rgb = texture(textureX, TexCoords).rgb;

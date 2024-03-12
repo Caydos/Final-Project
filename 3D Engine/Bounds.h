@@ -9,6 +9,53 @@ namespace Bounds
 	{
 		glm::vec3 min;
 		glm::vec3 max;
+
+		unsigned int VAO = 0;
+		unsigned int VBO = 0;
+		glm::vec3 vertices[8];
+		int edges[12][2] = {
+			{0, 1}, {1, 3}, {3, 2}, {2, 0},
+			{4, 5}, {5, 7}, {7, 6}, {6, 4},
+			{0, 4}, {1, 5}, {3, 7}, {2, 6}
+		};
+		void Draw()
+		{
+			vertices[0] = glm::vec3(min.x, min.y, min.z);
+			vertices[1] = glm::vec3(max.x, min.y, min.z);
+			vertices[2] = glm::vec3(min.x, max.y, min.z);
+			vertices[3] = glm::vec3(max.x, max.y, min.z);
+			vertices[4] = glm::vec3(min.x, min.y, max.z);
+			vertices[5] = glm::vec3(max.x, min.y, max.z);
+			vertices[6] = glm::vec3(min.x, max.y, max.z);
+			vertices[7] = glm::vec3(max.x, max.y, max.z);
+
+			if (!VAO && !VBO)
+			{
+				glGenVertexArrays(1, &VAO);
+				glGenBuffers(1, &VBO);
+
+				glBindVertexArray(VAO);
+
+				glBindBuffer(GL_ARRAY_BUFFER, VBO);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+				// Position attribute
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+				glEnableVertexAttribArray(0);
+
+				// Unbind VAO (it's always a good practice to unbind any buffer/array to prevent strange bugs)
+				glBindVertexArray(0);
+			}
+			glBindVertexArray(VAO);
+
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+			for (int i = 0; i < 12; i++) {
+				// Draw line between each pair of vertices
+				glDrawArrays(GL_LINES, edges[i][0], 2);
+			}
+			glBindVertexArray(0);
+		}
 	};
 
 	class BoundingBox
@@ -22,23 +69,6 @@ namespace Bounds
 
 		void Initialize()
 		{
-			// Create VBO and VAO
-			glGenBuffers(1, &this->VBO);
-			glGenVertexArrays(1, &this->VAO);
-
-			// Bind VAO and VBO, upload vertex data
-			glBindVertexArray(this->VAO);
-			glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(this->lines), this->lines, GL_STATIC_DRAW);
-
-			// Position attribute
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-			glEnableVertexAttribArray(0);
-
-			// Unbind
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindVertexArray(0);
-			this->shader = GetGameData()->shaders[Shaders::GEOMETRY];
 			this->initialized = true;
 		}
 
@@ -51,15 +81,8 @@ namespace Bounds
 			}
 			glm::mat4 test(1.0f);
 			this->shader->setMat4("model", test);
-			this->shader->setVec4("color", glm::vec4(1.0f, 1.0f,1.0f,1.0f));
+			this->shader->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 			this->shader->setFloat("opacity", 1.0f);
-			glBindVertexArray(this->VAO);
-
-			// Draw the lines
-			glDrawArrays(GL_LINES, 0, 24);
-
-			// Unbind the VAO
-			glBindVertexArray(0);
 		}
 
 		Box GetBox()

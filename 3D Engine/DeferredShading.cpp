@@ -17,7 +17,7 @@ void DeferredShading::Initialize(GameData* _gameData)
 
 	glGenTextures(1, &gPosition);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -26,7 +26,7 @@ void DeferredShading::Initialize(GameData* _gameData)
 
 	glGenTextures(1, &gNormal);
 	glBindTexture(GL_TEXTURE_2D, gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
@@ -104,6 +104,7 @@ void DeferredShading::Draw(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
 	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
@@ -118,24 +119,7 @@ void DeferredShading::Draw(GameData* _gameData)
 	Camera* cam = Scene::World::GetCamera();
 	_gameData->shaders[Shaders::RENDER]->use();
 	_gameData->shaders[Shaders::RENDER]->setVec3("viewPos", cam->Position);
-	std::string str = "lights[0]";
-	_gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lightning::SPOT);
-	_gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), true);
-	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), cam->Front);
-	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), cam->Position);
 
-
-
-	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".cutOff"), glm::cos(glm::radians(12.5f)));
-	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".outerCutOff"), glm::cos(glm::radians(15.5f)));
-
-	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".constant"), 1.0f);
-	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".linear"), 0.09f);
-	_gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".quadratic"), 0.032f);
-
-	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), glm::vec3(0.0f, 0.0f, 0.0f));
-	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), glm::vec3(1.0f, 1.0f, 1.0f));
-	_gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), glm::vec3(1.0f, 1.0f, 1.0f));
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
 	glActiveTexture(GL_TEXTURE1);
@@ -148,4 +132,5 @@ void DeferredShading::Draw(GameData* _gameData)
 	RenderQuad();
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 }

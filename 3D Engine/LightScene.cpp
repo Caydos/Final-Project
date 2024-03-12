@@ -13,7 +13,7 @@ Lightning::Light* Scene::Lights::InsertLight(GameData* _gameData, Lightning::Lig
 	}
 
 	std::string str = "lights[" + std::to_string(lights.size()) + ']';
-	//_gameData->shaders[Shaders::RENDER]->use();
+	_gameData->shaders[Shaders::RENDER]->use();
 	switch (_light.GetType())
 	{
 	case Lightning::DIRECTIONAL:
