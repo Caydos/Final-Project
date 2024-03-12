@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "Texture.h"
 #include "RayCasting.h"
+#include "Bounds.h"
 
 #define BLOCKS_DIRECTORY "../Blocks/"
 #define BLOCKS_FILE_EXTENSION ".json"
@@ -157,6 +158,7 @@ namespace Blocks
 		void Scale(glm::vec3 _scale);
 		void Scale(float _x, float _y, float _z);
 
+		Bounds::Box GetBoundingBox();
 	private:
 		bool inScene;
 
@@ -168,6 +170,7 @@ namespace Blocks
 		glm::vec3 position;
 		glm::vec3 rotation;
 		glm::vec3 scale;
+		Bounds::Box boundingBox;
 	};
 
 	void Initialize();

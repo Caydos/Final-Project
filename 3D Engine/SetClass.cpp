@@ -214,7 +214,7 @@ void Sets::Set::ApplyTransformation()
 		}
 	}
 
-	CalculateBoundingBox();
+	this->CalculateBoundingBox();
 }
 
 glm::mat4 Sets::Set::GetBone()
@@ -403,26 +403,51 @@ void Sets::Set::Scale(float _x, float _y, float _z)
 
 void Sets::Set::CalculateBoundingBox()
 {
-	glm::vec3 globalMin = glm::vec3(FLT_MAX);
-	glm::vec3 globalMax = glm::vec3(-FLT_MAX);
-
-	for (Blocks::Block& block : blocks)
 	{
-		glm::vec3 scale;
-		glm::quat rotation;
-		glm::vec3 translation;
-		glm::vec3 skew;
-		glm::vec4 perspective;
-		glm::decompose(block.GetModel(), scale, rotation, translation, skew, perspective);
+		glm::vec3 globalMin = glm::vec3(FLT_MAX);
+		glm::vec3 globalMax = glm::vec3(-FLT_MAX);
 
-		glm::vec3 localMin = translation - scale / 2.0f;
-		glm::vec3 localMax = translation + scale / 2.0f;
+		for (Blocks::Block& block : blocks)
+		{
+			glm::vec3 scale;
+			glm::quat rotation;
+			glm::vec3 translation;
+			glm::vec3 skew;
+			glm::vec4 perspective;
+			glm::decompose(block.GetModel(), scale, rotation, translation, skew, perspective);
 
-		globalMin = glm::min(globalMin, localMin);
-		globalMax = glm::max(globalMax, localMax);
+			glm::vec3 localMin = translation - scale / 2.0f;
+			glm::vec3 localMax = translation + scale / 2.0f;
+
+			globalMin = glm::min(globalMin, localMin);
+			globalMax = glm::max(globalMax, localMax);
+		}
+
+		this->boundingBox.min = globalMin;
+		this->boundingBox.max = globalMax;
 	}
+	{
+		glm::vec3 minPoint = glm::vec3(FLT_MAX);
+		glm::vec3 maxPoint = glm::vec3(-FLT_MAX);
 
-	this->boundingBox = { globalMin, globalMax };
+		for (Blocks::Block& block : blocks)
+		{
+			Bounds::Box box = block.GetBoundingBox();
+			std::vector<glm::vec3> corners = Bounds::GetCorners(box);
+			for (const auto& corner : corners) {
+				glm::vec3 transformedCorner = box.rotation * (corner * box.scale) + box.position;
+				minPoint = glm::min(minPoint, transformedCorner);
+				maxPoint = glm::max(maxPoint, transformedCorner);
+			}
+		}
+
+		Bounds::Box globalBox;
+		globalBox.position = (minPoint + maxPoint) * 0.5f;
+		globalBox.scale = (maxPoint - minPoint) * 0.5f;
+		// Setting orientation to Identity, as determining an optimal rotation is complex
+		globalBox.rotation = glm::mat3(1.0f);
+		std::cout << globalBox.scale.x << " " << globalBox.scale.y << " " << globalBox.scale.z << " " << std::endl;
+	}
 }
 
 bool Sets::Set::HasOrigin()
@@ -501,5 +526,5 @@ Bounds::Box Sets::Set::GetBoundingBox()
 
 void Sets::Set::DrawBoundingBox()
 {
-	this->boundingBox.Draw();
+	
 }

@@ -73,10 +73,23 @@ void Blocks::Block::ApplyTransformation()
 	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	*this->model = glm::scale(*this->model, this->scale);
-	if (this->type != nullptr)
-	{
-		//this->type->AskForRefresh();
-	}
+
+	this->boundingBox.position = this->position;
+
+	// The extents are half the size of the cube, factoring in the scale.
+	// Assuming the cube initially spans from -1 to 1 (so has a length of 2) before scaling.
+	this->boundingBox.scale = this->scale * 0.5f;
+
+	glm::vec3 rotationRadians = glm::radians(this->rotation);
+
+	// Create a rotation matrix from the Euler angles
+	glm::mat4 rotMat(1.0f);
+	rotMat = glm::rotate(rotMat, rotationRadians.z, glm::vec3(0.0f, 0.0f, 1.0f)); // Z-axis rotation
+	rotMat = glm::rotate(rotMat, rotationRadians.y, glm::vec3(0.0f, 1.0f, 0.0f)); // Y-axis rotation
+	rotMat = glm::rotate(rotMat, rotationRadians.x, glm::vec3(1.0f, 0.0f, 0.0f)); // X-axis rotation
+
+	// Extract the rotational part as a mat3 from the transformation matrix.
+	this->boundingBox.rotation = glm::mat3(rotMat);
 }
 
 glm::vec3 Blocks::Block::GetPosition() { return this->position; }
@@ -154,4 +167,9 @@ void Blocks::Block::Scale(float _x, float _y, float _z)
 	this->scale.y += _y;
 	this->scale.z += _z;
 	ApplyTransformation();
+}
+
+Bounds::Box Blocks::Block::GetBoundingBox()
+{
+	return boundingBox;
 }

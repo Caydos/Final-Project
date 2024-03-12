@@ -294,6 +294,9 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Game\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source Files\Physic Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">
@@ -457,6 +460,9 @@
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Source Files\Game\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Source Files\Physic Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
