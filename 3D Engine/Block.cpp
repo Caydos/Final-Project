@@ -78,7 +78,7 @@ void Blocks::Block::ApplyTransformation()
 
 	// The extents are half the size of the cube, factoring in the scale.
 	// Assuming the cube initially spans from -1 to 1 (so has a length of 2) before scaling.
-	this->boundingBox.scale = this->scale * 0.5f;
+	this->boundingBox.extents = this->scale * 0.5f;
 
 	glm::vec3 rotationRadians = glm::radians(this->rotation);
 

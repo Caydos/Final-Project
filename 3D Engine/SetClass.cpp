@@ -131,7 +131,7 @@ bool Sets::Set::IsVisible()
 void Sets::Set::CheckVisibility()
 {
 	if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
-	if (FrustrumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.min, this->boundingBox.max))
+	if (FrustrumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.GetBox().min, this->boundingBox.GetBox().max))
 	{
 		if (this->visible) { return; }
 		this->visible = true;
@@ -403,6 +403,7 @@ void Sets::Set::Scale(float _x, float _y, float _z)
 
 void Sets::Set::CalculateBoundingBox()
 {
+	Bounds::Box box;
 	{
 		glm::vec3 globalMin = glm::vec3(FLT_MAX);
 		glm::vec3 globalMax = glm::vec3(-FLT_MAX);
@@ -423,31 +424,40 @@ void Sets::Set::CalculateBoundingBox()
 			globalMax = glm::max(globalMax, localMax);
 		}
 
-		this->boundingBox.min = globalMin;
-		this->boundingBox.max = globalMax;
+		box.min = globalMin;
+		box.max = globalMax;
 	}
 	{
 		glm::vec3 minPoint = glm::vec3(FLT_MAX);
 		glm::vec3 maxPoint = glm::vec3(-FLT_MAX);
 
-		for (Blocks::Block& block : blocks)
+		for (Blocks::Block& block : this->blocks)
 		{
-			Bounds::Box box = block.GetBoundingBox();
-			std::vector<glm::vec3> corners = Bounds::GetCorners(box);
-			for (const auto& corner : corners) {
-				glm::vec3 transformedCorner = box.rotation * (corner * box.scale) + box.position;
+			block.ApplyTransformation();
+			Bounds::Box blockBox = block.GetBoundingBox();
+			std::vector<glm::vec3> corners = Bounds::GetCorners(blockBox);
+			for (const auto& corner : corners)
+			{
+				glm::vec3 transformedCorner = /*glm::radians(this->rotation) **/blockBox.rotation * (corner * this->scale) + this->position;
 				minPoint = glm::min(minPoint, transformedCorner);
 				maxPoint = glm::max(maxPoint, transformedCorner);
 			}
 		}
+		//std::cout << "Min point : " << minPoint.x << " " << minPoint.y << " " << minPoint.z << std::endl;
+		//std::cout << "Max point : " << maxPoint.x << " " << maxPoint.y << " " << maxPoint.z << std::endl;
+		box.position = (minPoint + maxPoint) * 0.5f;
+		box.extents = (maxPoint - minPoint) * 0.5f;
 
-		Bounds::Box globalBox;
-		globalBox.position = (minPoint + maxPoint) * 0.5f;
-		globalBox.scale = (maxPoint - minPoint) * 0.5f;
+		glm::vec3 rotationRadians = glm::radians(this->rotation);
 		// Setting orientation to Identity, as determining an optimal rotation is complex
-		globalBox.rotation = glm::mat3(1.0f);
-		std::cout << globalBox.scale.x << " " << globalBox.scale.y << " " << globalBox.scale.z << " " << std::endl;
+		glm::mat4 rotMat(1.0f);
+		rotMat = glm::rotate(rotMat, rotationRadians.z, glm::vec3(0.0f, 0.0f, 1.0f)); // Z-axis rotation
+		rotMat = glm::rotate(rotMat, rotationRadians.y, glm::vec3(0.0f, 1.0f, 0.0f)); // Y-axis rotation
+		rotMat = glm::rotate(rotMat, rotationRadians.x, glm::vec3(1.0f, 0.0f, 0.0f)); // X-axis rotation
+		//std::cout << "Input axis : " << rotationRadians.x << std::endl;
+		box.rotation = glm::mat3(rotMat);
 	}
+	this->boundingBox.SetBox(box);
 }
 
 bool Sets::Set::HasOrigin()
@@ -505,7 +515,7 @@ void Sets::Set::MoveOrigin(glm::vec3 _offset)
 			this->typesInstances->at(i)->AskForRefresh(this->typesInstances);
 		}
 	}
-	
+
 	CalculateBoundingBox();
 }
 
@@ -521,10 +531,10 @@ void Sets::Set::MoveOrigin(float _x, float _y, float _z)
 
 Bounds::Box Sets::Set::GetBoundingBox()
 {
-	return this->boundingBox;
+	return this->boundingBox.GetBox();
 }
 
 void Sets::Set::DrawBoundingBox()
 {
-	
+	this->boundingBox.Draw();
 }

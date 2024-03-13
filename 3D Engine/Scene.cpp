@@ -192,8 +192,10 @@ void Scene::Initialize(GameData* _gameData)
 	//		}
 	//	}
 	//}
+	float size = 0.0f;
 	for (size_t rowId = 0; rowId < 50; rowId++)
 	{
+		size += 0.2f;
 		for (size_t columnId = 0; columnId < 50; columnId++)
 		{
 			Blocks::Block block;
@@ -202,7 +204,8 @@ void Scene::Initialize(GameData* _gameData)
 			glm::vec3 scale = block.GetType()->GetScale();
 			block.SetScale(scale);
 			block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
-			set->InsertBlock(block);
+			set->InsertBlock(block, false);
+			//break;
 			if (!rowId || rowId == 49)
 			{
 				for (size_t heightId = 1; heightId < 20; heightId++)
@@ -213,7 +216,7 @@ void Scene::Initialize(GameData* _gameData)
 					glm::vec3 scale = block.GetType()->GetScale();
 					block.SetScale(scale);
 					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block);
+					set->InsertBlock(block, false);
 				}
 			}
 			else if (columnId == 49)
@@ -226,13 +229,16 @@ void Scene::Initialize(GameData* _gameData)
 					glm::vec3 scale = block.GetType()->GetScale();
 					block.SetScale(scale);
 					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block);
+					set->InsertBlock(block, false);
 				}
 			}
 		}
+		//if (rowId == 1) { break; }
 	}
+	std::cout << "X size : " << size << std::endl;
 	set->SetName("Wall");
 	set->SetPath("../Sets/");
+	set->CalculateBoundingBox();
 
 
 	//playerSet = Sets::Create();

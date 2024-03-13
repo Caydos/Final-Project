@@ -7,11 +7,12 @@ namespace Bounds
 {
 	struct Box
 	{
+		Box();
 		glm::vec3 min;
 		glm::vec3 max;
 
 		glm::vec3 position;     // Center of the box
-		glm::vec3 scale;    // Half-size extents of the box
+		glm::vec3 extents;    // Half-size extents of the box
 		glm::mat3 rotation; // 3x3 rotation matrix representing the box's orientation
 	};
 	bool AreColliding(const Box& box1, const Box& box2);
@@ -32,7 +33,7 @@ namespace Bounds
 		void SetBox(Box _box);
 
 	private:
-		glm::vec3 scale;
+		glm::mat4 model;
 		Shaders::Shader* shader;
 		bool initialized;
 		unsigned int VBO;

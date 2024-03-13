@@ -94,7 +94,7 @@ namespace Sets
 		glm::vec3 rotation;
 		glm::vec3 scale;
 
-		Bounds::Box boundingBox;
+		Bounds::BoundingBox boundingBox;
 	};
 	void UpdateVisibility();
 	Set* Create();
