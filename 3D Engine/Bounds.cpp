@@ -2,10 +2,12 @@
 
 
 
-bool Bounds::AreColliding(const Box& box1, const Box& box2)
+bool Bounds::AreColliding(const Box& box1, const Box& box2, glm::vec3& collisionNormal)
 {
     float ra, rb;
     glm::mat3 R, AbsR;
+    float minPenetration = std::numeric_limits<float>::infinity();
+    glm::vec3 localCollisionNormal;
 
     // Compute rotation matrix expressing box2 in box1’s coordinate frame
     R = box1.rotation * glm::transpose(box2.rotation);
@@ -19,6 +21,26 @@ bool Bounds::AreColliding(const Box& box1, const Box& box2)
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             AbsR[i][j] = fabs(R[i][j]) + std::numeric_limits<float>::epsilon();
+        }
+    }
+
+    // Example of testing one axis (extend this concept to all axes you test)
+    for (int i = 0; i < 3; i++) {
+        ra = box1.extents[i];
+        rb = box2.extents[0] * AbsR[i][0] + box2.extents[1] * AbsR[i][1] + box2.extents[2] * AbsR[i][2];
+        float penetration = ra + rb - fabs(t[i]);
+
+        if (penetration < 0) {
+            return false; // No collision
+        }
+        else {
+            if (penetration < minPenetration) {
+                minPenetration = penetration;
+                localCollisionNormal = box1.rotation * glm::vec3(i == 0, i == 1, i == 2);
+                if (t[i] < 0) {
+                    localCollisionNormal = -localCollisionNormal; // Ensure the normal points away from box2
+                }
+            }
         }
     }
 
@@ -81,8 +103,15 @@ bool Bounds::AreColliding(const Box& box1, const Box& box2)
     rb = box2.extents[0] * AbsR[2][1] + box2.extents[1] * AbsR[2][0];
     if (fabs(t[1] * R[0][2] - t[0] * R[1][2]) > ra + rb) return false;
 
+
+    if (minPenetration < std::numeric_limits<float>::infinity()) {
+        collisionNormal = localCollisionNormal; // The calculated collision normal
+        return true; // Collision detected
+    }
+
+
     // Since no separating axis is found, the OBBs must be intersecting
-    return true;
+    return false;
 }
 
 std::vector<glm::vec3> Bounds::GetCorners(const Box& box)
@@ -139,7 +168,7 @@ void Bounds::BoundingBox::Initialize()
     // Unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    this->shader = GetGameData()->shaders[Shaders::GEOMETRY];
+    this->shader = GetGameData()->shaders[Shaders::SINGLE_DRAW];
     this->initialized = true;
 }
 
@@ -151,6 +180,7 @@ void Bounds::BoundingBox::Draw()
         this->Initialize();
     }
 
+    this->shader->setBool("instanceUsage", false);
     this->shader->setMat4("model", this->model);
     this->shader->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     this->shader->setFloat("opacity", 1.0f);
@@ -205,10 +235,16 @@ void Bounds::BoundingBox::SetBox(Box _box)
         lines[i * 3 + 2] = point.z;
     }
 
-
+    this->model = glm::mat4(1.0f);
     // Create a translation matrix
-    this->model = glm::translate(glm::mat4(1.0f), this->box.position);
-
+    //for (int i = 0; i < 3; ++i)
+    //{
+    //    for (int j = 0; j < 3; ++j)
+    //    {
+    //        this->model[i][j] = this->box.rotation[i][j];
+    //    }
+    //}
+    //this->model *= glm::mat4(this->box.rotation);
 
     if (initialized)
     {

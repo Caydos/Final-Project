@@ -39,7 +39,7 @@ static Sets::Set* set = nullptr;
 void Scene::Initialize(GameData* _gameData)
 {
 	inputClock.Restart();
-	FPVCam = Scene::World::NewCamera(glm::vec3(/*3.0f, 1.2f, 3.0f*/1.0, 0.1, 1.0));
+	FPVCam = Scene::World::NewCamera(glm::vec3(3.0f, 1.2f, 3.0f));
 	Scene::World::FocusCamera(_gameData, FPVCam);
 
 	Lightning::Light flashLight2;
@@ -205,7 +205,6 @@ void Scene::Initialize(GameData* _gameData)
 			block.SetScale(scale);
 			block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
 			set->InsertBlock(block, false);
-			//break;
 			if (!rowId || rowId == 49)
 			{
 				for (size_t heightId = 1; heightId < 20; heightId++)
@@ -233,23 +232,18 @@ void Scene::Initialize(GameData* _gameData)
 				}
 			}
 		}
-		//if (rowId == 1) { break; }
 	}
-	std::cout << "X size : " << size << std::endl;
 	set->SetName("Wall");
 	set->SetPath("../Sets/");
 	set->CalculateBoundingBox();
 
 
-	//playerSet = Sets::Create();
-	//playerSet->GenerateRenderingInstance();
-	//playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Character.json")));
-	//playerSet->SetName("Player");
-	//playerSet->SetPath("../Sets/");
-	//playerSet->SetPosition(_gameData->camera->Position);
-	//playerSet->CalculateBoundingBox();
-
-	//body.boundingBox = playerSet->GetBoundingBox();
+	playerSet = Sets::Create();
+	playerSet->GenerateRenderingInstance();
+	playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Character.json")));
+	playerSet->SetName("Player");
+	playerSet->SetPath("../Sets/");
+	playerSet->SetPosition(_gameData->camera->Position);
 	initialized = true;
 }
 
@@ -323,7 +317,8 @@ void Scene::Tick(GameData* _gameData)
 		}
 	}
 	Scene::World::Render(_gameData);
-
+	_gameData->shaders[Shaders::SINGLE_DRAW]->use();
+	playerSet->DrawBoundingBox();
 	// Needs to be called after the inputs that enables it
 	//if (!_gameData->window.IsFocused())
 	{
@@ -344,6 +339,24 @@ void Scene::Tick(GameData* _gameData)
 		ImGui::Render();
 	}
 	glDisable(GL_DEPTH_TEST);
+	glm::vec3 collisionNormal;
+	if (Bounds::AreColliding(playerSet->GetBoundingBox(), set->GetBoundingBox(), collisionNormal))
+	{
+		Crosshairs::Get()->SetColor(Colors::Grey);
+		std::vector<Blocks::Block>*  blocks = set->GetBlocks();
+		for (size_t i = 0; i < blocks->size(); i++)
+		{
+			glm::vec3 collisionNormal;
+			if (Bounds::AreColliding(playerSet->GetBoundingBox(), blocks->at(i).GetBoundingBox(), collisionNormal))
+			{
+				Crosshairs::Get()->SetColor(Colors::Red);
+			}
+		}
+	}
+	else
+	{
+		Crosshairs::Get()->SetColor(Colors::Green);
+	}
 	Crosshairs::Draw();
 
 	glEnable(GL_DEPTH_TEST);

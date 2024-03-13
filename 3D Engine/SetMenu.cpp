@@ -42,21 +42,25 @@ void Sets::Menu(GameData* _gameData, float _yOffset)
 				{
 					sets->at(parentSetId)->SetPosition(position);
 				}
-
+				glm::vec3 scale = sets->at(parentSetId)->GetScale();
+				if (ImGui::SliderFloat(std::string("Scale##Scale" + name).c_str(), &scale.x, 0.0f, 1.0f))
+				{
+					sets->at(parentSetId)->SetScale(scale.x);
+				}
 				//Rotations
 				{
 					glm::vec3 rotation = sets->at(parentSetId)->GetRotation();
-					if (ImGui::SliderFloat("X Axis", &rotation.x, 0.0f, 360.0f, "%.0f"))
+					if (ImGui::SliderFloat(std::string("X Axis##Rotation" + name).c_str(), &rotation.x, 0.0f, 360.0f, "%.0f"))
 					{
 						rotation.x = std::round(rotation.x / 90.0f) * 90.0f;
 						sets->at(parentSetId)->SetRotation(rotation);
 					}
-					if (ImGui::SliderFloat("Y Axis", &rotation.y, 0.0f, 360.0f, "%.0f"))
+					if (ImGui::SliderFloat(std::string("Y Axis##Rotation" + name).c_str(), &rotation.y, 0.0f, 360.0f, "%.0f"))
 					{
 						rotation.y = std::round(rotation.y / 90.0f) * 90.0f;
 						sets->at(parentSetId)->SetRotation(rotation);
 					}
-					if (ImGui::SliderFloat("Z Axis", &rotation.z, 0.0f, 360.0f, "%.0f"))
+					if (ImGui::SliderFloat(std::string("Z Axis##Rotation" + name).c_str(), &rotation.z, 0.0f, 360.0f, "%.0f"))
 					{
 						rotation.z = std::round(rotation.z / 90.0f) * 90.0f;
 						sets->at(parentSetId)->SetRotation(rotation);

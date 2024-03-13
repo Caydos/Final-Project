@@ -454,7 +454,6 @@ void Sets::Set::CalculateBoundingBox()
 		rotMat = glm::rotate(rotMat, rotationRadians.z, glm::vec3(0.0f, 0.0f, 1.0f)); // Z-axis rotation
 		rotMat = glm::rotate(rotMat, rotationRadians.y, glm::vec3(0.0f, 1.0f, 0.0f)); // Y-axis rotation
 		rotMat = glm::rotate(rotMat, rotationRadians.x, glm::vec3(1.0f, 0.0f, 0.0f)); // X-axis rotation
-		//std::cout << "Input axis : " << rotationRadians.x << std::endl;
 		box.rotation = glm::mat3(rotMat);
 	}
 	this->boundingBox.SetBox(box);

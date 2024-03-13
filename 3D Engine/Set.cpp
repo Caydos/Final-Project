@@ -70,7 +70,7 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 		arrows[2].GenerateGraphicsBuffers();
 		arrows[2].BindShader(_gameData->shaders[Shaders::SINGLE_DRAW]);
 		arrows[2].SetColor(Colors::Blue);
-		arrows[2].SetRotation(glm::vec3(90.0f, 0.0f, -90.0f));
+		arrows[2].SetRotation(glm::vec3(90.0f, 0.0f, 90.0f));
 		initialized = true;
 	}
 	if (parentSet != nullptr)
