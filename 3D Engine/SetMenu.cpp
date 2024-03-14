@@ -70,13 +70,15 @@ void Sets::Menu(GameData* _gameData, float _yOffset)
 				{
 					std::vector<Blocks::BlockType*> blocks = Blocks::GetAll();
 					blockCount = blocks.size();
-					blocksName = new const char* [blockCount];
+					blocksName = new const char* [blockCount + 1];
+					blocksName[0] = new char[5];
+					blocksName[0] = "None";
 					for (size_t i = 0; i < blockCount; ++i)
 					{
 						std::string materialName = blocks[i]->GetName();
 						char* nameCopy = new char[materialName.length() + 1];
 						strcpy(nameCopy, materialName.c_str());
-						blocksName[i] = nameCopy;
+						blocksName[i + 1] = nameCopy;
 					}
 				}
 				if (!sets->at(parentSetId)->HasOrigin())
@@ -85,19 +87,22 @@ void Sets::Menu(GameData* _gameData, float _yOffset)
 					ImGui::Text("Origin block :");
 					if (ImGui::Combo("##Originblocks", &marker, blocksName, blockCount))
 					{
-						Blocks::Block block;
-						block.GenerateModel();
-						Blocks::MaterialCheck(&block, blocksName[marker]);
-						Blocks::BlockType* type = block.GetType();
-						if (type != nullptr)
+						if (marker > 0)
 						{
-							block.SetScale(type->GetScale());
-							sets->at(parentSetId)->InsertBlock(block);
-						}
-						else
-						{
-							std::cout << "No texture" << std::endl;
-							block.EraseModel();
+							Blocks::Block block;
+							block.GenerateModel();
+							Blocks::MaterialCheck(&block, blocksName[marker]);
+							Blocks::BlockType* type = block.GetType();
+							if (type != nullptr)
+							{
+								block.SetScale(type->GetScale());
+								sets->at(parentSetId)->InsertBlock(block);
+							}
+							else
+							{
+								std::cout << "No texture" << std::endl;
+								block.EraseModel();
+							}
 						}
 					}
 				}
