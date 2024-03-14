@@ -70,11 +70,11 @@ void Blocks::Load(std::string _name)
 		{
 			Texture* texture = new Texture;
 			texture->LoadFromFile((std::string(BLOCKS_DIRECTORY) + _name + "/" + files[fileId]).c_str());
-			if (filename_without_extension == "texture")
+			if (filename_without_extension == "tex")
 			{
 				block->SetTexture(texture);
 			}
-			else
+			else if (filename_without_extension == "map")
 			{
 				block->SetEffectsTexture(texture);
 			}

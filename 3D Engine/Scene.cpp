@@ -15,7 +15,6 @@ static Scene::Type type = Scene::Type::MODEL_EDITOR;
 static Clock inputClock;
 static Colors::Color clearColor = Colors::Black;
 static Lightning::Light* flashLight;
-static Sets::Set* playerSet;
 static Physics::Body body;
 static float RunningMultiplier = 2.5f;
 static float MovementSpeed = 2.25f;
@@ -61,189 +60,73 @@ void Scene::Initialize(GameData* _gameData)
 
 	Blocks::Initialize();
 
-	Blocks::BlockType* blType[3] = { nullptr };
-	std::vector<Blocks::BlockType*> types = Blocks::GetAll();
-	for (size_t i = 0; i < types.size(); i++)
-	{
-		if (types[i]->GetName() == "Sol_Carelage")
-		{
-			blType[0] = types[i];
-		}
-		else if (types[i]->GetName() == "Mur_Hopital1")
-		{
-			blType[1] = types[i];
-		}
-		else if (types[i]->GetName() == "Mur_Hopital2")
-		{
-			blType[2] = types[i];
-		}
-	}
+	//Blocks::BlockType* blType[3] = { nullptr };
+	//std::vector<Blocks::BlockType*> types = Blocks::GetAll();
+	//for (size_t i = 0; i < types.size(); i++)
+	//{
+	//	if (types[i]->GetName() == "HSP_S1")
+	//	{
+	//		blType[0] = types[i];
+	//	}
+	//	else if (types[i]->GetName() == "HSP_W1")
+	//	{
+	//		blType[1] = types[i];
+	//	}
+	//	else if (types[i]->GetName() == "HSP_W2")
+	//	{
+	//		blType[2] = types[i];
+	//	}
+	//}
 
 	//Maze::Generate();
-	/*Sets::Set**/ set = Sets::Create();
-	set->GenerateRenderingInstance();
+	///*Sets::Set**/ set = Sets::Create();
+	//set->GenerateRenderingInstance();
 
-	//const int meters = 50;
-	//const int dimensions = meters / 0.2f;
-
-	//for (int i = 0; i < (int)meters / 4; i++)
+	//float size = 0.0f;
+	//for (size_t rowId = 0; rowId < 50; rowId++)
 	//{
-	//	int value = 4 * i / 0.2f;
-	//	ints.push_back(value);
-	//};
-
-	//for (int i = 0; i < (int)meters / 15; i++)
-	//{
-	//	int value = 15 * i / 0.2f;
-	//	for (size_t j = 0; j < 4 / 0.2f; j++)
+	//	size += 0.2f;
+	//	for (size_t columnId = 0; columnId < 50; columnId++)
 	//	{
-	//		ints2.push_back(value + j);
-	//	}
-	//	if (i != 0 && !ints3.size())
-	//	{
-	//		ints3.push_back(value);
-	//	}
-	//};
-
-	//for (size_t rowId = 0; rowId < dimensions; rowId++)
-	//{
-	//	for (size_t columnId = 0; columnId < dimensions; columnId++)
-	//	{
+	//		Blocks::Block block;
+	//		block.GenerateModel();
+	//		block.SetType(blType[0]);
+	//		glm::vec3 scale = block.GetType()->GetScale();
+	//		block.SetScale(scale);
+	//		block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
+	//		set->InsertBlock(block, false);
+	//		if (!rowId || rowId == 49)
 	//		{
-	//			Blocks::Block block;
-	//			block.GenerateModel();
-	//			block.SetType(blType[0]);
-	//			glm::vec3 scale = /*block.GetType()->GetScale()*/glm::vec3(0.2f);
-	//			block.SetScale(scale);
-	//			block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
-	//			set->InsertBlock(block, false);
-	//		}
-
-	//		{
-	//			Blocks::Block block;
-	//			block.GenerateModel();
-	//			block.SetType(blType[0]);
-	//			glm::vec3 scale = /*block.GetType()->GetScale()*/glm::vec3(0.2f);
-	//			block.SetScale(scale);
-	//			block.SetPosition(glm::vec3(scale.x * rowId, 20 * 0.2f, scale.z * columnId));
-	//			set->InsertBlock(block, false);
-	//		}
-
-	//		for (size_t i = 0; i < ints.size(); i++)
-	//		{
-	//			if (rowId == ints[i])
+	//			for (size_t heightId = 1; heightId < 20; heightId++)
 	//			{
-	//				bool found = false;
-	//				for (size_t j = 0; j < ints2.size(); j++)
-	//				{
-	//					if (columnId == ints2[j])
-	//					{
-	//						found = true;
-	//						break;
-	//					}
-	//				}
-	//				if (found)
-	//				{
-	//					continue;
-	//				}
-	//				for (size_t heightId = 1; heightId < 20; heightId++)
-	//				{
-	//					Blocks::Block block;
-	//					block.GenerateModel();
-	//					block.SetType((heightId < 7) ? blType[1] : blType[2]);
-	//					glm::vec3 scale = block.GetType()->GetScale();
-	//					block.SetScale(scale);
-	//					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-	//					set->InsertBlock(block, false);
-	//				}
+	//				Blocks::Block block;
+	//				block.GenerateModel();
+	//				block.SetType((heightId < 7) ? blType[1] : blType[2]);
+	//				glm::vec3 scale = block.GetType()->GetScale();
+	//				block.SetScale(scale);
+	//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//				set->InsertBlock(block, false);
 	//			}
-	//			else
+	//		}
+	//		else if (columnId == 49)
+	//		{
+	//			for (size_t heightId = 1; heightId < 20; heightId++)
 	//			{
-	//				for (size_t k = 0; k < ints3.size(); k++)
-	//				{
-	//					if (columnId == ints3[0] || columnId == dimensions -1)
-	//					{
-	//						//bool found = false;
-	//						//for (size_t j = 0; j < ints2.size(); j++)
-	//						//{
-	//						//	if (columnId == ints2[j])
-	//						//	{
-	//						//		found = true;
-	//						//		break;
-	//						//	}
-	//						//}
-	//						//if (found)
-	//						//{
-	//						//	continue;
-	//						//}
-	//						for (size_t heightId = 1; heightId < 20; heightId++)
-	//						{
-	//							Blocks::Block block;
-	//							block.GenerateModel();
-	//							block.SetType((heightId < 7) ? blType[1] : blType[2]);
-	//							glm::vec3 scale = block.GetType()->GetScale();
-	//							block.SetScale(scale);
-	//							block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-	//							set->InsertBlock(block, false);
-	//						}
-	//					}
-	//				}
+	//				Blocks::Block block;
+	//				block.GenerateModel();
+	//				block.SetType((heightId < 7) ? blType[1] : blType[2]);
+	//				glm::vec3 scale = block.GetType()->GetScale();
+	//				block.SetScale(scale);
+	//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//				set->InsertBlock(block, false);
 	//			}
 	//		}
 	//	}
 	//}
-	float size = 0.0f;
-	for (size_t rowId = 0; rowId < 50; rowId++)
-	{
-		size += 0.2f;
-		for (size_t columnId = 0; columnId < 50; columnId++)
-		{
-			Blocks::Block block;
-			block.GenerateModel();
-			block.SetType(blType[0]);
-			glm::vec3 scale = block.GetType()->GetScale();
-			block.SetScale(scale);
-			block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
-			set->InsertBlock(block, false);
-			if (!rowId || rowId == 49)
-			{
-				for (size_t heightId = 1; heightId < 20; heightId++)
-				{
-					Blocks::Block block;
-					block.GenerateModel();
-					block.SetType((heightId < 7) ? blType[1] : blType[2]);
-					glm::vec3 scale = block.GetType()->GetScale();
-					block.SetScale(scale);
-					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block, false);
-				}
-			}
-			else if (columnId == 49)
-			{
-				for (size_t heightId = 1; heightId < 20; heightId++)
-				{
-					Blocks::Block block;
-					block.GenerateModel();
-					block.SetType((heightId < 7) ? blType[1] : blType[2]);
-					glm::vec3 scale = block.GetType()->GetScale();
-					block.SetScale(scale);
-					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block, false);
-				}
-			}
-		}
-	}
-	set->SetName("Wall");
-	set->SetPath("../Sets/");
-	set->CalculateBoundingBox();
+	//set->SetName("Wall");
+	//set->SetPath("../Sets/");
+	//set->CalculateBoundingBox();
 
-
-	playerSet = Sets::Create();
-	playerSet->GenerateRenderingInstance();
-	playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/Character.json")));
-	playerSet->SetName("Player");
-	playerSet->SetPath("../Sets/");
-	playerSet->SetPosition(_gameData->camera->Position);
 	initialized = true;
 }
 
@@ -317,8 +200,6 @@ void Scene::Tick(GameData* _gameData)
 		}
 	}
 	Scene::World::Render(_gameData);
-	_gameData->shaders[Shaders::SINGLE_DRAW]->use();
-	playerSet->DrawBoundingBox();
 	// Needs to be called after the inputs that enables it
 	//if (!_gameData->window.IsFocused())
 	{
@@ -339,24 +220,24 @@ void Scene::Tick(GameData* _gameData)
 		ImGui::Render();
 	}
 	glDisable(GL_DEPTH_TEST);
-	glm::vec3 collisionNormal;
-	if (Bounds::AreColliding(playerSet->GetBoundingBox(), set->GetBoundingBox(), collisionNormal))
-	{
-		Crosshairs::Get()->SetColor(Colors::Grey);
-		std::vector<Blocks::Block>*  blocks = set->GetBlocks();
-		for (size_t i = 0; i < blocks->size(); i++)
-		{
-			glm::vec3 collisionNormal;
-			if (Bounds::AreColliding(playerSet->GetBoundingBox(), blocks->at(i).GetBoundingBox(), collisionNormal))
-			{
-				Crosshairs::Get()->SetColor(Colors::Red);
-			}
-		}
-	}
-	else
-	{
-		Crosshairs::Get()->SetColor(Colors::Green);
-	}
+	//glm::vec3 collisionNormal;
+	//if (Bounds::AreColliding(playerSet->GetBoundingBox(), set->GetBoundingBox(), collisionNormal))
+	//{
+	//	Crosshairs::Get()->SetColor(Colors::Grey);
+	//	std::vector<Blocks::Block>*  blocks = set->GetBlocks();
+	//	for (size_t i = 0; i < blocks->size(); i++)
+	//	{
+	//		glm::vec3 collisionNormal;
+	//		if (Bounds::AreColliding(playerSet->GetBoundingBox(), blocks->at(i).GetBoundingBox(), collisionNormal))
+	//		{
+	//			Crosshairs::Get()->SetColor(Colors::Red);
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	Crosshairs::Get()->SetColor(Colors::Green);
+	//}
 	Crosshairs::Draw();
 
 	glEnable(GL_DEPTH_TEST);
