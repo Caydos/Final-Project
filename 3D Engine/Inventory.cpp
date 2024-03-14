@@ -1,6 +1,9 @@
 #include "Inventory.h"
 #include "Clock.h"
 #include "Blocks.h"
+#include <direct.h> // For _wgetcwd and _wchdir
+
+
 
 static Clock inputClock;
 static bool opened = false;
@@ -215,10 +218,24 @@ void Inventory::Menu(GameData* _gameData)
 			{//Left click
 
 			}
-			//if (ImGui::IsItemClicked(1))
-			//{//Right Click
-			//    std::cout << "Right click on invisible button detected." << std::endl;
-			//}
+			if (ImGui::IsItemClicked(1))
+			{//Right Click
+				blocks[i]->GetTexture()->Refresh();
+			}
+			if (ImGui::IsItemClicked(2))
+			{
+				std::cout << "Wheel click" << std::endl;
+				char buffer[FILENAME_MAX]; // FILENAME_MAX is defined in stdio.h
+				if (_getcwd(buffer, FILENAME_MAX))
+				{
+					std::cout << "Current working directory: " << buffer << std::endl;
+					std::cout << blocks[i]->GetTexture()->GetPath() << std::endl;;
+					system((std::string("explorer ") + std::string(buffer)).c_str());
+				}
+				else {
+					std::cerr << "Error getting current working directory: " << strerror(errno) << std::endl;
+				}
+			}
 			ImVec2 rect_min = ImGui::GetItemRectMin();
 			ImVec2 rect_max = ImGui::GetItemRectMax();
 			ImDrawList* scopeDrawList = ImGui::GetWindowDrawList();

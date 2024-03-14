@@ -2,21 +2,22 @@
 #include <algorithm>
 
 
-Clock::Clock() : isPaused(false), pausedTime(0) 
+Clock::Clock() : isPaused(false), pausedTime(0)
 {
     clock = std::chrono::high_resolution_clock::now();
 }
- 
+
 void Clock::Restart(void)
 {
-	auto end = std::chrono::high_resolution_clock::now();
-	this->clock = end;
+    auto end = std::chrono::high_resolution_clock::now();
+    this->clock = end;
     timeSave = 0;
 }
 
 float Clock::GetElapsedTime()
 {
-    if (isPaused) 
+    float elapsedTime;
+    if (isPaused)
     {
         return timeSave;
     }
@@ -24,15 +25,35 @@ float Clock::GetElapsedTime()
     {
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - this->clock);
-        return duration.count() + timeSave;
+        elapsedTime = duration.count() + timeSave;
     }
-	
+
+    return std::min(elapsedTime, 100000.0f); //Bloquer a 100 secondes le slider
 }
 
-void Clock::Pause(void) 
+void Clock::SetElapsedTime(float _time)
+{
+    if (isPaused)
+    {
+        //Si l'horloge est en pause ajustez timeSave.
+        timeSave = _time;
+    }
+    else
+    {
+        //Calculer un nouveau point de départ
+        auto now = std::chrono::high_resolution_clock::now();
+        auto adjusted_time = now - std::chrono::milliseconds(int(_time));
+        clock = adjusted_time;
+
+        //Réinitialiser timeSave
+        timeSave = 0;
+    }
+}
+
+void Clock::Pause(void)
 {
     timeSave = this->GetElapsedTime();
-    if (!isPaused) 
+    if (!isPaused)
     {
         auto now = std::chrono::high_resolution_clock::now();
         pausedTime += now - clock;
@@ -40,11 +61,12 @@ void Clock::Pause(void)
     }
 }
 
-void Clock::Play(void) 
+void Clock::Play(void)
 {
-    if (isPaused) 
+    if (isPaused)
     {
         clock = std::chrono::high_resolution_clock::now();
         isPaused = false;
     }
 }
+

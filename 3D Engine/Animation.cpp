@@ -1,15 +1,61 @@
+﻿
+
 #include "Animation.h"
 #include "Clock.h"
 
 static Clock clocking;
+static std::vector<std::string> sequences; //Stocker le nom des séquences
+static int sequenceCounter = 0; //Compteur pour générer des noms
+
 
 void Animation::SubMenu(GameData* _gameData)
 {
-	if (ImGui::TreeNode("Animation"))
-	{
-        
-		ImGui::TreePop();
-	}
+    if (ImGui::TreeNode("Animation"))
+    {
+        if (ImGui::TreeNode("Sequence"))
+        {
+            if (ImGui::Button("Create Sequence"))
+            {
+                sequences.push_back("Sequence " + std::to_string(sequenceCounter++));
+            }
+
+            for (int i = 0; i < sequences.size(); i++)
+            {
+                if (ImGui::TreeNode(sequences[i].c_str()))
+                {
+                    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+                    {
+                        ImGui::SetDragDropPayload("SEQUENCE", &i, sizeof(int));
+                        ImGui::Text("Move %s", sequences[i].c_str());
+                        ImGui::EndDragDropSource();
+                    }
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SEQUENCE");
+                        if (payload)
+                        {
+                            int sourceIndex = *(const int*)payload->Data;
+                            std::swap(sequences[i], sequences[sourceIndex]);
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+
+                    if (ImGui::Button("Test"))
+                    {
+
+                    }
+                    //Ajouter ici les options pour toutes les sequences
+
+                    ImGui::TreePop();
+                }
+            }
+
+            ImGui::TreePop();
+        }
+
+        ImGui::TreePop();
+    }
 }
 
 void Animation::Menu(GameData* _gameData)
@@ -54,7 +100,10 @@ void Animation::Menu(GameData* _gameData)
     }
 
     ImGui::PushItemWidth(-1);
-    ImGui::SliderFloat("##Timebar", &time, 0.0f, 100.0f, "Time: %.3f", ImGuiSliderFlags_AlwaysClamp);
+    if (ImGui::SliderFloat("##Timebar", &time, 0.0f, 100.0f, "Time: %.3f", ImGuiSliderFlags_AlwaysClamp))
+    {
+        clocking.SetElapsedTime(time * 1000);
+    }
     ImGui::PopItemWidth();
 
     ImGui::End();

@@ -10,7 +10,7 @@ public:
 	float GetElapsedTime();
 	void Pause(void);
 	void Play(void);
-
+	void SetElapsedTime(float _time);
 private:
 	std::chrono::high_resolution_clock::time_point clock;
 

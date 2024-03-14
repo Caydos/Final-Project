@@ -12,6 +12,7 @@ public:
 
 	void LoadFromFile(const char* _path);
 	void Refresh();
+	std::string GetPath();
 
 	unsigned int id;
 	std::string name;

@@ -2,6 +2,7 @@
 #define ANIMATION_H
 
 #include "Common.h"
+#include <string>
 
 namespace Animation
 {

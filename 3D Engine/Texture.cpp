@@ -41,6 +41,7 @@ void Texture::LoadFromFile(const char* _path)
 
 	stbi_set_flip_vertically_on_load(true);
 
+	this->path = _path;
 	unsigned char* data = stbi_load(_path, &this->width, &this->height, &this->nrChannels, 0);
 	if (data)
 	{
@@ -51,7 +52,6 @@ void Texture::LoadFromFile(const char* _path)
 	}
 	else
 	{
-		this->path = _path;
 		std::cout << "Unable to find texture at path : " << _path << std::endl;
 	}
 }
@@ -72,6 +72,11 @@ void Texture::Refresh()
 	{
 		std::cout << "Unable to find texture at path : " << this->path << std::endl;
 	}
+}
+
+std::string Texture::GetPath()
+{
+	return this->path;
 }
 
 Texture::Texture()
