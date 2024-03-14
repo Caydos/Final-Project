@@ -11,6 +11,7 @@ namespace Files
 	std::vector<std::string> GetAllAtPath(const char* _path);
 	std::string GetFileContent(const char* _path);
 	void Create(const char* _path, const char* _name, const char* _extension, const char* _content);
+	std::string GetParentDirectory(const std::string& path);
 
 	struct FileSearch
 	{

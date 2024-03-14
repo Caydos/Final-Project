@@ -2,6 +2,7 @@
 #include "Clock.h"
 #include "Blocks.h"
 #include <direct.h> // For _wgetcwd and _wchdir
+#include "Files.h"
 
 
 
@@ -229,8 +230,8 @@ void Inventory::Menu(GameData* _gameData)
 				if (_getcwd(buffer, FILENAME_MAX))
 				{
 					std::cout << "Current working directory: " << buffer << std::endl;
-					std::cout << blocks[i]->GetTexture()->GetPath() << std::endl;;
-					system((std::string("explorer ") + std::string(buffer)).c_str());
+					std::cout << blocks[i]->GetTexture()->GetPath() << std::endl;
+					//system((std::string("explorer ") + std::string(buffer) + Files::GetParentDirectory(blocks[i]->GetTexture()->GetPath())).c_str());
 				}
 				else {
 					std::cerr << "Error getting current working directory: " << strerror(errno) << std::endl;

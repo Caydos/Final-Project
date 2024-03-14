@@ -77,6 +77,29 @@ void Files::Create(const char* _path, const char* _name, const char* _extension,
 	}
 }
 
+#ifdef _WIN32
+const char DIRECTORY_SEPARATOR = '\\';
+#else
+const char DIRECTORY_SEPARATOR = '/';
+#endif
+std::string Files::GetParentDirectory(const std::string& path)
+{
+	size_t last_sep = path.find_last_of(DIRECTORY_SEPARATOR);
+	if (last_sep == std::string::npos) {
+		// No directory separator found, return the current directory or an empty string
+		return ".";
+	}
+	else if (last_sep == 0) {
+		// The only directory separator is at the beginning (root directory)
+		return std::string(1, DIRECTORY_SEPARATOR);
+	}
+	else {
+		// Return the substring from the beginning to the last separator
+		// It removes the trailing directory name
+		return path.substr(0, last_sep);
+	}
+}
+
 #include <windows.h>
 #include <direct.h> // For _wgetcwd and _wchdir
 #include <commdlg.h> // Common dialogs
