@@ -83,10 +83,17 @@ void Sets::Set::LoadFromJson(json _content)
 				Blocks::BlockType* type = block.GetType();
 				if (type == nullptr)
 				{
+					std::cout << name.c_str() << std::endl;
 					block.EraseModel();
 					continue;
 				}
 				block.SetScale(type->GetScale());
+			}
+			else
+			{
+				block.EraseModel();
+				std::cout << "damn" << std::endl;
+				continue;
 			}
 			if (object.contains("position"))
 			{

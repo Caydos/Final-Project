@@ -18,8 +18,7 @@
                 "z": 0.10
             },
             "textureId": 0,
-            "durability": 100.0,
-            "type": "cube"
+            "durability": 100.0
         },
         {
             "position" : {
@@ -38,8 +37,7 @@
                 "z": 1.0
             },
             "textureId": 0,
-            "durability": 100.0,
-            "type": "cube"
+            "durability": 100.0
         }
     ]
 }
