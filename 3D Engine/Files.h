@@ -12,6 +12,7 @@ namespace Files
 	std::string GetFileContent(const char* _path);
 	void Create(const char* _path, const char* _name, const char* _extension, const char* _content);
 	std::string GetParentDirectory(const std::string& path);
+	std::string AddPaths(std::string path1, std::string path2);
 
 	struct FileSearch
 	{

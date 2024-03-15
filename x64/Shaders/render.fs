@@ -69,7 +69,7 @@ void main()
     float Shininess = 32.0;
     // if (Normal == vec3(0.0, 0.0, 0.0)){ discard; }
     vec3 norm = normalize(Normal);
-    vec3 viewDir = normalize(/*viewPos -*/ WorldPos);
+    vec3 viewDir = normalize(viewPos - WorldPos);
 
     vec3 result = CalcSpotLight(lights[0], norm, WorldPos, viewDir, Albedo, Specular, Shininess);
     FragColor = vec4(result.x, result.y, result.z, 1.0);

@@ -1,8 +1,12 @@
 #include "Files.h"
 #include <iostream>
 #include <filesystem>
+#include <sstream>
 #include <fstream>
-
+#include <windows.h>
+#include <direct.h> // For _wgetcwd and _wchdir
+#include <commdlg.h> // Common dialogs
+#include <string>
 
 namespace fs = std::filesystem;
 std::vector<std::string> Files::GetAllAtPath(const char* _path)
@@ -77,11 +81,7 @@ void Files::Create(const char* _path, const char* _name, const char* _extension,
 	}
 }
 
-#ifdef _WIN32
-const char DIRECTORY_SEPARATOR = '\\';
-#else
 const char DIRECTORY_SEPARATOR = '/';
-#endif
 std::string Files::GetParentDirectory(const std::string& path)
 {
 	size_t last_sep = path.find_last_of(DIRECTORY_SEPARATOR);
@@ -100,10 +100,50 @@ std::string Files::GetParentDirectory(const std::string& path)
 	}
 }
 
-#include <windows.h>
-#include <direct.h> // For _wgetcwd and _wchdir
-#include <commdlg.h> // Common dialogs
-#include <string>
+std::string Files::AddPaths(std::string path1, std::string path2) {
+	std::replace(path1.begin(), path1.end(), '/', '\\');
+	std::string newPath2 = path2;
+	std::replace(newPath2.begin(), newPath2.end(), '/', '\\');
+
+	std::vector<std::string> dirs;
+	std::stringstream pathStream(path1);
+	std::string segment;
+
+	while (std::getline(pathStream, segment, '\\')) {
+		if (!segment.empty() && segment != ".") {
+			if (segment == ".." && !dirs.empty()) {
+				dirs.pop_back();
+			}
+			else if (segment != "..") {
+				dirs.push_back(segment);
+			}
+		}
+	}
+
+	std::stringstream path2Stream(newPath2);
+	while (std::getline(path2Stream, segment, '\\')) {
+		if (!segment.empty() && segment != ".") {
+			if (segment == ".." && !dirs.empty()) {
+				dirs.pop_back();
+			}
+			else if (segment != "..") {
+				dirs.push_back(segment);
+			}
+		}
+	}
+
+	std::string result;
+	for (const auto& dir : dirs) {
+		if (!result.empty()) {
+			result += "\\";
+		}
+		result += dir;
+	}
+
+	return result;
+}
+
+
 // Function to convert const char* to std::wstring
 // Function to convert const char* to std::wstring
 std::wstring ConvertToWideString(const char* str) {
