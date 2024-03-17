@@ -52,17 +52,17 @@ void Sets::Menu(GameData* _gameData, float _yOffset)
 					glm::vec3 rotation = sets->at(parentSetId)->GetRotation();
 					if (ImGui::SliderFloat(std::string("X Axis##Rotation" + name).c_str(), &rotation.x, 0.0f, 360.0f, "%.0f"))
 					{
-						rotation.x = std::round(rotation.x / 90.0f) * 90.0f;
+						//rotation.x = std::round(rotation.x / 90.0f) * 90.0f;
 						sets->at(parentSetId)->SetRotation(rotation);
 					}
 					if (ImGui::SliderFloat(std::string("Y Axis##Rotation" + name).c_str(), &rotation.y, 0.0f, 360.0f, "%.0f"))
 					{
-						rotation.y = std::round(rotation.y / 90.0f) * 90.0f;
+						//rotation.y = std::round(rotation.y / 90.0f) * 90.0f;
 						sets->at(parentSetId)->SetRotation(rotation);
 					}
 					if (ImGui::SliderFloat(std::string("Z Axis##Rotation" + name).c_str(), &rotation.z, 0.0f, 360.0f, "%.0f"))
 					{
-						rotation.z = std::round(rotation.z / 90.0f) * 90.0f;
+						//rotation.z = std::round(rotation.z / 90.0f) * 90.0f;
 						sets->at(parentSetId)->SetRotation(rotation);
 					}
 				}

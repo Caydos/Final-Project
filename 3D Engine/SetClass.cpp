@@ -62,7 +62,6 @@ void Sets::Set::Save()
 	if (this->path.size() > 2)
 	{
 		Files::Create(this->path.c_str(), this->GetName().c_str(), ".json", resultObject.dump().c_str());
-		std::cout << path << std::endl;
 		return;
 	}
 	Files::Create(SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
@@ -83,7 +82,7 @@ void Sets::Set::LoadFromJson(json _content)
 				Blocks::BlockType* type = block.GetType();
 				if (type == nullptr)
 				{
-					std::cout << name.c_str() << std::endl;
+					Logger::Write("Unable to insert ", name.c_str(), " block in ", this->GetName(), " set.\n");
 					block.EraseModel();
 					continue;
 				}
@@ -92,7 +91,7 @@ void Sets::Set::LoadFromJson(json _content)
 			else
 			{
 				block.EraseModel();
-				std::cout << "damn" << std::endl;
+				Logger::Write("Invalid json loading for ", this->GetName(), " set. (Unable to find [type] attribute)\n");
 				continue;
 			}
 			if (object.contains("position"))
@@ -108,6 +107,12 @@ void Sets::Set::LoadFromJson(json _content)
 			this->InsertBlock(block);
 		}
 	}
+	else
+	{
+		Logger::Write("Invalid json loading for ", this->GetName(), " set. (Unable to find [blocks])\n");
+		return;
+	}
+	this->ApplyTransformation();
 }
 
 std::string Sets::Set::GetName()
@@ -221,7 +226,62 @@ void Sets::Set::ApplyTransformation()
 		}
 	}
 
+	for (size_t childId = 0; childId < this->childs.size(); childId++)
+	{
+		this->childs[childId]->ApplyTransformation();
+	}
 	this->CalculateBoundingBox();
+}
+
+Sets::Set* Sets::Set::GetParent()
+{
+	return this->parent;
+}
+
+void Sets::Set::SetParent(Set* _parent, bool _boundsCalculation)
+{
+	if (this->parent != nullptr)
+	{
+		this->parent->RemoveChild(this);
+	}
+	this->parent = _parent;
+	_parent->AddChild(this, _boundsCalculation);
+	this->ApplyTransformation();
+}
+
+std::vector<Sets::Set*> Sets::Set::GetChilds()
+{
+	return this->childs;
+}
+
+void Sets::Set::AddChild(Set* _child, bool _boundsCalculation)
+{
+	if (_child == nullptr)
+	{
+		Logger::Write("Cannot insert nullptr child in ", this->GetName(), " set.\n");
+		return;
+	}
+	this->childs.push_back(_child);
+	if (_boundsCalculation) { this->CalculateBoundingBox(); }
+}
+
+void Sets::Set::RemoveChild(Set* _child, bool _boundsCalculation)
+{
+	if (_child == nullptr)
+	{
+		Logger::Write("Cannot remove nullptr child from ", this->GetName(), " set.\n");
+		return;
+	}
+	for (size_t childId = 0; childId < this->childs.size(); childId++)
+	{
+		if (this->childs[childId] == _child)
+		{
+			this->childs.erase(this->childs.begin() + childId);
+			return;
+		}
+	}
+	Logger::Write(_child->GetName(), " does not belong to ", this->GetName(), " set.\n");
+	if (_boundsCalculation) { this->CalculateBoundingBox(); }
 }
 
 glm::mat4 Sets::Set::GetBone()
@@ -283,6 +343,7 @@ void Sets::Set::RemoveBlock(Blocks::Block* _block)
 			this->blocks[blockId].EraseModel();
 
 			this->blocks.erase(this->blocks.begin() + blockId);
+			this->CalculateBoundingBox();
 			return;
 		}
 	}
@@ -304,6 +365,11 @@ void Sets::Set::EraseRenderingInstance()
 	{
 		delete this->typesInstances;
 	}
+}
+
+std::vector<Blocks::BlockType*>* Sets::Set::GetRenderingInstance()
+{
+	return this->typesInstances;
 }
 
 void Sets::Set::SetRenderingInstance(std::vector<Blocks::BlockType*>* _instance)
@@ -440,8 +506,19 @@ void Sets::Set::CalculateBoundingBox()
 
 		for (Blocks::Block& block : this->blocks)
 		{
-			block.ApplyTransformation();
 			Bounds::Box blockBox = block.GetBoundingBox();
+			std::vector<glm::vec3> corners = Bounds::GetCorners(blockBox);
+			for (const auto& corner : corners)
+			{
+				glm::vec3 transformedCorner = /*glm::radians(this->rotation) **/blockBox.rotation * (corner * this->scale) + this->position;
+				minPoint = glm::min(minPoint, transformedCorner);
+				maxPoint = glm::max(maxPoint, transformedCorner);
+			}
+		}
+		for (size_t childId = 0; childId < this->childs.size(); childId++)
+		{
+			//this->childs[childId]->ApplyTransformation();
+			Bounds::Box blockBox = this->childs[childId]->GetBoundingBox();
 			std::vector<glm::vec3> corners = Bounds::GetCorners(blockBox);
 			for (const auto& corner : corners)
 			{
@@ -457,11 +534,13 @@ void Sets::Set::CalculateBoundingBox()
 
 		glm::vec3 rotationRadians = glm::radians(this->rotation);
 		// Setting orientation to Identity, as determining an optimal rotation is complex
-		glm::mat4 rotMat(1.0f);
-		rotMat = glm::rotate(rotMat, rotationRadians.z, glm::vec3(0.0f, 0.0f, 1.0f)); // Z-axis rotation
-		rotMat = glm::rotate(rotMat, rotationRadians.y, glm::vec3(0.0f, 1.0f, 0.0f)); // Y-axis rotation
-		rotMat = glm::rotate(rotMat, rotationRadians.x, glm::vec3(1.0f, 0.0f, 0.0f)); // X-axis rotation
-		box.rotation = glm::mat3(rotMat);
+		glm::mat4 rotX = glm::rotate(glm::mat4(1.0f), rotationRadians.x, glm::vec3(1, 0, 0));
+		glm::mat4 rotY = glm::rotate(glm::mat4(1.0f), rotationRadians.y, glm::vec3(0, 1, 0));
+		glm::mat4 rotZ = glm::rotate(glm::mat4(1.0f), rotationRadians.z, glm::vec3(0, 0, 1));
+		// Combine the rotations
+		glm::mat4 rotationMatrix = rotZ * rotY * rotX;
+
+		box.rotation = glm::mat3(rotationMatrix);
 	}
 	this->boundingBox.SetBox(box);
 }

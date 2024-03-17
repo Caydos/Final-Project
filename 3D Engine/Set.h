@@ -31,6 +31,12 @@ namespace Sets
 
 		void ApplyTransformation();
 
+		Set* GetParent();
+		void SetParent(Set* _parent, bool _boundsCalculation = true);
+
+		std::vector<Set*> GetChilds();
+		void AddChild(Set* _child, bool _boundsCalculation = true);
+		void RemoveChild(Set* _child, bool _boundsCalculation = true);
 		glm::mat4 GetBone();
 
 
@@ -40,6 +46,7 @@ namespace Sets
 		
 		void GenerateRenderingInstance();
 		void EraseRenderingInstance();
+		std::vector<Blocks::BlockType*>* GetRenderingInstance();
 		void SetRenderingInstance(std::vector<Blocks::BlockType*>* _instance);
 
 
@@ -83,8 +90,8 @@ namespace Sets
 
 		bool visible;
 		Set* parent;
+		std::vector<Set*> childs;
 		glm::mat4* bone;
-		std::vector<Set*> sets;
 
 		std::vector<Blocks::Block> blocks;
 		std::vector<Blocks::BlockType*>* typesInstances;

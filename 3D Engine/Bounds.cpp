@@ -6,56 +6,38 @@ bool Bounds::AreColliding(const Box& box1, const Box& box2, glm::vec3& collision
 {
     float ra, rb;
     glm::mat3 R, AbsR;
-    float minPenetration = std::numeric_limits<float>::infinity();
-    glm::vec3 localCollisionNormal;
 
     // Compute rotation matrix expressing box2 in box1’s coordinate frame
-    R = box1.rotation * glm::transpose(box2.rotation);
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            R[i][j] = glm::dot(box1.rotation[i], box2.rotation[j]);
+        }
+    }
 
     // Compute translation vector t
     glm::vec3 t = box2.position - box1.position;
-    // Bring translation into box1’s coordinate frame
-    t = box1.rotation * t;
+    // Bring the translation into box1's coordinate frame
+    t = glm::vec3(glm::dot(t, box1.rotation[0]), glm::dot(t, box1.rotation[1]), glm::dot(t, box1.rotation[2]));
 
-    // Compute common subexpressions. Add in an epsilon term to counteract arithmetic errors when two edges are parallel and their cross product is (near) null
+    // Compute common subexpressions. Add in an epsilon term to counteract arithmetic errors when two edges are parallel and their cross product is (near) null (this might not be necessary but is often included for safety).
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             AbsR[i][j] = fabs(R[i][j]) + std::numeric_limits<float>::epsilon();
         }
     }
 
-    // Example of testing one axis (extend this concept to all axes you test)
-    for (int i = 0; i < 3; i++) {
-        ra = box1.extents[i];
-        rb = box2.extents[0] * AbsR[i][0] + box2.extents[1] * AbsR[i][1] + box2.extents[2] * AbsR[i][2];
-        float penetration = ra + rb - fabs(t[i]);
-
-        if (penetration < 0) {
-            return false; // No collision
-        }
-        else {
-            if (penetration < minPenetration) {
-                minPenetration = penetration;
-                localCollisionNormal = box1.rotation * glm::vec3(i == 0, i == 1, i == 2);
-                if (t[i] < 0) {
-                    localCollisionNormal = -localCollisionNormal; // Ensure the normal points away from box2
-                }
-            }
-        }
-    }
-
-    // Test axes L = A0, L = A1, L = A2 (the three axes parallel to the faces of box1)
+    // Test axes L = A0, L = A1, L = A2
     for (int i = 0; i < 3; i++) {
         ra = box1.extents[i];
         rb = box2.extents[0] * AbsR[i][0] + box2.extents[1] * AbsR[i][1] + box2.extents[2] * AbsR[i][2];
         if (fabs(t[i]) > ra + rb) return false;
     }
 
-    // Test axes L = B0, L = B1, L = B2 (the three axes parallel to the faces of box2)
+    // Test axes L = B0, L = B1, L = B2
     for (int i = 0; i < 3; i++) {
         ra = box1.extents[0] * AbsR[0][i] + box1.extents[1] * AbsR[1][i] + box1.extents[2] * AbsR[2][i];
         rb = box2.extents[i];
-        if (fabs(t[0] * R[0][i] + t[1] * R[1][i] + t[2] * R[2][i]) > ra + rb) return false;
+        if (fabs(glm::dot(t, box1.rotation[i])) > ra + rb) return false;
     }
 
     // Test axis L = A0 x B0
@@ -63,55 +45,10 @@ bool Bounds::AreColliding(const Box& box1, const Box& box2, glm::vec3& collision
     rb = box2.extents[1] * AbsR[0][2] + box2.extents[2] * AbsR[0][1];
     if (fabs(t[2] * R[1][0] - t[1] * R[2][0]) > ra + rb) return false;
 
-    // Test axis L = A0 x B1
-    ra = box1.extents[1] * AbsR[2][1] + box1.extents[2] * AbsR[1][1];
-    rb = box2.extents[0] * AbsR[0][2] + box2.extents[2] * AbsR[0][0];
-    if (fabs(t[2] * R[1][1] - t[1] * R[2][1]) > ra + rb) return false;
+    // ... (additional axis tests need to be implemented here, 9 in total for cross products)
 
-    // Test axis L = A0 x B2
-    ra = box1.extents[1] * AbsR[2][2] + box1.extents[2] * AbsR[1][2];
-    rb = box2.extents[0] * AbsR[0][1] + box2.extents[1] * AbsR[0][0];
-    if (fabs(t[2] * R[1][2] - t[1] * R[2][2]) > ra + rb) return false;
-
-    // Test axis L = A1 x B0
-    ra = box1.extents[0] * AbsR[2][0] + box1.extents[2] * AbsR[0][0];
-    rb = box2.extents[1] * AbsR[1][2] + box2.extents[2] * AbsR[1][1];
-    if (fabs(t[0] * R[2][0] - t[2] * R[0][0]) > ra + rb) return false;
-
-    // Test axis L = A1 x B1
-    ra = box1.extents[0] * AbsR[2][1] + box1.extents[2] * AbsR[0][1];
-    rb = box2.extents[0] * AbsR[1][2] + box2.extents[2] * AbsR[1][0];
-    if (fabs(t[0] * R[2][1] - t[2] * R[0][1]) > ra + rb) return false;
-
-    // Test axis L = A1 x B2
-    ra = box1.extents[0] * AbsR[2][2] + box1.extents[2] * AbsR[0][2];
-    rb = box2.extents[0] * AbsR[1][1] + box2.extents[1] * AbsR[1][0];
-    if (fabs(t[0] * R[2][2] - t[2] * R[0][2]) > ra + rb) return false;
-
-    // Test axis L = A2 x B0
-    ra = box1.extents[0] * AbsR[1][0] + box1.extents[1] * AbsR[0][0];
-    rb = box2.extents[1] * AbsR[2][2] + box2.extents[2] * AbsR[2][1];
-    if (fabs(t[1] * R[0][0] - t[0] * R[1][0]) > ra + rb) return false;
-
-    // Test axis L = A2 x B1
-    ra = box1.extents[0] * AbsR[1][1] + box1.extents[1] * AbsR[0][1];
-    rb = box2.extents[0] * AbsR[2][2] + box2.extents[2] * AbsR[2][0];
-    if (fabs(t[1] * R[0][1] - t[0] * R[1][1]) > ra + rb) return false;
-
-    // Test axis L = A2 x B2
-    ra = box1.extents[0] * AbsR[1][2] + box1.extents[1] * AbsR[0][2];
-    rb = box2.extents[0] * AbsR[2][1] + box2.extents[1] * AbsR[2][0];
-    if (fabs(t[1] * R[0][2] - t[0] * R[1][2]) > ra + rb) return false;
-
-
-    if (minPenetration < std::numeric_limits<float>::infinity()) {
-        collisionNormal = localCollisionNormal; // The calculated collision normal
-        return true; // Collision detected
-    }
-
-
-    // Since no separating axis is found, the OBBs must be intersecting
-    return false;
+    // No separating axis found, the OBBs must be intersecting
+    return true;
 }
 
 std::vector<glm::vec3> Bounds::GetCorners(const Box& box)
@@ -245,6 +182,9 @@ void Bounds::BoundingBox::SetBox(Box _box)
     //    }
     //}
     //this->model *= glm::mat4(this->box.rotation);
+    //this->model = glm::rotate(this->model, glm::radians(45.0f), glm::vec3(1, 0, 0));
+    //this->model = glm::rotate(this->model, glm::radians(45.0f), glm::vec3(0, 1, 0));
+    //this->model = glm::rotate(this->model, glm::radians(45.0f), glm::vec3(0, 0, 1));
 
     if (initialized)
     {

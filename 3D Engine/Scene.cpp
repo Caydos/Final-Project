@@ -35,6 +35,7 @@ std::vector<int> ints;
 std::vector<int> ints2;
 std::vector<int> ints3;
 static Sets::Set* set = nullptr;
+static Sets::Set* playerSet = nullptr;
 void Scene::Initialize(GameData* _gameData)
 {
 	inputClock.Restart();
@@ -82,10 +83,8 @@ void Scene::Initialize(GameData* _gameData)
 	/*Sets::Set**/ set = Sets::Create();
 	set->GenerateRenderingInstance();
 
-	float size = 0.0f;
 	for (size_t rowId = 0; rowId < 50; rowId++)
 	{
-		size += 0.2f;
 		for (size_t columnId = 0; columnId < 50; columnId++)
 		{
 			Blocks::Block block;
@@ -95,37 +94,60 @@ void Scene::Initialize(GameData* _gameData)
 			block.SetScale(scale);
 			block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
 			set->InsertBlock(block, false);
-			if (!rowId || rowId == 49)
-			{
-				for (size_t heightId = 1; heightId < 20; heightId++)
-				{
-					Blocks::Block block;
-					block.GenerateModel();
-					block.SetType((heightId < 7) ? blType[1] : blType[2]);
-					glm::vec3 scale = block.GetType()->GetScale();
-					block.SetScale(scale);
-					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block, false);
-				}
-			}
-			else if (columnId == 49)
-			{
-				for (size_t heightId = 1; heightId < 20; heightId++)
-				{
-					Blocks::Block block;
-					block.GenerateModel();
-					block.SetType((heightId < 7) ? blType[1] : blType[2]);
-					glm::vec3 scale = block.GetType()->GetScale();
-					block.SetScale(scale);
-					block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-					set->InsertBlock(block, false);
-				}
-			}
+			break;
+			//if (!rowId || rowId == 49)
+			//{
+			//	for (size_t heightId = 1; heightId < 20; heightId++)
+			//	{
+			//		Blocks::Block block;
+			//		block.GenerateModel();
+			//		block.SetType((heightId < 7) ? blType[1] : blType[2]);
+			//		glm::vec3 scale = block.GetType()->GetScale();
+			//		block.SetScale(scale);
+			//		block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+			//		set->InsertBlock(block, false);
+			//	}
+			//}
+			//else if (columnId == 49)
+			//{
+			//	for (size_t heightId = 1; heightId < 20; heightId++)
+			//	{
+			//		Blocks::Block block;
+			//		block.GenerateModel();
+			//		block.SetType((heightId < 7) ? blType[1] : blType[2]);
+			//		glm::vec3 scale = block.GetType()->GetScale();
+			//		block.SetScale(scale);
+			//		block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+			//		set->InsertBlock(block, false);
+			//	}
+			//}
 		}
+		break;
 	}
 	set->SetName("Wall");
 	set->SetPath("../Sets/");
 	set->CalculateBoundingBox();
+
+	playerSet = Sets::Create();
+	playerSet->Initialize();
+	playerSet->GenerateRenderingInstance();
+	playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_Torso.json")));
+
+
+	playerSet->SetPosition(glm::vec3(1.0, 1.0, 1.0));
+	playerSet->SetName("Character");
+	playerSet->SetPath("../Sets/MC/");
+	Sets::SetEditedSet(playerSet);
+
+	Sets::Set* head = Sets::Create();
+	head->SetParent(playerSet, false);
+	head->SetRenderingInstance(playerSet->GetRenderingInstance());
+	head->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_Head.json")));
+	head->SetName("Head");
+	head->SetPath("../Sets/MC/");
+
+	playerSet->CalculateBoundingBox();
+
 
 	initialized = true;
 }
