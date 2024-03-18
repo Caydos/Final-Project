@@ -1,12 +1,13 @@
-﻿
-
-#include "Animation.h"
+﻿#include "Animation.h"
 #include "Clock.h"
 
 static Clock clocking;
 static std::vector<std::string> sequences; //Stocker le nom des séquences
 static int sequenceCounter = 0; //Compteur pour générer des noms
-
+static bool renamingSequence = false; // Indicateur de renommage en cours
+static std::string newSequenceName; // Nouveau nom de la séquence en cours de renommage
+int renamingSequenceIndex = -1;
+bool loopTimer = false;
 
 void Animation::SubMenu(GameData* _gameData)
 {
@@ -41,11 +42,12 @@ void Animation::SubMenu(GameData* _gameData)
                         ImGui::EndDragDropTarget();
                     }
 
-                    if (ImGui::Button("Test"))
+                    if (ImGui::Button(("Rename##" + std::to_string(i)).c_str()))
                     {
-
+                        renamingSequenceIndex = i;
+                        renamingSequence = true;
+                        newSequenceName = sequences[i];
                     }
-                    //Ajouter ici les options pour toutes les sequences
 
                     ImGui::TreePop();
                 }
@@ -98,6 +100,22 @@ void Animation::Menu(GameData* _gameData)
         clocking.Restart();
         time = 0;
     }
+    ImGui::SameLine();
+
+    if (ImGui::Checkbox("Loop Timer", &loopTimer))
+    {
+        // Si la checkbox est cochée, le timer se relance en boucle.
+        if (loopTimer)
+        {
+            //Relancer le timer du debut quand il atteint sa valeur max
+
+        }
+        else //Sinon
+        {
+            // Si la checkbox n'est pas cochée, le timer s'arrete bien quand il atteint sa valeur max
+
+        }
+    }
 
     ImGui::PushItemWidth(-1);
     if (ImGui::SliderFloat("##Timebar", &time, 0.0f, 100.0f, "Time: %.3f", ImGuiSliderFlags_AlwaysClamp))
@@ -105,6 +123,32 @@ void Animation::Menu(GameData* _gameData)
         clocking.SetElapsedTime(time * 1000);
     }
     ImGui::PopItemWidth();
+
+    if (renamingSequence)
+    {
+        ImGui::OpenPopup("Rename Sequence");
+        renamingSequence = false;
+    }
+
+    if (ImGui::BeginPopupModal("Rename Sequence"))
+    {
+        ImGui::Text("New name:");
+        ImGui::InputText("##newSequenceName", &newSequenceName[0], newSequenceName.size() + 1);
+        if (ImGui::Button("OK", ImVec2(120, 0)))
+        {
+            // Mettre à jour le nom de la séquence
+            sequences[renamingSequenceIndex] = newSequenceName;
+            newSequenceName.clear();
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        {
+            newSequenceName.clear();
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
 
     ImGui::End();
 }

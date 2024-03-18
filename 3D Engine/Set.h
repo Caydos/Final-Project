@@ -109,6 +109,9 @@ namespace Sets
 
 	std::vector<Set*>* GetAll();
 
+	bool ChildTree(GameData* _gameData, Set* _set);
+	bool SetTree(GameData* _gameData, Set* _set);
+
 	void Menu(GameData* _gameData, float _yOffset);
 	void Edition(GameData* _gameData, bool _allowControls = true);
 
