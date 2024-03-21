@@ -4,6 +4,7 @@
 #include "Blocks.h"
 #include "Bounds.h"
 #include "Files.h"
+#include "Animation.h"
 
 #define SETS_DIRECTORY "../Sets/"
 #define SETS_FILE_EXTENSION ".json"
@@ -18,7 +19,7 @@ namespace Sets
 		void Initialize();
 		void Erase();
 		void Save();
-		void LoadFromJson(json _content);
+		void LoadFromJson(json _content, bool _computeTransformation = true);
 
 		std::string GetName();
 		void SetName(std::string _name);
@@ -51,26 +52,26 @@ namespace Sets
 
 
 		glm::vec3 GetPosition();
-		void SetPosition(float _x, float _y, float _z);
-		void SetPosition(glm::vec3 _position);
+		void SetPosition(float _x, float _y, float _z, bool _computeTransformation = true);
+		void SetPosition(glm::vec3 _position, bool _computeTransformation = true);
 
-		void Move(glm::vec3 _position);
-		void Move(float _x, float _y, float _z);
+		void Move(glm::vec3 _position, bool _computeTransformation = true);
+		void Move(float _x, float _y, float _z, bool _computeTransformation = true);
 
 		glm::vec3 GetRotation();
-		void SetRotation(float _x, float _y, float _z);
-		void SetRotation(glm::vec3 _rotation);
+		void SetRotation(float _x, float _y, float _z, bool _computeTransformation = true);
+		void SetRotation(glm::vec3 _rotation, bool _computeTransformation = true);
 
-		void Rotate(glm::vec3 _rotation);
-		void Rotate(float _x, float _y, float _z);
+		void Rotate(glm::vec3 _rotation, bool _computeTransformation = true);
+		void Rotate(float _x, float _y, float _z, bool _computeTransformation = true);
 
 		glm::vec3 GetScale();
-		void SetScale(float _x, float _y, float _z);
-		void SetScale(float _scale);
-		void SetScale(glm::vec3 _scale);
+		void SetScale(float _x, float _y, float _z, bool _computeTransformation = true);
+		void SetScale(float _scale, bool _computeTransformation = true);
+		void SetScale(glm::vec3 _scale, bool _computeTransformation = true);
 
-		void Scale(glm::vec3 _scale);
-		void Scale(float _x, float _y, float _z);
+		void Scale(glm::vec3 _scale, bool _computeTransformation = true);
+		void Scale(float _x, float _y, float _z, bool _computeTransformation = true);
 
 		void CalculateBoundingBox();
 
@@ -102,6 +103,8 @@ namespace Sets
 		glm::vec3 scale;
 
 		Bounds::BoundingBox boundingBox;
+
+		std::vector<Animation::Animation> animations;
 	};
 	void UpdateVisibility();
 	Set* Create();
@@ -109,7 +112,7 @@ namespace Sets
 
 	std::vector<Set*>* GetAll();
 
-	bool ChildTree(GameData* _gameData, Set* _set);
+	bool ChildTree(GameData* _gameData, Set* _parentSet);
 	bool SetTree(GameData* _gameData, Set* _set);
 
 	void Menu(GameData* _gameData, float _yOffset);

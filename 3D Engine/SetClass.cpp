@@ -59,6 +59,25 @@ void Sets::Set::Save()
 		blocksArray.push_back(objetAttributes);
 	}
 	resultObject["blocks"] = blocksArray;
+
+	json childsArray;
+	for (size_t childId = 0;  childId < this->childs.size();  childId++)
+	{
+		if (this->childs[childId]->GetName().size() > 3)//Ensure the name is present
+		{
+			json childObj;
+			childObj["name"] = this->childs[childId]->GetName();
+			childObj["path"] = this->childs[childId]->GetPath();
+
+			glm::vec3 position = this->childs[childId]->GetPosition();
+			childObj["position"] = { position.x, position.y, position.z };
+			glm::vec3 rotation = this->childs[childId]->GetRotation();
+			childObj["rotation"] = { rotation.x, rotation.y, rotation.z };
+			childsArray.push_back(childObj);
+		}
+	}
+	resultObject["childs"] = childsArray;
+
 	if (this->path.size() > 2)
 	{
 		Files::Create(this->path.c_str(), this->GetName().c_str(), ".json", resultObject.dump().c_str());
@@ -67,7 +86,7 @@ void Sets::Set::Save()
 	Files::Create(SETS_DIRECTORY, this->GetName().c_str(), ".json", resultObject.dump().c_str());
 }
 
-void Sets::Set::LoadFromJson(json _content)
+void Sets::Set::LoadFromJson(json _content, bool _computeTransformation)
 {//load here
 	if (_content.contains("blocks"))
 	{
@@ -111,6 +130,44 @@ void Sets::Set::LoadFromJson(json _content)
 	{
 		Logger::Write("Invalid json loading for ", this->GetName(), " set. (Unable to find [blocks])\n");
 		return;
+	}
+	if (_content.contains("childs"))
+	{
+		for (auto& child : _content["childs"])
+		{
+			if (child.contains("name") && child.contains("path"))
+			{
+				Sets::Set* childSet = Sets::Create();
+				childSet->SetParent(this, false);
+				childSet->SetRenderingInstance(this->GetRenderingInstance());
+				try
+				{
+					auto parsedContent = json::parse(Files::GetFileContent(std::string(std::string(child["path"]) + std::string(child["name"]) + SETS_FILE_EXTENSION).c_str()));
+					childSet->LoadFromJson(parsedContent, false);
+				}
+				catch (json::parse_error& e)
+				{
+					std::cerr << "JSON parsing error: " << e.what() << '\n';
+					Sets::Erase(childSet);
+					continue;
+				}
+				childSet->SetName(child["name"]);
+				childSet->SetPath(child["path"]);
+				if (child.contains("position"))
+				{
+					childSet->SetPosition(glm::vec3(child["position"][0], child["position"][1], child["position"][2]), false);
+				}
+				if (child.contains("rotation"))
+				{
+					childSet->SetRotation(glm::vec3(child["rotation"][0], child["rotation"][1], child["rotation"][2]), false);
+				}
+			}
+			else
+			{
+				Logger::Write("Child from set ", this->GetName(), " has no name or path....\n");
+				continue;
+			}
+		}
 	}
 	this->ApplyTransformation();
 }
@@ -388,90 +445,129 @@ void Sets::Set::SetRenderingInstance(std::vector<Blocks::BlockType*>* _instance)
 
 
 glm::vec3 Sets::Set::GetPosition() { return this->position; }
-void Sets::Set::SetPosition(float _x, float _y, float _z)
+void Sets::Set::SetPosition(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->position = glm::vec3(_x, _y, _z);
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::SetPosition(glm::vec3 _position)
+void Sets::Set::SetPosition(glm::vec3 _position, bool _computeTransformation)
 {
 	this->position = _position;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::Move(glm::vec3 _position)
+void Sets::Set::Move(glm::vec3 _position, bool _computeTransformation)
 {
 	this->position += _position;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::Move(float _x, float _y, float _z)
+void Sets::Set::Move(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->position.x += _x;
 	this->position.y += _y;
 	this->position.z += _z;
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
 
 glm::vec3 Sets::Set::GetRotation() { return this->rotation; }
-void Sets::Set::SetRotation(float _x, float _y, float _z)
+void Sets::Set::SetRotation(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->rotation = glm::vec3(_x, _y, _z);
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::SetRotation(glm::vec3 _rotation)
+void Sets::Set::SetRotation(glm::vec3 _rotation, bool _computeTransformation)
 {
 	this->rotation = _rotation;
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::Rotate(glm::vec3 _rotation)
+void Sets::Set::Rotate(glm::vec3 _rotation, bool _computeTransformation)
 {
 	this->rotation += _rotation;
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::Rotate(float _x, float _y, float _z)
+void Sets::Set::Rotate(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->rotation.x += _x;
 	this->rotation.y += _y;
 	this->rotation.z += _z;
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
 
 glm::vec3 Sets::Set::GetScale() { return this->scale; }
-void Sets::Set::SetScale(float _x, float _y, float _z)
+void Sets::Set::SetScale(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->scale = glm::vec3(_x, _y, _z);
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::SetScale(float _scale)
+void Sets::Set::SetScale(float _scale, bool _computeTransformation)
 {
 	this->scale = glm::vec3(_scale, _scale, _scale);
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::SetScale(glm::vec3 _scale)
+void Sets::Set::SetScale(glm::vec3 _scale, bool _computeTransformation)
 {
 	this->scale = _scale;
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::Scale(glm::vec3 _scale)
+void Sets::Set::Scale(glm::vec3 _scale, bool _computeTransformation)
 {
 	this->scale += _scale;
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Sets::Set::Scale(float _x, float _y, float _z)
+void Sets::Set::Scale(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->scale.x += _x;
 	this->scale.y += _y;
 	this->scale.z += _z;
 
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
 
 void Sets::Set::CalculateBoundingBox()

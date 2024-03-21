@@ -151,6 +151,9 @@
     <Filter Include="Source Files\Game\Entity">
       <UniqueIdentifier>{e33d3bca-5aff-48f9-8b6b-0569f00842c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering Engine\Set\Animation">
+      <UniqueIdentifier>{5671aec9-66d8-4292-8345-291bced397b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -285,7 +288,7 @@
     <ClCompile Include="SSAO.cpp">
       <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
+    <ClCompile Include="AnimationUI.cpp">
       <Filter>Source Files\Rendering Engine\UI\Editor\Animation</Filter>
     </ClCompile>
     <ClCompile Include="DeferredShading.cpp">
@@ -296,6 +299,9 @@
     </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Source Files\Physic Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files\Rendering Engine\Set\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -446,9 +452,6 @@
     <ClInclude Include="SSAO.h">
       <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Source Files\Rendering Engine\UI\Editor\Animation</Filter>
-    </ClInclude>
     <ClInclude Include="DeferredShading.h">
       <Filter>Source Files\Rendering Engine\Graphics components\Deferred Shading</Filter>
     </ClInclude>
@@ -463,6 +466,9 @@
     </ClInclude>
     <ClInclude Include="Physics.h">
       <Filter>Source Files\Physic Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Source Files\Rendering Engine\Set\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -148,6 +148,7 @@
     <ClCompile Include="..\Libs\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="..\Libs\IMGUI\imgui_widgets.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationUI.cpp" />
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Blocks.cpp" />

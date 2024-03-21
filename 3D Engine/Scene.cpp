@@ -80,73 +80,73 @@ void Scene::Initialize(GameData* _gameData)
 	}
 
 	//Maze::Generate();
-	/*Sets::Set**/ set = Sets::Create();
-	set->GenerateRenderingInstance();
+	///*Sets::Set**/ set = Sets::Create();
+	//set->GenerateRenderingInstance();
 
-	for (size_t rowId = 0; rowId < 50; rowId++)
-	{
-		for (size_t columnId = 0; columnId < 50; columnId++)
-		{
-			Blocks::Block block;
-			block.GenerateModel();
-			block.SetType(blType[0]);
-			glm::vec3 scale = block.GetType()->GetScale();
-			block.SetScale(scale);
-			block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
-			set->InsertBlock(block, false);
-			break;
-			//if (!rowId || rowId == 49)
-			//{
-			//	for (size_t heightId = 1; heightId < 20; heightId++)
-			//	{
-			//		Blocks::Block block;
-			//		block.GenerateModel();
-			//		block.SetType((heightId < 7) ? blType[1] : blType[2]);
-			//		glm::vec3 scale = block.GetType()->GetScale();
-			//		block.SetScale(scale);
-			//		block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-			//		set->InsertBlock(block, false);
-			//	}
-			//}
-			//else if (columnId == 49)
-			//{
-			//	for (size_t heightId = 1; heightId < 20; heightId++)
-			//	{
-			//		Blocks::Block block;
-			//		block.GenerateModel();
-			//		block.SetType((heightId < 7) ? blType[1] : blType[2]);
-			//		glm::vec3 scale = block.GetType()->GetScale();
-			//		block.SetScale(scale);
-			//		block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-			//		set->InsertBlock(block, false);
-			//	}
-			//}
-		}
-		break;
-	}
-	set->SetName("Wall");
-	set->SetPath("../Sets/");
-	set->CalculateBoundingBox();
+	//for (size_t rowId = 0; rowId < 50; rowId++)
+	//{
+	//	for (size_t columnId = 0; columnId < 50; columnId++)
+	//	{
+	//		Blocks::Block block;
+	//		block.GenerateModel();
+	//		block.SetType(blType[0]);
+	//		glm::vec3 scale = block.GetType()->GetScale();
+	//		block.SetScale(scale);
+	//		block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
+	//		set->InsertBlock(block, false);
+	//		break;
+	//		//if (!rowId || rowId == 49)
+	//		//{
+	//		//	for (size_t heightId = 1; heightId < 20; heightId++)
+	//		//	{
+	//		//		Blocks::Block block;
+	//		//		block.GenerateModel();
+	//		//		block.SetType((heightId < 7) ? blType[1] : blType[2]);
+	//		//		glm::vec3 scale = block.GetType()->GetScale();
+	//		//		block.SetScale(scale);
+	//		//		block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//		//		set->InsertBlock(block, false);
+	//		//	}
+	//		//}
+	//		//else if (columnId == 49)
+	//		//{
+	//		//	for (size_t heightId = 1; heightId < 20; heightId++)
+	//		//	{
+	//		//		Blocks::Block block;
+	//		//		block.GenerateModel();
+	//		//		block.SetType((heightId < 7) ? blType[1] : blType[2]);
+	//		//		glm::vec3 scale = block.GetType()->GetScale();
+	//		//		block.SetScale(scale);
+	//		//		block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//		//		set->InsertBlock(block, false);
+	//		//	}
+	//		//}
+	//	}
+	//	break;
+	//}
+	//set->SetName("Wall");
+	//set->SetPath("../Sets/");
+	//set->CalculateBoundingBox();
 
-	playerSet = Sets::Create();
-	playerSet->Initialize();
-	playerSet->GenerateRenderingInstance();
-	playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_Torso.json")));
+	//playerSet = Sets::Create();
+	//playerSet->Initialize();
+	//playerSet->GenerateRenderingInstance();
+	//playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_Torso.json")));
 
 
-	playerSet->SetPosition(glm::vec3(1.0, 1.0, 1.0));
-	playerSet->SetName("Character");
-	playerSet->SetPath("../Sets/MC/");
-	Sets::SetEditedSet(playerSet);
+	//playerSet->SetPosition(glm::vec3(1.0, 1.0, 1.0));
+	//playerSet->SetName("Character");
+	//playerSet->SetPath("../Sets/MC/");
+	//Sets::SetEditedSet(playerSet);
 
-	Sets::Set* head = Sets::Create();
-	head->SetParent(playerSet, false);
-	head->SetRenderingInstance(playerSet->GetRenderingInstance());
-	head->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_Head.json")));
-	head->SetName("Head");
-	head->SetPath("../Sets/MC/");
+	//Sets::Set* head = Sets::Create();
+	//head->SetParent(playerSet, false);
+	//head->SetRenderingInstance(playerSet->GetRenderingInstance());
+	//head->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_Head.json")));
+	//head->SetName("Head");
+	//head->SetPath("../Sets/MC/");
 
-	playerSet->CalculateBoundingBox();
+	//playerSet->CalculateBoundingBox();
 
 
 	initialized = true;
@@ -242,6 +242,7 @@ void Scene::Tick(GameData* _gameData)
 		ImGui::Render();
 	}
 	glDisable(GL_DEPTH_TEST);
+	//Collisions::Tick();
 	//glm::vec3 collisionNormal;
 	//if (Bounds::AreColliding(playerSet->GetBoundingBox(), set->GetBoundingBox(), collisionNormal))
 	//{

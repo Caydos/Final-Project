@@ -6,19 +6,83 @@ static float originScale = 1.0f;
 static const char** blocksName = nullptr;
 static int blockCount = 0;
 static Sets::Set* selectedSet = nullptr;
+static char filename[128] = ""; // Buffer for the filename
+static bool showFilenameInput = false; // To toggle the visibility of input field
 
-bool Sets::ChildTree(GameData* _gameData, Set* _set)
+bool Sets::ChildTree(GameData* _gameData, Set* _parentSet)
 {
-	std::vector<Set*> childs = _set->GetChilds();
-	if (!childs.size()) { return false; }
-	std::string name = std::string("Childrens" + std::string("##sets-") + std::to_string((int)_set));
+	std::vector<Set*> childs = _parentSet->GetChilds();
+	std::string name = std::string("Childrens" + std::string("##sets-") + std::to_string((int)_parentSet));
 	if (ImGui::TreeNode(name.c_str()))
 	{
+		ImVec2 size(ImGui::GetContentRegionAvail().x, 0);
+		if (ImGui::Button(std::string("Create##CreateChildSet" + name).c_str(), ImVec2(size.x * 0.4f, 0)))
+		{
+			showFilenameInput = true;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button(std::string("Open##OpenChildSet" + name).c_str(), ImVec2(size.x * 0.4f, 0)))
+		{
+			Files::FileSearch fileSearch = Files::OpenSearchDialog();
+			if (fileSearch.achieved && fileSearch.extension == SETS_FILE_EXTENSION)
+			{
+				Sets::Set* childSet = Sets::Create();
+				std::string content = Files::GetFileContent(fileSearch.originalPath.c_str());
+				childSet->SetParent(_parentSet, false);
+				childSet->SetRenderingInstance(_parentSet->GetRenderingInstance());
+
+				try
+				{
+					auto parsedContent = json::parse(content);
+					childSet->LoadFromJson(parsedContent);
+				}
+				catch (json::parse_error& e)
+				{
+					std::cerr << "JSON parsing error: " << e.what() << '\n';
+					Sets::Erase(childSet);
+				}
+
+				childSet->SetName(fileSearch.name);
+				childSet->SetPath(fileSearch.path);
+				childSet->CheckVisibility();
+			}
+		}
+		if (!childs.size()) { return false; }
 		for (size_t childId = 0; childId < childs.size(); childId++)
 		{
 			bool kill = SetTree(_gameData, childs[childId]);
 			if (kill) { return true; }
 		}
+	}
+
+	if (showFilenameInput)
+	{
+		ImGui::OpenPopup("Enter child Filename");
+	}
+
+	if (ImGui::BeginPopupModal("Enter child Filename", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::InputText("Filename", filename, IM_ARRAYSIZE(filename));
+		if (ImGui::Button("OK"))
+		{
+			Sets::Set* newSet = Sets::Create();
+			newSet->SetName(filename);
+
+			newSet->SetParent(_parentSet, false);
+			newSet->SetRenderingInstance(_parentSet->GetRenderingInstance());
+			
+			newSet->SetPath(_parentSet->GetPath());
+
+			showFilenameInput = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel"))
+		{
+			showFilenameInput = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
 	}
 	return false;
 }
