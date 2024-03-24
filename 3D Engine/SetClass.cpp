@@ -61,7 +61,7 @@ void Sets::Set::Save()
 	resultObject["blocks"] = blocksArray;
 
 	json childsArray;
-	for (size_t childId = 0;  childId < this->childs.size();  childId++)
+	for (size_t childId = 0; childId < this->childs.size(); childId++)
 	{
 		if (this->childs[childId]->GetName().size() > 3)//Ensure the name is present
 		{
@@ -88,6 +88,7 @@ void Sets::Set::Save()
 
 void Sets::Set::LoadFromJson(json _content, bool _computeTransformation)
 {//load here
+	this->Initialize();
 	if (_content.contains("blocks"))
 	{
 		for (auto& object : _content["blocks"])
@@ -143,10 +144,11 @@ void Sets::Set::LoadFromJson(json _content, bool _computeTransformation)
 				try
 				{
 					auto parsedContent = json::parse(Files::GetFileContent(std::string(std::string(child["path"]) + std::string(child["name"]) + SETS_FILE_EXTENSION).c_str()));
-					childSet->LoadFromJson(parsedContent, false);
+					childSet->LoadFromJson(parsedContent);
 				}
 				catch (json::parse_error& e)
 				{
+					Logger::Write("Json parsing error on set ", child["name"], " \n");
 					std::cerr << "JSON parsing error: " << e.what() << '\n';
 					Sets::Erase(childSet);
 					continue;
@@ -169,7 +171,10 @@ void Sets::Set::LoadFromJson(json _content, bool _computeTransformation)
 			}
 		}
 	}
-	this->ApplyTransformation();
+	if (_computeTransformation)
+	{
+		this->ApplyTransformation();
+	}
 }
 
 std::string Sets::Set::GetName()
@@ -199,7 +204,9 @@ bool Sets::Set::IsVisible()
 
 void Sets::Set::CheckVisibility()
 {
-	if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
+	if (this->useParentRendering) { return; }
+	//else if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
+
 	if (FrustrumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.GetBox().min, this->boundingBox.GetBox().max))
 	{
 		if (this->visible) { return; }
@@ -222,6 +229,20 @@ void Sets::Set::AppplyVisibility()
 		{
 			this->typesInstances->at(i)->SetInstanceVisibility(this->typesInstances, this->visible);
 		}
+	}
+	else if (this->useParentRendering && this->parent != nullptr)
+	{
+		if (this->typesInstances != nullptr)
+		{
+			for (size_t instanceId = 0; instanceId < this->typesInstances->size(); instanceId++)
+			{
+				for (size_t blockId = 0; blockId < this->blocks.size(); blockId++)
+				{
+					this->typesInstances->at(instanceId)->RemoveFromInstance(this->typesInstances, this->blocks[blockId].GetModelAddress());
+				}
+			}
+		}
+		this->parent->AppplyVisibility();
 	}
 }
 
@@ -303,7 +324,10 @@ void Sets::Set::SetParent(Set* _parent, bool _boundsCalculation)
 	}
 	this->parent = _parent;
 	_parent->AddChild(this, _boundsCalculation);
-	this->ApplyTransformation();
+	if (_boundsCalculation)
+	{
+		this->ApplyTransformation();
+	}
 }
 
 std::vector<Sets::Set*> Sets::Set::GetChilds()
@@ -585,7 +609,12 @@ void Sets::Set::CalculateBoundingBox()
 			globalMin = glm::min(globalMin, box.min);
 			globalMax = glm::max(globalMax, box.max);
 		}
-
+		for (size_t childId = 0; childId < this->childs.size(); childId++)
+		{
+			Bounds::Box childBox = this->childs[childId]->GetBoundingBox();
+			globalMin = glm::min(globalMin, childBox.min);
+			globalMax = glm::max(globalMax, childBox.max);
+		}
 		box.min = globalMin;
 		box.max = globalMax;
 	}

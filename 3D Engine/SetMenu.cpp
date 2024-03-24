@@ -44,7 +44,9 @@ bool Sets::ChildTree(GameData* _gameData, Set* _parentSet)
 
 				childSet->SetName(fileSearch.name);
 				childSet->SetPath(fileSearch.path);
-				childSet->CheckVisibility();
+				_parentSet->CalculateBoundingBox();
+				_parentSet->CheckVisibility();
+				_parentSet->AppplyVisibility();
 			}
 		}
 		if (!childs.size()) { return false; }
@@ -187,14 +189,17 @@ bool Sets::SetTree(GameData* _gameData, Set* _set)
 
 		if (ImGui::Button(std::string("Close##CloseSet" + name).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
 		{
-			_set->Erase();	std::vector<Set*>* sets = Sets::GetAll();
-			for (size_t setId = 0; setId < sets->size(); setId++)
-			{
-				if (sets->at(setId) == _set)
-				{
-					sets->erase(sets->begin() + setId);
-				}
-			}
+			//_set->Erase();	
+			//std::vector<Set*>* sets = Sets::GetAll();
+			//for (size_t setId = 0; setId < sets->size(); setId++)
+			//{
+			//	if (sets->at(setId) == _set)
+			//	{
+			//		sets->erase(sets->begin() + setId);
+			//		break;
+			//	}
+			//}
+			Sets::Erase(_set);
 			return true;
 		}
 
