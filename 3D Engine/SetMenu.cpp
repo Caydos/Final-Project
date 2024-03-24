@@ -55,6 +55,7 @@ bool Sets::ChildTree(GameData* _gameData, Set* _parentSet)
 			bool kill = SetTree(_gameData, childs[childId]);
 			if (kill) { return true; }
 		}
+		ImGui::TreePop();
 	}
 
 	if (showFilenameInput)

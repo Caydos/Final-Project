@@ -67,11 +67,11 @@ void Blocks::Block::ApplyTransformation()
 		*this->model = glm::mat4(1.0f);
 	}
 
-	*this->model = glm::scale(*this->model, this->scale);
-	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	*this->model = glm::translate(*this->model, this->position);
+	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	*this->model = glm::scale(*this->model, this->scale);
 
 
 	this->CalculateBoundingBox();
