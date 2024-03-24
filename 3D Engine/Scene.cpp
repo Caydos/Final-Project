@@ -6,8 +6,6 @@
 #include "Blocks.h"
 #include "Inventory.h"
 #include "Set.h"
-#include "Physics.h"
-#include "Collisions.h"
 
 static bool initialized = false;
 static unsigned int FPVCam;
@@ -15,10 +13,7 @@ static Scene::Type type = Scene::Type::MODEL_EDITOR;
 static Clock inputClock;
 static Colors::Color clearColor = Colors::Black;
 static Lightning::Light* flashLight;
-static Physics::Body body;
-static float RunningMultiplier = 2.5f;
 static float MovementSpeed = 2.25f;
-static const float JumpVelocity = 0.125f;
 static bool falling = false;
 static bool running = true;
 
@@ -31,9 +26,7 @@ void Scene::SetClearColor(Colors::Color _color)
 {
 	clearColor = _color;
 }
-std::vector<int> ints;
-std::vector<int> ints2;
-std::vector<int> ints3;
+
 static Sets::Set* set = nullptr;
 static Sets::Set* playerSet = nullptr;
 void Scene::Initialize(GameData* _gameData)
@@ -242,25 +235,7 @@ void Scene::Tick(GameData* _gameData)
 		ImGui::Render();
 	}
 	glDisable(GL_DEPTH_TEST);
-	//Collisions::Tick();
-	//glm::vec3 collisionNormal;
-	//if (Bounds::AreColliding(playerSet->GetBoundingBox(), set->GetBoundingBox(), collisionNormal))
-	//{
-	//	Crosshairs::Get()->SetColor(Colors::Grey);
-	//	std::vector<Blocks::Block>*  blocks = set->GetBlocks();
-	//	for (size_t i = 0; i < blocks->size(); i++)
-	//	{
-	//		glm::vec3 collisionNormal;
-	//		if (Bounds::AreColliding(playerSet->GetBoundingBox(), blocks->at(i).GetBoundingBox(), collisionNormal))
-	//		{
-	//			Crosshairs::Get()->SetColor(Colors::Red);
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	Crosshairs::Get()->SetColor(Colors::Green);
-	//}
+
 	Crosshairs::Draw();
 
 	glEnable(GL_DEPTH_TEST);

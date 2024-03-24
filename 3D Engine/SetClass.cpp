@@ -577,66 +577,17 @@ void Sets::Set::CalculateBoundingBox()
 		glm::vec3 globalMin = glm::vec3(FLT_MAX);
 		glm::vec3 globalMax = glm::vec3(-FLT_MAX);
 
-		for (Blocks::Block& block : blocks)
+		for (Blocks::Block& block : this->blocks)
 		{
-			glm::vec3 scale;
-			glm::quat rotation;
-			glm::vec3 translation;
-			glm::vec3 skew;
-			glm::vec4 perspective;
-			glm::decompose(block.GetModel(), scale, rotation, translation, skew, perspective);
+			block.CalculateBoundingBox();
+			Bounds::Box box = block.GetBoundingBox();
 
-			glm::vec3 localMin = translation - scale / 2.0f;
-			glm::vec3 localMax = translation + scale / 2.0f;
-
-			globalMin = glm::min(globalMin, localMin);
-			globalMax = glm::max(globalMax, localMax);
+			globalMin = glm::min(globalMin, box.min);
+			globalMax = glm::max(globalMax, box.max);
 		}
 
 		box.min = globalMin;
 		box.max = globalMax;
-	}
-	{
-		glm::vec3 minPoint = glm::vec3(FLT_MAX);
-		glm::vec3 maxPoint = glm::vec3(-FLT_MAX);
-
-		for (Blocks::Block& block : this->blocks)
-		{
-			Bounds::Box blockBox = block.GetBoundingBox();
-			std::vector<glm::vec3> corners = Bounds::GetCorners(blockBox);
-			for (const auto& corner : corners)
-			{
-				glm::vec3 transformedCorner = /*glm::radians(this->rotation) **/blockBox.rotation * (corner * this->scale) + this->position;
-				minPoint = glm::min(minPoint, transformedCorner);
-				maxPoint = glm::max(maxPoint, transformedCorner);
-			}
-		}
-		for (size_t childId = 0; childId < this->childs.size(); childId++)
-		{
-			//this->childs[childId]->ApplyTransformation();
-			Bounds::Box blockBox = this->childs[childId]->GetBoundingBox();
-			std::vector<glm::vec3> corners = Bounds::GetCorners(blockBox);
-			for (const auto& corner : corners)
-			{
-				glm::vec3 transformedCorner = /*glm::radians(this->rotation) **/blockBox.rotation * (corner * this->scale) + this->position;
-				minPoint = glm::min(minPoint, transformedCorner);
-				maxPoint = glm::max(maxPoint, transformedCorner);
-			}
-		}
-		//std::cout << "Min point : " << minPoint.x << " " << minPoint.y << " " << minPoint.z << std::endl;
-		//std::cout << "Max point : " << maxPoint.x << " " << maxPoint.y << " " << maxPoint.z << std::endl;
-		box.position = (minPoint + maxPoint) * 0.5f;
-		box.extents = (maxPoint - minPoint) * 0.5f;
-
-		glm::vec3 rotationRadians = glm::radians(this->rotation);
-		// Setting orientation to Identity, as determining an optimal rotation is complex
-		glm::mat4 rotX = glm::rotate(glm::mat4(1.0f), rotationRadians.x, glm::vec3(1, 0, 0));
-		glm::mat4 rotY = glm::rotate(glm::mat4(1.0f), rotationRadians.y, glm::vec3(0, 1, 0));
-		glm::mat4 rotZ = glm::rotate(glm::mat4(1.0f), rotationRadians.z, glm::vec3(0, 0, 1));
-		// Combine the rotations
-		glm::mat4 rotationMatrix = rotZ * rotY * rotX;
-
-		box.rotation = glm::mat3(rotationMatrix);
 	}
 	this->boundingBox.SetBox(box);
 }

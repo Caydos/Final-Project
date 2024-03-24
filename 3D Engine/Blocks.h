@@ -159,6 +159,7 @@ namespace Blocks
 		void Scale(float _x, float _y, float _z);
 
 		Bounds::Box GetBoundingBox();
+		void CalculateBoundingBox();
 	private:
 		bool inScene;
 

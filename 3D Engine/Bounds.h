@@ -10,10 +10,6 @@ namespace Bounds
 		Box();
 		glm::vec3 min;
 		glm::vec3 max;
-
-		glm::vec3 position;     // Center of the box
-		glm::vec3 extents;    // Half-size extents of the box
-		glm::mat3 rotation; // 3x3 rotation matrix representing the box's orientation
 	};
 	bool AreColliding(const Box& box1, const Box& box2, glm::vec3& collisionNormal);
 	std::vector<glm::vec3> GetCorners(const Box& box);

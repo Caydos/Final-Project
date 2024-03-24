@@ -4,10 +4,16 @@
 
 namespace Collisions
 {
+	struct Result
+	{
+		bool isColliding;
+		glm::vec3 penetration; // Negative values indicate no penetration
+
+		Result() : isColliding(false), penetration(glm::vec3(0.0f)) {}
+	};
 	bool PointCollidingBox(glm::vec3 _position, Bounds::Box _box);
-	bool BoxColliding(Bounds::Box _firstBox, Bounds::Box _secondBox);
+	Result BoxColliding(Bounds::Box _firstBox, Bounds::Box _secondBox);
 	bool IntersectRayWithBox(glm::vec3 rayOrigin, glm::vec3 rayDirection, glm::vec3 boxMin, glm::vec3 boxMax, float& t);
-	void Tick();
 }
 
 #endif // !COLLISIONS_H

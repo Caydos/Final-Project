@@ -1,4 +1,5 @@
 #include "Blocks.h"
+#include <glm/gtx/matrix_decompose.hpp>
 
 Blocks::Block::Block()
 {
@@ -66,30 +67,14 @@ void Blocks::Block::ApplyTransformation()
 		*this->model = glm::mat4(1.0f);
 	}
 
+	*this->model = glm::scale(*this->model, this->scale);
+	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	*this->model = glm::translate(*this->model, this->position);
 
-	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	*this->model = glm::rotate(*this->model, glm::radians(this->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	*this->model = glm::scale(*this->model, this->scale);
-
-	this->boundingBox.position = this->position;
-
-	// The extents are half the size of the cube, factoring in the scale.
-	// Assuming the cube initially spans from -1 to 1 (so has a length of 2) before scaling.
-	this->boundingBox.extents = this->scale * 0.5f;
-
-	glm::vec3 rotationRadians = glm::radians(this->rotation);
-
-	// Create a rotation matrix from the Euler angles
-	glm::mat4 rotMat(1.0f);
-	rotMat = glm::rotate(rotMat, rotationRadians.z, glm::vec3(0.0f, 0.0f, 1.0f)); // Z-axis rotation
-	rotMat = glm::rotate(rotMat, rotationRadians.y, glm::vec3(0.0f, 1.0f, 0.0f)); // Y-axis rotation
-	rotMat = glm::rotate(rotMat, rotationRadians.x, glm::vec3(1.0f, 0.0f, 0.0f)); // X-axis rotation
-
-	// Extract the rotational part as a mat3 from the transformation matrix.
-	this->boundingBox.rotation = glm::mat3(rotMat);
+	this->CalculateBoundingBox();
 }
 
 glm::vec3 Blocks::Block::GetPosition() { return this->position; }
@@ -171,5 +156,53 @@ void Blocks::Block::Scale(float _x, float _y, float _z)
 
 Bounds::Box Blocks::Block::GetBoundingBox()
 {
-	return boundingBox;
+	return this->boundingBox;
+}
+
+void Blocks::Block::CalculateBoundingBox()
+{
+	if (this->model == nullptr) { return; }
+	float halfSideLength = 0.5f;
+
+	std::vector<glm::vec3> vertices = {
+		// Top vertices
+		glm::vec3(-halfSideLength, halfSideLength, halfSideLength), // Top-front-left
+		glm::vec3(halfSideLength, halfSideLength, halfSideLength), // Top-front-right
+		glm::vec3(halfSideLength, halfSideLength, -halfSideLength), // Top-back-right
+		glm::vec3(-halfSideLength, halfSideLength, -halfSideLength), // Top-back-left
+
+		// Bottom vertices
+		glm::vec3(-halfSideLength, -halfSideLength, halfSideLength), // Bottom-front-left
+		glm::vec3(halfSideLength, -halfSideLength, halfSideLength), // Bottom-front-right
+		glm::vec3(halfSideLength, -halfSideLength, -halfSideLength), // Bottom-back-right
+		glm::vec3(-halfSideLength, -halfSideLength, -halfSideLength), // Bottom-back-left
+	};
+	glm::vec3 globalMin = glm::vec3(FLT_MAX);
+	glm::vec3 globalMax = glm::vec3(-FLT_MAX);
+	glm::vec4 transformedVertex = *this->model * glm::vec4(vertices[0], 1.0);
+	this->boundingBox.min = transformedVertex;
+	this->boundingBox.max = transformedVertex;
+
+	for (auto vertex : vertices)
+	{
+		glm::vec4 transformedVertex = *this->model * glm::vec4(vertex, 1.0);
+
+		this->boundingBox.min.x = std::min(this->boundingBox.min.x, transformedVertex.x);
+		this->boundingBox.min.y = std::min(this->boundingBox.min.y, transformedVertex.y);
+		this->boundingBox.min.z = std::min(this->boundingBox.min.z, transformedVertex.z);
+
+		this->boundingBox.max.x = std::max(this->boundingBox.max.x, transformedVertex.x);
+		this->boundingBox.max.y = std::max(this->boundingBox.max.y, transformedVertex.y);
+		this->boundingBox.max.z = std::max(this->boundingBox.max.z, transformedVertex.z);
+	}
+
+	//glm::vec3 scale;
+	//glm::quat rotation;
+	//glm::vec3 translation;
+	//glm::vec3 skew;
+	//glm::vec4 perspective;
+	//glm::decompose(*this->model, scale, rotation, translation, skew, perspective);
+
+	//boundingBox.min = translation - scale / 2.0f;
+	//boundingBox.max = translation + scale / 2.0f;
 }
