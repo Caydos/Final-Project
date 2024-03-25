@@ -30,6 +30,11 @@ Sets::Set* Sets::Create()
 	return newSet;
 }
 
+void Sets::Insert(Set* _set)
+{
+	sets.push_back(_set);
+}
+
 void Sets::Erase(Set* _set)
 {
 	for (size_t i = 0; i < sets.size(); i++)

@@ -89,14 +89,14 @@ namespace Sets
 		std::string name;
 		std::string path;
 
-		bool visible;
-		Set* parent;
+		bool visible = false;
+		Set* parent = nullptr;
 		std::vector<Set*> childs;
-		glm::mat4* bone;
+		glm::mat4* bone = nullptr;
 
 		std::vector<Blocks::Block> blocks;
-		std::vector<Blocks::BlockType*>* typesInstances;
-		bool useParentRendering;
+		std::vector<Blocks::BlockType*>* typesInstances = nullptr;
+		bool useParentRendering = false;
 
 		glm::vec3 position;
 		glm::vec3 rotation;
@@ -106,8 +106,11 @@ namespace Sets
 
 		std::vector<Animation::Animation> animations;
 	};
+
 	void UpdateVisibility();
+
 	Set* Create();
+	void Insert(Set* _set);
 	void Erase(Set* _set);
 
 	std::vector<Set*>* GetAll();

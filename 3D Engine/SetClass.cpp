@@ -668,6 +668,10 @@ void Sets::Set::MoveOrigin(glm::vec3 _offset)
 	{
 		this->blocks[i].Move(_offset);
 	}
+	for (size_t childId = 0; childId < this->childs.size(); childId++)
+	{
+		this->childs[childId]->Move(_offset);
+	}
 
 	if (this->typesInstances != nullptr)
 	{

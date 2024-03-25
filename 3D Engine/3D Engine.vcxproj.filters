@@ -49,18 +49,6 @@
     <Filter Include="Source Files\Utils\Logger">
       <UniqueIdentifier>{5932c580-124e-4eec-a2f4-80ac1e28a80c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Scripting">
-      <UniqueIdentifier>{1fc1871b-da24-4b5c-aedb-e34de6b9134a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Scripting\Sync">
-      <UniqueIdentifier>{34ce6a3b-8d10-40e7-a068-009b71bb66c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Scripting\Manager">
-      <UniqueIdentifier>{83e19106-b635-432c-a976-554a04a073b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Scripting\Manager\Ped">
-      <UniqueIdentifier>{deec8922-c35a-4a59-947e-c7eebac4a8d2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Physic Engine">
       <UniqueIdentifier>{96d9d9e9-b55e-456c-9308-1ce73694dd9d}</UniqueIdentifier>
     </Filter>
@@ -153,6 +141,21 @@
     </Filter>
     <Filter Include="Source Files\Rendering Engine\Set\Animation">
       <UniqueIdentifier>{5671aec9-66d8-4292-8345-291bced397b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting">
+      <UniqueIdentifier>{1fc1871b-da24-4b5c-aedb-e34de6b9134a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Sync">
+      <UniqueIdentifier>{34ce6a3b-8d10-40e7-a068-009b71bb66c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Manager">
+      <UniqueIdentifier>{83e19106-b635-432c-a976-554a04a073b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Manager\Ped">
+      <UniqueIdentifier>{deec8922-c35a-4a59-947e-c7eebac4a8d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Manager\Player">
+      <UniqueIdentifier>{6039c797-fcb7-492a-a71a-0a6085093a77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -302,6 +305,12 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files\Rendering Engine\Set\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripting.cpp">
+      <Filter>Source Files\Game\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Game\Scripting\Manager\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -469,6 +478,12 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Source Files\Rendering Engine\Set\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripting.h">
+      <Filter>Source Files\Game\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Source Files\Game\Scripting\Manager\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

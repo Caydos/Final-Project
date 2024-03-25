@@ -26,6 +26,7 @@ namespace Scene
 	void Inputs(GameData* _gameData);
 	void Tick(GameData* _gameData);
 	void CleanUp();
+	void SetInputUsage(bool _usage);
 
 	namespace Lights
 	{

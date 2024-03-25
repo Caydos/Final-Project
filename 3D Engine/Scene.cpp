@@ -8,14 +8,13 @@
 #include "Set.h"
 
 static bool initialized = false;
+static bool inputs = true;
 static unsigned int FPVCam;
 static Scene::Type type = Scene::Type::MODEL_EDITOR;
 static Clock inputClock;
 static Colors::Color clearColor = Colors::Black;
 static Lightning::Light* flashLight;
 static float MovementSpeed = 2.25f;
-static bool falling = false;
-static bool running = true;
 
 Colors::Color Scene::GetClearColor()
 {
@@ -87,60 +86,37 @@ void Scene::Initialize(GameData* _gameData)
 	//		block.SetScale(scale);
 	//		block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
 	//		set->InsertBlock(block, false);
-	//		break;
-	//		//if (!rowId || rowId == 49)
-	//		//{
-	//		//	for (size_t heightId = 1; heightId < 20; heightId++)
-	//		//	{
-	//		//		Blocks::Block block;
-	//		//		block.GenerateModel();
-	//		//		block.SetType((heightId < 7) ? blType[1] : blType[2]);
-	//		//		glm::vec3 scale = block.GetType()->GetScale();
-	//		//		block.SetScale(scale);
-	//		//		block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-	//		//		set->InsertBlock(block, false);
-	//		//	}
-	//		//}
-	//		//else if (columnId == 49)
-	//		//{
-	//		//	for (size_t heightId = 1; heightId < 20; heightId++)
-	//		//	{
-	//		//		Blocks::Block block;
-	//		//		block.GenerateModel();
-	//		//		block.SetType((heightId < 7) ? blType[1] : blType[2]);
-	//		//		glm::vec3 scale = block.GetType()->GetScale();
-	//		//		block.SetScale(scale);
-	//		//		block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-	//		//		set->InsertBlock(block, false);
-	//		//	}
-	//		//}
+	//		if (!rowId || rowId == 49)
+	//		{
+	//			for (size_t heightId = 1; heightId < 20; heightId++)
+	//			{
+	//				Blocks::Block block;
+	//				block.GenerateModel();
+	//				block.SetType((heightId < 7) ? blType[1] : blType[2]);
+	//				glm::vec3 scale = block.GetType()->GetScale();
+	//				block.SetScale(scale);
+	//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//				set->InsertBlock(block, false);
+	//			}
+	//		}
+	//		else if (columnId == 49)
+	//		{
+	//			for (size_t heightId = 1; heightId < 20; heightId++)
+	//			{
+	//				Blocks::Block block;
+	//				block.GenerateModel();
+	//				block.SetType((heightId < 7) ? blType[1] : blType[2]);
+	//				glm::vec3 scale = block.GetType()->GetScale();
+	//				block.SetScale(scale);
+	//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+	//				set->InsertBlock(block, false);
+	//			}
+	//		}
 	//	}
-	//	break;
 	//}
 	//set->SetName("Wall");
 	//set->SetPath("../Sets/");
 	//set->CalculateBoundingBox();
-
-	//playerSet = Sets::Create();
-	//playerSet->Initialize();
-	//playerSet->GenerateRenderingInstance();
-	//playerSet->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_Torso.json")));
-
-
-	//playerSet->SetPosition(glm::vec3(1.0, 1.0, 1.0));
-	//playerSet->SetName("Character");
-	//playerSet->SetPath("../Sets/MC/");
-	//Sets::SetEditedSet(playerSet);
-
-	//Sets::Set* head = Sets::Create();
-	//head->SetParent(playerSet, false);
-	//head->SetRenderingInstance(playerSet->GetRenderingInstance());
-	//head->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_Head.json")));
-	//head->SetName("Head");
-	//head->SetPath("../Sets/MC/");
-
-	//playerSet->CalculateBoundingBox();
-
 
 	initialized = true;
 }
@@ -198,7 +174,7 @@ void Scene::Inputs(GameData* _gameData)
 void Scene::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
-	Inputs(_gameData);
+	if (inputs) { Inputs(_gameData); }
 
 	_gameData->window.Clear(clearColor);
 
@@ -249,5 +225,10 @@ void Scene::Tick(GameData* _gameData)
 
 void Scene::CleanUp()
 {
+}
+
+void Scene::SetInputUsage(bool _usage)
+{
+	inputs = _usage;
 }
 

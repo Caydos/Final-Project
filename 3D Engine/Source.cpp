@@ -8,7 +8,7 @@
 #include "Commands.h"
 #include "Network.h"
 #include "Audio.h"
-
+#include "Scripting.h"
 
 float lastFrame = 0.0f;
 
@@ -57,6 +57,7 @@ int main()
 	//std::cout << glm::cos(glm::radians(15.5f)) <<  " " << glm::cos(glm::radians((12.5f))) << std::endl;
 
 	gameData.gameStates[SCENE] = &Scene::Tick;
+	gameData.gameStates[GAME] = &Scritping::Tick;
 	gameData.gameState = SCENE;
 
 #ifdef _DEBUG

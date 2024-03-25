@@ -19,6 +19,7 @@ enum Gamestate
 {
 	MAIN_MENU,
 	SCENE,
+	GAME,
 };
 
 #include "Camera.h"
