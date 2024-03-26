@@ -6,6 +6,6 @@ namespace DeferredShading
 {
 	void Initialize(GameData* _gameData);
 	void RenderQuad();
-	void Draw(GameData* _gameData);
+	void Draw(GameData* _gameData, bool _skyboxUsage);
 }
 #endif // !DEFERRED_SHADING_H

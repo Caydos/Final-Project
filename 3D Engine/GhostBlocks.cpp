@@ -28,6 +28,8 @@ static glm::vec3 planeNormals[3] = {
 	glm::vec3(1, 0, 0),
 };
 
+static unsigned int maxBlocks = 18;
+
 void Blocks::Ghost::Draw(GameData* _gameData)
 {
 	if (!ghostInitialized)
@@ -175,22 +177,26 @@ void Blocks::Ghost::SetRay(RayCasting::Ray _ray)
 			glm::ivec3 gridNumbers = glm::ivec3((destination - position) / scale);
 			glm::ivec3 minGrid = glm::min(glm::ivec3(0), gridNumbers);
 			glm::ivec3 maxGrid = glm::max(glm::ivec3(0), gridNumbers);
-
+			unsigned int count = 0;
 			for (int xId = minGrid.x; xId <= maxGrid.x; ++xId) {
 				for (int yId = minGrid.y; yId <= maxGrid.y; ++yId) {
 					for (int zId = minGrid.z; zId <= maxGrid.z; ++zId) {
 						if (dominantAxis == 0 && xId != 0) continue;
 						if (dominantAxis == 1 && yId != 0) continue;
 						if (dominantAxis == 2 && zId != 0) continue;
-
 						glm::vec3 offset = glm::vec3(xId, yId, zId) * scale;
 						glm::mat4 model = glm::mat4(1.0f);
 						model = glm::translate(model, position + offset);
 						model = glm::scale(model, scale);
+						count++;
 						models.push_back(model);
+						//if (count >= maxBlocks) { break; }
 					}
+					//if (count >= maxBlocks) { break; }
 				}
+				//if (count >= maxBlocks) { break; }
 			}
+
 			glBindVertexArray(VAO);
 			glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
 			glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(glm::mat4), &models[0], GL_STATIC_DRAW);

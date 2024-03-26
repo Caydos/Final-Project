@@ -3,12 +3,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include "Viewer.h"
 #include "Scene.h"
 #include "Commands.h"
 #include "Network.h"
 #include "Audio.h"
 #include "Scripting.h"
+#include "Tools.h"
 
 float lastFrame = 0.0f;
 
@@ -47,6 +47,7 @@ int main()
 	Shaders::Shader worldObjectShader("../Shaders/WorldObject.vs", "../Shaders/WorldObject.fs");
 	Shaders::Shader geometryShader("../Shaders/Geometry.vs", "../Shaders/Geometry.fs");
 	Shaders::Shader renderShader("../Shaders/Render.vs", "../Shaders/Render.fs");
+	Shaders::Shader skyboxShader("../Shaders/Skybox.vs", "../Shaders/Skybox.fs");
 
 
 	gameData.shaders[Shaders::UI] = &uiShader;
@@ -54,11 +55,12 @@ int main()
 	gameData.shaders[Shaders::SINGLE_DRAW] = &worldObjectShader;
 	gameData.shaders[Shaders::GEOMETRY] = &geometryShader;
 	gameData.shaders[Shaders::RENDER] = &renderShader;
-	//std::cout << glm::cos(glm::radians(15.5f)) <<  " " << glm::cos(glm::radians((12.5f))) << std::endl;
+	gameData.shaders[Shaders::SKYBOX] = &skyboxShader;
 
-	gameData.gameStates[SCENE] = &Scene::Tick;
+
+	gameData.gameStates[TOOLS] = &Tools::Tick;
 	gameData.gameStates[GAME] = &Scritping::Tick;
-	gameData.gameState = GAME;
+	gameData.gameState = TOOLS;
 
 #ifdef _DEBUG
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -106,6 +108,7 @@ int main()
 		}
 
 		gameData.gameStates[gameData.gameState](&gameData);
+		gameData.window.Events();
 	}
 
 	ImGui_ImplOpenGL3_Shutdown();

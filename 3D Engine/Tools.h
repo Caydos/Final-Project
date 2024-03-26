@@ -1,13 +1,12 @@
-#ifndef VIEWER_H
-#define VIEWER_H
+#ifndef TOOLS_H
+#define TOOLS_H
 #include "Common.h"
 
-namespace Viewer
+namespace Tools
 {
 	void Initialize(GameData* _gameData);
 	void Inputs(GameData* _gameData);
 	void Tick(GameData* _gameData);
-	void CleanUp();
 }
 
-#endif // !VIEWER_H
+#endif // !TOOLS_H

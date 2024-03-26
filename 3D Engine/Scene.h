@@ -11,22 +11,12 @@
 
 namespace Scene
 {
-	enum Type
-	{
-		WORLD,
-		MODEL_EDITOR,
-		LEVEL_EDITOR,
-		VFX_EDITOR
-	};
-
 	Colors::Color GetClearColor();
 	void SetClearColor(Colors::Color _color);
 
 	void Initialize(GameData* _gameData);
-	void Inputs(GameData* _gameData);
 	void Tick(GameData* _gameData);
 	void CleanUp();
-	void SetInputUsage(bool _usage);
 
 	namespace Lights
 	{
@@ -39,15 +29,9 @@ namespace Scene
 
 	namespace World
 	{
-		enum ComponentType
-		{
-			DECOR,
-			MODEL,
-			ENTITY
-		};
-
-
 		//void QueueLoading(Component* _component, std::string _fileName); // for later sync
+		bool IsSkyboxActive();
+		void SetSkyboxState(bool _enabled);
 
 		void ConsiderLightning(bool _value = true, GameData* _gameData = nullptr);
 		bool IsConsideringLightning();

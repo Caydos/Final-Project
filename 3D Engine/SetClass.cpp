@@ -37,9 +37,24 @@ void Sets::Set::Erase()
 	{
 		delete this->bone;
 	}
+
+	if (this->parent != nullptr)
+	{
+		this->parent->RemoveChild(this, true);
+	}
+	for (size_t i = 0; i < this->childs.size(); i++)
+	{
+		Sets::Erase(this->childs[i]);
+	}
+
 	for (size_t i = 0; i < this->blocks.size(); i++)
 	{
 		this->blocks[i].EraseModel();
+	}
+	Sets::Set* editedSet = Sets::GetEditedSet();
+	if (editedSet == this)
+	{
+		Sets::SetEditedSet(nullptr);
 	}
 }
 
@@ -204,7 +219,14 @@ bool Sets::Set::IsVisible()
 
 void Sets::Set::CheckVisibility()
 {
-	if (this->useParentRendering) { return; }
+	if (this->useParentRendering)
+	{
+		if (this->parent != nullptr)
+		{
+			this->visible = this->parent->IsVisible();
+		}
+		return;
+	}
 	//else if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
 
 	if (FrustrumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.GetBox().min, this->boundingBox.GetBox().max))
@@ -309,6 +331,10 @@ void Sets::Set::ApplyTransformation()
 		this->childs[childId]->ApplyTransformation();
 	}
 	this->CalculateBoundingBox();
+	if (this->parent != nullptr)
+	{
+		this->parent->CalculateBoundingBox();
+	}
 }
 
 Sets::Set* Sets::Set::GetParent()

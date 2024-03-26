@@ -296,6 +296,11 @@ void Sets::Edition(GameData* _gameData, bool _allowControls)
 	}
 }
 
+Sets::Set* Sets::GetEditedSet()
+{
+	return parentSet;
+}
+
 void Sets::SetEditedSet(Set* _set)
 {
 	parentSet = _set;

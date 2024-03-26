@@ -10,7 +10,8 @@ void Scritping::Tick(GameData* _gameData)
 	if (!initialized)
 	{
 		Scene::Initialize(_gameData);
-		Scene::SetInputUsage(false);
+		Scene::World::SetSkyboxState(true);
+
 		player = Players::Create();
 		Peds::Ped* playerPed = Peds::Create();
 		playerPed->Initialize();

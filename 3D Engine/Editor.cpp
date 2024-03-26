@@ -96,6 +96,12 @@ void Editor::Menu(GameData* _gameData)
 	{
 		if (ImGui::TreeNode("Scene Configuration"))
 		{
+			bool skyboxUsage = Scene::World::IsSkyboxActive();
+			if (ImGui::Checkbox("Skybox Usage", &skyboxUsage))
+			{
+				Scene::World::SetSkyboxState(skyboxUsage);
+			}
+
 			if (ImGui::TreeNode("Background Color"))
 			{
 				ImVec4 actualColor = Scene::GetClearColor().imguiValues;

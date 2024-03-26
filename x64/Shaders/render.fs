@@ -68,7 +68,11 @@ void main()
     vec3 Albedo = texture(gAlbedoSpec, TexCoords).rgb;
     float Specular = texture(gEffects, TexCoords).a;
     float Shininess = 32.0;
-    if((Normal.x == clearColor.x) && (Normal.y == clearColor.y) && (Normal.z == clearColor.z)) { discard; }
+    if((Normal.x == clearColor.x) && (Normal.y == clearColor.y) && (Normal.z == clearColor.z))
+    {
+        FragColor = vec4(Albedo.x, Albedo.y, Albedo.z, 1.0);
+        return;
+    }
    
     
     vec3 norm = normalize(Normal);
@@ -76,6 +80,5 @@ void main()
 
     vec3 result = CalcSpotLight(lights[0], norm, WorldPos, viewDir, Albedo, Specular, Shininess);
     FragColor = vec4(result.x, result.y, result.z, 1.0);
-    // FragColor = vec4(Albedo.x, Albedo.y, Albedo.z, 1.0);
 }
 

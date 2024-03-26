@@ -2,6 +2,7 @@
 #include "Set.h"
 #include "SSAO.h"
 #include "Scene.h"
+#include "Skybox.h"
 
 static bool initialized = false;
 static unsigned int quadVAO = 0;
@@ -70,6 +71,8 @@ void DeferredShading::Initialize(GameData* _gameData)
 	_gameData->shaders[Shaders::RENDER]->setInt("gEffects", 3);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	Skybox::Load(_gameData);
+
 	initialized = true;
 }
 
@@ -99,7 +102,7 @@ void DeferredShading::RenderQuad()
 	glBindVertexArray(0);
 }
 
-void DeferredShading::Draw(GameData* _gameData)
+void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 {
 	if (!initialized) { Initialize(_gameData); }
 	Colors::Color clearColor = Scene::GetClearColor();
@@ -112,6 +115,13 @@ void DeferredShading::Draw(GameData* _gameData)
 	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
 	glClearColor(clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	if (_skyboxUsage)
+	{
+		Skybox::Draw(_gameData);
+	}
+
+	_gameData->shaders[Shaders::GEOMETRY]->use();
 	Sets::UpdateVisibility();
 	Blocks::Draw();
 

@@ -37,110 +37,17 @@
     <Filter Include="Source Files\Game\Maze">
       <UniqueIdentifier>{6bb04a54-0cad-45df-9fae-908482cb61e7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Network">
-      <UniqueIdentifier>{0c8dd573-4847-4ac7-9bda-2889b0ce26f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Network\Reading">
-      <UniqueIdentifier>{6614a0de-4826-40ab-9efa-34e6f97f4466}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Utils\Commands">
       <UniqueIdentifier>{1e328f22-7624-48c1-813d-4fc192f73e6e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Utils\Logger">
       <UniqueIdentifier>{5932c580-124e-4eec-a2f4-80ac1e28a80c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Physic Engine">
-      <UniqueIdentifier>{96d9d9e9-b55e-456c-9308-1ce73694dd9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Physic Engine\Bounds">
-      <UniqueIdentifier>{a51fe32a-561d-40a9-ac97-7b4fa92ff62c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Physic Engine\Collisions">
-      <UniqueIdentifier>{8a0e5052-3f3e-4d2a-9cf9-ddd10c3f2192}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine">
-      <UniqueIdentifier>{e59d9e5b-44d7-4a50-a762-07075062fc11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Drawables">
-      <UniqueIdentifier>{6276a9f5-9edd-42fa-a1db-0cf4995c2fa5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Visual">
-      <UniqueIdentifier>{30ec2660-1e08-4ae9-9aad-645bb84398cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Visual\Shader">
-      <UniqueIdentifier>{37233fd0-0092-47c7-9187-2ac690ae37ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Visual\Texture">
-      <UniqueIdentifier>{c7c7455a-7d5c-4849-b6b6-ad273aa657de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Data">
-      <UniqueIdentifier>{408b492b-d28c-4981-a08e-f6d07575d0e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Viewer">
-      <UniqueIdentifier>{ca19b92e-7684-499a-ad14-cec115b966e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\RayCasting">
-      <UniqueIdentifier>{eeea14ed-a0b5-4469-b611-a4b34155d2f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\UI">
-      <UniqueIdentifier>{cdc04775-bcc3-46d6-82fa-a6d0c95fdffe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Scene">
-      <UniqueIdentifier>{cdf5196c-c524-4f4d-9e94-752bbc20ed42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Scene\World">
-      <UniqueIdentifier>{50147a87-9106-4661-8a2d-d9d99144fe86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Crosshair">
-      <UniqueIdentifier>{7c2fecb1-7442-481e-bbca-9d636fa0fc3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Audio Engine">
-      <UniqueIdentifier>{268709e6-c977-4f7b-a188-e2b11ca9e3b3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Utils\Settings">
       <UniqueIdentifier>{9ad962b9-e469-4307-a610-0224068cac80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Rendering Engine\Blocks">
-      <UniqueIdentifier>{61b29eda-86d2-468b-8842-64cca62f238c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Blocks\Classes">
-      <UniqueIdentifier>{61682fc7-5654-4a5a-945d-0dfacbe524ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Set">
-      <UniqueIdentifier>{1d9f4203-3b73-4a7d-8723-015c578eff62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Set\Classes">
-      <UniqueIdentifier>{1bf93266-9c66-4a5e-ab79-482356e31152}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Set\Menu">
-      <UniqueIdentifier>{a29cb63a-69b5-460c-a71d-17b155231d87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\UI\Editor">
-      <UniqueIdentifier>{6b101b05-937a-42f6-bb1c-a87baa4dee3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\UI\Editor\Lights">
-      <UniqueIdentifier>{4dda0681-db9a-46b9-a63a-0590ebe0e7cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\UI\Editor\Objects">
-      <UniqueIdentifier>{8e867d6d-54e1-4d93-be0f-dbb5f26d0ebd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Graphics components">
-      <UniqueIdentifier>{0dca8719-eb90-49e6-8659-d537b14d2ad9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Graphics components\SSAO">
-      <UniqueIdentifier>{f1dd51a7-531a-44ca-902a-d11d8dc8a8d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\UI\Editor\Animation">
-      <UniqueIdentifier>{c0f54fb7-601c-491c-8bc0-6c1115570339}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Graphics components\Deferred Shading">
-      <UniqueIdentifier>{c1c7c516-d26d-4fbc-a008-f22a427e4b1e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Entity">
       <UniqueIdentifier>{e33d3bca-5aff-48f9-8b6b-0569f00842c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering Engine\Set\Animation">
-      <UniqueIdentifier>{5671aec9-66d8-4292-8345-291bced397b9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Game\Scripting">
       <UniqueIdentifier>{1fc1871b-da24-4b5c-aedb-e34de6b9134a}</UniqueIdentifier>
@@ -157,6 +64,105 @@
     <Filter Include="Source Files\Game\Scripting\Manager\Player">
       <UniqueIdentifier>{6039c797-fcb7-492a-a71a-0a6085093a77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Tools">
+      <UniqueIdentifier>{bec8b3dc-09d4-4d0c-9117-73645c995c6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools\UI">
+      <UniqueIdentifier>{cdc04775-bcc3-46d6-82fa-a6d0c95fdffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools\UI\Editor">
+      <UniqueIdentifier>{6b101b05-937a-42f6-bb1c-a87baa4dee3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools\UI\Editor\Lights">
+      <UniqueIdentifier>{4dda0681-db9a-46b9-a63a-0590ebe0e7cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools\UI\Editor\Objects">
+      <UniqueIdentifier>{8e867d6d-54e1-4d93-be0f-dbb5f26d0ebd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools\UI\Editor\Animation">
+      <UniqueIdentifier>{c0f54fb7-601c-491c-8bc0-6c1115570339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines">
+      <UniqueIdentifier>{44d0a3ce-4785-4d63-bdd0-72ac6d68e2d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Network">
+      <UniqueIdentifier>{0c8dd573-4847-4ac7-9bda-2889b0ce26f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Network\Reading">
+      <UniqueIdentifier>{6614a0de-4826-40ab-9efa-34e6f97f4466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Audio">
+      <UniqueIdentifier>{268709e6-c977-4f7b-a188-e2b11ca9e3b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Physics">
+      <UniqueIdentifier>{96d9d9e9-b55e-456c-9308-1ce73694dd9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Physics\Bounds">
+      <UniqueIdentifier>{a51fe32a-561d-40a9-ac97-7b4fa92ff62c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Physics\Collisions">
+      <UniqueIdentifier>{8a0e5052-3f3e-4d2a-9cf9-ddd10c3f2192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering">
+      <UniqueIdentifier>{e59d9e5b-44d7-4a50-a762-07075062fc11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Drawables">
+      <UniqueIdentifier>{6276a9f5-9edd-42fa-a1db-0cf4995c2fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Visual">
+      <UniqueIdentifier>{30ec2660-1e08-4ae9-9aad-645bb84398cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Visual\Shader">
+      <UniqueIdentifier>{37233fd0-0092-47c7-9187-2ac690ae37ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Visual\Texture">
+      <UniqueIdentifier>{c7c7455a-7d5c-4849-b6b6-ad273aa657de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Data">
+      <UniqueIdentifier>{408b492b-d28c-4981-a08e-f6d07575d0e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\RayCasting">
+      <UniqueIdentifier>{eeea14ed-a0b5-4469-b611-a4b34155d2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Scene">
+      <UniqueIdentifier>{cdf5196c-c524-4f4d-9e94-752bbc20ed42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Scene\World">
+      <UniqueIdentifier>{50147a87-9106-4661-8a2d-d9d99144fe86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Crosshair">
+      <UniqueIdentifier>{7c2fecb1-7442-481e-bbca-9d636fa0fc3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Blocks">
+      <UniqueIdentifier>{61b29eda-86d2-468b-8842-64cca62f238c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Blocks\Classes">
+      <UniqueIdentifier>{61682fc7-5654-4a5a-945d-0dfacbe524ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Set">
+      <UniqueIdentifier>{1d9f4203-3b73-4a7d-8723-015c578eff62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Set\Classes">
+      <UniqueIdentifier>{1bf93266-9c66-4a5e-ab79-482356e31152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Set\Menu">
+      <UniqueIdentifier>{a29cb63a-69b5-460c-a71d-17b155231d87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Set\Animation">
+      <UniqueIdentifier>{5671aec9-66d8-4292-8345-291bced397b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Graphics components">
+      <UniqueIdentifier>{0dca8719-eb90-49e6-8659-d537b14d2ad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Graphics components\SSAO">
+      <UniqueIdentifier>{f1dd51a7-531a-44ca-902a-d11d8dc8a8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Graphics components\Deferred Shading">
+      <UniqueIdentifier>{c1c7c516-d26d-4fbc-a008-f22a427e4b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Graphics components\Skybox">
+      <UniqueIdentifier>{7d258442-2a95-421b-a21f-21ae18141b58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -166,16 +172,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Source Files\Rendering Engine\Visual\Shader</Filter>
+      <Filter>Source Files\Engines\Rendering\Visual\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Rendering Engine\Visual\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Viewer.cpp">
-      <Filter>Source Files\Rendering Engine\Viewer</Filter>
+      <Filter>Source Files\Engines\Rendering\Visual\Texture</Filter>
     </ClCompile>
     <ClCompile Include="RayCasting.cpp">
-      <Filter>Source Files\Rendering Engine\RayCasting</Filter>
+      <Filter>Source Files\Engines\Rendering\RayCasting</Filter>
     </ClCompile>
     <ClCompile Include="Files.cpp">
       <Filter>Source Files\Utils\Files</Filter>
@@ -184,10 +187,10 @@
       <Filter>Source Files\Utils\Clock</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\Rendering Engine\Scene</Filter>
+      <Filter>Source Files\Engines\Rendering\Scene</Filter>
     </ClCompile>
     <ClCompile Include="LightScene.cpp">
-      <Filter>Source Files\Rendering Engine\Scene\World</Filter>
+      <Filter>Source Files\Engines\Rendering\Scene\World</Filter>
     </ClCompile>
     <ClCompile Include="..\Libs\IMGUI\imgui.cpp">
       <Filter>Source Files\Libs\IMGUI</Filter>
@@ -211,31 +214,31 @@
       <Filter>Source Files\Libs\IMGUI\OpenGl</Filter>
     </ClCompile>
     <ClCompile Include="Editor.cpp">
-      <Filter>Source Files\Rendering Engine\UI\Editor</Filter>
+      <Filter>Source Files\Tools\UI\Editor</Filter>
     </ClCompile>
     <ClCompile Include="WorldScene.cpp">
-      <Filter>Source Files\Rendering Engine\Scene\World</Filter>
+      <Filter>Source Files\Engines\Rendering\Scene\World</Filter>
     </ClCompile>
     <ClCompile Include="LightMenu.cpp">
-      <Filter>Source Files\Rendering Engine\UI\Editor\Lights</Filter>
+      <Filter>Source Files\Tools\UI\Editor\Lights</Filter>
     </ClCompile>
     <ClCompile Include="ObjectsMenu.cpp">
-      <Filter>Source Files\Rendering Engine\UI\Editor\Objects</Filter>
+      <Filter>Source Files\Tools\UI\Editor\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Crosshair.cpp">
-      <Filter>Source Files\Rendering Engine\Crosshair</Filter>
+      <Filter>Source Files\Engines\Rendering\Crosshair</Filter>
     </ClCompile>
     <ClCompile Include="Maze.cpp">
       <Filter>Source Files\Game\Maze</Filter>
     </ClCompile>
     <ClCompile Include="Reading.cpp">
-      <Filter>Source Files\Network\Reading</Filter>
+      <Filter>Source Files\Engines\Network\Reading</Filter>
     </ClCompile>
     <ClCompile Include="Connection.cpp">
-      <Filter>Source Files\Network</Filter>
+      <Filter>Source Files\Engines\Network</Filter>
     </ClCompile>
     <ClCompile Include="Events.cpp">
-      <Filter>Source Files\Network</Filter>
+      <Filter>Source Files\Engines\Network</Filter>
     </ClCompile>
     <ClCompile Include="Commands.cpp">
       <Filter>Source Files\Utils\Commands</Filter>
@@ -250,61 +253,61 @@
       <Filter>Source Files\Game\Scripting\Manager\Ped</Filter>
     </ClCompile>
     <ClCompile Include="Bounds.cpp">
-      <Filter>Source Files\Physic Engine\Bounds</Filter>
+      <Filter>Source Files\Engines\Physics\Bounds</Filter>
     </ClCompile>
     <ClCompile Include="Collisions.cpp">
-      <Filter>Source Files\Physic Engine\Collisions</Filter>
+      <Filter>Source Files\Engines\Physics\Collisions</Filter>
     </ClCompile>
     <ClCompile Include="Audio.cpp">
-      <Filter>Source Files\Audio Engine</Filter>
+      <Filter>Source Files\Engines\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Settings.cpp">
       <Filter>Source Files\Utils\Settings</Filter>
     </ClCompile>
     <ClCompile Include="Blocks.cpp">
-      <Filter>Source Files\Rendering Engine\Blocks</Filter>
+      <Filter>Source Files\Engines\Rendering\Blocks</Filter>
     </ClCompile>
     <ClCompile Include="Block.cpp">
-      <Filter>Source Files\Rendering Engine\Blocks\Classes</Filter>
+      <Filter>Source Files\Engines\Rendering\Blocks\Classes</Filter>
     </ClCompile>
     <ClCompile Include="BlockType.cpp">
-      <Filter>Source Files\Rendering Engine\Blocks\Classes</Filter>
+      <Filter>Source Files\Engines\Rendering\Blocks\Classes</Filter>
     </ClCompile>
     <ClCompile Include="Set.cpp">
-      <Filter>Source Files\Rendering Engine\Set</Filter>
+      <Filter>Source Files\Engines\Rendering\Set</Filter>
     </ClCompile>
     <ClCompile Include="SetClass.cpp">
-      <Filter>Source Files\Rendering Engine\Set\Classes</Filter>
+      <Filter>Source Files\Engines\Rendering\Set\Classes</Filter>
     </ClCompile>
     <ClCompile Include="SetMenu.cpp">
-      <Filter>Source Files\Rendering Engine\Set\Menu</Filter>
+      <Filter>Source Files\Engines\Rendering\Set\Menu</Filter>
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
-      <Filter>Source Files\Rendering Engine\UI</Filter>
+      <Filter>Source Files\Tools\UI</Filter>
     </ClCompile>
     <ClCompile Include="GhostBlocks.cpp">
-      <Filter>Source Files\Rendering Engine\Blocks</Filter>
+      <Filter>Source Files\Engines\Rendering\Blocks</Filter>
     </ClCompile>
     <ClCompile Include="Instance.cpp">
-      <Filter>Source Files\Rendering Engine\Blocks\Classes</Filter>
+      <Filter>Source Files\Engines\Rendering\Blocks\Classes</Filter>
     </ClCompile>
     <ClCompile Include="SSAO.cpp">
-      <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
+      <Filter>Source Files\Engines\Rendering\Graphics components\SSAO</Filter>
     </ClCompile>
     <ClCompile Include="AnimationUI.cpp">
-      <Filter>Source Files\Rendering Engine\UI\Editor\Animation</Filter>
+      <Filter>Source Files\Tools\UI\Editor\Animation</Filter>
     </ClCompile>
     <ClCompile Include="DeferredShading.cpp">
-      <Filter>Source Files\Rendering Engine\Graphics components\Deferred Shading</Filter>
+      <Filter>Source Files\Engines\Rendering\Graphics components\Deferred Shading</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Game\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Physics.cpp">
-      <Filter>Source Files\Physic Engine</Filter>
+      <Filter>Source Files\Engines\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
-      <Filter>Source Files\Rendering Engine\Set\Animation</Filter>
+      <Filter>Source Files\Engines\Rendering\Set\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Scripting.cpp">
       <Filter>Source Files\Game\Scripting</Filter>
@@ -312,19 +315,25 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Game\Scripting\Manager\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files\Engines\Rendering\Graphics components\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="Tools.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">
-      <Filter>Source Files\Rendering Engine\Drawables</Filter>
+      <Filter>Source Files\Engines\Rendering\Drawables</Filter>
     </ClInclude>
     <ClInclude Include="Triangle.h">
-      <Filter>Source Files\Rendering Engine\Drawables</Filter>
+      <Filter>Source Files\Engines\Rendering\Drawables</Filter>
     </ClInclude>
     <ClInclude Include="Quad.h">
-      <Filter>Source Files\Rendering Engine\Drawables</Filter>
+      <Filter>Source Files\Engines\Rendering\Drawables</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Source Files\Rendering Engine\Visual</Filter>
+      <Filter>Source Files\Engines\Rendering\Visual</Filter>
     </ClInclude>
     <ClInclude Include="Vectors.h">
       <Filter>Source Files\Utils</Filter>
@@ -333,28 +342,25 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Keys.h">
-      <Filter>Source Files\Rendering Engine\Data</Filter>
+      <Filter>Source Files\Engines\Rendering\Data</Filter>
     </ClInclude>
     <ClInclude Include="DefaultVertices.h">
-      <Filter>Source Files\Rendering Engine\Data</Filter>
+      <Filter>Source Files\Engines\Rendering\Data</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>Source Files\Rendering Engine\Visual\Shader</Filter>
+      <Filter>Source Files\Engines\Rendering\Visual\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Source Files\Rendering Engine\Visual\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Viewer.h">
-      <Filter>Source Files\Rendering Engine\Viewer</Filter>
+      <Filter>Source Files\Engines\Rendering\Visual\Texture</Filter>
     </ClInclude>
     <ClInclude Include="RayCasting.h">
-      <Filter>Source Files\Rendering Engine\RayCasting</Filter>
+      <Filter>Source Files\Engines\Rendering\RayCasting</Filter>
     </ClInclude>
     <ClInclude Include="Line.h">
-      <Filter>Source Files\Rendering Engine\Drawables</Filter>
+      <Filter>Source Files\Engines\Rendering\Drawables</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
-      <Filter>Source Files\Rendering Engine\Visual</Filter>
+      <Filter>Source Files\Engines\Rendering\Visual</Filter>
     </ClInclude>
     <ClInclude Include="Files.h">
       <Filter>Source Files\Utils\Files</Filter>
@@ -363,10 +369,10 @@
       <Filter>Source Files\Utils\Clock</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Source Files\Rendering Engine\Scene</Filter>
+      <Filter>Source Files\Engines\Rendering\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Colors.h">
-      <Filter>Source Files\Rendering Engine\Data</Filter>
+      <Filter>Source Files\Engines\Rendering\Data</Filter>
     </ClInclude>
     <ClInclude Include="..\Libs\IMGUI\imconfig.h">
       <Filter>Source Files\Libs\IMGUI</Filter>
@@ -396,28 +402,28 @@
       <Filter>Source Files\Libs\IMGUI\OpenGl</Filter>
     </ClInclude>
     <ClInclude Include="Editor.h">
-      <Filter>Source Files\Rendering Engine\UI\Editor</Filter>
+      <Filter>Source Files\Tools\UI\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Lightning.h">
-      <Filter>Source Files\Rendering Engine\Visual</Filter>
+      <Filter>Source Files\Engines\Rendering\Visual</Filter>
     </ClInclude>
     <ClInclude Include="LightMenu.h">
-      <Filter>Source Files\Rendering Engine\UI\Editor\Lights</Filter>
+      <Filter>Source Files\Tools\UI\Editor\Lights</Filter>
     </ClInclude>
     <ClInclude Include="ObjectsMenu.h">
-      <Filter>Source Files\Rendering Engine\UI\Editor\Objects</Filter>
+      <Filter>Source Files\Tools\UI\Editor\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Crosshair.h">
-      <Filter>Source Files\Rendering Engine\Crosshair</Filter>
+      <Filter>Source Files\Engines\Rendering\Crosshair</Filter>
     </ClInclude>
     <ClInclude Include="Maze.h">
       <Filter>Source Files\Game\Maze</Filter>
     </ClInclude>
     <ClInclude Include="Reading.h">
-      <Filter>Source Files\Network\Reading</Filter>
+      <Filter>Source Files\Engines\Network\Reading</Filter>
     </ClInclude>
     <ClInclude Include="Network.h">
-      <Filter>Source Files\Network</Filter>
+      <Filter>Source Files\Engines\Network</Filter>
     </ClInclude>
     <ClInclude Include="Commands.h">
       <Filter>Source Files\Utils\Commands</Filter>
@@ -435,49 +441,49 @@
       <Filter>Source Files\Game\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="Bounds.h">
-      <Filter>Source Files\Physic Engine\Bounds</Filter>
+      <Filter>Source Files\Engines\Physics\Bounds</Filter>
     </ClInclude>
     <ClInclude Include="Collisions.h">
-      <Filter>Source Files\Physic Engine\Collisions</Filter>
+      <Filter>Source Files\Engines\Physics\Collisions</Filter>
     </ClInclude>
     <ClInclude Include="Audio.h">
-      <Filter>Source Files\Audio Engine</Filter>
+      <Filter>Source Files\Engines\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Wav.h">
-      <Filter>Source Files\Audio Engine</Filter>
+      <Filter>Source Files\Engines\Audio</Filter>
     </ClInclude>
     <ClInclude Include="FrustrumCulling.h">
-      <Filter>Source Files\Rendering Engine\Graphics components</Filter>
+      <Filter>Source Files\Engines\Rendering\Graphics components</Filter>
     </ClInclude>
     <ClInclude Include="Settings.h">
       <Filter>Source Files\Utils\Settings</Filter>
     </ClInclude>
     <ClInclude Include="Blocks.h">
-      <Filter>Source Files\Rendering Engine\Blocks</Filter>
+      <Filter>Source Files\Engines\Rendering\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="Set.h">
-      <Filter>Source Files\Rendering Engine\Set</Filter>
+      <Filter>Source Files\Engines\Rendering\Set</Filter>
     </ClInclude>
     <ClInclude Include="SSAO.h">
-      <Filter>Source Files\Rendering Engine\Graphics components\SSAO</Filter>
+      <Filter>Source Files\Engines\Rendering\Graphics components\SSAO</Filter>
     </ClInclude>
     <ClInclude Include="DeferredShading.h">
-      <Filter>Source Files\Rendering Engine\Graphics components\Deferred Shading</Filter>
+      <Filter>Source Files\Engines\Rendering\Graphics components\Deferred Shading</Filter>
     </ClInclude>
     <ClInclude Include="SidesArrows.h">
-      <Filter>Source Files\Rendering Engine\Drawables</Filter>
+      <Filter>Source Files\Engines\Rendering\Drawables</Filter>
     </ClInclude>
     <ClInclude Include="Inventory.h">
-      <Filter>Source Files\Rendering Engine\UI</Filter>
+      <Filter>Source Files\Tools\UI</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Source Files\Game\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Physics.h">
-      <Filter>Source Files\Physic Engine</Filter>
+      <Filter>Source Files\Engines\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
-      <Filter>Source Files\Rendering Engine\Set\Animation</Filter>
+      <Filter>Source Files\Engines\Rendering\Set\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Scripting.h">
       <Filter>Source Files\Game\Scripting</Filter>
@@ -485,10 +491,19 @@
     <ClInclude Include="Player.h">
       <Filter>Source Files\Game\Scripting\Manager\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Source Files\Engines\Rendering\Graphics components\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Source Files\Engines\Rendering\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="Tools.h">
+      <Filter>Source Files\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Arrows.h">
-      <Filter>Source Files\Rendering Engine\Drawables</Filter>
+      <Filter>Source Files\Engines\Rendering\Drawables</Filter>
     </None>
   </ItemGroup>
 </Project>

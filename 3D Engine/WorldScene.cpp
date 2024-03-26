@@ -16,6 +16,7 @@ static std::shared_mutex loadingMutex;
 static glm::mat4 projection;
 static glm::mat4 view;
 static std::string sceneName;
+static bool skyboxState = true;
 static bool considerLightning = true;
 
 
@@ -28,6 +29,16 @@ static bool considerLightning = true;
 //}
 
 
+
+bool Scene::World::IsSkyboxActive()
+{
+	return skyboxState;
+}
+
+void Scene::World::SetSkyboxState(bool _enabled)
+{
+	skyboxState = _enabled;
+}
 
 void Scene::World::ConsiderLightning(bool _value, GameData* _gameData)
 {
@@ -119,6 +130,10 @@ void Scene::World::Render(GameData* _gameData)
     projection = glm::perspective(glm::radians(camera->Fov), (float)_gameData->resolution[0] / (float)_gameData->resolution[1], 0.1f, 100.0f);
 	view = camera->GetViewMatrix();
     {
+		_gameData->shaders[Shaders::SKYBOX]->use();
+		_gameData->shaders[Shaders::SKYBOX]->setMat4("projection", projection);
+		_gameData->shaders[Shaders::SKYBOX]->setMat4("view", glm::mat4(glm::mat3(view)));// Remove translation from the view matrix
+
 
 		_gameData->shaders[Shaders::SINGLE_DRAW]->use();
         _gameData->shaders[Shaders::SINGLE_DRAW]->setMat4("projection", projection);
@@ -131,7 +146,7 @@ void Scene::World::Render(GameData* _gameData)
         _gameData->shaders[Shaders::GEOMETRY]->setBool("instanceUsage", true);
 
     }
-	DeferredShading::Draw(_gameData);
+	DeferredShading::Draw(_gameData, skyboxState);
 }
 
 

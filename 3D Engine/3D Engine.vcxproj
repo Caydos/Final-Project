@@ -179,8 +179,10 @@
     <ClCompile Include="SetClass.cpp" />
     <ClCompile Include="SetMenu.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SSAO.cpp" />
     <ClCompile Include="Sync.cpp" />
+    <ClCompile Include="Tools.cpp" />
     <ClCompile Include="WorldScene.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="Files.cpp" />
@@ -190,7 +192,6 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Viewer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libs\IMGUI\backends\imgui_impl_glfw.h" />
@@ -238,11 +239,12 @@
     <ClInclude Include="Set.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SidesArrows.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SSAO.h" />
     <ClInclude Include="Sync.h" />
+    <ClInclude Include="Tools.h" />
     <ClInclude Include="Vectors.h" />
-    <ClInclude Include="Viewer.h" />
     <ClInclude Include="Wav.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Colors.h" />

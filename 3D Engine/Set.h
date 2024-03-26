@@ -121,6 +121,7 @@ namespace Sets
 	void Menu(GameData* _gameData, float _yOffset);
 	void Edition(GameData* _gameData, bool _allowControls = true);
 
+	Set* GetEditedSet();
 	void SetEditedSet(Set* _set);
 }
 

@@ -18,7 +18,7 @@
 enum Gamestate
 {
 	MAIN_MENU,
-	SCENE,
+	TOOLS,
 	GAME,
 };
 
