@@ -11,6 +11,7 @@ namespace Shaders
 {
     enum Type
     {
+        SKYBOX,
         UI,
         UI_OBJECT,
         SINGLE_DRAW,

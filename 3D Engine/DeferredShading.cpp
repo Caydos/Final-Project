@@ -102,6 +102,7 @@ void DeferredShading::RenderQuad()
 void DeferredShading::Draw(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
+	Colors::Color clearColor = Scene::GetClearColor();
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
@@ -109,16 +110,20 @@ void DeferredShading::Draw(GameData* _gameData)
 	glFrontFace(GL_CCW);
 	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
+	glClearColor(clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Sets::UpdateVisibility();
 	Blocks::Draw();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
+	glClearColor(clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	Camera* cam = Scene::World::GetCamera();
 	_gameData->shaders[Shaders::RENDER]->use();
 	_gameData->shaders[Shaders::RENDER]->setVec3("viewPos", cam->Position);
+	_gameData->shaders[Shaders::RENDER]->setVec4("clearColor", clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, gPosition);

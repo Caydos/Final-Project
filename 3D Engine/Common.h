@@ -36,7 +36,7 @@ struct GameData
 	float resolution[2];
 	Window window;
 
-	Shaders::Shader* shaders[5];
+	Shaders::Shader* shaders[6];
 	Shaders::Shader* actualShader;
 
 	Gamestate gameState;

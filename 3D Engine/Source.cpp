@@ -42,11 +42,11 @@ int main()
 
 	gameData.window.Create("3D Rendering Engine", gameData.resolution[0], gameData.resolution[1]);
 
-	Shaders::Shader uiShader("../Shaders/ui.vs", "../Shaders/ui.fs");
+	Shaders::Shader uiShader("../Shaders/UI.vs", "../Shaders/UI.fs");
 	Shaders::Shader uiObject("../Shaders/UIObject.vs", "../Shaders/UIObject.fs");
 	Shaders::Shader worldObjectShader("../Shaders/WorldObject.vs", "../Shaders/WorldObject.fs");
-	Shaders::Shader geometryShader("../Shaders/geometry.vs", "../Shaders/geometry.fs");
-	Shaders::Shader renderShader("../Shaders/render.vs", "../Shaders/render.fs");
+	Shaders::Shader geometryShader("../Shaders/Geometry.vs", "../Shaders/Geometry.fs");
+	Shaders::Shader renderShader("../Shaders/Render.vs", "../Shaders/Render.fs");
 
 
 	gameData.shaders[Shaders::UI] = &uiShader;
@@ -58,7 +58,7 @@ int main()
 
 	gameData.gameStates[SCENE] = &Scene::Tick;
 	gameData.gameStates[GAME] = &Scritping::Tick;
-	gameData.gameState = SCENE;
+	gameData.gameState = GAME;
 
 #ifdef _DEBUG
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

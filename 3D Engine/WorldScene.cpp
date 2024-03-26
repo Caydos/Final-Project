@@ -6,6 +6,7 @@
 #include "Blocks.h"
 #include "Set.h"
 #include "DeferredShading.h"
+#include "Quad.h"
 
 static std::vector<Camera> cameras;
 static unsigned int focusedCamera = 0;
@@ -111,7 +112,6 @@ void Scene::World::MouseInputs(GameData* _gameData)
 		std::cout << "[Camera] - (MouseInputs) : Exception caught: " << e.what() << std::endl;
 	}
 }
-
 
 void Scene::World::Render(GameData* _gameData)
 {

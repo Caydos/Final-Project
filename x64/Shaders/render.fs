@@ -34,6 +34,7 @@ struct Light
 #define MAX_LIGHTS 40
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 viewPos;
+uniform vec4 clearColor;
 
 vec3 CalcSpotLight(Light _light, vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, float _specular, float _shininess)
 {
@@ -67,7 +68,9 @@ void main()
     vec3 Albedo = texture(gAlbedoSpec, TexCoords).rgb;
     float Specular = texture(gEffects, TexCoords).a;
     float Shininess = 32.0;
-    // if (Normal == vec3(0.0, 0.0, 0.0)){ discard; }
+    if((Normal.x == clearColor.x) && (Normal.y == clearColor.y) && (Normal.z == clearColor.z)) { discard; }
+   
+    
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - WorldPos);
 

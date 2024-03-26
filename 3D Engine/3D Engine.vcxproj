@@ -238,6 +238,7 @@
     <ClInclude Include="Set.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SidesArrows.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="SSAO.h" />
     <ClInclude Include="Sync.h" />
     <ClInclude Include="Vectors.h" />
