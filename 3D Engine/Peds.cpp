@@ -1,4 +1,5 @@
 #include "Peds.h"
+#include "Collisions.h"
 
 
 Peds::Ped::Ped()
@@ -80,6 +81,35 @@ void Peds::Ped::Run()
 {
 	this->running = true;
 }
+void Peds::Ped::Simulate(GameData* _gameData)
+{
+	std::vector<Sets::Set*> sets = Sets::GetAllParents();
+	for (size_t setId = 0; setId < sets.size(); setId++)
+	{
+		if (sets[setId] == this) { continue; }
+		//std::vector<Sets::Set*> childs = sets->at(setId)->GetChilds();
+		//bool skip = false;
+		//for (size_t childId = 0; childId < childs.size(); childId++)
+		//{
+		//	if (childs[childId] == sets->at(setId))
+		//	{
+		//		skip = true;
+		//		break;
+		//	}
+		//}
+		//if (skip) { continue; }
+		//Bounds::Box parentBox = sets[setId]->GetBoundingBox();
+		//Collisions::Result rslt = Collisions::BoxColliding(this->GetBoundingBox(), parentBox);
+		//if (rslt.isColliding)
+		//{
+		//	std::cout << this->GetName() << " - " << sets[setId]->GetName() << std::endl;
+		//	for (size_t childId = 0; childId < length; childId++)
+		//	{
+
+		//	}
+		//}
+	}
+}
 
 
 std::vector<Peds::Ped*> pedPool;
@@ -101,4 +131,12 @@ void Peds::Erase(Ped* _ped, bool _eraseModel)
 std::vector<Peds::Ped*>* Peds::GetPool()
 {
 	return &pedPool;
+}
+
+void Peds::Simulate(GameData* _gameData)
+{
+	for (size_t pedId = 0; pedId < pedPool.size(); pedId++)
+	{
+		pedPool[pedId]->Simulate(_gameData);
+	}
 }

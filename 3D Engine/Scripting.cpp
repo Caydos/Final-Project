@@ -7,12 +7,12 @@ static bool initialized = false;
 static Players::Player* player = nullptr;
 static unsigned int FPVCam;
 static Lightning::Light* flashLight;
+static Sets::Set* set;
 
 void Scritping::Tick(GameData* _gameData)
 {
 	if (!initialized)
 	{
-
 		Scene::Initialize(_gameData);
 		Scene::World::SetSkyboxState(false);
 
@@ -51,7 +51,69 @@ void Scritping::Tick(GameData* _gameData)
 		Scene::Lights::UpdateShader(_gameData);
 
 
-		Maze::GenerateMaze(3,1);
+		//Maze::GenerateMaze(3,1);
+		Blocks::BlockType* blType[3] = { nullptr };
+		std::vector<Blocks::BlockType*> types = Blocks::GetAll();
+		for (size_t i = 0; i < types.size(); i++)
+		{
+			if (types[i]->GetName() == "HSP_S1")
+			{
+				blType[0] = types[i];
+			}
+			else if (types[i]->GetName() == "HSP_W1")
+			{
+				blType[1] = types[i];
+			}
+			else if (types[i]->GetName() == "HSP_W2")
+			{
+				blType[2] = types[i];
+			}
+		}
+		/*Sets::Set**/ set = Sets::Create();
+		set->GenerateRenderingInstance();
+
+		for (size_t rowId = 0; rowId < 50; rowId++)
+		{
+			for (size_t columnId = 0; columnId < 50; columnId++)
+			{
+				Blocks::Block block;
+				block.GenerateModel();
+				block.SetType(blType[0]);
+				glm::vec3 scale = block.GetType()->GetScale();
+				block.SetScale(scale);
+				block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
+				set->InsertBlock(block, false);
+				if (!rowId || rowId == 49)
+				{
+					for (size_t heightId = 1; heightId < 20; heightId++)
+					{
+						Blocks::Block block;
+						block.GenerateModel();
+						block.SetType((heightId < 7) ? blType[1] : blType[2]);
+						glm::vec3 scale = block.GetType()->GetScale();
+						block.SetScale(scale);
+						block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+						set->InsertBlock(block, false);
+					}
+				}
+				else if (columnId == 49)
+				{
+					for (size_t heightId = 1; heightId < 20; heightId++)
+					{
+						Blocks::Block block;
+						block.GenerateModel();
+						block.SetType((heightId < 7) ? blType[1] : blType[2]);
+						glm::vec3 scale = block.GetType()->GetScale();
+						block.SetScale(scale);
+						block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
+						set->InsertBlock(block, false);
+					}
+				}
+			}
+		}
+		set->SetName("Wall");
+		set->SetPath("../Sets/");
+		set->CalculateBoundingBox();
 		initialized = true;
 	}
 	std::vector<Lightning::Light>* lights = Scene::Lights::GetLights();
@@ -68,5 +130,6 @@ void Scritping::Tick(GameData* _gameData)
 	}
 	Scene::Tick(_gameData);
 	player->Control(_gameData);
+	Peds::Simulate(_gameData);
 
 }

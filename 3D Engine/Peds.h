@@ -26,6 +26,8 @@ namespace Peds
 		float GetRunningMultiplier();
 		void SetRunningMultiplier(float _multiplier);
 		void Run();
+
+		void Simulate(GameData* _gameData);
 	private:
 		std::shared_mutex mutex;
 		Camera* camera;
@@ -40,6 +42,7 @@ namespace Peds
 	Ped* Create();
 	void Erase(Ped* _ped, bool _eraseModel = true);
 	std::vector<Peds::Ped*>* GetPool();
+	void Simulate(GameData* _gameData);
 }
 
 #endif // !PEDS_H

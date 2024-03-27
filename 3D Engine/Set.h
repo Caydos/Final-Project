@@ -114,6 +114,7 @@ namespace Sets
 	void Erase(Set* _set);
 
 	std::vector<Set*>* GetAll();
+	std::vector<Set*> GetAllParents();
 
 	bool ChildTree(GameData* _gameData, Set* _parentSet);
 	bool SetTree(GameData* _gameData, Set* _set);

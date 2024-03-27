@@ -54,6 +54,19 @@ std::vector<Sets::Set*>* Sets::GetAll()
 	return &sets;
 }
 
+std::vector<Sets::Set*> Sets::GetAllParents()
+{
+	std::vector<Set*> parents;
+	for (size_t setId = 0; setId < sets.size(); setId++)
+	{
+		if (sets[setId]->GetParent() == nullptr)
+		{
+			parents.push_back(sets[setId]);
+		}
+	}
+	return parents;
+}
+
 static bool holding = false;
 static Blocks::Block* hittedOne = nullptr;
 static glm::vec3 position;
