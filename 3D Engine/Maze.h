@@ -7,14 +7,14 @@
 
 //////////////////////////////////////// CELL PRESET ////////////////////////////////////////
 #define NB_CELL 5
-#define CELL_W 2
+#define BRICK_W 0.25
 #define NB_CELL_BRICK 10
-#define BRICK_W (CELL_W/NB_CELL_BRICK)
+#define CELL_W ((float)BRICK_W*(float)NB_CELL_BRICK)
 //////////////////////////////////////// STAGE PRESET ////////////////////////////////////////
-#define NB_STAGE_H 1
+//#define _nbStage 1
 #define OFFSET_STAGE 1
 //////////////////////////////////////// MAP PRESET ////////////////////////////////////////
-#define NB_MAP_H 3
+//#define _mapW 3
 #define MAP_W (CELL_W*NB_CELL)
 //////////////////////////////////////// DENSITY ////////////////////////////////////////
 #define SHORTCUT_LUCK 75
@@ -56,22 +56,13 @@ namespace Maze
 		FIELDS,
 	};
 
-	enum TextEnum
-	{
-		WALL,
-		GROUND,
-		WALLROT,
-		ROOF,
-		WALLMISSING,
-		WALLMISSINGROT,
-	};
-
 	struct Decor
 	{
 		Sets::Set* decor;
 		bool isVisible;
 		const char* name;
 		glm::vec3 pos;
+		glm::vec3 rot;
 	};
 
 	struct Cell
@@ -81,6 +72,8 @@ namespace Maze
 		std::vector<Decor> wallMissingList;
 		std::vector<Decor> ground;
 		std::vector<Decor> wallList;
+		std::vector<Decor> wallOutList;
+		std::vector<Decor> props;
 	};
 
 	struct Chunck
@@ -106,22 +99,27 @@ namespace Maze
 
 	struct ManagmentText
 	{
-		std::vector<const char*> hallRoomList;
-		std::vector<const char*> hospitalRoomList;
-		std::vector<const char*> fieldsRoomList;
-		std::vector<const char*> laboRoomList;
-
-		std::vector<const char*> hallCellList;
-		std::vector<const char*> hospitalCellList;
-		std::vector<const char*> fieldsCellList;
-		std::vector<const char*> laboCellList;
-
-		std::vector<const char*> exitRoomList;
-		std::vector<const char*> propsBuildingRoomList;
+		std::vector<const char*> ground;
+		std::vector<const char*> wallBot;
+		std::vector<const char*> wallBotWindow;
+		std::vector<const char*> wallLeftWindow;
+		std::vector<const char*> wallLeft;
+		std::vector<const char*> roof;
+		std::vector<const char*> propsBuilding;
+		std::vector<const char*> garden;
+		std::vector<const char*> gardenRot;
 	};
 
 	void Generate();
 	void Create();
-}
 
+	ManagmentText InitProps();
+	void GenerateMaze(int _mapW, int _nbStage);
+	void StageManagment(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck, Stage& _stage, int _mapW, int _nbStage);
+	void InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck, ManagmentText _text, int _mapW, int _nbStage);
+	void InitLaby(Chunck& _chunck);
+	void InitHospital(int _mapNb, int _stageNb, int _mapW, int _nbStage);
+	void InitSpecialChuncks(int _mapNb, int _stageNb, int _cell, ManagmentText _text, int _mapW, int _nbStage);
+	void CreateMaze();
+}
 #endif // !OBSTACLE_H

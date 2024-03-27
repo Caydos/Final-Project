@@ -321,6 +321,9 @@
     <ClCompile Include="Tools.cpp">
       <Filter>Source Files\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Props.cpp">
+      <Filter>Source Files\Game\Maze</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">
@@ -499,6 +502,9 @@
     </ClInclude>
     <ClInclude Include="Tools.h">
       <Filter>Source Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Props.h">
+      <Filter>Source Files\Game\Maze</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

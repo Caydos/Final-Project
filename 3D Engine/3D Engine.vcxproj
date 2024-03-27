@@ -173,6 +173,7 @@
     <ClCompile Include="Peds.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Props.cpp" />
     <ClCompile Include="Reading.cpp" />
     <ClCompile Include="Scripting.cpp" />
     <ClCompile Include="Set.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="Peds.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Props.h" />
     <ClInclude Include="RayCasting.h" />
     <ClInclude Include="Reading.h" />
     <ClInclude Include="Scene.h" />
