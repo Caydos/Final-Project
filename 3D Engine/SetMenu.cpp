@@ -106,6 +106,9 @@ bool Sets::SetTree(GameData* _gameData, Set* _set)
 			selectedSet = _set;
 		}
 		ImGui::Text(std::string("Block count : " + std::to_string(_set->GetBlocks()->size())).c_str());
+		Bounds::Box boundingBox = _set->GetBoundingBox();
+		glm::vec3 size = boundingBox.max - boundingBox.min;
+		ImGui::Text(std::string("Size : (" + std::to_string(size.x) + "," + std::to_string(size.y) + "," + std::to_string(size.z) + ")").c_str());
 		ImGui::Text("Position : ");
 		glm::vec3 position = _set->GetPosition();
 		if (ImGui::DragFloat3(std::string("##Position" + name).c_str(), &position.x, 0.05f))
