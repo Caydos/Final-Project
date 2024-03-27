@@ -115,6 +115,7 @@ void Scene::World::MouseInputs(GameData* _gameData)
 {
 	try
 	{
+		if (!cameras.size()) { return; }
 		Camera* camera = &cameras.at(focusedCamera);
 		camera->ProcessMouseMovement(_gameData->window.xoffset, _gameData->window.yoffset, true, _gameData->dt);
 	}
@@ -126,6 +127,7 @@ void Scene::World::MouseInputs(GameData* _gameData)
 
 void Scene::World::Render(GameData* _gameData)
 {
+	if (!cameras.size()) { return; }
     Camera* camera = &cameras.at(focusedCamera);
     projection = glm::perspective(glm::radians(camera->Fov), (float)_gameData->resolution[0] / (float)_gameData->resolution[1], 0.1f, 100.0f);
 	view = camera->GetViewMatrix();

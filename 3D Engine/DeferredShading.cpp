@@ -71,7 +71,7 @@ void DeferredShading::Initialize(GameData* _gameData)
 	_gameData->shaders[Shaders::RENDER]->setInt("gEffects", 3);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	Skybox::Load(_gameData);
+	//Skybox::Load(_gameData);
 
 	initialized = true;
 }
@@ -120,7 +120,7 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	{
 		Skybox::Draw(_gameData);
 	}
-
+	glActiveTexture(GL_TEXTURE0);
 	_gameData->shaders[Shaders::GEOMETRY]->use();
 	Sets::UpdateVisibility();
 	Blocks::Draw();

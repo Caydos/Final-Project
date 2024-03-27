@@ -76,6 +76,7 @@ unsigned int loadCubemap(std::vector<std::string> faces)
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     stbi_set_flip_vertically_on_load(true);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     return textureID;
 }
@@ -100,9 +101,16 @@ void Skybox::Load(GameData* _gameData)
     _gameData->shaders[Shaders::SKYBOX]->setInt("skybox", 0);
     cubemapTexture = loadCubemap(faces);
 }
+static bool initialized = false;
 
 void Skybox::Draw(GameData* _gameData)
 {
+    if (!initialized)
+    {
+        Load(_gameData);
+        initialized = true;
+    }
+    std::cout << "draw" << std::endl;
     // draw skybox as last
     glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
     _gameData->shaders[Shaders::SKYBOX]->use();

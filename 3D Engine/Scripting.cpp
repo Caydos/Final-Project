@@ -4,13 +4,19 @@
 
 static bool initialized = false;
 static Players::Player* player = nullptr;
+static unsigned int FPVCam;
 
 void Scritping::Tick(GameData* _gameData)
 {
 	if (!initialized)
 	{
+
 		Scene::Initialize(_gameData);
-		Scene::World::SetSkyboxState(true);
+		Scene::World::SetSkyboxState(false);
+
+		FPVCam = Scene::World::NewCamera(glm::vec3(3.0f, 1.2f, 3.0f));
+		Scene::World::FocusCamera(_gameData, FPVCam);
+
 
 		player = Players::Create();
 		Peds::Ped* playerPed = Peds::Create();
