@@ -7,6 +7,7 @@ Players::Player::Player()
 Players::Player::~Player()
 {
 }
+const float sideSpeedMultiplier = 0.8f;
 
 void Players::Player::Control(GameData* _gameData)
 {
@@ -28,17 +29,20 @@ void Players::Player::Control(GameData* _gameData)
 		}
 		if (_gameData->window.IsKeyPressed(Keys::A))
 		{
-			velocityVec -= glm::normalize(glm::vec3(camera->Right.x, 0.0f, camera->Right.z)) * velocity;
+			velocityVec -= glm::normalize(glm::vec3(camera->Right.x, 0.0f, camera->Right.z)) * velocity * sideSpeedMultiplier;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::D))
 		{
-			velocityVec += glm::normalize(glm::vec3(camera->Right.x, 0.0f, camera->Right.z)) * velocity;
+			velocityVec += glm::normalize(glm::vec3(camera->Right.x, 0.0f, camera->Right.z)) * velocity * sideSpeedMultiplier;
 		}
-		if (_gameData->window.IsKeyPressed(Keys::SPACE))
+		if (_gameData->window.IsKeyPressed(Keys::SPACE) && jumpClock.GetElapsedTime() > 500/* && this->ped->GetBody().velocity.y == 0*/)
 		{
+			velocityVec.y += 0.0125;
+			jumpClock.Restart();
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_CONTROL))
 		{
+			velocityVec.y -= velocity;
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
 		{
@@ -47,7 +51,7 @@ void Players::Player::Control(GameData* _gameData)
 			velocityVec.z *= this->ped->GetRunningMultiplier();
 		}
 		this->ped->PushVelocity(velocityVec, true);
-		this->ped->Update();
+		//this->ped->Update();
 	}
 }
 std::vector<Players::Player*> playerPool;

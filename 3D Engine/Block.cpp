@@ -179,6 +179,18 @@ void Blocks::Block::CalculateBoundingBox()
 	};
 	glm::vec3 globalMin = glm::vec3(FLT_MAX);
 	glm::vec3 globalMax = glm::vec3(-FLT_MAX);
+
+	glm::mat4 tempModel(1.0f);
+	if (this->parent != nullptr)
+	{
+		tempModel = *parent;
+	}
+
+
+	tempModel = glm::translate(tempModel, this->position);
+	tempModel = glm::scale(tempModel, this->scale);
+
+
 	glm::vec4 transformedVertex = *this->model * glm::vec4(vertices[0], 1.0);
 	this->boundingBox.min = transformedVertex;
 	this->boundingBox.max = transformedVertex;

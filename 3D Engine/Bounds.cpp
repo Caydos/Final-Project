@@ -39,6 +39,7 @@ void Bounds::BoundingBox::Draw()
         this->Initialize();
     }
 
+    this->shader->use();
     this->shader->setBool("instanceUsage", false);
     this->shader->setMat4("model", this->model);
     this->shader->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));

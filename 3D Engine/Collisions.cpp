@@ -37,6 +37,69 @@ Collisions::Result Collisions::BoxColliding(Bounds::Box _firstBox, Bounds::Box _
 	return result;
 }
 
+glm::vec3 Collisions::CalculateCollisionResponse(Bounds::Box movingBox, Bounds::Box stationaryBox, glm::vec3 velocity)
+{
+	//Bounds::Box expandedBox = movingBox.getExpanded(velocity);
+
+	//if (!expandedBox.overlaps(stationaryBox)) {
+	//	// If there's no overlap even after expanding, no collision is expected
+	//	return velocity;
+	//}
+
+	//// Attempt to move on each axis individually to find allowed movement
+	//glm::vec3 allowedMovement = velocity;
+	//glm::vec3 axes[3] = { glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, 1) };
+
+	//for (int i = 0; i < 3; ++i) {
+	//	glm::vec3 axisMovement(0);
+	//	axisMovement[i] = velocity[i];
+	//	Bounds::Box testBox = movingBox.getExpanded(axisMovement);
+
+	//	if (!testBox.overlaps(stationaryBox)) {
+	//		// If moving along this axis doesn't cause a collision, retain this component of the movement
+	//		continue;
+	//	}
+
+	//	// Calculate the depth of overlap along this axis
+	//	float depth = std::min(stationaryBox.max[i] - movingBox.min[i], movingBox.max[i] - stationaryBox.min[i]);
+	//	if (velocity[i] > 0) {
+	//		allowedMovement[i] = std::min(allowedMovement[i], depth);
+	//	}
+	//	else if (velocity[i] < 0) {
+	//		allowedMovement[i] = std::max(allowedMovement[i], -depth);
+	//	}
+	//	allowedMovement.y = 0;
+	//	return allowedMovement;
+	//}
+	Bounds::Box predictedBox = { movingBox.min + velocity, movingBox.max + velocity };
+	glm::vec3 penetration;
+
+	if (!predictedBox.intersects(stationaryBox, penetration)) {
+		// No collision; proceed with the movement
+		return velocity;
+	}
+	else {
+		// Collision; resolve along the minimal penetration axis
+		glm::vec3 minimalPenetration = penetration;
+
+		// Find the axis with the minimal penetration
+		if (std::abs(penetration.x) < std::abs(penetration.y) && std::abs(penetration.x) < std::abs(penetration.z)) {
+			minimalPenetration.y = minimalPenetration.z = 0.0f;
+		}
+		else if (std::abs(penetration.y) < std::abs(penetration.z)) {
+			minimalPenetration.x = minimalPenetration.z = 0.0f;
+		}
+		else {
+			minimalPenetration.x = minimalPenetration.y = 0.0f;
+		}
+
+		// Adjust the velocity based on the penetration depth
+		glm::vec3 adjustedVelocity = velocity + minimalPenetration;
+
+		return adjustedVelocity;
+	}
+}
+
 bool Collisions::IntersectRayWithBox(glm::vec3 rayOrigin, glm::vec3 rayDirection, glm::vec3 boxMin, glm::vec3 boxMax, float& t)
 {
 	glm::vec3 invDir = 1.0f / rayDirection;

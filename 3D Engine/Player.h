@@ -2,6 +2,8 @@
 #define PLAYER_H
 #include "Peds.h"
 #include "Physics.h"
+#include "Clock.h"
+
 namespace Players
 {
 	class Player
@@ -18,6 +20,7 @@ namespace Players
 	private:
 		//int serverId;
 		Peds::Ped* ped;
+		Clock jumpClock;
 		
 	};
 	Player* Create();

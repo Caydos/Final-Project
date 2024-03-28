@@ -18,6 +18,8 @@ namespace Peds
 		void SetCamera(Camera* _camera);
 
 		Physics::Body GetBody();
+		Physics::Type GetBodyType();
+		void SetBodyType(Physics::Type _type);
 
 		void PushVelocity(glm::vec3 _velocity, bool _movementVelocity = false);
 		void Update();

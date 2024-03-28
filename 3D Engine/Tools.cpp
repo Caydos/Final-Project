@@ -6,6 +6,7 @@
 #include "Crosshair.h"
 #include "Scene.h"
 #include "Clock.h"
+#include "Maze.h"
 static bool initialized = false;
 
 static unsigned int FPVCam;
@@ -38,6 +39,8 @@ void Tools::Initialize(GameData* _gameData)
 	Scene::Lights::InsertLight(_gameData, flashLight2);
 
 	Scene::Lights::UpdateShader(_gameData);
+
+	//Maze::GenerateMaze(3, 1);
 
 	initialized = true;
 }

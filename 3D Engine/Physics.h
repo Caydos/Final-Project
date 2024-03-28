@@ -8,12 +8,18 @@ namespace Physics
 	float CalculateCrossSectionalArea(const Bounds::Box& box); //A
 
 	float CalculateDragCoefficient(float aerodynamic); // Fdrag
-
+	enum Type
+	{
+		RIGID, // Concerned by physics without deformation
+		STATIC, // A rigid not concerned by physics
+	};
 	class Body
 	{
 	public:
 		Body();
 		~Body();
+
+		Type type = STATIC;
 
 		float aerodynamic; // from 0 to 1.0f
 		float weight;
