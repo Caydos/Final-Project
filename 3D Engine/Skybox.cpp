@@ -110,7 +110,6 @@ void Skybox::Draw(GameData* _gameData)
         Load(_gameData);
         initialized = true;
     }
-    std::cout << "draw" << std::endl;
     // draw skybox as last
     glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
     _gameData->shaders[Shaders::SKYBOX]->use();

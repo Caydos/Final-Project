@@ -16,7 +16,7 @@ void Scritping::Tick(GameData* _gameData)
 	if (!initialized)
 	{
 		Scene::Initialize(_gameData);
-		Scene::World::SetSkyboxState(false);
+		Scene::World::SetSkyboxState(true);
 
 		FPVCam = Scene::World::NewCamera(glm::vec3(3.0f, 1.2f, 3.0f));
 		Scene::World::FocusCamera(_gameData, FPVCam);

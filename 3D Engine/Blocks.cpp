@@ -34,7 +34,15 @@ void Blocks::Load(std::string _name)
 				{
 					if (content["attributes"].contains("scale"))
 					{
-						glm::vec3 scale(content["attributes"]["scale"]);
+						glm::vec3 scale;
+						if (content["attributes"]["scale"].is_array())
+						{
+							scale = glm::vec3(content["attributes"]["scale"][0], content["attributes"]["scale"][1], content["attributes"]["scale"][2]);
+						}
+						else
+						{
+							scale = glm::vec3(content["attributes"]["scale"]);
+						}
 						block->SetScale(scale);
 					}
 					if (content["attributes"].contains("lightDependent"))
