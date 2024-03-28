@@ -10,6 +10,7 @@ namespace Physics
 	float CalculateDragCoefficient(float aerodynamic); // Fdrag
 	enum Type
 	{
+		GHOST, // Not concerned by anything
 		RIGID, // Concerned by physics without deformation
 		STATIC, // A rigid not concerned by physics
 	};

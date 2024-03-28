@@ -37,8 +37,18 @@ void Players::Player::Control(GameData* _gameData)
 		}
 		if (_gameData->window.IsKeyPressed(Keys::SPACE) && jumpClock.GetElapsedTime() > 500/* && this->ped->GetBody().velocity.y == 0*/)
 		{
-			velocityVec.y += 0.0125;
-			jumpClock.Restart();
+			if (this->ped->GetBodyType() == Physics::Type::RIGID)
+			{
+				if (jumpClock.GetElapsedTime() > 500)
+				{
+					jumpClock.Restart();
+					velocityVec.y += 0.0125;
+				}
+			}
+			else
+			{
+				velocityVec.y += 0.0125;
+			}
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_CONTROL))
 		{

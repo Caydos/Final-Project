@@ -46,9 +46,6 @@
     <Filter Include="Source Files\Utils\Settings">
       <UniqueIdentifier>{9ad962b9-e469-4307-a610-0224068cac80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Entity">
-      <UniqueIdentifier>{e33d3bca-5aff-48f9-8b6b-0569f00842c6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Scripting">
       <UniqueIdentifier>{1fc1871b-da24-4b5c-aedb-e34de6b9134a}</UniqueIdentifier>
     </Filter>
@@ -162,6 +159,9 @@
     </Filter>
     <Filter Include="Source Files\Engines\Rendering\Graphics components\Skybox">
       <UniqueIdentifier>{7d258442-2a95-421b-a21f-21ae18141b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Manager\Monster">
+      <UniqueIdentifier>{25350a0b-551d-4e48-a300-8c82bad0a791}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -300,9 +300,6 @@
     <ClCompile Include="DeferredShading.cpp">
       <Filter>Source Files\Engines\Rendering\Graphics components\Deferred Shading</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files\Game\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Source Files\Engines\Physics</Filter>
     </ClCompile>
@@ -323,6 +320,9 @@
     </ClCompile>
     <ClCompile Include="Props.cpp">
       <Filter>Source Files\Game\Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Source Files\Game\Scripting\Manager\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -479,9 +479,6 @@
     <ClInclude Include="Inventory.h">
       <Filter>Source Files\Tools\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Source Files\Game\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Physics.h">
       <Filter>Source Files\Engines\Physics</Filter>
     </ClInclude>
@@ -505,6 +502,9 @@
     </ClInclude>
     <ClInclude Include="Props.h">
       <Filter>Source Files\Game\Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Source Files\Game\Scripting\Manager\Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

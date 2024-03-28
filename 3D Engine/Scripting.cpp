@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Maze.h"
 #include "Collisions.h"
+#include "Monster.h"
 
 static bool initialized = false;
 static Players::Player* player = nullptr;
@@ -29,6 +30,7 @@ void Scritping::Tick(GameData* _gameData)
 		playerPed->SetName("Character");
 		playerPed->SetPath("../Sets/MC/");
 		playerPed->SetCamera(_gameData->camera);
+		playerPed->SetBodyType(Physics::Type::RIGID);
 		player->SetPed(playerPed);
 
 		playerPed->SetPosition(glm::vec3(3.650f, 1.850f, 1.1f), true);
@@ -53,70 +55,11 @@ void Scritping::Tick(GameData* _gameData)
 
 
 		Maze::GenerateMaze(3,1);
-		//Blocks::BlockType* blType[3] = { nullptr };
-		//std::vector<Blocks::BlockType*> types = Blocks::GetAll();
-		//for (size_t i = 0; i < types.size(); i++)
-		//{
-		//	if (types[i]->GetName() == "HSP_S1")
-		//	{
-		//		blType[0] = types[i];
-		//	}
-		//	else if (types[i]->GetName() == "HSP_W1")
-		//	{
-		//		blType[1] = types[i];
-		//	}
-		//	else if (types[i]->GetName() == "HSP_W2")
-		//	{
-		//		blType[2] = types[i];
-		//	}
-		//}
-		///*Sets::Set**/ set = Sets::Create();
-		//set->GenerateRenderingInstance();
+		Monster::GenerateMonster(); //Pop les mob
 
-		//for (size_t rowId = 0; rowId < 50; rowId++)
-		//{
-		//	for (size_t columnId = 0; columnId < 50; columnId++)
-		//	{
-		//		Blocks::Block block;
-		//		block.GenerateModel();
-		//		block.SetType(blType[0]);
-		//		glm::vec3 scale = block.GetType()->GetScale();
-		//		block.SetScale(scale);
-		//		block.SetPosition(glm::vec3(scale.x * rowId, .0f, scale.z * columnId));
-		//		set->InsertBlock(block, false);
-		//		if (!rowId || rowId == 49)
-		//		{
-		//			for (size_t heightId = 1; heightId < 20; heightId++)
-		//			{
-		//				Blocks::Block block;
-		//				block.GenerateModel();
-		//				block.SetType((heightId < 7) ? blType[1] : blType[2]);
-		//				glm::vec3 scale = block.GetType()->GetScale();
-		//				block.SetScale(scale);
-		//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-		//				set->InsertBlock(block, false);
-		//			}
-		//		}
-		//		else if (columnId == 49)
-		//		{
-		//			for (size_t heightId = 1; heightId < 20; heightId++)
-		//			{
-		//				Blocks::Block block;
-		//				block.GenerateModel();
-		//				block.SetType((heightId < 7) ? blType[1] : blType[2]);
-		//				glm::vec3 scale = block.GetType()->GetScale();
-		//				block.SetScale(scale);
-		//				block.SetPosition(glm::vec3(scale.x * rowId, scale.y * heightId, scale.z * columnId));
-		//				set->InsertBlock(block, false);
-		//			}
-		//		}
-		//	}
-		//}
-		//set->SetName("Wall");
-		//set->SetPath("../Sets/");
-		//set->CalculateBoundingBox();
 		initialized = true;
 	}
+
 	std::vector<Lightning::Light>* lights = Scene::Lights::GetLights();
 	for (size_t i = 0; i < lights->size(); i++)
 	{
@@ -133,4 +76,18 @@ void Scritping::Tick(GameData* _gameData)
 	player->Control(_gameData);
 	Peds::Simulate(_gameData);
 	player->GetPed()->DrawBoundingBox();
+	Monster::MovementMob(_gameData);
+
+
+
+
+	// Cheat code
+	if (_gameData->window.IsKeyPressed(Keys::F1))
+	{
+		player->GetPed()->SetBodyType(Physics::Type::GHOST);
+	}
+	if (_gameData->window.IsKeyPressed(Keys::F2))
+	{
+		player->GetPed()->SetBodyType(Physics::Type::RIGID);
+	}
 }

@@ -159,7 +159,6 @@
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="DeferredShading.cpp" />
-    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="GhostBlocks.cpp" />
     <ClCompile Include="Instance.cpp" />
@@ -169,6 +168,7 @@
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
     <ClCompile Include="Peds.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -216,7 +216,6 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="DefaultVertices.h" />
     <ClInclude Include="DeferredShading.h" />
-    <ClInclude Include="Entity.h" />
     <ClInclude Include="EventListing.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="FrustrumCulling.h" />
@@ -228,6 +227,7 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="ObjectsMenu.h" />
     <ClInclude Include="Peds.h" />

@@ -95,16 +95,22 @@ void Peds::Ped::Simulate(GameData* _gameData)
 {
 	std::vector<Sets::Set*> sets = Sets::GetAllParents();
 
-	this->body.velocity.y -= 0.05f * std::min(_gameData->dt, 1.0f);
-	for (size_t setId = 0; setId < sets.size(); setId++)
+	if (this->body.type == Physics::Type::STATIC || this->body.type == Physics::Type::RIGID)
 	{
-		if (sets[setId] == this) { continue; }
-		Bounds::Box setBox = this->GetBoundingBox();
-
-		std::vector<Blocks::Block>* blocks = sets[setId]->GetBlocks();
-		for (size_t blockId = 0; blockId < blocks->size(); blockId++)
+		if (this->body.type == Physics::Type::RIGID)
 		{
-			this->body.velocity = Collisions::CalculateCollisionResponse(setBox, blocks->at(blockId).GetBoundingBox(), this->body.velocity);
+			this->body.velocity.y -= 0.05f * std::min(_gameData->dt, 1.0f);
+		}
+		for (size_t setId = 0; setId < sets.size(); setId++)
+		{
+			if (sets[setId] == this) { continue; }
+			Bounds::Box setBox = this->GetBoundingBox();
+
+			std::vector<Blocks::Block>* blocks = sets[setId]->GetBlocks();
+			for (size_t blockId = 0; blockId < blocks->size(); blockId++)
+			{
+				this->body.velocity = Collisions::CalculateCollisionResponse(setBox, blocks->at(blockId).GetBoundingBox(), this->body.velocity);
+			}
 		}
 	}
 	if (this->camera != nullptr)
@@ -119,7 +125,10 @@ void Peds::Ped::Simulate(GameData* _gameData)
 	//this->body.velocity -= this->movementVelocity;
 	//this->body.velocity = glm::vec3(0);
 	this->body.velocity.x = 0;
-	//this->body.velocity.y = offset.y;
+	if (this->body.type != Physics::Type::RIGID)
+	{
+		this->body.velocity.y = 0;
+	}
 	this->body.velocity.z = 0;
 	this->movementVelocity = glm::vec3(.0f);
 }
