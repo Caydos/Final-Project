@@ -28,7 +28,7 @@ public:
 		this->SetPosition(_position);
 		this->SetScale(_scale);
 		this->SetColor(_color);
-
+		this->SetOpacity(1.0f);
 		mode = _mode;
 	}
 
@@ -68,7 +68,6 @@ public:
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		this->SetInitialize(true);
-
 	}
 
 	Colors::Color GetColor() { return this->color; }

@@ -107,6 +107,10 @@ int main()
 			gameData.window.SetTitle(title.c_str());
 		}
 
+		gameData.window.Clear();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
 		gameData.gameStates[gameData.gameState](&gameData);
 		gameData.window.Events();
 	}

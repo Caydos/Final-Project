@@ -38,40 +38,136 @@
 //	text.hall.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
 //}
 //
-std::vector<Maze::Decor> Props::Generate(int _chunckType, glm::vec3 _cellPos, int _line, int _column)
+Maze::Decor Props::Generate(int _chunckType, glm::vec3 _cellPos, int _line, int _column, int _name)
 {
 	/////////////////////////////////////////////////////// INIT Props //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	std::vector<Maze::Decor> propsList;
+	Maze::Decor decor{};
 
 	int randomLuck = 0;
 	randomLuck = rand() % 100;
 	if (_chunckType == Maze::HOSPITAL)
 	{
-		if (_column == NB_CELL / 2 && randomLuck > PROPS_LUCK && _line != NB_CELL / 2)
+		if (_name == Props::CORRIDOR)
 		{
-			Maze::Decor bed;
-
-			bed.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z + 2*(CELL_W / 3) + BRICK_W/2);
-			bed.rot = glm::vec3(0, 0, 0);
-			bed.isVisible = true;
-			bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
-
-			propsList.push_back(bed);
+			if (randomLuck > PROPS_LUCK)
+			{
+				if (_column == NB_CELL / 2 && _line != NB_CELL / 2)
+				{
+					decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ + CELL_W - BRICK_W);
+					decor.rot = glm::vec3(0, 0, 0);
+					decor.isVisible = true;
+					decor.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
+				}
+			}
+			//} 
+			else if (randomLuck < 100 - PROPS_LUCK)
+			{
+				//if (_name == Props::BENCH)
+				//{
+				if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
+				{
+					//decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z /*+ 2 * (CELL_W / 3)*/ + BRICK_W / 2 + CELL_W);
+					decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3);
+					decor.rot = glm::vec3(0, 0, 0);
+					decor.isVisible = true;
+					decor.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
+				}
+			}
 		}
-		if (_column != NB_CELL / 2 && _line == NB_CELL / 2 || _column != NB_CELL / 2 && _line == NB_CELL / 2  + 1)
+		if (_name == Props::DOOR)
 		{
-			Maze::Decor door;
+			if (_column != NB_CELL / 2 && _line == NB_CELL / 2 || _column != NB_CELL / 2 && _line == NB_CELL / 2 - 1)
+			{
+				//Maze::Decor door;
 
-			door.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3 - BRICK_W/2, _cellPos.z + BRICK_W / 2);
-			door.rot = glm::vec3(0, 0, 0);
-			door.isVisible = true;
-			door.name = "../Sets/HOSPITAL/Props/HSP_FireproofDoor.json";
+				decor.pos = glm::vec3(_cellPos.x - BRICK_W * 3 - BRICK_W / 2 - 0.025, _cellPos.y, _cellPos.z);
+				decor.rot = glm::vec3(0, 0, 0);
+				decor.isVisible = true;
+				decor.name = "../Sets/HOSPITAL/Props/HSP_RoomDoor.json";
 
-			propsList.push_back(door);
+				//return door;
+			}
+		}
+		if (_name == Props::LIGHT)
+		{
+			decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 - BRICK_W, _cellPos.y + CELL_W - BRICK_W, _cellPos.z + CELL_W / 2 - BRICK_W / 2/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*//* + BRICK_W * 3*/);;
+			decor.rot = glm::vec3(0, 0, 0);
+			decor.isVisible = true;
+			decor.name = "../Sets/HOSPITAL/Props/HSP_Light.json";
+		}
+		if (_name == Props::PANELEXIT)
+		{
+			if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line == NB_CELL / 2)
+			{
+				decor.pos = glm::vec3(_cellPos.x /*- CELL_W / 2*/ /*- BRICK_W*//* - BRICK_W/2*/, _cellPos.y + CELL_W - BRICK_W, _cellPos.z + CELL_W / 2/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*//* + BRICK_W * 3*/);;
+				decor.rot = glm::vec3(0, 0, 0);
+				decor.isVisible = true;
+				decor.name = "../Sets/HOSPITAL/Props/HSP_Exit2.json";
+			}
+		}
+		if (_name == Props::RAIL)
+		{
+			if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
+			{
+				decor.pos = glm::vec3(_cellPos.x - CELL_W - BRICK_W - 0.02, _cellPos.y + BRICK_W, _cellPos.z + BRICK_W);
+				decor.rot = glm::vec3(0, 0, 0);
+				decor.isVisible = true;
+				decor.name = "../Sets/HOSPITAL/Props/HSP_Rail1.json";
+			}
 		}
 	}
+	return decor;
+}
 
-	std::cout << NB_CELL / 2 << std::endl;
+std::vector<Maze::Decor> Props::GenerateBedRoom(int _chunckType, glm::vec3 _cellPos, int _line, int _column)
+{
 
-	return propsList;
+	std::vector<Maze::Decor> room;
+
+	if (_chunckType == Maze::HOSPITAL)
+	{
+		if (_line == 0 && _column == 0 || _line == 0 && _column == NB_CELL / 2 + 1 || _line == NB_CELL / 2 + 1 && _column == NB_CELL / 2 + 1 || _line == NB_CELL / 2 + 1 && _column == 0)
+		{
+			Maze::Decor bed1;
+			Maze::Decor bed2;
+			Maze::Decor name;
+			Maze::Decor desk;
+			Maze::Decor chair;
+			Maze::Decor table;
+			Maze::Decor perch;
+
+			bed1.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W * 2, _cellPos.y + BRICK_W / 3, _cellPos.z + BRICK_W * 3 + CELL_W - BRICK_W/* + CELL_W/2*/);
+			bed1.rot = glm::vec3(0, 90, 0);
+			bed1.isVisible = true;
+			bed1.name = "../Sets/HOSPITAL/Props/HSP_Bed.json";
+
+			bed2.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W * 2 + CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z + BRICK_W * 3 + CELL_W - BRICK_W * 3 - BRICK_W / 3/* + CELL_W/2*/);
+			bed2.rot = glm::vec3(0, -90, 0);
+			bed2.isVisible = true;
+			bed2.name = "../Sets/HOSPITAL/Props/HSP_Bed.json";
+
+			chair.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W + BRICK_W * 3 - BRICK_W * 2, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 + BRICK_W);
+			chair.rot = glm::vec3(0, rand() % 90, 0);
+			chair.isVisible = true;
+			chair.name = "../Sets/HOSPITAL/Props/HSP_Table.json";
+
+			table.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W + BRICK_W * 2 + BRICK_W * 3, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 + BRICK_W * 2 - BRICK_W * 3);
+			table.rot = glm::vec3(0, 90, 0);
+			table.isVisible = true;
+			table.name = "../Sets/HOSPITAL/Props/HSP_Armchair.json";
+
+			perch.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W + BRICK_W * 2 + BRICK_W * 3, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 + BRICK_W * 2 - BRICK_W * 3);
+			perch.rot = glm::vec3(0, 0, 0);
+			perch.isVisible = true;
+			perch.name = "../Sets/HOSPITAL/Props/HSP_Perch.json";
+
+			room.push_back(bed1);
+			room.push_back(bed2);
+			room.push_back(chair);
+			room.push_back(table);
+			room.push_back(perch);
+
+		}
+	}
+	return room;
 }

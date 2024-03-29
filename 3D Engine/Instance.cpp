@@ -39,6 +39,7 @@ void Blocks::Instance::GenerateGraphicsBuffers()
 }
 void Blocks::Instance::RemoveGraphicsBuffers()
 {
+	if (!this->graphicsLoaded) { return; }
 	glDeleteBuffers(1, &this->vertexVBO);
 	glDeleteBuffers(1, &this->instanceVBO);
 	glDeleteVertexArrays(1, &this->VAO);
@@ -47,6 +48,7 @@ void Blocks::Instance::RemoveGraphicsBuffers()
 
 void Blocks::Instance::BindGraphicsBuffers()
 {
+	if (!this->graphicsLoaded) { return; }
 	glBindVertexArray(this->VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->instanceVBO);
 	glBufferData(GL_ARRAY_BUFFER, this->models.size() * sizeof(glm::mat4), &this->models[0], GL_STATIC_DRAW);
@@ -54,6 +56,7 @@ void Blocks::Instance::BindGraphicsBuffers()
 
 void Blocks::Instance::SetVertices()
 {
+	if (!this->graphicsLoaded) { return; }
 	glBindVertexArray(this->VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertexVBO);
 	glBufferData(GL_ARRAY_BUFFER, 288 * sizeof(float), &cubeVertices, GL_STATIC_DRAW);
@@ -122,6 +125,12 @@ void Blocks::Instance::Draw()
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, this->models.size());
 
 		glBindVertexArray(0);
+	}
+	else
+	{
+		this->GenerateGraphicsBuffers();
+		this->SetVertices();
+		this->BindGraphicsBuffers();
 	}
 }
 

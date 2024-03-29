@@ -74,6 +74,7 @@ namespace Maze
 		std::vector<Decor> wallList;
 		std::vector<Decor> wallOutList;
 		std::vector<Decor> props;
+		std::vector<Decor> bedroom;
 	};
 
 	struct Chunck

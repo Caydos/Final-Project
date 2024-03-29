@@ -163,6 +163,9 @@
     <Filter Include="Source Files\Game\Scripting\Manager\Monster">
       <UniqueIdentifier>{25350a0b-551d-4e48-a300-8c82bad0a791}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripting\LoadingScreen">
+      <UniqueIdentifier>{224daf18-d8d5-4913-90e3-418afcb12e98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -323,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>Source Files\Game\Scripting\Manager\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScreen.cpp">
+      <Filter>Source Files\Game\Scripting\LoadingScreen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -505,6 +511,9 @@
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>Source Files\Game\Scripting\Manager\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScreen.h">
+      <Filter>Source Files\Game\Scripting\LoadingScreen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

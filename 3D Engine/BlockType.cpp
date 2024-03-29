@@ -86,8 +86,8 @@ void Blocks::BlockType::SetShininess(float _shininess) { this->shininess = _shin
 Blocks::Instance* Blocks::BlockType::AddInstance(void* _instanceId)
 {
 	Instance* newInstance = new Instance;
-	newInstance->GenerateGraphicsBuffers();
-	newInstance->SetVertices();
+	//newInstance->GenerateGraphicsBuffers();
+	//newInstance->SetVertices();
 	newInstance->SetId(_instanceId);
 	this->instances.push_back(newInstance);
 	return newInstance;

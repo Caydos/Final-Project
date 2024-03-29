@@ -41,31 +41,31 @@ Maze::ManagmentText Maze::InitProps()
 	text.wallLeft.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
 	text.wallLeft.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
 
-	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
+	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.wallBotWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 
-	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
+	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.wallLeftWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
 
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSF_Wd_2.json");
+	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 
-	text.gardenRot.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.gardenRot.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.gardenRot.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
-	text.gardenRot.push_back("../Sets/HOSPITAL/Map/HSF_Wd_1.json");
+	text.gardenRot.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.gardenRot.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.gardenRot.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
+	text.gardenRot.push_back("../Sets/HOSPITAL/Map/HSP_Window1.json");
 
 	return text;
 }
@@ -141,7 +141,7 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 			ground.isVisible = true;
 			ground.name = _text.ground[_chunck.type]/*"../Sets/Ground.json"*/;
 
-			cell.props = Props::Generate(_chunck.type, ground.pos, line, column);
+			//cell.props.push_back(Props::Generate(_chunck.type, ground.pos, line, column, Props::BED));
 
 			if (_chunck.type == GARDEN && _stageNb != 0)
 			{
@@ -172,7 +172,7 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 			{
 				Decor roof;
 
-				roof.pos = (glm::vec3(CELL_W * column + /*BRICK_W +*/ _mapColumn * MAP_W, CELL_W /*/ 2*/ + CELL_W * _stageNb - BRICK_W / 2, CELL_W * line - BRICK_W / 2 + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
+				roof.pos = (glm::vec3(CELL_W * column + /*BRICK_W +*/ _mapColumn * MAP_W, BRICK_W /*/ 2*/ + CELL_W * _stageNb - BRICK_W / 2, CELL_W * line - BRICK_W / 2 + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
 				roof.isVisible = true;
 				roof.name = _text.roof[_chunck.type]/*"../Sets/Ground.json"*/;
 				cell.ground.push_back(roof);
@@ -187,7 +187,7 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 					{
 						Decor tower;
 
-						tower.name = /*"../Sets/HOSPITAL/Map/HSF_Wd_2.json"*/"../Sets/EXTERIOR/PropsBuilding1.json";
+						tower.name = /*"../Sets/HOSPITAL/Map/HSF_Wd_2.json"*/"../Sets/HOSPITAL/Map//HSF_Wd_2.json";
 						tower.pos = (glm::vec3(CELL_W * column + /*BRICK_W +*/ _mapColumn * MAP_W - MAP_W - BRICK_W / 2, CELL_W /*/ 2*/ + CELL_W * _stageNb - BRICK_W / 3, CELL_W * line - BRICK_W / 2 /*+ BRICK_W * 2*/ + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
 						tower.isVisible = true;
 						_chunck.decor.push_back(tower);
@@ -202,7 +202,7 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 
 				exit.pos = (glm::vec3(CELL_W * column + /*BRICK_W / 2 +*/ _mapColumn * MAP_W, CELL_W + CELL_W * _stageNb - CELL_W, CELL_W * line + /*BRICK_W * 2 +*/ _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
 				exit.isVisible = true;
-				exit.name = "../Sets/HOSPITAL/Map/HSF_Wd_2.json";
+				exit.name = "../Sets/HOSPITAL/Map/HSP_Room.json";
 				_chunck.decor.push_back(exit);
 			}
 
@@ -228,7 +228,9 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 					if (i == BOTTOM) //BOTTOM WALL
 					{
 						wall.pos = (glm::vec3(CELL_W * column + /*BRICK_W / 2 +*/ _mapColumn * MAP_W, /*BRICK_W +*/ CELL_W * _stageNb, CELL_W * line + /*BRICK_W + BRICK_W +*/ CELL_W + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
+						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::DOOR));
 						wallOut.pos = (glm::vec3(CELL_W * column + /*BRICK_W / 2 +*/ _mapColumn * MAP_W, /*BRICK_W +*/ CELL_W * _stageNb, CELL_W * line + /*BRICK_W + BRICK_W +*/ CELL_W + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb) + BRICK_W / 2));
+
 						if (_mapLine == _mapW - 1 && line == NB_CELL - 1)
 						{
 							wall.name = _text.wallBotWindow[_chunck.type]/*"../Sets/WallWindow.json"*/;
@@ -263,6 +265,16 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 					else if (i == LEFT) //LEFT WALL
 					{
 						wall.pos = (glm::vec3(CELL_W * column - BRICK_W / 2.f + _mapColumn * MAP_W, /*BRICK_W +*/ CELL_W * _stageNb, CELL_W * line /*- BRICK_W/2*/ - BRICK_W / 2.f + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
+						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::CORRIDOR));
+						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::LIGHT));
+						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::PANELEXIT));
+						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::RAIL));
+						cell.bedroom = Props::GenerateBedRoom(_chunck.type, wall.pos, line, column);
+
+						//if (cell.props.size() <= 1)
+						//{
+						//	cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::BENCH));
+						//}
 						wallOut.pos = (glm::vec3(CELL_W * column - BRICK_W / 2.f + _mapColumn * MAP_W + BRICK_W / 2, /*BRICK_W +*/ CELL_W * _stageNb, CELL_W * line /*- BRICK_W/2*/ - BRICK_W / 2.f + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
 						if (_mapColumn == _mapW - 1 && column == NB_CELL - 1)
 						{
@@ -723,7 +735,7 @@ void Maze::CreateMaze()
 				{
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor = Sets::Create();
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->GenerateRenderingInstance();
-					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.decor[decor].name)));
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.decor[decor].name)), false);
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetName("Wall");
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetPath("../Sets/");
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.decor[decor].pos);
@@ -739,7 +751,7 @@ void Maze::CreateMaze()
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor = Sets::Create();
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->GenerateRenderingInstance();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].name)));
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetName("Ground");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetPath("../Sets/");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].pos);
@@ -753,7 +765,7 @@ void Maze::CreateMaze()
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor = Sets::Create();
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->GenerateRenderingInstance();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].name)));
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetName("Wall");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetPath("../Sets/");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].pos);
@@ -767,7 +779,7 @@ void Maze::CreateMaze()
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor = Sets::Create();
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->GenerateRenderingInstance();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].name)));
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetName("Wall");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetPath("../Sets/");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].pos);
@@ -781,7 +793,7 @@ void Maze::CreateMaze()
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor = Sets::Create();
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->GenerateRenderingInstance();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].name)));
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetName("Wall");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetPath("../Sets/");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].pos);
@@ -795,11 +807,26 @@ void Maze::CreateMaze()
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor = Sets::Create();
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->GenerateRenderingInstance();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].name)));
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetName("Props");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetPath("../Sets/");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetRotation(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].rot, true);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].pos);
+					}
+				}
+
+				for (int bedroom = 0; bedroom < maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom.size(); bedroom++)
+				{
+					//props load
+					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].isVisible)
+					{
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor = Sets::Create();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->GenerateRenderingInstance();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].name)), false);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetName("Props");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetPath("../Sets/");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetRotation(maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].rot, true);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].pos);
 					}
 				}
 			}
@@ -809,14 +836,7 @@ void Maze::CreateMaze()
 
 void Maze::GenerateMaze(int _mapW, int _nbStage)
 {
-
-	Clock timer;
-	timer.Restart();
-
 	ManagmentText text = InitProps();
-
-	std::cout << "InitProps" << timer.GetElapsedTime() << std::endl;
-	timer.Restart();
 
 	for (int mapLine = 0; mapLine < _mapW; mapLine++)
 	{
@@ -830,11 +850,7 @@ void Maze::GenerateMaze(int _mapW, int _nbStage)
 
 				StageManagment(mapColumn, mapLine, stageNb, chunck, stage, _mapW, _nbStage);
 				InitCell(mapColumn, mapLine, stageNb, chunck, text, _mapW, _nbStage);
-				std::cout << "InitCellStruct" << timer.GetElapsedTime() << std::endl;
-				timer.Restart();
 				InitLaby(chunck);
-				std::cout << "LabyGen" << timer.GetElapsedTime() << std::endl;
-				timer.Restart();
 
 				stage.chunk = chunck;
 				map.stageList.push_back(stage);
@@ -850,19 +866,12 @@ void Maze::GenerateMaze(int _mapW, int _nbStage)
 		for (int stageNb = 0; stageNb < maze[mapNb].stageList.size(); stageNb++)
 		{
 			InitHospital(mapNb, stageNb, _mapW, _nbStage);
-			std::cout << "InitHospital" << timer.GetElapsedTime() << std::endl;
-			timer.Restart();
 			for (int cell = 0; cell < maze[mapNb].stageList[stageNb].chunk.cellList.size(); cell++)
 			{
 				InitSpecialChuncks(mapNb, stageNb, cell, text, _mapW, _nbStage);
-				std::cout << "InitSpecificChunck" << timer.GetElapsedTime() << std::endl;
-				timer.Restart();
 			}
 		}
 	}
-
 	CreateMaze();
-	std::cout << "Creation" << timer.GetElapsedTime() << std::endl;
-	timer.Restart();
 
 }

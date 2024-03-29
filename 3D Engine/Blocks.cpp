@@ -2,6 +2,30 @@
 #include "Files.h"
 
 static std::vector<Blocks::BlockType*> blocks;
+static std::vector<Blocks::Instance*> generationQueue;
+static std::vector<Blocks::Instance*> removalQueue;
+
+void Blocks::QueueInstanceGeneration(Instance* _instance)
+{
+	generationQueue.push_back(_instance);
+}
+
+void Blocks::QueueInstanceRemoval(Instance* _instance)
+{
+	removalQueue.push_back(_instance);
+}
+
+void Blocks::UpdateInstanceQueue()
+{
+	//for (size_t queueId = 0; queueId < generationQueue.size(); queueId++)
+	//{
+	//	generationQueue[queueId].
+	//}
+	//for (size_t blockId = 0; blockId < blocks.size(); blockId++)
+	//{
+	//	blocks[blockId]->RemoveInstance(_instance);
+	//}
+}
 
 void Blocks::Initialize()
 {
@@ -132,6 +156,7 @@ void Blocks::Refresh()
 
 void Blocks::Draw()
 {
+	UpdateInstanceQueue();
 	for (size_t i = 0; i < blocks.size(); i++)
 	{
 		blocks[i]->Draw();

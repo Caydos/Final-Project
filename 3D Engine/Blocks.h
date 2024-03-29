@@ -52,6 +52,10 @@ namespace Blocks
 		bool refreshInQueue;
 		bool visible;
 	};
+	void QueueInstanceGeneration(Instance* _instance);
+	void QueueInstanceRemoval(Instance* _instance);
+
+	void UpdateInstanceQueue();
 	class BlockType
 	{
 	public:

@@ -11,6 +11,15 @@
 
 namespace Props
 {
+	enum PropsType
+	{
+		CORRIDOR,
+		DOOR,
+		PANELEXIT,
+		BENCH,
+		LIGHT,
+		RAIL,
+	};
 
 	struct ManagmentText
 	{
@@ -20,7 +29,8 @@ namespace Props
 		std::vector<const char*> hall;
 	};
 
-	std::vector<Maze::Decor> Generate(int _chunckType, glm::vec3 _cellPos, int _line, int _column);
+	Maze::Decor Generate(int _chunckType, glm::vec3 _cellPos, int _line, int _column, int _type);
+	std::vector<Maze::Decor> GenerateBedRoom(int _chunckType, glm::vec3 _cellPos, int _line, int _column);
 	//void Text();
 }
 #endif // !OBSTACLE_H
