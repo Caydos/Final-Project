@@ -16,7 +16,7 @@ void Scritping::Tick(GameData* _gameData)
 	if (!initialized)
 	{
 		Scene::Initialize(_gameData);
-		Scene::World::SetSkyboxState(true);
+		Scene::World::SetSkyboxState(false);
 
 		FPVCam = Scene::World::NewCamera(glm::vec3(3.0f, 1.2f, 3.0f));
 		Scene::World::FocusCamera(_gameData, FPVCam);
@@ -40,7 +40,7 @@ void Scritping::Tick(GameData* _gameData)
 		flashLight2.SetType(Lightning::LightType::SPOT);
 		flashLight2.SetAmbient(glm::vec3(0.0f, 0.0f, 0.0f));
 		flashLight2.SetDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
-		flashLight2.SetSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
+		flashLight2.SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
 		flashLight2.SetConstant(1.0f);
 		flashLight2.SetLinear(0.09f);
 		flashLight2.SetQuadratic(0.0032f);

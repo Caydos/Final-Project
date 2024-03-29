@@ -43,7 +43,7 @@ vec3 CalcSpotLight(Light _light, vec3 _normal, vec3 _worldPos, vec3 _viewDir, ve
     float diff = max(dot(_normal, lightDir), 0.0);
     // specular shading
     vec3 reflectDir = reflect(-lightDir, _normal);
-    float spec = pow(max(dot(_viewDir, reflectDir), 0.0), 32.0);
+    float spec = pow(max(dot(_viewDir, reflectDir), 0.0), _shininess);
     // attenuation
     float distance = length(_light.position - _worldPos);
     float attenuation = 1.0 / (_light.constant + _light.linear * distance + _light.quadratic * (distance * distance));    
@@ -66,8 +66,8 @@ void main()
     vec3 WorldPos = texture(gPosition, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec3 Albedo = texture(gAlbedoSpec, TexCoords).rgb;
+    float Shininess = texture(gEffects, TexCoords).r;
     float Specular = texture(gEffects, TexCoords).a;
-    float Shininess = 32.0;
     if((Normal.x == clearColor.x) && (Normal.y == clearColor.y) && (Normal.z == clearColor.z))
     {
         FragColor = vec4(Albedo.x, Albedo.y, Albedo.z, 1.0);
@@ -78,7 +78,7 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - WorldPos);
 
-    vec3 result = CalcSpotLight(lights[0], norm, WorldPos, viewDir, Albedo, Specular, Shininess);
+    vec3 result = CalcSpotLight(lights[0], norm, WorldPos, viewDir, Albedo, Specular, Shininess*100);
     FragColor = vec4(result.x, result.y, result.z, 1.0);
 }
 

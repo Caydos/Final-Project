@@ -12,11 +12,7 @@ in vec3 Normal;
 uniform sampler2D textureX;
 uniform sampler2D effectsTexture;
 
-// Uniform for mode selection
-// 0 = Color, 1 = Texture, 2 = Both
-uniform int mode;
-uniform float colorAlpha;
-uniform float opacity;
+uniform float shininess;
 
 void main()
 {    
@@ -25,5 +21,7 @@ void main()
 
     gAlbedoSpec.rgb = texture(textureX, TexCoords).rgb;
     gAlbedoSpec.a = 1.0;
+    // gEffects.r = shininess;
+    gEffects.r = shininess / 100;
     gEffects.a = texture(effectsTexture, TexCoords).a;
 }

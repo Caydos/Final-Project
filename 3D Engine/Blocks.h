@@ -197,6 +197,11 @@ namespace Blocks
 		void RestrictAxis(Axis _axis, int _value);
 		std::vector<glm::mat4> GetModels();
 	}
+
+	namespace Menu
+	{
+		void Menu(GameData* _gameData);
+	}
 }
 
 #endif // !BLOCKS_H

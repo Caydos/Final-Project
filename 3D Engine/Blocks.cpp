@@ -142,3 +142,38 @@ std::vector<Blocks::BlockType*> Blocks::GetAll()
 {
 	return blocks;
 }
+
+void Blocks::Menu::Menu(GameData* _gameData)
+{
+	if (ImGui::TreeNode("Blocks Configuration"))
+	{
+		for (size_t blockId = 0; blockId < blocks.size(); blockId++)
+		{
+			std::string name = "##Block" + std::to_string(blockId) + blocks[blockId]->GetName();
+			if (ImGui::TreeNode(std::string(blocks[blockId]->GetName() + name).c_str()))
+			{
+				glm::vec3 dffColor = blocks[blockId]->GetDiffuse();
+				ImVec4 diffuseColor(dffColor.x, dffColor.y, dffColor.z,1.0);
+				if (ImGui::ColorPicker3(std::string("Diffuse" + name).c_str(), (float*)&diffuseColor))
+				{
+					blocks[blockId]->SetDiffuse(glm::vec3(diffuseColor.x, diffuseColor.y, diffuseColor.z));
+				}
+
+				float shininess = blocks[blockId]->GetShininess();
+				if (ImGui::SliderFloat(std::string("Shininess" + name).c_str(), &shininess, 0.0f, 1000.0f))
+				{
+					blocks[blockId]->SetShininess(shininess);
+				}
+
+
+				if (ImGui::Button(std::string("Save" + name).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+				{
+					//blocks[blockId]->Save();
+				}
+				ImGui::TreePop();
+			}
+		}
+
+		ImGui::TreePop();
+	}
+}

@@ -12,6 +12,7 @@
 static bool initialized = false;
 static bool displayed = false;
 static Clock inputClock;
+static std::vector<Blocks::BlockType*> blocks;
 
 void Editor::Initialize(GameData* _gameData)
 {
@@ -149,6 +150,9 @@ void Editor::Menu(GameData* _gameData)
 		}
 		Crosshairs::Menu(_gameData);
 		Animation::UI::SubMenu(_gameData);
+		Blocks::Menu::Menu(_gameData);
+
+
 
 		ImGui::End();
 	}

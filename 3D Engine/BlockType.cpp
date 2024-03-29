@@ -177,14 +177,13 @@ void Blocks::BlockType::Draw()
 		}
 	}
 
-	shader->setVec4("color", glm::vec4(this->color.values[0], this->color.values[1], this->color.values[2], this->color.values[3]));
 	shader->setBool("lightDependent", this->lightDependent);
 	shader->setInt("mode", mode);
-	shader->setFloat("opacity", 1.0f);
+	shader->setFloat("shininess", this->shininess);
 
-	shader->setVec3("material.diffuse", this->diffuse);
-	shader->setVec3("material.specular", this->specular);
-	shader->setFloat("material.shininess", this->shininess);
+	//shader->setVec3("diffuse", this->diffuse);
+	//shader->setVec3("material.specular", this->specular);
+	//shader->setFloat("material.shininess", this->shininess);
 	for (size_t i = 0; i < this->instances.size(); i++)
 	{
 		this->instances[i]->Draw();
