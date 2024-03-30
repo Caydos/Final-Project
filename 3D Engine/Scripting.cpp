@@ -16,7 +16,10 @@ static bool generated = false;
 
 void Generation()
 {
-	Maze::GenerateMaze(3, 1);
+	Clock loadingClock;
+	loadingClock.Restart();
+	Maze::GenerateMaze(8, 1);
+	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	Monster::GenerateMonster(); //Pop les mob
 	generated = true;
 }

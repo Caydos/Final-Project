@@ -25,7 +25,7 @@ void Sets::UpdateVisibility()
 Sets::Set* Sets::Create()
 {
 	Set* newSet = new Set;
-	newSet->Initialize();
+	newSet->Initialize(false);
 	sets.push_back(newSet);
 	return newSet;
 }

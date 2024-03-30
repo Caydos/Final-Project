@@ -17,12 +17,12 @@ Sets::Set::~Set()
 {
 }
 
-void Sets::Set::Initialize()
+void Sets::Set::Initialize(bool _computeTransformation)
 {
 	if (this->bone == nullptr)
 	{
 		this->bone = new glm::mat4(1.0f);
-		this->SetScale(1.0f);
+		this->SetScale(1.0f, _computeTransformation);
 	}
 }
 
@@ -103,7 +103,7 @@ void Sets::Set::Save()
 
 void Sets::Set::LoadFromJson(json _content, bool _computeTransformation)
 {//load here
-	this->Initialize();
+	this->Initialize(false);
 	if (_content.contains("blocks"))
 	{
 		for (auto& object : _content["blocks"])
@@ -139,7 +139,7 @@ void Sets::Set::LoadFromJson(json _content, bool _computeTransformation)
 				glm::vec3 rotation(object["rotation"][0], object["rotation"][1], object["rotation"][2]);
 				block.SetRotation(rotation);
 			}
-			this->InsertBlock(block);
+			this->InsertBlock(block, false);
 		}
 	}
 	else

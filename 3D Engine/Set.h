@@ -16,7 +16,7 @@ namespace Sets
 	public:
 		Set();
 		~Set();
-		void Initialize();
+		void Initialize(bool _computeTransformation = true);
 		void Erase();
 		void Save();
 		void LoadFromJson(json _content, bool _computeTransformation = true);
