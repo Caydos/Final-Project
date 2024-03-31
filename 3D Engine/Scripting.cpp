@@ -51,15 +51,15 @@ void Scritping::Tick(GameData* _gameData)
 
 		Lightning::Light flashLight2;
 		flashLight2.SetType(Lightning::LightType::SPOT);
-		flashLight2.SetAmbient(glm::vec3(0.0f, 0.0f, 0.0f));
-		flashLight2.SetDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
+		flashLight2.SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
+		flashLight2.SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
 		flashLight2.SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
 		flashLight2.SetConstant(1.0f);
 		flashLight2.SetLinear(0.09f);
 		flashLight2.SetQuadratic(0.0032f);
 
-		flashLight2.SetCutOff(11.339f);
-		flashLight2.SetOuterCutOff(34.764f);
+		flashLight2.SetCutOff(90.339f);
+		flashLight2.SetOuterCutOff(90.764f);
 		flashLight2.SetName("FlashLight");
 		flashLight2.SetActive(true);
 		Scene::Lights::InsertLight(_gameData, flashLight2);

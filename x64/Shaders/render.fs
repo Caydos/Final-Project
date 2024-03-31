@@ -77,8 +77,17 @@ void main()
     
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - WorldPos);
-
-    vec3 result = CalcSpotLight(lights[0], norm, WorldPos, viewDir, Albedo, Specular, Shininess*100);
+    vec3 result;
+    for (int lightId = 0; lightId < MAX_LIGHTS; lightId++)
+    {
+        if (lights[lightId].activated)
+        {
+            if (lights[lightId].type == SPOT)
+            {
+                result += CalcSpotLight(lights[0], norm, WorldPos, viewDir, Albedo, Specular, Shininess*100);
+            }
+        }
+    }
     FragColor = vec4(result.x, result.y, result.z, 1.0);
 }
 
