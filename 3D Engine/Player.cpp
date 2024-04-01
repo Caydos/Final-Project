@@ -2,12 +2,18 @@
 
 Players::Player::Player()
 {
+	this->footSteps = nullptr;
 }
 
 Players::Player::~Player()
 {
 }
 const float sideSpeedMultiplier = 0.8f;
+
+void Players::Player::SetFootStepSound(Audio::Sound* _sound)
+{
+	this->footSteps = _sound;
+}
 
 void Players::Player::Control(GameData* _gameData)
 {
@@ -56,10 +62,23 @@ void Players::Player::Control(GameData* _gameData)
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
 		{
+			if (!this->footSteps->IsPlaying())
+			{
+				this->footSteps->Play();
+			}
 			this->ped->Run();
 			velocityVec.x *= this->ped->GetRunningMultiplier();
 			velocityVec.z *= this->ped->GetRunningMultiplier();
+			this->footSteps->SetPosition(this->ped->GetPosition());
 		}
+		else
+		{
+			if (this->footSteps->IsPlaying())
+			{
+				this->footSteps->Pause();
+			}
+		}
+
 		this->ped->PushVelocity(velocityVec, true);
 		//this->ped->Update();
 	}

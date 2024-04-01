@@ -45,7 +45,13 @@ bool Lighting::Light::IsVisible() { return this->visible; }
 void Lighting::Light::CheckVisibility()
 {
 	//this->visible = FrustumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->position - this->range, this->position + this->range);
+	
 	this->visible = true;
+	if (this->type == Lighting::LightType::SPOT && glm::distance(this->position, GetGameData()->camera->Position) > LIGHT_VISIBILITY_RANGE)
+	{
+		this->visible = false;
+		return;
+	}
 }
 void Lighting::Light::CalculateRange()
 {

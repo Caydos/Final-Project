@@ -17,6 +17,7 @@ Peds::Ped::~Ped()
 }
 
 
+
 Camera* Peds::Ped::GetCamera()
 {
 	return this->camera;

@@ -12,6 +12,7 @@ namespace Players
 		Player();
 		~Player();
 
+		void SetFootStepSound(Audio::Sound* _sound);
 		void Control(GameData* _gameData);
 
 		Peds::Ped* GetPed();
@@ -21,7 +22,7 @@ namespace Players
 		//int serverId;
 		Peds::Ped* ped;
 		Clock jumpClock;
-		
+		Audio::Sound* footSteps;
 	};
 	Player* Create();
 	void Erase(Player* _player);

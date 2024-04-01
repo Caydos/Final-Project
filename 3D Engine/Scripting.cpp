@@ -7,6 +7,7 @@
 #include "LoadingScreen.h"
 #include "FrustumCulling.h"
 #include "Sprite.h"
+#include "Audio.h"
 
 static bool initialized = false;
 static Players::Player* player = nullptr;
@@ -28,6 +29,9 @@ static Clock tempClock;
 static Texture* textureTitle;
 static Texture* textureBack;
 
+
+static Audio::Sound* footSteps;
+
 void Generation()
 {
 	Clock loadingClock;
@@ -42,14 +46,21 @@ void Scritping::Tick(GameData* _gameData)
 {
 	if (!initialized)
 	{
+		footSteps = Audio::CreateSound();
+		footSteps->Initialize();
+		footSteps->LoadFromFile("../Sounds/Footsteps.wav");
+		footSteps->Loop(true);
+
 		Scene::Initialize(_gameData);
-		Scene::World::SetSkyboxState(true);
+		Scene::World::SetSkyboxState(false);
 
 		FPVCam = Scene::World::NewCamera(glm::vec3(3.0f, 1.2f, 3.0f));
 		Scene::World::FocusCamera(_gameData, FPVCam);
 
 
 		player = Players::Create();
+		player->SetFootStepSound(footSteps);
+
 		Peds::Ped* playerPed = Peds::Create();
 		playerPed->Initialize();
 		playerPed->GenerateRenderingInstance();

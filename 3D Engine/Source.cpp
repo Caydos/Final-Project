@@ -3,6 +3,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+
+#include <OpenAl/al.h>
+#include <OpenAl/alc.h>
+
+
 #include "Scene.h"
 #include "Commands.h"
 #include "Network.h"
@@ -15,9 +20,34 @@ float lastFrame = 0.0f;
 GameData gameData;
 
 GameData* GetGameData() { return &gameData; }
+ALCdevice* device;
+ALCcontext* context;
 
 int main()
 {
+	{//Audio
+		// Initialize OpenAL device and context
+		device = alcOpenDevice(NULL);
+		if (!device)
+		{
+			return 0;
+		}
+
+		context = alcCreateContext(device, NULL);
+		if (!context) {
+			alcCloseDevice(device);
+			return 0;
+		}
+		alcMakeContextCurrent(context);
+
+		// Set Listener properties
+		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); // Position of the listener
+		ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
+		alListenerfv(AL_ORIENTATION, orientation);
+
+		// Set Distance Model (optional, depending on your needs)
+		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+	}
 	bool running = true;
 	Network::Events::CreateEvents();
 	std::thread eventThread(&Network::Events::Thread, running);
@@ -76,7 +106,7 @@ int main()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(gameData.window.GetWindow(), true);
-	ImGui_ImplOpenGL3_Init("#version 330 core");
+	ImGui_ImplOpenGL3_Init("#version 430 core");
 
 	// Initialize variables
 	float lastFPSCalculationTime = 0.0f;
@@ -84,6 +114,11 @@ int main()
 
 	while (gameData.window.IsActive())
 	{
+		// Set Listener properties
+		alListener3f(AL_POSITION, gameData.camera->Position.x, gameData.camera->Position.y, gameData.camera->Position.z); // Position of the listener
+		ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
+		alListenerfv(AL_ORIENTATION, orientation);
+
 		float currentFrame = static_cast<float>(glfwGetTime());
 		gameData.dt = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -119,6 +154,9 @@ int main()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	glfwTerminate();
+
+	alcDestroyContext(context);
+	alcCloseDevice(device);
 
 	system("pause");
 	return 0;

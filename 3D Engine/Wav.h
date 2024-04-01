@@ -6,32 +6,33 @@
 #include <OpenAl/al.h>
 #include <OpenAl/alc.h>
 
-ALuint loadWavFile(const std::string& filename) {
-    std::ifstream file(filename, std::ios::binary);
+void LoadWavFile(const std::string& _filename, ALuint _buffer)
+{
+    std::ifstream file(_filename, std::ios::binary);
     if (!file) {
-        std::cerr << "Cannot open WAV file: " << filename << std::endl;
-        return 0;
+        std::cerr << "Cannot open WAV file: " << _filename << std::endl;
+        return;
     }
 
     char buffer[4];
     if (!file.read(buffer, 4)) {
         std::cerr << "Error reading WAV file (1)" << std::endl;
-        return 0;
+        return;
     }
     if (strncmp(buffer, "RIFF", 4) != 0) {
         std::cerr << "File is not a valid WAV file (does not start with RIFF)" << std::endl;
-        return 0;
+        return;
     }
     file.ignore(4); // Ignore chunk size
     if (!file.read(buffer, 4) || strncmp(buffer, "WAVE", 4) != 0) {
         std::cerr << "File is not a valid WAV file (does not contain WAVE)" << std::endl;
-        return 0;
+        return;
     }
 
     // Read format subchunk
     if (!file.read(buffer, 4) || strncmp(buffer, "fmt ", 4) != 0) {
         std::cerr << "Invalid WAV file (no fmt )" << std::endl;
-        return 0;
+        return;
     }
 
     // Read format chunk size
@@ -53,7 +54,7 @@ ALuint loadWavFile(const std::string& filename) {
     // Read data subchunk
     if (!file.read(buffer, 4) || strncmp(buffer, "data", 4) != 0) {
         std::cerr << "Invalid WAV file (no data subchunk)" << std::endl;
-        return 0;
+        return;
     }
 
     unsigned int dataSize;
@@ -62,7 +63,7 @@ ALuint loadWavFile(const std::string& filename) {
     std::vector<char> data(dataSize);
     if (!file.read(data.data(), dataSize)) {
         std::cerr << "Error reading WAV data" << std::endl;
-        return 0;
+        return;
     }
 
     ALenum format;
@@ -73,11 +74,7 @@ ALuint loadWavFile(const std::string& filename) {
         format = (bitsPerSample == 8) ? AL_FORMAT_STEREO8 : AL_FORMAT_STEREO16;
     }
 
-    ALuint bufferId;
-    alGenBuffers(1, &bufferId);
-    alBufferData(bufferId, format, data.data(), dataSize, sampleRate);
-
-    return bufferId;
+    alBufferData(_buffer, format, data.data(), dataSize, sampleRate);
 }
 
 #endif // !WAV_H

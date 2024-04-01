@@ -31,7 +31,7 @@ struct Light
     vec3 specular;
 };
 
-#define MAX_LIGHTS 300
+#define MAX_LIGHTS 40
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 viewPos;
 uniform vec4 clearColor;

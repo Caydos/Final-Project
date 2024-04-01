@@ -4,6 +4,7 @@
 #include "Files.h"
 #include "Set.h"
 #include "Physics.h"
+#include "Audio.h"
 
 namespace Peds
 {
@@ -12,7 +13,6 @@ namespace Peds
 	public:
 		Ped();
 		~Ped();
-
 
 		Camera* GetCamera();
 		void SetCamera(Camera* _camera);
