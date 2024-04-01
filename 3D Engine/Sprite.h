@@ -2,9 +2,12 @@
 #define SPRITE_H
 #include "Drawable.h"
 #include "Common.h"
+#include "Clock.h"
 
 #define SPRITE_VERTEX_COUNT 24
 #define SPRITE_DIRECTORY "../Textures/"
+#define SPRITE_NUMBER 6 
+
 
 class Sprite : public Drawable
 {
@@ -12,25 +15,46 @@ class Sprite : public Drawable
 public:
 	Sprite()
 	{
-		hovered = false;
 	}
 
 	~Sprite()
 	{
 	}
 
-	void Load(const char* _path, glm::vec3 _position, glm::vec3 _scale, Colors::Color _color, int _mode)
+
+	void Load(const char* _path, glm::vec3 _position, glm::vec3 _scale, int _mode)
 	{
-		Texture* texture = new Texture;
-		texture->LoadFromFile(_path);
-		this->SetTexture(texture);
+		if (strlen(_path) > 1)
+		{
+			Texture* texture = new Texture;
+			texture->LoadFromFile(_path);
+			this->SetTexture(texture);
+		}
 
 		this->SetPosition(_position);
 		this->SetScale(_scale);
-		this->SetColor(_color);
-		this->SetOpacity(1.0f);
+
 		mode = _mode;
+
 	}
+
+	//void ReleaseTexture()
+	//{
+	//	if (texture != nullptr)
+	//	{
+	//		delete texture;
+	//		texture = nullptr;
+	//		std::cout << "test" << std::endl;
+	//	}
+	//}
+
+	//void LoadTexture(const char* _path)
+	//{
+	//	ReleaseTexture();
+	//	this->texture = new Texture;
+	//	this->texture->LoadFromFile(_path);
+	//	this->SetTexture(this->texture);
+	//}
 
 	void Initialize(void)
 	{
@@ -68,6 +92,7 @@ public:
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		this->SetInitialize(true);
+
 	}
 
 	Colors::Color GetColor() { return this->color; }
@@ -121,14 +146,67 @@ public:
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
+	bool IsMouseOverQuad(const glm::vec2& mousePos)
+	{
+		glm::vec3 scale = this->GetScale();
+		glm::vec3 position = this->GetPosition();
+		glm::vec2 halfScale(scale.x / 2, scale.y / 2);
+		if (mousePos.x >= position.x
+			&& mousePos.x <= position.x + scale.x
+			&& mousePos.y >= position.y - scale.y
+			&& mousePos.y <= position.y
+			)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+
 private:
 	glm::mat4 model;
 	Colors::Color color;
 	float vertices[SPRITE_VERTEX_COUNT];
 	int vertexCount;
 	int mode;
-	bool hovered;
 };
 
 
+struct AnimationM
+{
+	std::vector<Texture*> textures;
+	Clock clock;
+	float tempsMax = 2.0f;
+	int imageCourante = 0;
+
+	void AddTexture(const char* _path)
+	{
+		Texture* texture = new Texture;
+		texture->LoadFromFile(_path);
+		textures.push_back(texture);
+	}
+
+	template<typename ...string>
+	void Load(float _tempsMax, string..._txtpath)
+	{
+		this->tempsMax = _tempsMax;
+		((AddTexture(_txtpath)), ...);
+	}
+
+	void Animate(Sprite* _sprite)
+	{
+
+		float tempsCourant = this->clock.GetElapsedTime() / 1000;
+		if (tempsCourant >= this->tempsMax) //Gestion du dépassement de l'animation
+		{
+			this->clock.Restart();
+			tempsCourant = 0;
+		}
+
+		//Animation
+		imageCourante = (tempsCourant * textures.size()) / this->tempsMax;
+		_sprite->SetTexture(textures[imageCourante]);
+	}
+};
 #endif // !SPRITE_H
