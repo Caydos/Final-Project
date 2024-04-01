@@ -3,12 +3,12 @@
 #include "Common.h"
 #include "Colors.h"
 #include "Editor.h"
-#include "Lightning.h"
+#include "Lighting.h"
 
 namespace LightMenu
 {
 	void Basic(GameData* _gameData);
-	void Object(GameData* _gameData, Lightning::Light* _light);
+	void Object(GameData* _gameData, Lighting::Light* _light);
 	void CleanUp();
 }
 

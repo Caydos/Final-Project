@@ -3,7 +3,7 @@
 
 #include "Common.h"
 #include <glm/vec3.hpp>
-#include "Lightning.h"
+#include "Lighting.h"
 #include "Bounds.h"
 
 #define SCENE_DIRECTORY "../Scenes/"
@@ -20,11 +20,17 @@ namespace Scene
 
 	namespace Lights
 	{
-		Lightning::Light* InsertLight(GameData* _gameData, Lightning::Light& _light);
+		Lighting::Light* Create();
+		void Erase(Lighting::Light* _light);
+		void UpdateVisibility();
+		void RefreshLight(Lighting::Light* _light);
+
+
+		Lighting::Light* InsertLight(GameData* _gameData, Lighting::Light& _light);
 		void UpdateLight(GameData* _gameData, unsigned int _id);
 		void UpdateShader(GameData* _gameData);
-		std::vector<Lightning::Light>* GetLights();
-		void Remove(Lightning::Light* _lightAddr);
+		std::vector<Lighting::Light>* GetLights();
+		void Remove(Lighting::Light* _lightAddr);
 	}
 
 	namespace World

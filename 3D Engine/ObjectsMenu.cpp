@@ -142,7 +142,7 @@ static ImVec4 currentColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 //			ImGui::TreePop();
 //		}
 //
-//		if (ImGui::TreeNode("Lightning options##CubeLight"))
+//		if (ImGui::TreeNode("Lighting options##CubeLight"))
 //		{
 //			bool _objectLightDependecy = _object->GetLightDependency();
 //			if (ImGui::Checkbox("Light Dependant", &_objectLightDependecy))
@@ -150,7 +150,7 @@ static ImVec4 currentColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 //				_object->SetLightDependency(_objectLightDependecy);
 //			}
 //
-//			Lightning::Light* cubeLight = _object->GetLight();
+//			Lighting::Light* cubeLight = _object->GetLight();
 //			bool isCubeALight = (cubeLight == nullptr) ? false : true;
 //			int currentLightType = 0;
 //			if (cubeLight != nullptr)
@@ -158,13 +158,13 @@ static ImVec4 currentColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 //				currentLightType = cubeLight->GetType() + 1;
 //			}
 //			ImGui::Text("Select Light Type:");
-//			if (ImGui::Combo("##LightType", &currentLightType, Lightning::LightTypes, IM_ARRAYSIZE(Lightning::LightTypes)))
+//			if (ImGui::Combo("##LightType", &currentLightType, Lighting::LightTypes, IM_ARRAYSIZE(Lighting::LightTypes)))
 //			{
 //				if (currentLightType)
 //				{
-//					Lightning::Light light;
-//					light.SetName((std::string("Cube light : ") + Lightning::LightTypes[currentLightType]));
-//					light.SetType((Lightning::LightType)(currentLightType - 1));
+//					Lighting::Light light;
+//					light.SetName((std::string("Cube light : ") + Lighting::LightTypes[currentLightType]));
+//					light.SetType((Lighting::LightType)(currentLightType - 1));
 //					light.SetPosition(_object->GetPosition());
 //
 //					cubeLight = Scene::Lights::InsertLight(_gameData, light);

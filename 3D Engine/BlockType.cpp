@@ -158,6 +158,26 @@ void Blocks::BlockType::AskForRefresh(void* _instanceId)
 	}
 }
 
+bool Blocks::BlockType::IsLightEmitter()
+{
+	return this->lightEmission;
+}
+
+void Blocks::BlockType::SetLightEmission(bool _state)
+{
+	this->lightEmission = _state;
+}
+
+Lighting::Light Blocks::BlockType::GetLight()
+{
+	return this->lightEmitter;
+}
+
+void Blocks::BlockType::SetLight(Lighting::Light _light)
+{
+	this->lightEmitter = _light;
+}
+
 void Blocks::BlockType::Draw()
 {
 	//this->shader->setBool("instanceUsage", true);

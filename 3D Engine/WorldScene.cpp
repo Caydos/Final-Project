@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "Camera.h"
-#include "Lightning.h"
+#include "Lighting.h"
 #include <algorithm>
 #include "Files.h"
 #include "Blocks.h"

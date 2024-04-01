@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "RayCasting.h"
 #include "Bounds.h"
+#include "Lighting.h"
 
 #define BLOCKS_DIRECTORY "../Blocks/"
 #define BLOCKS_FILE_EXTENSION ".json"
@@ -102,6 +103,13 @@ namespace Blocks
 		void RemoveFromInstance(void* _instanceId, glm::mat4* _model);
 		void AskForRefresh(void* _instanceId);
 
+
+
+		bool IsLightEmitter();
+		void SetLightEmission(bool _state);
+		Lighting::Light GetLight();
+		void SetLight(Lighting::Light _light);
+
 		void Draw();
 
 	private:
@@ -119,6 +127,9 @@ namespace Blocks
 		float shininess;
 
 		std::vector<Instance*> instances;
+
+		bool lightEmission;
+		Lighting::Light lightEmitter;
 	};
 
 	class Block
@@ -176,6 +187,8 @@ namespace Blocks
 		glm::vec3 rotation;
 		glm::vec3 scale;
 		Bounds::Box boundingBox;
+
+		Lighting::Light* light;
 	};
 
 	void Initialize();

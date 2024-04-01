@@ -1,5 +1,6 @@
 #include "Blocks.h"
 #include "Files.h"
+#include "Set.h"
 
 static std::vector<Blocks::BlockType*> blocks;
 static std::vector<Blocks::Instance*> generationQueue;
@@ -89,6 +90,68 @@ void Blocks::Load(std::string _name)
 					{
 						block->SetShininess(content["attributes"]["shininess"]);
 					}
+
+
+					if (content["attributes"].contains("light"))
+					{
+						std::cout << "Loading block Light" << std::endl;
+						Lighting::Light light;
+						if (content["attributes"]["light"].contains("position"))
+						{
+							light.SetPosition(glm::vec3(content["attributes"]["light"]["position"][0],
+								content["attributes"]["light"]["position"][1],
+								content["attributes"]["light"]["position"][2]));
+						}
+						if (content["attributes"]["light"].contains("direction"))
+						{
+							light.SetDirection(glm::vec3(content["attributes"]["light"]["direction"][0],
+														content["attributes"]["light"]["direction"][1], 
+														content["attributes"]["light"]["direction"][2]));
+						}
+						if (content["attributes"]["light"].contains("ambient"))
+						{
+							light.SetAmbient(glm::vec3(content["attributes"]["light"]["ambient"][0],
+								content["attributes"]["light"]["ambient"][1],
+								content["attributes"]["light"]["ambient"][2]));
+						}
+						if (content["attributes"]["light"].contains("diffuse"))
+						{
+							light.SetDiffuse(glm::vec3(content["attributes"]["light"]["diffuse"][0],
+								content["attributes"]["light"]["diffuse"][1],
+								content["attributes"]["light"]["diffuse"][2]));
+						}
+						if (content["attributes"]["light"].contains("specular"))
+						{
+							light.SetSpecular(glm::vec3(content["attributes"]["light"]["specular"][0],
+								content["attributes"]["light"]["specular"][1],
+								content["attributes"]["light"]["specular"][2]));
+						}
+						if (content["attributes"]["light"].contains("constant"))
+						{
+							light.SetConstant(content["attributes"]["light"]["constant"]);
+						}
+						if (content["attributes"]["light"].contains("linear"))
+						{
+							light.SetLinear(content["attributes"]["light"]["linear"]);
+						}
+						if (content["attributes"]["light"].contains("quadratic"))
+						{
+							light.SetQuadratic(content["attributes"]["light"]["quadratic"]);
+						}
+						if (content["attributes"]["light"].contains("cutOff"))
+						{
+							light.SetCutOff(content["attributes"]["light"]["cutOff"]);
+						}
+						if (content["attributes"]["light"].contains("outerCutOff"))
+						{
+							light.SetOuterCutOff(content["attributes"]["light"]["outerCutOff"]);
+						}
+						light.SetActive(true);
+						light.SetType(Lighting::SPOT);
+						light.SetName(block->GetName() + " spot light");
+						block->SetLightEmission(true);
+						block->SetLight(light);
+					}
 				}
 			}
 			catch (nlohmann::json::parse_error& e)
@@ -177,28 +240,79 @@ void Blocks::Menu::Menu(GameData* _gameData)
 			std::string name = "##Block" + std::to_string(blockId) + blocks[blockId]->GetName();
 			if (ImGui::TreeNode(std::string(blocks[blockId]->GetName() + name).c_str()))
 			{
-				glm::vec3 dffColor = blocks[blockId]->GetDiffuse();
-				ImVec4 diffuseColor(dffColor.x, dffColor.y, dffColor.z,1.0);
-				if (ImGui::ColorPicker3(std::string("Diffuse" + name).c_str(), (float*)&diffuseColor))
+				if (ImGui::TreeNode((std::string("Material") + name).c_str()))
 				{
-					blocks[blockId]->SetDiffuse(glm::vec3(diffuseColor.x, diffuseColor.y, diffuseColor.z));
+					glm::vec3 dffColor = blocks[blockId]->GetDiffuse();
+					ImVec4 diffuseColor(dffColor.x, dffColor.y, dffColor.z, 1.0);
+					if (ImGui::ColorPicker3(std::string("Diffuse" + name).c_str(), (float*)&diffuseColor))
+					{
+						blocks[blockId]->SetDiffuse(glm::vec3(diffuseColor.x, diffuseColor.y, diffuseColor.z));
+					}
+
+					float shininess = blocks[blockId]->GetShininess();
+					if (ImGui::SliderFloat(std::string("Shininess" + name).c_str(), &shininess, 0.0f, 1000.0f))
+					{
+						blocks[blockId]->SetShininess(shininess);
+					}
+
+
+					if (ImGui::Button(std::string("Save" + name).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+					{
+						//blocks[blockId]->Save();
+					}
+					ImGui::TreePop();
 				}
-
-				float shininess = blocks[blockId]->GetShininess();
-				if (ImGui::SliderFloat(std::string("Shininess" + name).c_str(), &shininess, 0.0f, 1000.0f))
+				if (ImGui::TreeNode((std::string("Light") + name).c_str()))
 				{
-					blocks[blockId]->SetShininess(shininess);
-				}
+					//bool emitter;
+					//if (ImGui::Checkbox((std::string("Light : ") + name).c_str(), &emitter))
+					//{
+
+					//}
+					if (blocks[blockId]->IsLightEmitter())
+					{
+						Lighting::Light light = blocks[blockId]->GetLight();
+						float constant = light.GetConstant();
+						if (ImGui::SliderFloat((std::string("Constant : ") + name).c_str(), &constant, 0.0, 1.0))
+						{
+							light.SetConstant(constant);
+						}
+						float linear = light.GetLinear();
+						if (ImGui::SliderFloat((std::string("Linear : ") + name).c_str(), &linear, 0.0, 1.0))
+						{
+							light.SetLinear(linear);
+						}
+						float quadratic = light.GetQuadratic();
+						if (ImGui::SliderFloat((std::string("Quadratic : ") + name).c_str(), &quadratic, 0.0, 1.0))
+						{
+							light.SetQuadratic(quadratic);
+						}
+
+						float cutOff = light.GetCutOff();
+						if (ImGui::SliderFloat((std::string("cutOff : ") + name).c_str(), &cutOff, 0.0, 200.0))
+						{
+							light.SetCutOff(cutOff);
+						}
+
+						float outerCutOff = light.GetOuterCutOff();
+						if (ImGui::SliderFloat((std::string("outerCutOff : ") + name).c_str(), &outerCutOff, 0.0, 360.0))
+						{
+							light.SetOuterCutOff(outerCutOff);
+						}
 
 
-				if (ImGui::Button(std::string("Save" + name).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
-				{
-					//blocks[blockId]->Save();
+						blocks[blockId]->SetLight(light);
+					}
+					std::vector<Sets::Set*>* sets = Sets::GetAll();
+					for (size_t i = 0; i < sets->size(); i++)
+					{
+						sets->at(i)->ApplyTransformation();
+					}
+					ImGui::TreePop();
 				}
 				ImGui::TreePop();
 			}
 		}
-
 		ImGui::TreePop();
 	}
 }

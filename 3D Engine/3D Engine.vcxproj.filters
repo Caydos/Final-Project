@@ -166,6 +166,12 @@
     <Filter Include="Source Files\Game\Scripting\LoadingScreen">
       <UniqueIdentifier>{224daf18-d8d5-4913-90e3-418afcb12e98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Graphics components\Frustum">
+      <UniqueIdentifier>{0ca1ee75-592c-4626-be29-e890bce5d820}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engines\Rendering\Visual\Lighting">
+      <UniqueIdentifier>{f2b46df8-c80d-46cf-a244-f104b7ac42d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -330,6 +336,12 @@
     <ClCompile Include="LoadingScreen.cpp">
       <Filter>Source Files\Game\Scripting\LoadingScreen</Filter>
     </ClCompile>
+    <ClCompile Include="FrustumCulling.cpp">
+      <Filter>Source Files\Engines\Rendering\Graphics components\Frustum</Filter>
+    </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>Source Files\Engines\Rendering\Visual\Lighting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawable.h">
@@ -413,9 +425,6 @@
     <ClInclude Include="Editor.h">
       <Filter>Source Files\Tools\UI\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Lightning.h">
-      <Filter>Source Files\Engines\Rendering\Visual</Filter>
-    </ClInclude>
     <ClInclude Include="LightMenu.h">
       <Filter>Source Files\Tools\UI\Editor\Lights</Filter>
     </ClInclude>
@@ -460,9 +469,6 @@
     </ClInclude>
     <ClInclude Include="Wav.h">
       <Filter>Source Files\Engines\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="FrustrumCulling.h">
-      <Filter>Source Files\Engines\Rendering\Graphics components</Filter>
     </ClInclude>
     <ClInclude Include="Settings.h">
       <Filter>Source Files\Utils\Settings</Filter>
@@ -514,6 +520,12 @@
     </ClInclude>
     <ClInclude Include="LoadingScreen.h">
       <Filter>Source Files\Game\Scripting\LoadingScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="FrustumCulling.h">
+      <Filter>Source Files\Engines\Rendering\Graphics components\Frustum</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>Source Files\Engines\Rendering\Visual\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

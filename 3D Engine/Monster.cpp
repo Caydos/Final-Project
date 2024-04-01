@@ -13,9 +13,10 @@ void Monster::CreateMonster()
 {
     monster = Sets::Create();
     monster->GenerateRenderingInstance();
-    monster->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Extinguisher.json")));
+    monster->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")));
+    monster->SetScale(0.6f);
     monster->SetName("Monster");
-    glm::vec3 initialPosition = glm::vec3(3.6, 0.3, 0.5);
+    glm::vec3 initialPosition = glm::vec3(3.6, 0.1, 0.5);
     monster->SetPosition(initialPosition);
     monster->GetBoundingBox(); //Choper la boite englobante
 

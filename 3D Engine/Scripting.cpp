@@ -5,11 +5,13 @@
 #include "Collisions.h"
 #include "Monster.h"
 #include "LoadingScreen.h"
+#include "FrustumCulling.h"
 
 static bool initialized = false;
 static Players::Player* player = nullptr;
 static unsigned int FPVCam;
-static Lightning::Light* flashLight;
+static Lighting::Light* flashLight;
+static Lighting::Light* directionalLight;
 static Sets::Set* set;
 static std::thread mazeThread;
 static bool generated = false;
@@ -18,7 +20,7 @@ void Generation()
 {
 	Clock loadingClock;
 	loadingClock.Restart();
-	Maze::GenerateMaze(8, 1);
+	Maze::GenerateMaze(3, 1);
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	Monster::GenerateMonster(); //Pop les mob
 	generated = true;
@@ -48,23 +50,31 @@ void Scritping::Tick(GameData* _gameData)
 
 		playerPed->SetPosition(glm::vec3(3.650f, 1.850f, 1.1f), true);
 
+		directionalLight = Scene::Lights::Create();
+		directionalLight->SetType(Lighting::LightType::DIRECTIONAL);
+		directionalLight->SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
+		directionalLight->SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
+		directionalLight->SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
+		directionalLight->SetDirection(glm::vec3(0.0f, 1.0f, 0.0f));
+		directionalLight->SetName("Directional");
+		directionalLight->SetActive(true);
 
-		Lightning::Light flashLight2;
-		flashLight2.SetType(Lightning::LightType::SPOT);
-		flashLight2.SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
-		flashLight2.SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
-		flashLight2.SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
-		flashLight2.SetConstant(1.0f);
-		flashLight2.SetLinear(0.09f);
-		flashLight2.SetQuadratic(0.0032f);
+		flashLight = Scene::Lights::Create();
+		flashLight->SetType(Lighting::LightType::SPOT);
+		flashLight->SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
+		flashLight->SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
+		flashLight->SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
+		flashLight->SetConstant(1.0f);
+		flashLight->SetLinear(0.09f);
+		flashLight->SetQuadratic(0.0032f);
 
-		flashLight2.SetCutOff(90.339f);
-		flashLight2.SetOuterCutOff(90.764f);
-		flashLight2.SetName("FlashLight");
-		flashLight2.SetActive(true);
-		Scene::Lights::InsertLight(_gameData, flashLight2);
+		flashLight->SetCutOff(90.339f);
+		flashLight->SetOuterCutOff(90.764f);
+		flashLight->SetName("FlashLight");
+		flashLight->SetActive(false);
 
-		Scene::Lights::UpdateShader(_gameData);
+		//Scene::Lights::InsertLight(_gameData, flashLight2);
+		//Scene::Lights::UpdateShader(_gameData);
 
 
 		mazeThread = std::thread(Generation);
@@ -74,18 +84,27 @@ void Scritping::Tick(GameData* _gameData)
 	}
 	if (generated)
 	{
-		std::vector<Lightning::Light>* lights = Scene::Lights::GetLights();
-		for (size_t i = 0; i < lights->size(); i++)
-		{
-			if (lights->at(i).GetName() == "FlashLight")
-			{
+		//std::vector<Lighting::Light>* lights = Scene::Lights::GetLights();
+		//for (size_t i = 0; i < lights->size(); i++)
+		//{
+		//	if (lights->at(i).GetName() == "FlashLight")
+		//	{
 				Camera* cam = Scene::World::GetCamera();
-				flashLight = &lights->at(i);
+				//flashLight = &lights->at(i);
 				flashLight->SetPosition(cam->Position);
 				flashLight->SetDirection(cam->Front);
-				Scene::Lights::UpdateShader(_gameData);
-			}
-		}
+				Scene::Lights::RefreshLight(flashLight);
+				//Scene::Lights::UpdateShader(_gameData);
+		//	}
+		//}
+
+		//if (IsSphereVisible(*_gameData->camera, flashLight->GetPosition(), calculateLightRange(flashLight->GetConstant(), flashLight->GetLinear(), flashLight->GetQuadratic())))
+		//float range = calculateLightRange(flashLight->GetConstant(), flashLight->GetLinear(), flashLight->GetQuadratic());
+		//if (!FrustumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), flashLight->GetPosition() - range, flashLight->GetPosition() + range))
+		//{
+		//	std::cout << "Light is out of range" << std::endl;
+		//}
+
 		player->Control(_gameData);
 		Peds::Simulate(_gameData);
 		player->GetPed()->DrawBoundingBox();

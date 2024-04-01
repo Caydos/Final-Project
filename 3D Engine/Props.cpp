@@ -90,7 +90,7 @@ Maze::Decor Props::Generate(int _chunckType, glm::vec3 _cellPos, int _line, int 
 		}
 		if (_name == Props::LIGHT)
 		{
-			decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 - BRICK_W, _cellPos.y + CELL_W - BRICK_W, _cellPos.z + CELL_W / 2 - BRICK_W / 2/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*//* + BRICK_W * 3*/);;
+			decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 - BRICK_W, _cellPos.y + CELL_W - BRICK_W/* - 0.15*/, _cellPos.z + CELL_W / 2 - BRICK_W / 2/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*//* + BRICK_W * 3*/);;
 			decor.rot = glm::vec3(0, 0, 0);
 			decor.isVisible = true;
 			decor.name = "../Sets/HOSPITAL/Props/HSP_Light.json";

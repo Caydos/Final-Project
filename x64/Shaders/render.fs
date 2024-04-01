@@ -31,10 +31,25 @@ struct Light
     vec3 specular;
 };
 
-#define MAX_LIGHTS 40
+#define MAX_LIGHTS 300
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 viewPos;
 uniform vec4 clearColor;
+
+vec3 CalcDirLight(Light _light, vec3 _normal, vec3 _viewDir, vec3 _albedo, float _specular, float _shininess)
+{
+    vec3 lightDir = normalize(-_light.direction);
+    // diffuse shading
+    float diff = max(dot(_normal, lightDir), 0.0);
+    // specular shading
+    vec3 reflectDir = reflect(-lightDir, _normal);
+    float spec = pow(max(dot(_viewDir, reflectDir), 0.0), _shininess);
+    // combine results
+    vec3 ambient = _light.ambient * _albedo;
+    vec3 diffuse = _light.diffuse * diff * _albedo;
+    vec3 specular = _light.specular * spec * vec3(_specular,_specular,_specular);
+    return (ambient + diffuse + specular);
+}
 
 vec3 CalcSpotLight(Light _light, vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, float _specular, float _shininess)
 {
@@ -82,9 +97,13 @@ void main()
     {
         if (lights[lightId].activated)
         {
+            if (lights[lightId].type == DIRECTIONAL)
+            {
+                result += CalcDirLight(lights[lightId], norm, viewDir, Albedo, Specular, Shininess*100);
+            }
             if (lights[lightId].type == SPOT)
             {
-                result += CalcSpotLight(lights[0], norm, WorldPos, viewDir, Albedo, Specular, Shininess*100);
+                result += CalcSpotLight(lights[lightId], norm, WorldPos, viewDir, Albedo, Specular, Shininess*100);
             }
         }
     }

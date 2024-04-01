@@ -1,5 +1,5 @@
 #include "Set.h"
-#include "FrustrumCulling.h"
+#include "FrustumCulling.h"
 #include "Scene.h"
 #include "Inventory.h"
 #include <glm/gtx/matrix_decompose.hpp>
@@ -229,7 +229,7 @@ void Sets::Set::CheckVisibility()
 	}
 	//else if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
 
-	if (FrustrumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.GetBox().min, this->boundingBox.GetBox().max))
+	if (FrustumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.GetBox().min, this->boundingBox.GetBox().max))
 	{
 		if (this->visible) { return; }
 		this->visible = true;
