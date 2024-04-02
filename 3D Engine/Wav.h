@@ -6,7 +6,7 @@
 #include <OpenAl/al.h>
 #include <OpenAl/alc.h>
 
-void LoadWavFile(const std::string& _filename, ALuint _buffer)
+void LoadWavFile(const std::string& _filename, ALuint& _buffer)
 {
     std::ifstream file(_filename, std::ios::binary);
     if (!file) {
@@ -23,46 +23,51 @@ void LoadWavFile(const std::string& _filename, ALuint _buffer)
         std::cerr << "File is not a valid WAV file (does not start with RIFF)" << std::endl;
         return;
     }
+
     file.ignore(4); // Ignore chunk size
     if (!file.read(buffer, 4) || strncmp(buffer, "WAVE", 4) != 0) {
         std::cerr << "File is not a valid WAV file (does not contain WAVE)" << std::endl;
         return;
     }
 
-    // Read format subchunk
-    if (!file.read(buffer, 4) || strncmp(buffer, "fmt ", 4) != 0) {
-        std::cerr << "Invalid WAV file (no fmt )" << std::endl;
-        return;
+    bool fmtFound = false, dataFound = false;
+    unsigned int dataSize = 0;
+    unsigned short audioFormat = 0, numChannels = 0, bitsPerSample = 0;
+    unsigned int sampleRate = 0;
+    std::vector<char> data;
+
+    while (file.read(buffer, 4)) {
+        unsigned int chunkSize;
+        file.read(reinterpret_cast<char*>(&chunkSize), sizeof(chunkSize));
+
+        if (strncmp(buffer, "fmt ", 4) == 0 && !fmtFound) {
+            fmtFound = true;
+            file.read(reinterpret_cast<char*>(&audioFormat), sizeof(audioFormat));
+            file.read(reinterpret_cast<char*>(&numChannels), sizeof(numChannels));
+            file.read(reinterpret_cast<char*>(&sampleRate), sizeof(sampleRate));
+            file.ignore(6); // Ignore byte rate and block align
+            file.read(reinterpret_cast<char*>(&bitsPerSample), sizeof(bitsPerSample));
+            file.ignore(chunkSize - 16); // Skip the rest of the fmt chunk if any
+        }
+        else if (strncmp(buffer, "data", 4) == 0 && !dataFound) {
+            dataFound = true;
+            dataSize = chunkSize;
+            data.resize(dataSize);
+            if (!file.read(data.data(), dataSize)) {
+                std::cerr << "Error reading WAV data" << std::endl;
+                return;
+            }
+        }
+        else {
+            // Skip unrecognized or non-essential chunks
+            file.ignore(chunkSize);
+        }
+
+        if (fmtFound && dataFound) break; // Found both necessary chunks
     }
 
-    // Read format chunk size
-    unsigned int subchunk1Size;
-    file.read(reinterpret_cast<char*>(&subchunk1Size), sizeof(subchunk1Size));
-
-    unsigned short audioFormat, numChannels;
-    file.read(reinterpret_cast<char*>(&audioFormat), sizeof(audioFormat));
-    file.read(reinterpret_cast<char*>(&numChannels), sizeof(numChannels));
-
-    unsigned int sampleRate;
-    file.read(reinterpret_cast<char*>(&sampleRate), sizeof(sampleRate));
-
-    file.ignore(6); // Ignore byte rate and block align
-
-    unsigned short bitsPerSample;
-    file.read(reinterpret_cast<char*>(&bitsPerSample), sizeof(bitsPerSample));
-
-    // Read data subchunk
-    if (!file.read(buffer, 4) || strncmp(buffer, "data", 4) != 0) {
-        std::cerr << "Invalid WAV file (no data subchunk)" << std::endl;
-        return;
-    }
-
-    unsigned int dataSize;
-    file.read(reinterpret_cast<char*>(&dataSize), sizeof(dataSize));
-
-    std::vector<char> data(dataSize);
-    if (!file.read(data.data(), dataSize)) {
-        std::cerr << "Error reading WAV data" << std::endl;
+    if (!fmtFound || !dataFound) {
+        std::cerr << "Invalid WAV file (missing fmt or data subchunk)" << std::endl;
         return;
     }
 
@@ -74,6 +79,7 @@ void LoadWavFile(const std::string& _filename, ALuint _buffer)
         format = (bitsPerSample == 8) ? AL_FORMAT_STEREO8 : AL_FORMAT_STEREO16;
     }
 
+    alGenBuffers(1, &_buffer);
     alBufferData(_buffer, format, data.data(), dataSize, sampleRate);
 }
 

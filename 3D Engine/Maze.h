@@ -96,6 +96,7 @@ namespace Maze
 	struct MegaChunck
 	{
 		std::vector<Stage> stageList;
+		//std::vector<Decor> ObjectiveList;
 	};
 
 	struct ManagmentText

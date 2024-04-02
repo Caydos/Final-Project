@@ -29,6 +29,8 @@ static Clock tempClock;
 static Texture* textureTitle;
 static Texture* textureBack;
 
+bool drawHelpers = false;
+static Clock inputClock;
 
 static Audio::Sound* footSteps;
 
@@ -47,7 +49,6 @@ void Scritping::Tick(GameData* _gameData)
 	if (!initialized)
 	{
 		footSteps = Audio::CreateSound();
-		footSteps->Initialize();
 		footSteps->LoadFromFile("../Sounds/Footsteps.wav");
 		footSteps->Loop(true);
 
@@ -131,7 +132,7 @@ void Scritping::Tick(GameData* _gameData)
 		{
 			player->Control(_gameData);
 			Peds::Simulate(_gameData);
-			player->GetPed()->DrawBoundingBox();
+			//player->GetPed()->DrawBoundingBox();
 			Monster::MovementMob(_gameData);
 
 
@@ -146,6 +147,26 @@ void Scritping::Tick(GameData* _gameData)
 			{
 				player->GetPed()->SetBodyType(Physics::Type::RIGID);
 			}
+			if (_gameData->window.IsKeyPressed(Keys::F3))
+			{
+				//Respawn
+			}
+			if (_gameData->window.IsKeyPressed(Keys::F4) && inputClock.GetElapsedTime() > 125)
+			{
+				std::vector<Sets::Set*>* sets = Sets::GetAll();
+				for (size_t i = 0; i < sets->size(); i++)
+				{
+					if (sets->at(i)->GetName() == "Books")
+					{
+						sets->at(i)->CalculateBoundingBox();
+						sets->at(i)->DrawBoundingBox();
+						player->GetPed()->SetPosition(sets->at(i)->GetPosition());
+						break;
+					}
+				}
+				inputClock.Restart();
+			}
+
 			if (_gameData->window.IsKeyPressed(Keys::ESCAPE))
 			{
 				_gameData->window.Focus(false);
@@ -153,7 +174,42 @@ void Scritping::Tick(GameData* _gameData)
 				tempClock.Restart();
 				title.SetTexture(textureTitle);
 				background.SetTexture(textureBack);
+			}
+			// Assuming your crosshair is at the center of the screen
+			glm::vec4 ray_clip = glm::vec4(0.0, 0.0, -1.0, 1.0);
 
+			// Convert to Eye Space
+			glm::mat4 inv_projection = glm::inverse(Scene::World::GetProjection());
+			glm::vec4 ray_eye = inv_projection * ray_clip;
+			ray_eye = glm::vec4(ray_eye.x, ray_eye.y, -1.0, 0.0); // Homogenize
+
+			// Convert to World Space
+			glm::mat4 inv_view = glm::inverse(Scene::World::GetView());
+			glm::vec4 ray_wor = inv_view * ray_eye;
+			// Don't forget to normalize the ray direction
+			glm::vec3 ray_world_direction = glm::normalize(glm::vec3(ray_wor));
+
+			RayCasting::Ray ray;
+			glm::vec3 camPosition = Scene::World::GetCamera()->Position;
+			ray.origin = camPosition;
+			ray.direction = ray_world_direction;
+			std::vector<Sets::Set*>* sets = Sets::GetAll();
+			for (size_t i = 0; i < sets->size(); i++)
+			{
+				if (sets->at(i)->GetName() == "Books")
+				{
+					float rslt = RayCasting::Intersect(ray, sets->at(i)->GetBoundingBox());
+					if (rslt != -1 && rslt < 1.0f)
+					{
+						std::cout << "Hover" << std::endl;
+						if (_gameData->window.IsKeyPressed(Keys::E))
+						{
+							std::cout << "Key pressed" << std::endl;
+							Sets::Erase(sets->at(i));
+							break;
+						}
+					}
+				}
 			}
 		}
 		else
@@ -167,7 +223,6 @@ void Scritping::Tick(GameData* _gameData)
 				{
 					_gameData->window.Focus(true);
 				}
-
 			}
 			if (options.IsMouseOverQuad(mousePos))
 			{

@@ -4,6 +4,7 @@
 #include "Clock.h"
 
 std::vector<Maze::MegaChunck> maze;
+std::vector<Maze::Decor> objectiveList;
 
 Maze::ManagmentText Maze::InitProps()
 {
@@ -111,7 +112,7 @@ void Maze::StageManagment(int _mapColumn, int _mapLine, int _stageNb, Chunck& _c
 			}
 		}
 	}
-	if (_stageNb == 0 && _mapLine == 3 && _mapColumn == 4)
+	if (_stageNb == 0 && _mapLine == 1 && _mapColumn == 1)
 	{
 		_chunck.type = EXIT;
 	}
@@ -172,7 +173,7 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 			{
 				Decor roof;
 
-				roof.pos = (glm::vec3(CELL_W * column + /*BRICK_W +*/ _mapColumn * MAP_W, BRICK_W /*/ 2*/ + CELL_W * _stageNb - BRICK_W / 2, CELL_W * line - BRICK_W / 2 + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
+				roof.pos = (glm::vec3(CELL_W * column + /*BRICK_W +*/ _mapColumn * MAP_W, BRICK_W /*/ 2*/ + CELL_W * _stageNb - BRICK_W / 2, CELL_W * line - BRICK_W / 2 + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb + BRICK_W/2)));
 				roof.isVisible = true;
 				roof.name = _text.roof[_chunck.type]/*"../Sets/Ground.json"*/;
 				cell.ground.push_back(roof);
@@ -200,7 +201,7 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 			{
 				Decor exit;
 
-				exit.pos = (glm::vec3(CELL_W * column + /*BRICK_W / 2 +*/ _mapColumn * MAP_W, CELL_W + CELL_W * _stageNb - CELL_W, CELL_W * line + /*BRICK_W * 2 +*/ _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
+				exit.pos = (glm::vec3(CELL_W * column + /*BRICK_W / 2 +*/ _mapColumn * MAP_W - BRICK_W/2, CELL_W + CELL_W * _stageNb - CELL_W - BRICK_W - BRICK_W/2, CELL_W * line + /*BRICK_W * 2 +*/ _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)- BRICK_W/2));
 				exit.isVisible = true;
 				exit.name = "../Sets/HOSPITAL/Map/HSP_Room.json";
 				_chunck.decor.push_back(exit);
@@ -245,7 +246,7 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 						{
 							if (_chunck.type == HOSPITAL)
 							{
-								wall.name = "../Sets/HOSPITAL/Map/HSF_Wd_2.json";
+								wall.name = "../Sets/HOSPITAL/Map/HSP_Wall2.json";
 							}
 							wallOut.name = "../Sets/EXTERIOR/Ext_Brd_2.json";
 						}
@@ -266,9 +267,14 @@ void Maze::InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck,
 					{
 						wall.pos = (glm::vec3(CELL_W * column - BRICK_W / 2.f + _mapColumn * MAP_W, /*BRICK_W +*/ CELL_W * _stageNb, CELL_W * line /*- BRICK_W/2*/ - BRICK_W / 2.f + _mapLine * MAP_W + (OFFSET_STAGE * MAP_W * _stageNb)));
 						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::CORRIDOR));
+						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::AD));
 						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::LIGHT));
 						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::PANELEXIT));
 						cell.props.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::RAIL));
+						if (line == 0 && column == 0 || line == 0 && column == NB_CELL / 2 + 1 || line == NB_CELL / 2 + 1 && column == NB_CELL / 2 + 1 || line == NB_CELL / 2 + 1 && column == 0)
+						{
+							objectiveList.push_back(Props::Generate(_chunck.type, wall.pos, line, column, Props::BOOK));
+						}
 						cell.bedroom = Props::GenerateBedRoom(_chunck.type, wall.pos, line, column);
 
 						//if (cell.props.size() <= 1)
@@ -808,7 +814,7 @@ void Maze::CreateMaze()
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor = Sets::Create();
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->GenerateRenderingInstance();
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].name)), false);
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetName("Props");
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetName(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].name);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetPath("../Sets/");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetRotation(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].rot, true);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].pos);
@@ -830,6 +836,19 @@ void Maze::CreateMaze()
 					}
 				}
 			}
+		}
+	}
+	for (int objective = 0; objective < objectiveList.size(); objective++)
+	{
+		if (objectiveList[objective].isVisible)
+		{
+			objectiveList[objective].decor = Sets::Create();
+			objectiveList[objective].decor->GenerateRenderingInstance();
+			objectiveList[objective].decor->LoadFromJson(json::parse(Files::GetFileContent(objectiveList[objective].name)), false);
+			objectiveList[objective].decor->SetName("Books");
+			objectiveList[objective].decor->SetPath("../Sets/");
+			objectiveList[objective].decor->SetRotation(objectiveList[objective].rot, true);
+			objectiveList[objective].decor->SetPosition(objectiveList[objective].pos);
 		}
 	}
 }
@@ -871,6 +890,14 @@ void Maze::GenerateMaze(int _mapW, int _nbStage)
 				InitSpecialChuncks(mapNb, stageNb, cell, text, _mapW, _nbStage);
 			}
 		}
+	}
+
+	for (int i = 0; i < NB_CLUE; i++)
+	{
+		int randomBook;
+		randomBook = rand() % objectiveList.size();
+		std::cout << randomBook << std::endl;
+		objectiveList[randomBook].isVisible = true;
 	}
 	CreateMaze();
 

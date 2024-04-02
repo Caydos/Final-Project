@@ -78,10 +78,15 @@ void Players::Player::Control(GameData* _gameData)
 				this->footSteps->Pause();
 			}
 		}
+		if (velocityVec.x != 0 || velocityVec.z)
+		{
+
+		}
 
 		this->ped->PushVelocity(velocityVec, true);
 		//this->ped->Update();
 	}
+	footSteps->SetPosition(this->ped->GetPosition());
 }
 std::vector<Players::Player*> playerPool;
 

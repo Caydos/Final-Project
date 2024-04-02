@@ -48,6 +48,10 @@ int main()
 		// Set Distance Model (optional, depending on your needs)
 		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 	}
+	std::thread audioThread(Audio::Tick);
+	audioThread.detach();
+
+
 	bool running = true;
 	Network::Events::CreateEvents();
 	std::thread eventThread(&Network::Events::Thread, running);

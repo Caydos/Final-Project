@@ -8,6 +8,7 @@
 
 //////////////////////////////////////// DENSITY ////////////////////////////////////////
 #define PROPS_LUCK 75
+#define NB_CLUE 3
 
 namespace Props
 {
@@ -19,6 +20,8 @@ namespace Props
 		BENCH,
 		LIGHT,
 		RAIL,
+		BOOK,
+		AD,
 	};
 
 	struct ManagmentText

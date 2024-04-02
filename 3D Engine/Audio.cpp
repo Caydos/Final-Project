@@ -24,21 +24,24 @@ Audio::Sound::~Sound()
 
 void Audio::Sound::Initialize()
 {
-	std::unique_lock<std::shared_mutex> lock(this->mutex);
-	alGenSources(1, &this->source);
-	alGenBuffers(1, &this->buffer);
+	//std::unique_lock<std::shared_mutex> lock(this->mutex);
+	//alGenSources(1, &this->source);
+	//alGenBuffers(1, &this->buffer);
+	//std::cout << "created" << std::endl;
 	this->initialized = true;
 }
 
 void Audio::Sound::LoadFromFile(const char* _path)
 {
-	std::unique_lock<std::shared_mutex> lock(this->mutex);
+	//std::unique_lock<std::shared_mutex> lock(this->mutex);
 	LoadWavFile(_path, buffer);
+	alGenSources(1, &this->source);
+	alSourcei(this->source, AL_BUFFER, buffer);
 }
 
 void Audio::Sound::Erase()
 {
-	std::unique_lock<std::shared_mutex> lock(this->mutex);
+	//std::unique_lock<std::shared_mutex> lock(this->mutex);
 	if (this->initialized)
 	{
 		alDeleteSources(1, &this->source);
@@ -48,7 +51,7 @@ void Audio::Sound::Erase()
 
 void Audio::Sound::Loop(bool _state)
 {
-	std::unique_lock<std::shared_mutex> lock(this->mutex);
+	//std::unique_lock<std::shared_mutex> lock(this->mutex);
 	this->loop = _state;
 	alSourcei(this->source, AL_LOOPING, this->loop);
 
@@ -56,14 +59,19 @@ void Audio::Sound::Loop(bool _state)
 
 void Audio::Sound::Play()
 {
-	std::unique_lock<std::shared_mutex> lock(this->mutex);
+	//std::unique_lock<std::shared_mutex> lock(this->mutex);.
 	this->paused = false;
 	alSourcePlay(this->source);
+	ALenum error = alGetError();
+	if (error != AL_NO_ERROR)
+	{
+		std::cout << "Error playing source: " << error << std::endl;
+	}
 }
 
 void Audio::Sound::Pause()
 {
-	std::unique_lock<std::shared_mutex> lock(this->mutex);
+	//std::unique_lock<std::shared_mutex> lock(this->mutex);
 	this->paused = true;
 	alSourcePause(this->source);
 }
@@ -87,7 +95,7 @@ void Audio::Sound::SetPosition(glm::vec3 _position)
 {
 	std::unique_lock<std::shared_mutex> lock(this->mutex);
 	this->position = _position;
-	if (this->initialized)
+	//if (this->initialized)
 	{
 		alSource3f(source, AL_POSITION, this->position.x, this->position.y, this->position.z);
 	}
@@ -102,7 +110,7 @@ void Audio::Sound::SetVelocity(glm::vec3 _velocity)
 {
 	std::unique_lock<std::shared_mutex> lock(this->mutex);
 	this->velocity = _velocity;
-	if (this->initialized)
+	//if (this->initialized)
 	{
 		alSource3f(source, AL_VELOCITY, this->velocity.x, this->velocity.y, this->velocity.z);
 	}
@@ -110,6 +118,7 @@ void Audio::Sound::SetVelocity(glm::vec3 _velocity)
 
 void Audio::Sound::Update()
 {
+	//std::unique_lock<std::shared_mutex> lock(this->mutex);
 	ALint sourceState;
     alGetSourcei(source, AL_SOURCE_STATE, &sourceState);
 	if (sourceState == AL_PLAYING)
@@ -162,17 +171,21 @@ void Audio::Initialize()
 
 void Audio::Tick()
 {
-	mutex.lock_shared();
-	for (size_t soundId = 0; soundId < sounds.size(); soundId++)
+	while (true)
 	{
-
+		//mutex.lock_shared();
+		//for (size_t soundId = 0; soundId < sounds.size(); soundId++)
+		//{
+		//	//alGetSourcei(source, AL_SOURCE_STATE, &sourceState);
+		//	sounds[soundId]->Update();
+		//}
+		//mutex.unlock_shared();
 	}
-	mutex.unlock_shared();
 }
 
 Audio::Sound* Audio::CreateSound()
 {
-	std::unique_lock<std::shared_mutex> lock(mutex);
+	//std::unique_lock<std::shared_mutex> lock(mutex);
 	Audio::Sound* sound = new Audio::Sound;
 	sounds.push_back(sound);
 	return sound;
@@ -180,7 +193,7 @@ Audio::Sound* Audio::CreateSound()
 
 void Audio::EraseSound(Sound* _sound)
 {
-	std::unique_lock<std::shared_mutex> lock(mutex);
+	//std::unique_lock<std::shared_mutex> lock(mutex);
 	for (size_t soundId = 0; soundId < sounds.size(); soundId++)
 	{
 		if (sounds[soundId] == _sound)

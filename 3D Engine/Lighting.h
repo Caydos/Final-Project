@@ -5,7 +5,7 @@
 #include "FrustumCulling.h"
 
 #define MAX_LIGHTS 40
-#define LIGHT_VISIBILITY_RANGE 15
+#define LIGHT_VISIBILITY_RANGE 150
 
 namespace Lighting
 {
