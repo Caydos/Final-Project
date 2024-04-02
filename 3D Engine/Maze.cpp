@@ -735,13 +735,24 @@ void Maze::CreateMaze()
 		for (int stageNb = 0; stageNb < maze[mapNb].stageList.size(); stageNb++)
 		{
 			//chunk load
+			if (maze[mapNb].stageList[stageNb].chunk.parentSet == nullptr)
+			{
+				maze[mapNb].stageList[stageNb].chunk.parentSet = Sets::Create();
+				maze[mapNb].stageList[stageNb].chunk.parentSet->Initialize(false);
+				maze[mapNb].stageList[stageNb].chunk.parentSet->GenerateRenderingInstance();
+				maze[mapNb].stageList[stageNb].chunk.parentSet->SetName("Chunk");
+				//std::cout << "Another chunk" << std::endl;
+			}
+			std::vector<Blocks::BlockType*>* instanceAddr = maze[mapNb].stageList[stageNb].chunk.parentSet->GetRenderingInstance();
+
 			for (int decor = 0; decor < maze[mapNb].stageList[stageNb].chunk.decor.size(); decor++)
 			{
 				if (maze[mapNb].stageList[stageNb].chunk.decor[decor].isVisible)
 				{
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor = Sets::Create();
-					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->GenerateRenderingInstance();
-					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.decor[decor].name)), false);
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetRenderingInstance(instanceAddr);
+					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.decor[decor].name)));
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetName("Wall");
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetPath("../Sets/");
 					maze[mapNb].stageList[stageNb].chunk.decor[decor].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.decor[decor].pos);
@@ -756,8 +767,9 @@ void Maze::CreateMaze()
 					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].isVisible)
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor = Sets::Create();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->GenerateRenderingInstance();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].name)), false);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetRenderingInstance(instanceAddr);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].name)));
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetName("Ground");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetPath("../Sets/");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].ground[ground].pos);
@@ -770,8 +782,9 @@ void Maze::CreateMaze()
 					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].isVisible)
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor = Sets::Create();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->GenerateRenderingInstance();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].name)), false);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetRenderingInstance(instanceAddr);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].name)));
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetName("Wall");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetPath("../Sets/");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallList[wall].pos);
@@ -784,7 +797,8 @@ void Maze::CreateMaze()
 					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].isVisible)
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor = Sets::Create();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->GenerateRenderingInstance();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetRenderingInstance(instanceAddr);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetName("Wall");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallMissingList[wallMissing].decor->SetPath("../Sets/");
@@ -798,7 +812,8 @@ void Maze::CreateMaze()
 					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].isVisible)
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor = Sets::Create();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->GenerateRenderingInstance();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetRenderingInstance(instanceAddr);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetName("Wall");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetPath("../Sets/");
@@ -812,7 +827,8 @@ void Maze::CreateMaze()
 					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].isVisible)
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor = Sets::Create();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->GenerateRenderingInstance();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetRenderingInstance(instanceAddr);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetName(maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].name);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].props[Props].decor->SetPath("../Sets/");
@@ -827,7 +843,8 @@ void Maze::CreateMaze()
 					if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].isVisible)
 					{
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor = Sets::Create();
-						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->GenerateRenderingInstance();
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
+						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetRenderingInstance(instanceAddr);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].name)), false);
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetName("Props");
 						maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetPath("../Sets/");
@@ -836,6 +853,9 @@ void Maze::CreateMaze()
 					}
 				}
 			}
+
+			maze[mapNb].stageList[stageNb].chunk.parentSet->ApplyTransformation();
+			maze[mapNb].stageList[stageNb].chunk.parentSet->CalculateBoundingBox();
 		}
 	}
 	for (int objective = 0; objective < objectiveList.size(); objective++)
@@ -878,7 +898,7 @@ void Maze::GenerateMaze(int _mapW, int _nbStage)
 		}
 	}
 
-	std::cout << maze.size() << std::endl;
+	//std::cout << maze.size() << std::endl;
 
 	for (int mapNb = 0; mapNb < maze.size(); mapNb++)
 	{
@@ -896,7 +916,7 @@ void Maze::GenerateMaze(int _mapW, int _nbStage)
 	{
 		int randomBook;
 		randomBook = rand() % objectiveList.size();
-		std::cout << randomBook << std::endl;
+		//std::cout << randomBook << std::endl;
 		objectiveList[randomBook].isVisible = true;
 	}
 	CreateMaze();

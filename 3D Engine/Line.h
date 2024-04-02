@@ -3,7 +3,7 @@
 #include "Drawable.h"
 #include "Common.h"
 
-#define LINE_VERTEX_COUNT 4
+#define LINE_VERTEX_COUNT 8
 
 class Line : public Drawable
 {
@@ -22,8 +22,8 @@ public:
 	{
 		this->vertexCount = LINE_VERTEX_COUNT;
 		float verticesX[LINE_VERTEX_COUNT] = {
-			-.5,.0f,
-			.5f,.0f
+			-.5,.0f, 1.0, 1.0,
+			.5f,.0f, 1.0, 1.0
 		};
 
 		std::memcpy(this->vertices, verticesX, sizeof(verticesX));
@@ -36,7 +36,7 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, this->vertexCount * sizeof(float), this->vertices, GL_STATIC_DRAW);
 
 		// position attribute
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
 
@@ -84,7 +84,7 @@ public:
 		glm::mat4 transform = projection * model;
 
 		shader->setMat4("transform", transform);
-
+		shader->setInt("mode", 0);
 		shader->setVec4("color", glm::vec4(this->color.values[0], this->color.values[1], this->color.values[2], this->color.values[3]));
 		shader->setFloat("opacity", this->GetOpacity());
 

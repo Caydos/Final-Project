@@ -41,7 +41,7 @@ void Bounds::BoundingBox::Draw()
 
     this->shader->use();
     this->shader->setBool("instanceUsage", false);
-    this->shader->setMat4("model", this->model);
+    this->shader->setMat4("model", glm::mat4(1.0f));
     this->shader->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     this->shader->setFloat("opacity", 1.0f);
     glBindVertexArray(this->VAO);

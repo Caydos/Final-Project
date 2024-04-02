@@ -112,8 +112,8 @@ public:
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true, float _dt = .0f)
     {
-        xoffset *= MouseSensitivity * _dt;
-        yoffset *= MouseSensitivity * _dt;
+        xoffset *= MouseSensitivity /** _dt*/;
+        yoffset *= MouseSensitivity /** _dt*/;
 
         //Yaw += xoffset;
         Yaw = std::fmod((Yaw + xoffset), (GLfloat)360.0f);

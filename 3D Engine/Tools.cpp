@@ -12,6 +12,7 @@ static bool initialized = false;
 static unsigned int FPVCam;
 static Clock inputClock;
 static Lighting::Light* flashLight;
+static Lighting::Light* directionalLight;
 static float MovementSpeed = 2.25f;
 
 void Tools::Initialize(GameData* _gameData)
@@ -22,6 +23,15 @@ void Tools::Initialize(GameData* _gameData)
 	inputClock.Restart();
 	FPVCam = Scene::World::NewCamera(glm::vec3(3.0f, 1.2f, 3.0f));
 	Scene::World::FocusCamera(_gameData, FPVCam);
+
+	directionalLight = Scene::Lights::Create();
+	directionalLight->SetType(Lighting::LightType::DIRECTIONAL);
+	directionalLight->SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
+	directionalLight->SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
+	directionalLight->SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
+	directionalLight->SetDirection(glm::vec3(0.0f, 1.0f, 0.0f));
+	directionalLight->SetName("Directional");
+	directionalLight->SetActive(true);
 
 	//Lighting::Light flashLight2;
 	//flashLight2.SetType(Lighting::LightType::SPOT);
@@ -40,23 +50,23 @@ void Tools::Initialize(GameData* _gameData)
 
 	//Scene::Lights::UpdateShader(_gameData);
 
-	//Maze::GenerateMaze(3, 1);
+	Maze::GenerateMaze(3, 1);
 
-	Sets::Set* room = Sets::Create();
-	room->GenerateRenderingInstance();
-	room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_Room.json")));
-	room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
-	for (size_t i = 0; i < 5; i++)
-	{
-		for (size_t j = 0; j < 5; j++)
-		{
-			Sets::Set* light = Sets::Create();
-			light->GenerateRenderingInstance();
-			light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")));
-			light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j));
-			light->SetName("Light");
-		}
-	}
+	//Sets::Set* room = Sets::Create();
+	//room->GenerateRenderingInstance();
+	//room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_Room.json")));
+	//room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
+	//for (size_t i = 0; i < 5; i++)
+	//{
+	//	for (size_t j = 0; j < 5; j++)
+	//	{
+	//		Sets::Set* light = Sets::Create();
+	//		light->GenerateRenderingInstance();
+	//		light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")));
+	//		light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j));
+	//		light->SetName("Light");
+	//	}
+	//}
 	initialized = true;
 }
 

@@ -54,17 +54,17 @@ void Peds::Ped::PushVelocity(glm::vec3 _velocity, bool _movementVelocity)
 
 void Peds::Ped::Update()
 {
-	if (this->camera != nullptr)
-	{
-		this->camera->Position = this->GetPosition();
-		this->SetRotation(glm::vec3(.0f, -this->camera->Yaw + 90.0, .0f));
-	}
 	this->Move(this->body.velocity, true);
 	this->running = false;
 
 	// Reset states
 	this->body.velocity -= this->movementVelocity;
 	this->movementVelocity = glm::vec3(.0f);
+	if (this->camera != nullptr)
+	{
+		this->camera->Position = this->GetPosition();
+		this->SetRotation(glm::vec3(.0f, -this->camera->Yaw + 90.0, .0f));
+	}
 }
 
 float Peds::Ped::GetSpeed()
@@ -105,19 +105,23 @@ void Peds::Ped::Simulate(GameData* _gameData)
 		for (size_t setId = 0; setId < sets.size(); setId++)
 		{
 			if (sets[setId] == this) { continue; }
+			if (sets[setId]->GetName() == "Monster") { continue; }
 			Bounds::Box setBox = this->GetBoundingBox();
-
-			std::vector<Blocks::Block>* blocks = sets[setId]->GetBlocks();
-			for (size_t blockId = 0; blockId < blocks->size(); blockId++)
-			{
-				this->body.velocity = Collisions::CalculateCollisionResponse(setBox, blocks->at(blockId).GetBoundingBox(), this->body.velocity);
-			}
+			this->body.velocity = sets[setId]->ComputeCollisions(setBox, this->body.velocity);
+			//if (Collisions::CalculateCollisionResponse(setBox, sets[setId]->GetBoundingBox(), this->body.velocity) != glm::vec3(0.0))
+			//{
+			//	std::vector<Blocks::Block>* blocks = sets[setId]->GetBlocks();
+			//	for (size_t blockId = 0; blockId < blocks->size(); blockId++)
+			//	{
+			//		this->body.velocity = Collisions::CalculateCollisionResponse(setBox, blocks->at(blockId).GetBoundingBox(), this->body.velocity);
+			//	}
+			//	std::vector<Sets::Set*> children = sets[setId]->GetChilds();
+			//	for (size_t childId = 0; childId < children.size(); childId++)
+			//	{
+			//		
+			//	}
+			//}
 		}
-	}
-	if (this->camera != nullptr)
-	{
-		this->camera->Position = this->GetPosition();
-		this->SetRotation(glm::vec3(.0f, -this->camera->Yaw + 90.0, .0f));
 	}
 	this->Move(this->body.velocity, true);
 	this->running = false;
@@ -132,6 +136,16 @@ void Peds::Ped::Simulate(GameData* _gameData)
 	}
 	this->body.velocity.z = 0;
 	this->movementVelocity = glm::vec3(.0f);
+	if (this->camera != nullptr)
+	{
+		this->camera->Position = this->GetPosition();
+		this->SetRotation(glm::vec3(.0f, -this->camera->Yaw + 90.0, .0f) + additionalRotation);
+	}
+}
+
+void Peds::Ped::SetAdditionalRotation(glm::vec3 _rotation)
+{
+	this->additionalRotation = _rotation;
 }
 
 

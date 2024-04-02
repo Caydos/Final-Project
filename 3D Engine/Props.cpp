@@ -53,7 +53,7 @@ Maze::Decor Props::Generate(int _chunckType, glm::vec3 _cellPos, int _line, int 
 
 	int randomLuck = 0;
 	randomLuck = rand() % 100;
-	std::cout << randomLuck << std::endl;
+	//std::cout << randomLuck << std::endl;
 
 	if (_chunckType == Maze::HOSPITAL)
 	{

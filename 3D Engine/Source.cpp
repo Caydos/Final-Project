@@ -14,6 +14,7 @@
 #include "Audio.h"
 #include "Scripting.h"
 #include "Tools.h"
+#include "Sprite.h"
 
 float lastFrame = 0.0f;
 
@@ -22,6 +23,17 @@ GameData gameData;
 GameData* GetGameData() { return &gameData; }
 ALCdevice* device;
 ALCcontext* context;
+
+static Sprite winSprite;
+static Sprite loseSprite;
+void WinTick(GameData* _gameData)
+{
+	winSprite.Draw();
+}
+void LoseTick(GameData* _gameData)
+{
+	loseSprite.Draw();
+}
 
 int main()
 {
@@ -94,6 +106,8 @@ int main()
 
 	gameData.gameStates[TOOLS] = &Tools::Tick;
 	gameData.gameStates[GAME] = &Scritping::Tick;
+	gameData.gameStates[VICTORY] = &WinTick;
+	gameData.gameStates[LOSE] = &LoseTick;
 	gameData.gameState = GAME;
 
 #ifdef _DEBUG
@@ -112,6 +126,8 @@ int main()
 	ImGui_ImplGlfw_InitForOpenGL(gameData.window.GetWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 430 core");
 
+	winSprite.Load("../Textures/ScreenWin.png", glm::vec3(0, 0, 0), glm::vec3(1920, 1080, 0), 1);
+	loseSprite.Load("../Textures/ScreenLoose.png", glm::vec3(0, 0, 0), glm::vec3(1920, 1080, 0), 1);
 	// Initialize variables
 	float lastFPSCalculationTime = 0.0f;
 	int frameCount = 0;

@@ -729,3 +729,19 @@ void Sets::Set::DrawBoundingBox()
 {
 	this->boundingBox.Draw();
 }
+
+glm::vec3 Sets::Set::ComputeCollisions(Bounds::Box _boudingBox,glm::vec3 _velocity)
+{
+	if (Collisions::CalculateCollisionResponse(_boudingBox, this->GetBoundingBox(), _velocity) != glm::vec3(0.0))
+	{
+		for (size_t blockId = 0; blockId < blocks.size(); blockId++)
+		{
+			_velocity = Collisions::CalculateCollisionResponse(_boudingBox, blocks[blockId].GetBoundingBox(), _velocity);
+		}
+		for (size_t childId = 0; childId < this->childs.size(); childId++)
+		{
+			_velocity = this->childs[childId]->ComputeCollisions(_boudingBox, _velocity);
+		}
+	}
+	return _velocity;
+}

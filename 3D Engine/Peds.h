@@ -30,6 +30,8 @@ namespace Peds
 		void Run();
 
 		void Simulate(GameData* _gameData);
+
+		void SetAdditionalRotation(glm::vec3 _rotation);
 	private:
 		std::shared_mutex mutex;
 		Camera* camera;
@@ -39,6 +41,7 @@ namespace Peds
 		float speed;
 		float runningMultiplier;
 		bool running;
+		glm::vec3 additionalRotation;
 	};
 
 	Ped* Create();

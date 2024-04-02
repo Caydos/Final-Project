@@ -14,7 +14,7 @@ void LoadingScreen::Render(GameData* _gameData)
 {
     if (!initialized)
     {
-        background.Load("../Textures/LoadingScreen/Tableau.jpg", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0f), 1);
+        background.Load("../Textures/LoadingScreen/Loading_Screen.png", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0f), 1);
         spinner.Load("", glm::vec3(_gameData->resolution[0] - spinnerSize, _gameData->resolution[1] - spinnerSize, 0.0), glm::vec3(spinnerSize, spinnerSize, 0.0f), 1);
         textureSpin = new Texture;
         textureSpin->LoadFromFile("../Textures/LoadingScreen/image0000.png");

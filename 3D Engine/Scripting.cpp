@@ -8,6 +8,7 @@
 #include "FrustumCulling.h"
 #include "Sprite.h"
 #include "Audio.h"
+#include "Crosshair.h"
 
 static bool initialized = false;
 static Players::Player* player = nullptr;
@@ -33,14 +34,68 @@ bool drawHelpers = false;
 static Clock inputClock;
 
 static Audio::Sound* footSteps;
+static glm::vec3 spawnPoint(11.05, 1.850, 21.250);
+static float spawnYaw = 0.0f;
+
+static Sets::Set* exitDoor;
+static glm::vec3 exitDoorPoint(10.150, 0.050, 20.800);
+static float exitDoorYaw = 90.0f;
+
+
+static Monster::Monster* monster = nullptr; //Mob
+static Audio::Sound* tampon;
+static Audio::Sound* ambient;
+static Audio::Sound* doorOpen;
+static Audio::Sound* doorClose;
+static Clock ambientClock;
+
+struct Door
+{
+	glm::vec3 originalRotation;
+	Sets::Set* set = nullptr;
+};
+static std::vector<Door> doors;
+static int rewards = 3;
 
 void Generation()
 {
+	tampon = Audio::CreateSound();
+	tampon->LoadFromFile("../Sounds/Tampon.wav");
+
+	ambient = Audio::CreateSound();
+	ambient->LoadFromFile("../Sounds/AmbiantSound3.wav");
+
 	Clock loadingClock;
 	loadingClock.Restart();
 	Maze::GenerateMaze(3, 1);
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
-	Monster::GenerateMonster(); //Pop les mob
+	//Mob
+	monster = Monster::Create();
+	Peds::Ped* monsterPed = Peds::Create();
+	monsterPed->Initialize();
+	monsterPed->GenerateRenderingInstance();
+	monsterPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")));
+	monsterPed->SetName("Monster");
+	monsterPed->SetScale(0.60);
+	glm::vec3 initialPosition = glm::vec3(3.65, 0.20, 6.2);
+	monsterPed->SetBodyType(Physics::Type::GHOST);
+	monster->SetPed(monsterPed);
+
+	monsterPed->SetPosition(initialPosition);
+	monsterPed->SetRotation(glm::vec3(0.0));
+	monster->SetTargetPlayer(player);
+
+	std::vector<Sets::Set*>* sets = Sets::GetAll();
+	for (size_t i = 0; i < sets->size(); i++)
+	{
+		if (sets->at(i)->GetName() == "../Sets/HOSPITAL/Props/HSP_RoomDoor.json")
+		{
+			Door door;
+			door.set = sets->at(i);
+			door.originalRotation = door.set->GetRotation();
+			doors.push_back(door);
+		}
+	}
 	generated = true;
 }
 
@@ -55,12 +110,20 @@ void Scritping::Tick(GameData* _gameData)
 		Scene::Initialize(_gameData);
 		Scene::World::SetSkyboxState(false);
 
-		FPVCam = Scene::World::NewCamera(glm::vec3(3.0f, 1.2f, 3.0f));
+		FPVCam = Scene::World::NewCamera(glm::vec3(spawnPoint), glm::vec3(0.0f, 1.0f, 0.0f), spawnYaw/*Cuz the player ped has been mapped weirdly*/);
+
 		Scene::World::FocusCamera(_gameData, FPVCam);
 
 
 		player = Players::Create();
 		player->SetFootStepSound(footSteps);
+
+		exitDoor = Sets::Create();
+		exitDoor->Initialize();
+		exitDoor->GenerateRenderingInstance();
+		exitDoor->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_ExitDoor.json")));
+		exitDoor->SetPosition(exitDoorPoint);
+		exitDoor->SetRotation(glm::vec3(0.0, exitDoorYaw, 0.0));
 
 		Peds::Ped* playerPed = Peds::Create();
 		playerPed->Initialize();
@@ -68,11 +131,23 @@ void Scritping::Tick(GameData* _gameData)
 		playerPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/Character.json")));
 		playerPed->SetName("Character");
 		playerPed->SetPath("../Sets/MC/");
+		//std::vector<Sets::Set*> children = playerPed->GetChilds();
+		//for (size_t childId = 0; childId < children.size(); childId++)
+		//{
+		//	if (children[childId]->GetName() == "MC_HeadV3")
+		//	{
+		//		//Sets::Erase(children[childId]);
+		//		//playerPed->RemoveChild(, false);
+		//	}
+		//}
 		playerPed->SetCamera(_gameData->camera);
 		playerPed->SetBodyType(Physics::Type::RIGID);
 		player->SetPed(playerPed);
+		//playerPed->SetAdditionalRotation(glm::vec3(0.0,90.0,0.0));
 
-		playerPed->SetPosition(glm::vec3(3.650f, 1.850f, 1.1f), true);
+		playerPed->SetPosition(spawnPoint, true);
+		playerPed->SetRotation(glm::vec3(0.0, spawnYaw, 0.0), true);
+		//playerPed->SetScale(1.6f, true);
 
 		directionalLight = Scene::Lights::Create();
 		directionalLight->SetType(Lighting::LightType::DIRECTIONAL);
@@ -123,20 +198,32 @@ void Scritping::Tick(GameData* _gameData)
 		mazeThread = std::thread(Generation);
 		mazeThread.detach();
 
+
 		initialized = true;
 	}
 	Scene::Tick(_gameData);
+
 	if (generated)
 	{
 		if (_gameData->window.IsFocused())
 		{
+			Crosshairs::Draw();
+			Crosshairs::Get()->SetColor(Colors::White);
 			player->Control(_gameData);
 			Peds::Simulate(_gameData);
 			//player->GetPed()->DrawBoundingBox();
-			Monster::MovementMob(_gameData);
+
+			//monster->GetPed()->DrawBoundingBox();
+			monster->Update(_gameData);
 
 
-
+			if (ambientClock.GetElapsedTime() > 25000)
+			{
+				std::cout << "Sound played" << std::endl;
+				ambient->SetPosition(glm::vec3(rand() % 50, 1.5f, rand() % 50));
+				ambient->Play();
+				ambientClock.Restart();
+			}
 
 			// Cheat code
 			if (_gameData->window.IsKeyPressed(Keys::F1))
@@ -149,7 +236,7 @@ void Scritping::Tick(GameData* _gameData)
 			}
 			if (_gameData->window.IsKeyPressed(Keys::F3))
 			{
-				//Respawn
+				player->GetPed()->SetPosition(spawnPoint);
 			}
 			if (_gameData->window.IsKeyPressed(Keys::F4) && inputClock.GetElapsedTime() > 125)
 			{
@@ -175,6 +262,14 @@ void Scritping::Tick(GameData* _gameData)
 				title.SetTexture(textureTitle);
 				background.SetTexture(textureBack);
 			}
+
+			glm::vec3 vecT;
+			if (player->GetPed()->GetBoundingBox().intersects(monster->GetPed()->GetBoundingBox(), vecT))
+			{
+				_gameData->gameState = LOSE;
+				tampon->Play();
+			}
+
 			// Assuming your crosshair is at the center of the screen
 			glm::vec4 ray_clip = glm::vec4(0.0, 0.0, -1.0, 1.0);
 
@@ -193,22 +288,56 @@ void Scritping::Tick(GameData* _gameData)
 			glm::vec3 camPosition = Scene::World::GetCamera()->Position;
 			ray.origin = camPosition;
 			ray.direction = ray_world_direction;
+			for (size_t doorId = 0; doorId < doors.size(); doorId++)
+			{
+				float rslt = RayCasting::Intersect(ray, doors[doorId].set->GetBoundingBox());
+				if (rslt != -1 && rslt < 2.0f)
+				{
+					Crosshairs::Get()->SetColor(Colors::Blue);
+					if (_gameData->window.IsKeyPressed(Keys::E) && inputClock.GetElapsedTime() > 125)
+					{
+						if (doors[doorId].set->GetRotation() != doors[doorId].originalRotation)
+						{
+							doors[doorId].set->SetRotation(doors[doorId].originalRotation);
+						}
+						else
+						{
+							doors[doorId].set->Rotate(glm::vec3(0,90.0f,0));
+						}
+						inputClock.Restart();
+						break;
+					}
+				}
+			}
+
 			std::vector<Sets::Set*>* sets = Sets::GetAll();
 			for (size_t i = 0; i < sets->size(); i++)
 			{
 				if (sets->at(i)->GetName() == "Books")
 				{
 					float rslt = RayCasting::Intersect(ray, sets->at(i)->GetBoundingBox());
-					if (rslt != -1 && rslt < 1.0f)
+					if (rslt != -1 && rslt < 2.0f)
 					{
-						std::cout << "Hover" << std::endl;
+						Crosshairs::Get()->SetColor(Colors::Red);
 						if (_gameData->window.IsKeyPressed(Keys::E))
 						{
-							std::cout << "Key pressed" << std::endl;
 							Sets::Erase(sets->at(i));
+							rewards--;
 							break;
 						}
 					}
+				}
+			}
+
+			float rslt = RayCasting::Intersect(ray, exitDoor->GetBoundingBox());
+			if (rslt != -1 && rslt < 2.0f)
+			{
+				Crosshairs::Get()->SetColor(Colors::Green);
+				if (_gameData->window.IsKeyPressed(Keys::E) && !rewards)
+				{
+					//Endgame
+					_gameData->gameState = VICTORY;
+					tampon->Play();
 				}
 			}
 		}

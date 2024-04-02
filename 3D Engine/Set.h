@@ -5,6 +5,7 @@
 #include "Bounds.h"
 #include "Files.h"
 #include "Animation.h"
+#include "Collisions.h"
 
 #define SETS_DIRECTORY "../Sets/"
 #define SETS_FILE_EXTENSION ".json"
@@ -85,6 +86,8 @@ namespace Sets
 
 		Bounds::Box GetBoundingBox();
 		void DrawBoundingBox();
+
+		glm::vec3 ComputeCollisions(Bounds::Box _boudingBox, glm::vec3 _velocity);
 	private:
 		std::string name;
 		std::string path;

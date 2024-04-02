@@ -79,6 +79,7 @@ namespace Maze
 
 	struct Chunck
 	{
+		Sets::Set* parentSet = nullptr;
 		std::vector<Cell> cellList;
 		std::vector<Decor> decor;
 
