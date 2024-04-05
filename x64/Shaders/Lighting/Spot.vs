@@ -28,24 +28,7 @@ out vec3 outSpecular;
 out float outConstant;
 out float outLinear;
 out float outQuadratic;
-mat4 applyTranslation(mat4 existingMat, vec3 offset) {
-    mat4 translateMat = mat4(
-        vec4(1.0, 0.0, 0.0, 0.0),
-        vec4(0.0, 1.0, 0.0, 0.0),
-        vec4(0.0, 0.0, 1.0, 0.0),
-        vec4(offset, 1.0)
-    );
-    return existingMat * translateMat;
-}
-mat4 applyScale(mat4 existingMat, vec3 scaleFactor) {
-    mat4 scaleMat = mat4(
-        vec4(scaleFactor.x, 0.0, 0.0, 0.0),
-        vec4(0.0, scaleFactor.y, 0.0, 0.0),
-        vec4(0.0, 0.0, scaleFactor.z, 0.0),
-        vec4(0.0, 0.0, 0.0, 1.0)
-    );
-    return existingMat * scaleMat;
-}
+
 
 void main()
 {
@@ -54,8 +37,8 @@ void main()
         return;
     }
     // Correct model matrix construction
-    mat4 modelMatrix = applyTranslation(mat4(1.0), position); // Translate using instance position
-    modelMatrix = applyScale(modelMatrix, vec3(outerCutOff)); // Assuming outerCutOff represents scale
+    mat4 modelMatrix = Translate(mat4(1.0), position); // Translate using instance position
+    modelMatrix = scale(modelMatrix, vec3(outerCutOff)); // Assuming outerCutOff represents scale
 
     vec4 worldPosition = modelMatrix * vec4(vertexPos, 1.0);
     vec4 viewPosition = view * worldPosition;
