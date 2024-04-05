@@ -7,9 +7,10 @@ layout (location = 4) in float outerCutOff;
 layout (location = 5) in vec3 ambient;
 layout (location = 6) in vec3 diffuse;
 layout (location = 7) in vec3 specular;
-layout (location = 8) in vec3 constant;
-layout (location = 9) in vec3 linear;
-layout (location = 10) in vec3 quadratic;
+layout (location = 8) in float constant;
+layout (location = 9) in float linear;
+layout (location = 10) in float quadratic;
+layout (location = 11) in int activation;
 
 uniform mat4 view;
 uniform mat4 projection;
@@ -24,15 +25,37 @@ out float outOuterCutOff;
 out vec3 outAmbient;
 out vec3 outDiffuse;
 out vec3 outSpecular;
-out vec3 outConstant;
-out vec3 outLinear;
-out vec3 outQuadratic;
+out float outConstant;
+out float outLinear;
+out float outQuadratic;
+mat4 applyTranslation(mat4 existingMat, vec3 offset) {
+    mat4 translateMat = mat4(
+        vec4(1.0, 0.0, 0.0, 0.0),
+        vec4(0.0, 1.0, 0.0, 0.0),
+        vec4(0.0, 0.0, 1.0, 0.0),
+        vec4(offset, 1.0)
+    );
+    return existingMat * translateMat;
+}
+mat4 applyScale(mat4 existingMat, vec3 scaleFactor) {
+    mat4 scaleMat = mat4(
+        vec4(scaleFactor.x, 0.0, 0.0, 0.0),
+        vec4(0.0, scaleFactor.y, 0.0, 0.0),
+        vec4(0.0, 0.0, scaleFactor.z, 0.0),
+        vec4(0.0, 0.0, 0.0, 1.0)
+    );
+    return existingMat * scaleMat;
+}
 
 void main()
 {
+    if (activation == 0)
+    {
+        return;
+    }
     // Correct model matrix construction
-    mat4 modelMatrix = translate(mat4(1.0), position); // Translate using instance position
-    modelMatrix = scale(modelMatrix, vec3(outerCutOff)); // Assuming outerCutOff represents scale
+    mat4 modelMatrix = applyTranslation(mat4(1.0), position); // Translate using instance position
+    modelMatrix = applyScale(modelMatrix, vec3(outerCutOff)); // Assuming outerCutOff represents scale
 
     vec4 worldPosition = modelMatrix * vec4(vertexPos, 1.0);
     vec4 viewPosition = view * worldPosition;

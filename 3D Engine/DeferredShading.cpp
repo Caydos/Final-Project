@@ -147,5 +147,11 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	RenderQuad();
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
+
+	//Lighting
 	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+
+	Scene::Lights::DrawSpots(_gameData, gPosition, gNormal, gAlbedoSpec, gEffects);
 }

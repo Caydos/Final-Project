@@ -13,8 +13,8 @@
 static bool initialized = false;
 static Players::Player* player = nullptr;
 static unsigned int FPVCam;
-static Lighting::Light* flashLight;
-static Lighting::Light* directionalLight;
+//static Lighting::Light* flashLight;
+//static Lighting::Light* directionalLight;
 static Sets::Set* set;
 static std::thread mazeThread;
 static bool generated = false;
@@ -149,28 +149,28 @@ void Scritping::Tick(GameData* _gameData)
 		playerPed->SetRotation(glm::vec3(0.0, spawnYaw, 0.0), true);
 		//playerPed->SetScale(1.6f, true);
 
-		directionalLight = Scene::Lights::Create();
-		directionalLight->SetType(Lighting::LightType::DIRECTIONAL);
-		directionalLight->SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
-		directionalLight->SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
-		directionalLight->SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
-		directionalLight->SetDirection(glm::vec3(0.0f, 1.0f, 0.0f));
-		directionalLight->SetName("Directional");
-		directionalLight->SetActive(true);
+		//directionalLight = Scene::Lights::Create();
+		//directionalLight->SetType(Lighting::LightType::DIRECTIONAL);
+		//directionalLight->SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
+		//directionalLight->SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
+		//directionalLight->SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
+		//directionalLight->SetDirection(glm::vec3(0.0f, 1.0f, 0.0f));
+		//directionalLight->SetName("Directional");
+		//directionalLight->SetActive(true);
 
-		flashLight = Scene::Lights::Create();
-		flashLight->SetType(Lighting::LightType::SPOT);
-		flashLight->SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
-		flashLight->SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
-		flashLight->SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
-		flashLight->SetConstant(1.0f);
-		flashLight->SetLinear(0.09f);
-		flashLight->SetQuadratic(0.0032f);
+		//flashLight = Scene::Lights::Create();
+		//flashLight->SetType(Lighting::LightType::SPOT);
+		//flashLight->SetAmbient(glm::vec3(0.228f, 0.228f, 0.228f));
+		//flashLight->SetDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
+		//flashLight->SetSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
+		//flashLight->SetConstant(1.0f);
+		//flashLight->SetLinear(0.09f);
+		//flashLight->SetQuadratic(0.0032f);
 
-		flashLight->SetCutOff(90.339f);
-		flashLight->SetOuterCutOff(90.764f);
-		flashLight->SetName("FlashLight");
-		flashLight->SetActive(false);
+		//flashLight->SetCutOff(90.339f);
+		//flashLight->SetOuterCutOff(90.764f);
+		//flashLight->SetName("FlashLight");
+		//flashLight->SetActive(false);
 
 
 		_gameData->window.Focus(false);

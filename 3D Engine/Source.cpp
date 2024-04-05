@@ -37,29 +37,29 @@ void LoseTick(GameData* _gameData)
 
 int main()
 {
-	{//Audio
-		// Initialize OpenAL device and context
-		device = alcOpenDevice(NULL);
-		if (!device)
-		{
-			return 0;
-		}
+	//{//Audio
+	//	// Initialize OpenAL device and context
+	//	device = alcOpenDevice(NULL);
+	//	if (!device)
+	//	{
+	//		return 0;
+	//	}
 
-		context = alcCreateContext(device, NULL);
-		if (!context) {
-			alcCloseDevice(device);
-			return 0;
-		}
-		alcMakeContextCurrent(context);
+	//	context = alcCreateContext(device, NULL);
+	//	if (!context) {
+	//		alcCloseDevice(device);
+	//		return 0;
+	//	}
+	//	alcMakeContextCurrent(context);
 
-		// Set Listener properties
-		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); // Position of the listener
-		ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
-		alListenerfv(AL_ORIENTATION, orientation);
+	//	// Set Listener properties
+	//	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); // Position of the listener
+	//	ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
+	//	alListenerfv(AL_ORIENTATION, orientation);
 
-		// Set Distance Model (optional, depending on your needs)
-		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
-	}
+	//	// Set Distance Model (optional, depending on your needs)
+	//	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+	//}
 	std::thread audioThread(Audio::Tick);
 	audioThread.detach();
 
@@ -108,7 +108,7 @@ int main()
 	gameData.gameStates[GAME] = &Scritping::Tick;
 	gameData.gameStates[VICTORY] = &WinTick;
 	gameData.gameStates[LOSE] = &LoseTick;
-	gameData.gameState = GAME;
+	gameData.gameState = TOOLS;
 
 #ifdef _DEBUG
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -175,8 +175,8 @@ int main()
 	ImGui::DestroyContext();
 	glfwTerminate();
 
-	alcDestroyContext(context);
-	alcCloseDevice(device);
+	//alcDestroyContext(context);
+	//alcCloseDevice(device);
 
 	system("pause");
 	return 0;

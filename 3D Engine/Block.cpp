@@ -9,7 +9,7 @@ Blocks::Block::Block()
 	this->parent = nullptr;
 	this->parent = nullptr;
 	this->model = nullptr;
-	this->light = nullptr;
+	//this->light = nullptr;
 }
 Blocks::Block::~Block() {}
 
@@ -22,23 +22,23 @@ void Blocks::Block::SetType(BlockType* _type)
 {
 	this->type = _type;
 	//std::cout << "Type set once" << std::endl;
-	if (_type->IsLightEmitter() && this->light == nullptr)
-	{
+	//if (_type->IsLightEmitter() && this->light == nullptr)
+	//{
 
-		this->light = Scene::Lights::Create();
-		*this->light = _type->GetLight();
-		// Transform the position
-		glm::vec4 transformedLightPosition = glm::vec4(this->light->GetPosition(), 1.0f) * *this->model;
-		glm::vec3 newLightPosition = glm::vec3(transformedLightPosition);
+	//	this->light = Scene::Lights::Create();
+	//	*this->light = _type->GetLight();
+	//	// Transform the position
+	//	glm::vec4 transformedLightPosition = glm::vec4(this->light->GetPosition(), 1.0f) * *this->model;
+	//	glm::vec3 newLightPosition = glm::vec3(transformedLightPosition);
 
-		// Transform the direction
-		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(*this->model)));
-		glm::vec3 newLightDirection = normalMatrix * this->light->GetDirection();
+	//	// Transform the direction
+	//	glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(*this->model)));
+	//	glm::vec3 newLightDirection = normalMatrix * this->light->GetDirection();
 
-		this->light->SetPosition(newLightPosition);
-		this->light->SetDirection(newLightDirection);
-		Scene::Lights::RefreshLight(this->light);
-	}
+	//	this->light->SetPosition(newLightPosition);
+	//	this->light->SetDirection(newLightDirection);
+	//	Scene::Lights::RefreshLight(this->light);
+	//}
 }
 
 glm::mat4* Blocks::Block::GetParent()
@@ -95,42 +95,42 @@ void Blocks::Block::ApplyTransformation()
 
 
 	this->CalculateBoundingBox();
-	if (this->type->IsLightEmitter() && this->light != nullptr)
-	{
-		//*this->light = this->type->GetLight();
-		// Transform the position
-		Lighting::Light typeLight = this->type->GetLight();
-		this->light->SetDirection(typeLight.GetDirection());
-		this->light->SetPosition(typeLight.GetPosition());
+	//if (this->type->IsLightEmitter() && this->light != nullptr)
+	//{
+	//	//*this->light = this->type->GetLight();
+	//	// Transform the position
+	//	Lighting::Light typeLight = this->type->GetLight();
+	//	this->light->SetDirection(typeLight.GetDirection());
+	//	this->light->SetPosition(typeLight.GetPosition());
 
-		this->light->SetAmbient(typeLight.GetAmbient());
-		this->light->SetDiffuse(typeLight.GetDiffuse());
-		this->light->SetSpecular(typeLight.GetSpecular());
+	//	this->light->SetAmbient(typeLight.GetAmbient());
+	//	this->light->SetDiffuse(typeLight.GetDiffuse());
+	//	this->light->SetSpecular(typeLight.GetSpecular());
 
-		this->light->SetConstant(typeLight.GetConstant());
-		this->light->SetLinear(typeLight.GetLinear());
-		this->light->SetQuadratic(typeLight.GetQuadratic());
+	//	this->light->SetConstant(typeLight.GetConstant());
+	//	this->light->SetLinear(typeLight.GetLinear());
+	//	this->light->SetQuadratic(typeLight.GetQuadratic());
 
-		this->light->SetCutOff(typeLight.GetCutOff());
-		this->light->SetOuterCutOff(typeLight.GetOuterCutOff());
-
-
-		glm::vec4 transformedLightPosition = *this->model * glm::vec4(this->light->GetPosition(), 1.0f);
-		glm::vec3 newLightPosition = glm::vec3(transformedLightPosition);
-
-		// Transform the direction
-		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(*this->model)));
-		glm::vec3 newLightDirection = normalMatrix * this->light->GetDirection();
-
-		this->light->SetPosition(newLightPosition);
-		this->light->SetDirection(newLightDirection);
+	//	this->light->SetCutOff(typeLight.GetCutOff());
+	//	this->light->SetOuterCutOff(typeLight.GetOuterCutOff());
 
 
+	//	glm::vec4 transformedLightPosition = *this->model * glm::vec4(this->light->GetPosition(), 1.0f);
+	//	glm::vec3 newLightPosition = glm::vec3(transformedLightPosition);
 
-		//std::cout << newLightPosition.x << " " << newLightPosition.y << " " << newLightPosition.z << std::endl;
-		//std::cout << newLightDirection.x << " " << newLightDirection.y << " " << newLightDirection.z << std::endl << std::endl;
-		Scene::Lights::RefreshLight(this->light);
-	}
+	//	// Transform the direction
+	//	glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(*this->model)));
+	//	glm::vec3 newLightDirection = normalMatrix * this->light->GetDirection();
+
+	//	this->light->SetPosition(newLightPosition);
+	//	this->light->SetDirection(newLightDirection);
+
+
+
+	//	//std::cout << newLightPosition.x << " " << newLightPosition.y << " " << newLightPosition.z << std::endl;
+	//	//std::cout << newLightDirection.x << " " << newLightDirection.y << " " << newLightDirection.z << std::endl << std::endl;
+	//	Scene::Lights::RefreshLight(this->light);
+	//}
 }
 
 glm::vec3 Blocks::Block::GetPosition() { return this->position; }

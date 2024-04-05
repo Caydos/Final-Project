@@ -92,7 +92,7 @@ void Blocks::Load(std::string _name)
 					}
 
 
-					if (content["attributes"].contains("light"))
+					/*if (content["attributes"].contains("light"))
 					{
 						std::cout << "Loading block Light" << std::endl;
 						Lighting::Light light;
@@ -151,7 +151,7 @@ void Blocks::Load(std::string _name)
 						light.SetName(block->GetName() + " spot light");
 						block->SetLightEmission(true);
 						block->SetLight(light);
-					}
+					}*/
 				}
 			}
 			catch (nlohmann::json::parse_error& e)
@@ -269,45 +269,45 @@ void Blocks::Menu::Menu(GameData* _gameData)
 					//{
 
 					//}
-					if (blocks[blockId]->IsLightEmitter())
-					{
-						Lighting::Light light = blocks[blockId]->GetLight();
-						float constant = light.GetConstant();
-						if (ImGui::SliderFloat((std::string("Constant : ") + name).c_str(), &constant, 0.0, 1.0))
-						{
-							light.SetConstant(constant);
-						}
-						float linear = light.GetLinear();
-						if (ImGui::SliderFloat((std::string("Linear : ") + name).c_str(), &linear, 0.0, 1.0))
-						{
-							light.SetLinear(linear);
-						}
-						float quadratic = light.GetQuadratic();
-						if (ImGui::SliderFloat((std::string("Quadratic : ") + name).c_str(), &quadratic, 0.0, 1.0))
-						{
-							light.SetQuadratic(quadratic);
-						}
+					//if (blocks[blockId]->IsLightEmitter())
+					//{
+					//	Lighting::Light light = blocks[blockId]->GetLight();
+					//	float constant = light.GetConstant();
+					//	if (ImGui::SliderFloat((std::string("Constant : ") + name).c_str(), &constant, 0.0, 1.0))
+					//	{
+					//		light.SetConstant(constant);
+					//	}
+					//	float linear = light.GetLinear();
+					//	if (ImGui::SliderFloat((std::string("Linear : ") + name).c_str(), &linear, 0.0, 1.0))
+					//	{
+					//		light.SetLinear(linear);
+					//	}
+					//	float quadratic = light.GetQuadratic();
+					//	if (ImGui::SliderFloat((std::string("Quadratic : ") + name).c_str(), &quadratic, 0.0, 1.0))
+					//	{
+					//		light.SetQuadratic(quadratic);
+					//	}
 
-						float cutOff = light.GetCutOff();
-						if (ImGui::SliderFloat((std::string("cutOff : ") + name).c_str(), &cutOff, 0.0, 200.0))
-						{
-							light.SetCutOff(cutOff);
-						}
+					//	float cutOff = light.GetCutOff();
+					//	if (ImGui::SliderFloat((std::string("cutOff : ") + name).c_str(), &cutOff, 0.0, 200.0))
+					//	{
+					//		light.SetCutOff(cutOff);
+					//	}
 
-						float outerCutOff = light.GetOuterCutOff();
-						if (ImGui::SliderFloat((std::string("outerCutOff : ") + name).c_str(), &outerCutOff, 0.0, 360.0))
-						{
-							light.SetOuterCutOff(outerCutOff);
-						}
+					//	float outerCutOff = light.GetOuterCutOff();
+					//	if (ImGui::SliderFloat((std::string("outerCutOff : ") + name).c_str(), &outerCutOff, 0.0, 360.0))
+					//	{
+					//		light.SetOuterCutOff(outerCutOff);
+					//	}
 
 
-						blocks[blockId]->SetLight(light);
-					}
-					std::vector<Sets::Set*>* sets = Sets::GetAll();
-					for (size_t i = 0; i < sets->size(); i++)
-					{
-						sets->at(i)->ApplyTransformation();
-					}
+					//	blocks[blockId]->SetLight(light);
+					//}
+					//std::vector<Sets::Set*>* sets = Sets::GetAll();
+					//for (size_t i = 0; i < sets->size(); i++)
+					//{
+					//	sets->at(i)->ApplyTransformation();
+					//}
 					ImGui::TreePop();
 				}
 				ImGui::TreePop();

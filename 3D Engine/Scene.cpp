@@ -33,10 +33,10 @@ void Scene::Tick(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 
 	_gameData->window.Clear(clearColor);
-	Scene::Lights::UpdateVisibility();
 	Scene::World::Render(_gameData);
 }
 
 void Scene::CleanUp()
 {
 }
+

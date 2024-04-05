@@ -1,185 +1,166 @@
 #include "Scene.h"
 
+static bool initialized = false;
+static std::vector<Lighting::Spot*> spotLights;
+static unsigned int spotVAO;
+static unsigned int spotVertexVBO;
+static unsigned int spotInstanceVBO;
+static Shaders::Shader* spotShader;
 
-static std::vector<Lighting::Light*> lights;
-struct ShaderLight
-{
-	Lighting::Light* light = nullptr;
-	bool state = false;
-};
-static ShaderLight shaderLights[MAX_LIGHTS];
-static std::vector<int> refreshId;
+#define SPOT_MAX_COUNT 1000
 
-void InsertInShader(Lighting::Light* _light)
+void Scene::Lights::Initialize(GameData* _gameData)
 {
-	for (size_t inShaderId = 0; inShaderId < MAX_LIGHTS; inShaderId++)
+	spotShader = new Shaders::Shader("../Shaders/Lighting/Spot.vs", "../Shaders/Lighting/Spot.fs");
+	spotShader->setInt("gPosition", 0);
+	spotShader->setInt("gNormal", 1);
+	spotShader->setInt("gAlbedoSpec", 2);
+	spotShader->setInt("gEffects", 3);
+
+	glGenVertexArrays(1, &spotVAO);
+	glGenBuffers(1, &spotVertexVBO);
+	glGenBuffers(1, &spotInstanceVBO); // Corrected to spotInstanceVBO
+
+	glBindVertexArray(spotVAO);
+
+	// Assuming you have a predefined array of vertex positions for your sphere
+	float vertices[] = {
+			// Positions
+		  1.0f, 0.0f, 0.0f, // Right
+		  -1.0f, 0.0f, 0.0f, // Left
+		  0.0f, 1.0f, 0.0f, // Top
+		  0.0f, -1.0f, 0.0f, // Bottom
+		  0.0f, 0.0f, 1.0f, // Front
+		  0.0f, 0.0f, -1.0f // Back
+	};
+	glBindBuffer(GL_ARRAY_BUFFER, spotVertexVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Vertex positions (for the sphere geometry)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// Bind instance VBO for light properties setup
+	glBindBuffer(GL_ARRAY_BUFFER, spotInstanceVBO);
+	// You will need to buffer your instance data similar to vertices
+	// Assuming instanceData is a struct or array you've prepared
+	// glBufferData(GL_ARRAY_BUFFER, sizeof(instanceData), instanceData, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, NULL, GL_DYNAMIC_DRAW); // Allocate new size
+
+
+	// Set up instance attributes
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, position));
+	glEnableVertexAttribArray(1);
+	glVertexAttribDivisor(1, 1); // This attribute only advances once per instance
+
+
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, direction));
+	glEnableVertexAttribArray(2);
+	glVertexAttribDivisor(2, 1);
+
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, cutOff));
+	glEnableVertexAttribArray(3);
+	glVertexAttribDivisor(3, 1);
+
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, outerCutOff));
+	glEnableVertexAttribArray(4);
+	glVertexAttribDivisor(4, 1);
+
+	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, ambient));
+	glEnableVertexAttribArray(5);
+	glVertexAttribDivisor(5, 1);
+
+	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, diffuse));
+	glEnableVertexAttribArray(6);
+	glVertexAttribDivisor(6, 1);
+
+	glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, specular));
+	glEnableVertexAttribArray(7);
+	glVertexAttribDivisor(7, 1);
+
+	glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, constant));
+	glEnableVertexAttribArray(8);
+	glVertexAttribDivisor(8, 1);
+
+	glVertexAttribPointer(9, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, linear));
+	glEnableVertexAttribArray(9);
+	glVertexAttribDivisor(9, 1);
+
+	glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, quadratic));
+	glEnableVertexAttribArray(10);
+	glVertexAttribDivisor(10, 1);
+
+	glVertexAttribPointer(11, 1, GL_BOOL, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, active));
+	glEnableVertexAttribArray(11);
+	glVertexAttribDivisor(11, 1);
+
+	glBindVertexArray(0);
+	initialized = true;
+}
+
+Lighting::Spot* Scene::Lights::CreateSpot()
+{
+	Lighting::Spot* spot = new Lighting::Spot;
+	spotLights.push_back(spot);
+
+	return spot;
+}
+
+void Scene::Lights::EraseSpot(Lighting::Spot* _spot)
+{
+	for (size_t spotId = 0; spotId < spotLights.size(); spotId++)
 	{
-		if (!shaderLights[inShaderId].state)
-		{//Free cell
-			shaderLights[inShaderId].light = _light;
-			shaderLights[inShaderId].state = true;
-			//std::cout << "Inserting at id : " << inShaderId << std::endl;
-			refreshId.push_back(inShaderId);
+		if (spotLights[spotId] == _spot)
+		{
+			delete spotLights[spotId];
+			spotLights.erase(spotLights.begin() + spotId);
 			break;
 		}
 	}
 }
 
-void RemoveFromShader(Lighting::Light* _light)
+void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 {
-	for (size_t inShaderId = 0; inShaderId < MAX_LIGHTS; inShaderId++)
+	for (size_t spotId = 0; spotId < spotLights.size(); spotId++)
 	{
-		if (shaderLights[inShaderId].light == _light)
+		if (spotLights[spotId] == _spot)
 		{
-			shaderLights[inShaderId].state = false;
-			shaderLights[inShaderId].light = nullptr;
-			//std::cout << "Removing at id : " << inShaderId << std::endl;
-			refreshId.push_back(inShaderId);
+			glBindBuffer(GL_ARRAY_BUFFER, spotVertexVBO);
+			glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
 			break;
 		}
 	}
 }
 
-Lighting::Light* Scene::Lights::Create()
+
+void Scene::Lights::DrawSpots(GameData* _gameData, unsigned int _gPosition, unsigned int _gNormal, unsigned int _gAlbedoSpec, unsigned int _gEffects)
 {
-	Lighting::Light* light = new Lighting::Light;
-	lights.push_back(light);
-	return light;
-}
+	if (!initialized) { Initialize(_gameData); }
+	spotShader->use();
+	spotShader->setMat4("projection", Scene::World::GetProjection());
+	spotShader->setMat4("view", Scene::World::GetView());
+	spotShader->setVec3("viewPos", _gameData->camera->Position);
 
-void Scene::Lights::Erase(Lighting::Light* _light)
-{
-	for (size_t lightId = 0; lightId < lights.size(); lightId++)
-	{
-		if (lights[lightId] == _light)
-		{
-			if (_light->IsVisible())
-			{
-				//Remove from shader
-				RemoveFromShader(_light);
-			}
-			delete _light;
-			lights.erase(lights.begin() + lightId);
-			break;
-		}
-	}
-}
+	Colors::Color clearColor = Scene::GetClearColor();
+	spotShader->setVec4("clearColor", clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
 
-void Scene::Lights::UpdateVisibility()
-{
-	for (size_t lightId = 0; lightId < lights.size(); lightId++)
-	{
-		Lighting::Light* currentLight = lights[lightId];
-		bool previousVisibility = currentLight->IsVisible();
-		currentLight->CheckVisibility();
-		if (currentLight->IsVisible() && !previousVisibility)
-		{
-			//Insert in shader
-			InsertInShader(currentLight);
-		}
-		else if (!currentLight->IsVisible() && previousVisibility)
-		{
-			//Remove from shader
-			RemoveFromShader(currentLight);
-		}
-	}
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, _gPosition);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, _gNormal);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, _gAlbedoSpec);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, _gEffects);
 
-	for (size_t id = 0; id < refreshId.size(); id++)
-	{
-		std::string str = "lights[" + std::to_string(refreshId[id]) + ']';
-		GameData* gameData = GetGameData();
-		gameData->shaders[Shaders::RENDER]->use();
-		Lighting::Light* _light = shaderLights[refreshId[id]].light;
-		if (_light != nullptr && shaderLights[refreshId[id]].state)
-		{
-			switch (_light->GetType())
-			{
-			case Lighting::DIRECTIONAL:
-			{
-				gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lighting::DIRECTIONAL);
-				gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), _light->IsActive());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), _light->GetDirection());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), _light->GetAmbient());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), _light->GetDiffuse());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), _light->GetSpecular());
-				break;
-			}
-			case Lighting::POINT:
-			{
-				gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lighting::POINT);
-				gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), _light->IsActive());
 
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), _light->GetPosition());
+	glBindVertexArray(spotVAO);
 
-				gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".constant"), _light->GetConstant());
-				gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".linear"), _light->GetLinear());
-				gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".quadratic"), _light->GetQuadratic());
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
 
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), _light->GetAmbient());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), _light->GetDiffuse());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), _light->GetSpecular());
-				break;
-			}
-			case Lighting::SPOT:
-			{
-				//std::cout << "Updating " << str << std::endl;
-				gameData->shaders[Shaders::RENDER]->setInt(std::string(str + ".type"), Lighting::SPOT);
-				gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), _light->IsActive());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".direction"), _light->GetDirection());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".position"), _light->GetPosition());
-
-				gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".cutOff"), glm::cos(glm::radians(_light->GetCutOff())));
-				gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".outerCutOff"), glm::cos(glm::radians(_light->GetOuterCutOff())));
-
-				gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".constant"), _light->GetConstant());
-				gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".linear"), _light->GetLinear());
-				gameData->shaders[Shaders::RENDER]->setFloat(std::string(str + ".quadratic"), _light->GetQuadratic());
-
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".ambient"), _light->GetAmbient());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".diffuse"), _light->GetDiffuse());
-				gameData->shaders[Shaders::RENDER]->setVec3(std::string(str + ".specular"), _light->GetSpecular());
-				//std::cout << _light->GetConstant() << " " << _light->GetLinear() << " " << _light->GetQuadratic() << std::endl << std::endl;
-				break;
-			}
-			default:
-			{
-				break;
-			}
-			}
-		}
-		else
-		{
-			gameData->shaders[Shaders::RENDER]->setBool(std::string(str + ".activated"), false);
-		}
-	}
-	refreshId.clear();
-}
-
-void Scene::Lights::RefreshLight(Lighting::Light* _light)
-{
-	for (size_t lightId = 0; lightId < MAX_LIGHTS; lightId++)
-	{
-		Lighting::Light* currentLight = shaderLights[lightId].light;
-		if (currentLight == _light)
-		{
-			refreshId.push_back(lightId);
-			break;
-		}
-	}
+	glBindVertexArray(0);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

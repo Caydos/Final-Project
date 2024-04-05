@@ -107,8 +107,8 @@ namespace Blocks
 
 		bool IsLightEmitter();
 		void SetLightEmission(bool _state);
-		Lighting::Light GetLight();
-		void SetLight(Lighting::Light _light);
+		//Lighting::Light GetLight();
+		//void SetLight(Lighting::Light _light);
 
 		void Draw();
 
@@ -129,7 +129,7 @@ namespace Blocks
 		std::vector<Instance*> instances;
 
 		bool lightEmission;
-		Lighting::Light lightEmitter;
+		//Lighting::Light lightEmitter;
 	};
 
 	class Block
@@ -188,7 +188,7 @@ namespace Blocks
 		glm::vec3 scale;
 		Bounds::Box boundingBox;
 
-		Lighting::Light* light;
+		//Lighting::Light* light;
 	};
 
 	void Initialize();

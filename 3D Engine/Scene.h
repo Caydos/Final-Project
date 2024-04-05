@@ -20,17 +20,11 @@ namespace Scene
 
 	namespace Lights
 	{
-		Lighting::Light* Create();
-		void Erase(Lighting::Light* _light);
-		void UpdateVisibility();
-		void RefreshLight(Lighting::Light* _light);
-
-
-		Lighting::Light* InsertLight(GameData* _gameData, Lighting::Light& _light);
-		void UpdateLight(GameData* _gameData, unsigned int _id);
-		void UpdateShader(GameData* _gameData);
-		std::vector<Lighting::Light>* GetLights();
-		void Remove(Lighting::Light* _lightAddr);
+		void Initialize(GameData* _gameData);
+		Lighting::Spot* CreateSpot();
+		void EraseSpot(Lighting::Spot* _spot);
+		void UpdateSpot(Lighting::Spot* _spot);
+		void DrawSpots(GameData* _gameData, unsigned int _gPosition, unsigned int _gNormal, unsigned int _gAlbedoSpec, unsigned int _gEffects);
 	}
 
 	namespace World
