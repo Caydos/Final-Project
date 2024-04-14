@@ -9,7 +9,7 @@ namespace Sets
 	class Set;
 }
 
-namespace Animation
+namespace Animations
 {
 	class Sequence
 	{
@@ -27,6 +27,10 @@ namespace Animation
 		Animation();
 		~Animation();
 
+
+		std::string GetName();
+		void SetName(std::string _name);
+
 	private:
 		std::string name;
 		std::vector<Sequence> sequences;
@@ -36,9 +40,8 @@ namespace Animation
 
 	namespace UI
 	{
-
-		void SubMenu(GameData* _gameData);
 		void Menu(GameData* _gameData);
+		void Bar(GameData* _gameData);
 	}
 }
 

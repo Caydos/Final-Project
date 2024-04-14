@@ -69,6 +69,7 @@ void DeferredShading::Initialize(GameData* _gameData)
 	_gameData->shaders[Shaders::RENDER]->setInt("gNormal", 1);
 	_gameData->shaders[Shaders::RENDER]->setInt("gAlbedoSpec", 2);
 	_gameData->shaders[Shaders::RENDER]->setInt("gEffects", 3);
+	_gameData->shaders[Shaders::RENDER]->setInt("gLighting", 4);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//Skybox::Load(_gameData);
@@ -125,6 +126,17 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	Sets::UpdateVisibility();
 	Blocks::Draw();
 
+	unsigned int lightTexture;
+	{//Lighting
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glDisable(GL_BLEND);
+		glDisable(GL_DEPTH_TEST);
+
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		lightTexture = Scene::Lights::DrawSpots(_gameData, gPosition, gNormal, gAlbedoSpec, gEffects);
+	}
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
 	glClearColor(clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
@@ -143,15 +155,11 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, gEffects);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, lightTexture);
 
 	RenderQuad();
+
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
-
-	//Lighting
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE, GL_ONE);
-
-
-	Scene::Lights::DrawSpots(_gameData, gPosition, gNormal, gAlbedoSpec, gEffects);
 }

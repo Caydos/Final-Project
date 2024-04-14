@@ -745,3 +745,8 @@ glm::vec3 Sets::Set::ComputeCollisions(Bounds::Box _boudingBox,glm::vec3 _veloci
 	}
 	return _velocity;
 }
+
+std::vector<Animations::Animation>* Sets::Set::GetAnimations()
+{
+	return &this->animations;
+}

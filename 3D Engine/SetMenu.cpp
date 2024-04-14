@@ -158,7 +158,7 @@ bool Sets::SetTree(GameData* _gameData, Set* _set)
 		{
 			int marker = 0;
 			ImGui::Text("Origin block :");
-			if (ImGui::Combo("##Originblocks", &marker, blocksName, blockCount))
+			if (ImGui::Combo("##Originblocks", &marker, blocksName, blockCount + 1))
 			{
 				if (marker > 0)
 				{

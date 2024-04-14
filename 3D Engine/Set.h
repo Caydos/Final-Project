@@ -88,6 +88,8 @@ namespace Sets
 		void DrawBoundingBox();
 
 		glm::vec3 ComputeCollisions(Bounds::Box _boudingBox, glm::vec3 _velocity);
+
+		std::vector<Animations::Animation>* GetAnimations();
 	private:
 		std::string name;
 		std::string path;
@@ -107,7 +109,7 @@ namespace Sets
 
 		Bounds::BoundingBox boundingBox;
 
-		std::vector<Animation::Animation> animations;
+		std::vector<Animations::Animation> animations;
 	};
 
 	void UpdateVisibility();

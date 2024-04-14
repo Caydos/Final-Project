@@ -6,6 +6,7 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
 uniform sampler2D gEffects;
+uniform sampler2D gLighting;
 
 
 #define DIRECTIONAL 0
@@ -55,19 +56,21 @@ void main()
     vec3 WorldPos = texture(gPosition, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec3 Albedo = texture(gAlbedoSpec, TexCoords).rgb;
-    float Shininess = texture(gEffects, TexCoords).r;
-    float Specular = texture(gEffects, TexCoords).a;
+    vec3 Lighting = texture(gLighting, TexCoords).rgb;
+    // float Shininess = texture(gEffects, TexCoords).r;
+    // float Specular = texture(gEffects, TexCoords).a;
     if((Normal.x == clearColor.x) && (Normal.y == clearColor.y) && (Normal.z == clearColor.z))
     {
-        FragColor = vec4(Albedo.x, Albedo.y, Albedo.z, 1.0);
+        FragColor = vec4(Albedo, 1.0);
         return;
     }
    
     
-    vec3 norm = normalize(Normal);
-    vec3 viewDir = normalize(viewPos - WorldPos);
-    vec3 result;
+    // vec3 norm = normalize(Normal);
+    // vec3 viewDir = normalize(viewPos - WorldPos);
+    // vec3 result;
 
-    FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    // FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    FragColor = vec4(Lighting, 1.0);
 }
 

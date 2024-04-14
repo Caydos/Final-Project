@@ -1,17 +1,27 @@
 #include "Animation.h"
 
-Animation::Sequence::Sequence()
+Animations::Sequence::Sequence()
 {
 }
 
-Animation::Sequence::~Sequence()
+Animations::Sequence::~Sequence()
 {
 }
 
-Animation::Animation::Animation()
+Animations::Animation::Animation()
 {
 }
 
-Animation::Animation::~Animation()
+Animations::Animation::~Animation()
 {
+}
+
+std::string Animations::Animation::GetName()
+{
+	return this->name;
+}
+
+void Animations::Animation::SetName(std::string _name)
+{
+	this->name = _name;
 }

@@ -41,7 +41,9 @@ namespace Lighting
 		float quadratic;
 
 		bool active;
+		glm::mat4 modelMatrix;
 	};
+	void UpdateSpot(Spot* _spot);
 }
 
 

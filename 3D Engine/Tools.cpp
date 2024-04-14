@@ -14,7 +14,7 @@ static Clock inputClock;
 //static Lighting::Light* flashLight;
 //static Lighting::Light* directionalLight;
 static float MovementSpeed = 2.25f;
-
+static Lighting::Spot* spot;
 void Tools::Initialize(GameData* _gameData)
 {
 	Scene::Initialize(_gameData);
@@ -50,7 +50,18 @@ void Tools::Initialize(GameData* _gameData)
 
 	//Scene::Lights::UpdateShader(_gameData);
 
-	Maze::GenerateMaze(3, 1);
+	spot = Scene::Lights::CreateSpot();
+	spot->active = true;
+	spot->ambient = glm::vec3(0.228f, 0.228f, 0.228f);
+	spot->diffuse = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->constant = 1.0f;
+	spot->linear = 0.09f;
+	spot->quadratic = 0.0032f;
+	spot->cutOff = 10.0f;
+	spot->outerCutOff = 40.0f;
+
+	//Maze::GenerateMaze(3, 1);
 
 	//Sets::Set* room = Sets::Create();
 	//room->GenerateRenderingInstance();
@@ -126,7 +137,11 @@ void Tools::Tick(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 
 	Inputs(_gameData);
-
+	spot->position = _gameData->camera->Position;
+	spot->direction = _gameData->camera->Front;
+	//spot->direction = glm::vec3(0.0,-1.0,0.0);
+	Lighting::UpdateSpot(spot);
+	Scene::Lights::UpdateSpot(spot);
 	//std::vector<Lighting::Light>* lights = Scene::Lights::GetLights();
 	//for (size_t i = 0; i < lights->size(); i++)
 	//{

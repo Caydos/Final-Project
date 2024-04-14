@@ -149,8 +149,8 @@ void Editor::Menu(GameData* _gameData)
 			ImGui::TreePop();
 		}
 		Crosshairs::Menu(_gameData);
-		Animation::UI::SubMenu(_gameData);
 		Blocks::Menu::Menu(_gameData);
+		Animations::UI::Menu(_gameData);
 
 
 
@@ -158,7 +158,6 @@ void Editor::Menu(GameData* _gameData)
 	}
 
 	Sets::Menu(_gameData, mainMenuBarHeight);
-	Animation::UI::Menu(_gameData);
 
 	if (showFilenameInput)
 	{

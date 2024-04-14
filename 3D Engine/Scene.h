@@ -24,7 +24,7 @@ namespace Scene
 		Lighting::Spot* CreateSpot();
 		void EraseSpot(Lighting::Spot* _spot);
 		void UpdateSpot(Lighting::Spot* _spot);
-		void DrawSpots(GameData* _gameData, unsigned int _gPosition, unsigned int _gNormal, unsigned int _gAlbedoSpec, unsigned int _gEffects);
+		unsigned int DrawSpots(GameData* _gameData, unsigned int _gPosition, unsigned int _gNormal, unsigned int _gAlbedoSpec, unsigned int _gEffects);
 	}
 
 	namespace World

@@ -6,6 +6,7 @@
 #include <shared_mutex>
 #include <thread>
 #include <chrono>
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 #include <IMGUI/imgui.h>
