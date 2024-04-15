@@ -62,8 +62,10 @@ void main()
     if((Normal.x == clearColor.x) && (Normal.y == clearColor.y) && (Normal.z == clearColor.z))
     {
         FragColor = vec4(Albedo, 1.0);
+        // FragColor = vec4(1.0,1.0,1.0, 1.0);
         return;
     }
+
    
     
     // vec3 norm = normalize(Normal);
@@ -71,6 +73,12 @@ void main()
     // vec3 result;
 
     // FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    if ((Lighting.x == clearColor.x))// nuh huh
+    {
+        FragColor = vec4(0.0,0.0,0.0,1.0);
+        return;
+    }
     FragColor = vec4(Lighting, 1.0);
+    // FragColor = vec4(0.0,0.0,0.0, 1.0);
 }
 

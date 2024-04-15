@@ -1,8 +1,12 @@
 #version 430 core
-layout (location = 0) out vec4 gLightingSpec;
+layout (location = 0) out vec3 gPosition;
+layout (location = 1) out vec3 gNormal;
+layout (location = 2) out vec4 gAlbedoSpec;
+layout (location = 3) out vec4 gEffects;
+layout (location = 4) out vec4 gLightingSpec;
 
 
-uniform sampler2D gAlbedoSpec;
+// uniform sampler2D gAlbedoSpec;
 
 // in vec3 outPosition;
 // in vec3 outDirection;
@@ -48,8 +52,8 @@ void main()
 
     // vec3 WorldPos = texture(gPosition, gl_FragCoord.xy).rgb;
     // vec3 Normal = texture(gNormal, gl_FragCoord.xy).rgb;
-    vec2 ndc = gl_FragCoord.xy / screenSize;
-    vec3 Albedo = texture(gAlbedoSpec, ndc).rgb;
+    // vec2 ndc = gl_FragCoord.xy / screenSize;
+    // vec3 Albedo = texture(gAlbedoSpec, ndc).rgb;
     // float Shininess = texture(gEffects, TexCoords).r;
     // float Specular = texture(gEffects, TexCoords).a;
 
@@ -64,5 +68,6 @@ void main()
 
     // FragColor = vec4(CalcSpotLight(norm, WorldPos, viewDir, Albedo, Specular, Shininess*100), 1.0);
     // gLightingSpec = Albedo;
-    gLightingSpec.rgb = Albedo;
+    // gLightingSpec.rgb = gAlbedoSpec.rgb;
+    gLightingSpec = vec4(0.0, 0.0,1.0,1.0);
 }

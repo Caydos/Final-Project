@@ -61,7 +61,7 @@ void Tools::Initialize(GameData* _gameData)
 	spot->cutOff = 10.0f;
 	spot->outerCutOff = 40.0f;
 
-	//Maze::GenerateMaze(3, 1);
+	Maze::GenerateMaze(3, 1);
 
 	//Sets::Set* room = Sets::Create();
 	//room->GenerateRenderingInstance();
@@ -137,9 +137,9 @@ void Tools::Tick(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 
 	Inputs(_gameData);
-	spot->position = _gameData->camera->Position;
-	spot->direction = _gameData->camera->Front;
-	//spot->direction = glm::vec3(0.0,-1.0,0.0);
+	//spot->position = _gameData->camera->Position;
+	//spot->direction = _gameData->camera->Front;
+	spot->direction = glm::vec3(0.0,-1.0,0.0);
 	Lighting::UpdateSpot(spot);
 	Scene::Lights::UpdateSpot(spot);
 	//std::vector<Lighting::Light>* lights = Scene::Lights::GetLights();

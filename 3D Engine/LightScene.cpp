@@ -20,30 +20,30 @@ void Scene::Lights::Initialize(GameData* _gameData)
 	spotShader = new Shaders::Shader("../Shaders/Lighting/Spot.vs", "../Shaders/Lighting/Spot.fs");
 	spotShader->setInt("gAlbedoSpec", 0);
 
-	glGenFramebuffers(1, &gBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+	//glGenFramebuffers(1, &gBuffer);
+	//glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 
-	glGenTextures(1, &gAlbedoSpec);
-	glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gAlbedoSpec, 0);
-	unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(1, attachments);
-
-
-	glGenRenderbuffers(1, &rboDepth);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _gameData->resolution[0], _gameData->resolution[1]);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+	//glGenTextures(1, &gAlbedoSpec);
+	//glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gAlbedoSpec, 0);
+	//unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0 };
+	//glDrawBuffers(1, attachments);
 
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		std::cout << "Framebuffer is not complete!" << std::endl;
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glGenRenderbuffers(1, &rboDepth);
+	//glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _gameData->resolution[0], _gameData->resolution[1]);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+
+
+	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	//{
+	//	std::cout << "Framebuffer is not complete!" << std::endl;
+	//}
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
 	glGenVertexArrays(1, &spotVAO);
@@ -233,27 +233,28 @@ unsigned int Scene::Lights::DrawSpots(GameData* _gameData, unsigned int _gPositi
 	Colors::Color clearColor = Scene::GetClearColor();
 	spotShader->setVec4("clearColor", clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+	//glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
+	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS); // Standard depth function
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS); // Standard depth function
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _gAlbedoSpec);
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, _gAlbedoSpec);
 	
 
+	//glDisable(GL_CULL_FACE);// Remove there
 
 	glBindVertexArray(spotVAO);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	// Double the draw call to ensure only one draw depending if I'm inside or outside the light cone
-	glCullFace(GL_BACK);
+	//glCullFace(GL_BACK);
 
 	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
-	glCullFace(GL_FRONT);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
+	//glCullFace(GL_FRONT);
+	//glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
 
 	glBindVertexArray(0);
 	glDisable(GL_CULL_FACE);

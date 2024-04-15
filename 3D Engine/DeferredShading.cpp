@@ -8,7 +8,7 @@ static bool initialized = false;
 static unsigned int quadVAO = 0;
 static unsigned int quadVBO;
 static GLuint gBuffer;
-static GLuint gPosition, gNormal, gAlbedoSpec, gEffects;
+static GLuint gPosition, gNormal, gAlbedoSpec, gEffects, gLightMap;
 static GLuint rboDepth;
 
 void DeferredShading::Initialize(GameData* _gameData)
@@ -46,8 +46,15 @@ void DeferredShading::Initialize(GameData* _gameData)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gEffects, 0);
 
-	unsigned int attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-	glDrawBuffers(4, attachments);
+	glGenTextures(1, &gLightMap);
+	glBindTexture(GL_TEXTURE_2D, gLightMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gLightMap, 0);
+
+	unsigned int attachments[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
+	glDrawBuffers(5, attachments);
 
 
 	glGenRenderbuffers(1, &rboDepth);
@@ -121,6 +128,7 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	{
 		Skybox::Draw(_gameData);
 	}
+
 	glActiveTexture(GL_TEXTURE0);
 	_gameData->shaders[Shaders::GEOMETRY]->use();
 	Sets::UpdateVisibility();
@@ -131,7 +139,7 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 		//glEnable(GL_BLEND);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//glDisable(GL_BLEND);
-		glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
 
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		lightTexture = Scene::Lights::DrawSpots(_gameData, gPosition, gNormal, gAlbedoSpec, gEffects);
@@ -156,10 +164,12 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, gEffects);
 	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D, lightTexture);
+	glBindTexture(GL_TEXTURE_2D, gLightMap);
 
 	RenderQuad();
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
+
+	glActiveTexture(GL_TEXTURE0);
 }
