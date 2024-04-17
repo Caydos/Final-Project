@@ -17,6 +17,7 @@ static float MovementSpeed = 2.25f;
 static Lighting::Spot* spot;
 void Tools::Initialize(GameData* _gameData)
 {
+	std::cout << "Initialization" << std::endl;
 	Scene::Initialize(_gameData);
 	Scene::World::SetSkyboxState(false);
 
@@ -51,15 +52,15 @@ void Tools::Initialize(GameData* _gameData)
 	//Scene::Lights::UpdateShader(_gameData);
 
 	spot = Scene::Lights::CreateSpot();
-	spot->active = true;
+	spot->activation = 1.0f;
 	spot->ambient = glm::vec3(0.228f, 0.228f, 0.228f);
 	spot->diffuse = glm::vec3(0.0f, 0.0f, 0.0f);
 	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
 	spot->constant = 1.0f;
 	spot->linear = 0.09f;
 	spot->quadratic = 0.0032f;
-	spot->cutOff = 10.0f;
-	spot->outerCutOff = 40.0f;
+	spot->cutOff = glm::radians(55.0f);
+	spot->outerCutOff = glm::radians(95.0f);
 
 	Maze::GenerateMaze(3, 1);
 
@@ -137,9 +138,10 @@ void Tools::Tick(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 
 	Inputs(_gameData);
-	//spot->position = _gameData->camera->Position;
-	//spot->direction = _gameData->camera->Front;
-	spot->direction = glm::vec3(0.0,-1.0,0.0);
+	spot->position = _gameData->camera->Position;
+	spot->direction = _gameData->camera->Front;
+	//spot->direction = glm::vec3(0.0,-1.0,0.0);
+	//std::cout << spot->active << std::endl;
 	Lighting::UpdateSpot(spot);
 	Scene::Lights::UpdateSpot(spot);
 	//std::vector<Lighting::Light>* lights = Scene::Lights::GetLights();

@@ -7,44 +7,17 @@ static unsigned int spotVertexVBO;
 static unsigned int spotInstanceVBO;
 static Shaders::Shader* spotShader;
 
-
-static GLuint gBuffer;
-static GLuint gAlbedoSpec;
-static GLuint rboDepth;
-
 #define SPOT_MAX_COUNT 1
-static glm::mat4 tstMdl;
 
 void Scene::Lights::Initialize(GameData* _gameData)
 {
 	spotShader = new Shaders::Shader("../Shaders/Lighting/Spot.vs", "../Shaders/Lighting/Spot.fs");
-	spotShader->setInt("gAlbedoSpec", 0);
-
-	//glGenFramebuffers(1, &gBuffer);
-	//glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-
-	//glGenTextures(1, &gAlbedoSpec);
-	//glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gAlbedoSpec, 0);
-	//unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0 };
-	//glDrawBuffers(1, attachments);
-
-
-	//glGenRenderbuffers(1, &rboDepth);
-	//glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _gameData->resolution[0], _gameData->resolution[1]);
-	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
-
-
-	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	//{
-	//	std::cout << "Framebuffer is not complete!" << std::endl;
-	//}
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+	spotShader->use();
+	spotShader->setInt("inPosition", 0);
+	spotShader->setInt("inNormal", 1);
+	spotShader->setInt("inAlbedoSpec", 2);
+	spotShader->setInt("inEffects", 3);
+	spotShader->setInt("inLighting", 4);
 
 	glGenVertexArrays(1, &spotVAO);
 	glGenBuffers(1, &spotVertexVBO);
@@ -117,65 +90,74 @@ void Scene::Lights::Initialize(GameData* _gameData)
 	// glBufferData(GL_ARRAY_BUFFER, sizeof(instanceData), instanceData, GL_STATIC_DRAW);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, NULL, GL_DYNAMIC_DRAW); // Allocate new size
 
-	tstMdl = glm::mat4(1.0f);
-	//tstMdl = glm::translate(tstMdl, glm::vec3(1.0, 1.0, 1.0));
-	//tstMdl = glm::scale(tstMdl, glm::vec3(2.0, 2.0, 2.0));
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * SPOT_MAX_COUNT, &tstMdl, GL_DYNAMIC_DRAW); // Allocate new size
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, NULL, GL_DYNAMIC_DRAW); // Allocate new size
 
 
-	//// Set up instance attributes
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, position));
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribDivisor(1, 1); // This attribute only advances once per instance
+	// position
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*) offsetof(Lighting::Spot, position));
+	glVertexAttribDivisor(1, 1);
+
+	// direction
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, direction));
+	glVertexAttribDivisor(2, 1);
+
+	// cutOff
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, cutOff));
+	glVertexAttribDivisor(3, 1);
 
 
-	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, direction));
-	//glEnableVertexAttribArray(2);
-	//glVertexAttribDivisor(2, 1);
+	// outerCutOff
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, outerCutOff));
+	glVertexAttribDivisor(4, 1);
 
-	//glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, cutOff));
-	//glEnableVertexAttribArray(3);
-	//glVertexAttribDivisor(3, 1);
+	// ambient
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, ambient));
+	glVertexAttribDivisor(5, 1);
 
-	//glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, outerCutOff));
-	//glEnableVertexAttribArray(4);
-	//glVertexAttribDivisor(4, 1);
+	// diffuse
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, diffuse));
+	glVertexAttribDivisor(6, 1);
 
-	//glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, ambient));
-	//glEnableVertexAttribArray(5);
-	//glVertexAttribDivisor(5, 1);
+	// specular
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, specular));
+	glVertexAttribDivisor(7, 1);
 
-	//glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, diffuse));
-	//glEnableVertexAttribArray(6);
-	//glVertexAttribDivisor(6, 1);
+	// constant
+	glEnableVertexAttribArray(8);
+	glVertexAttribPointer(8, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, constant));
+	glVertexAttribDivisor(8, 1);
 
-	//glVertexAttribPointer(7, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, specular));
-	//glEnableVertexAttribArray(7);
-	//glVertexAttribDivisor(7, 1);
+	// linear
+	glEnableVertexAttribArray(9);
+	glVertexAttribPointer(9, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, linear));
+	glVertexAttribDivisor(9, 1);
 
-	//glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, constant));
-	//glEnableVertexAttribArray(8);
-	//glVertexAttribDivisor(8, 1);
+	// quadratic
+	glEnableVertexAttribArray(10);
+	glVertexAttribPointer(10, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, quadratic));
+	glVertexAttribDivisor(10, 1);
 
-	//glVertexAttribPointer(9, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, linear));
-	//glEnableVertexAttribArray(9);
-	//glVertexAttribDivisor(9, 1);
-
-	//glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, quadratic));
-	//glEnableVertexAttribArray(10);
-	//glVertexAttribDivisor(10, 1);
-
-	//glVertexAttribPointer(11, 1, GL_BOOL, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, active));
-	//glEnableVertexAttribArray(11);
-	//glVertexAttribDivisor(11, 1);
+	// activation (bool to int conversion may be needed)
+	glEnableVertexAttribArray(11);
+	glVertexAttribPointer(11, 1, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)offsetof(Lighting::Spot, activation));
+	glVertexAttribDivisor(11, 1);
 
 	for (unsigned int i = 0; i < 4; i++)
 	{
-		glEnableVertexAttribArray(i + 1);
-		glVertexAttribPointer(i + 1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4) * i));
-		glVertexAttribDivisor(i + 1, 1);
+		glEnableVertexAttribArray(i + 12);
+		glVertexAttribPointer(i + 12, 4, GL_FLOAT, GL_FALSE, sizeof(Lighting::Spot), (void*)(offsetof(Lighting::Spot, modelMatrix) + sizeof(glm::vec4) * i));
+		glVertexAttribDivisor(i + 12, 1);
 	}
+
+
 
 	glBindVertexArray(0);
 	initialized = true;
@@ -208,11 +190,28 @@ void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 	{
 		if (spotLights[spotId] == _spot)
 		{
-			//glBindVertexArray(spotVAO);
-			glBindBuffer(GL_ARRAY_BUFFER, spotInstanceVBO);
-			//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * SPOT_MAX_COUNT, &_spot->modelMatrix, GL_DYNAMIC_DRAW); // Allocate new size
-			glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(glm::mat4), sizeof(glm::mat4), &_spot->modelMatrix);
+			glBindVertexArray(spotVAO);
+			//glBindBuffer(GL_ARRAY_BUFFER, spotInstanceVBO);
+			////glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, _spot, GL_DYNAMIC_DRAW); // Allocate new size
+			//glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
 
+			//GLenum err;
+			//while ((err = glGetError()) != GL_NO_ERROR) {
+			//	std::cerr << "OpenGL error: " << std::hex << err << std::endl;
+			//}
+			GLenum err;
+			glBindBuffer(GL_ARRAY_BUFFER, spotInstanceVBO);
+			err = glGetError();
+			if (err != GL_NO_ERROR) {
+				std::cerr << "OpenGL error after glBindBuffer: " << std::hex << err << std::endl;
+			}
+
+			glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, _spot, GL_DYNAMIC_DRAW);
+			err = glGetError();
+			if (err != GL_NO_ERROR) {
+				std::cerr << "OpenGL error after glBufferData: " << std::hex << err << std::endl;
+			}
+			//glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
 
 			break;
 		}
@@ -220,7 +219,7 @@ void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 }
 
 
-unsigned int Scene::Lights::DrawSpots(GameData* _gameData, unsigned int _gPosition, unsigned int _gNormal, unsigned int _gAlbedoSpec, unsigned int _gEffects)
+void Scene::Lights::DrawSpots(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
 
@@ -232,33 +231,29 @@ unsigned int Scene::Lights::DrawSpots(GameData* _gameData, unsigned int _gPositi
 
 	Colors::Color clearColor = Scene::GetClearColor();
 	spotShader->setVec4("clearColor", clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-	//glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
-	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LESS); // Standard depth function
-
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, _gAlbedoSpec);
-	
-
-	//glDisable(GL_CULL_FACE);// Remove there
+	glDepthMask(GL_FALSE);  // Disable depth writing
 
 	glBindVertexArray(spotVAO);
-	//glEnable(GL_CULL_FACE);
-	// Double the draw call to ensure only one draw depending if I'm inside or outside the light cone
-	//glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 
+	// Double the draw call to ensure only one draw depending if I'm inside or outside the light cone
+	glCullFace(GL_BACK);
+	glEnable(GL_DEPTH_TEST);
 	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
-	//glCullFace(GL_FRONT);
-	//glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
+
+	glCullFace(GL_FRONT);
+	glDisable(GL_DEPTH_TEST);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
 
 	glBindVertexArray(0);
 	glDisable(GL_CULL_FACE);
-	return gAlbedoSpec;
+	glDepthMask(GL_TRUE);  // Disable depth writing
+	glEnable(GL_DEPTH_TEST);
+}
+
+std::vector<Lighting::Spot*>* Scene::Lights::GetSpots()
+{
+	return &spotLights;
 }
 
 

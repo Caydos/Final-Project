@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 out vec4 FragColor;
 in vec2 TexCoords;
 
@@ -60,25 +60,22 @@ void main()
     // float Shininess = texture(gEffects, TexCoords).r;
     // float Specular = texture(gEffects, TexCoords).a;
     if((Normal.x == clearColor.x) && (Normal.y == clearColor.y) && (Normal.z == clearColor.z))
-    {
+    {// Need to be a GL_RGBA32F texture
         FragColor = vec4(Albedo, 1.0);
-        // FragColor = vec4(1.0,1.0,1.0, 1.0);
         return;
     }
 
-   
-    
     // vec3 norm = normalize(Normal);
     // vec3 viewDir = normalize(viewPos - WorldPos);
     // vec3 result;
 
     // FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    if ((Lighting.x == clearColor.x))// nuh huh
-    {
+
+    if((Lighting.x == clearColor.x) && (Lighting.y == clearColor.y) && (Lighting.z == clearColor.z))
+    {// Need to be a GL_RGBA32F texture
         FragColor = vec4(0.0,0.0,0.0,1.0);
         return;
     }
     FragColor = vec4(Lighting, 1.0);
-    // FragColor = vec4(0.0,0.0,0.0, 1.0);
 }
 

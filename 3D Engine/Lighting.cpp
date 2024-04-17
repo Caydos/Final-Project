@@ -51,10 +51,9 @@ void Lighting::UpdateSpot(Spot* _spot)
 {
 	_spot->modelMatrix = glm::mat4(1.0f);
 	_spot->modelMatrix = glm::translate(_spot->modelMatrix, _spot->position);
-	//_spot->modelMatrix = glm::scale(_spot->modelMatrix, glm::vec3(_spot->outerCutOff));
 
 	//_spot->modelMatrix = glm::scale(_spot->modelMatrix, glm::vec3(CalcLightRange(_spot->constant, _spot->linear, _spot->quadratic)));
-
+	_spot->modelMatrix = glm::scale(_spot->modelMatrix, glm::vec3(5));
 }
 
 

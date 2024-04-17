@@ -48,7 +48,7 @@ void DeferredShading::Initialize(GameData* _gameData)
 
 	glGenTextures(1, &gLightMap);
 	glBindTexture(GL_TEXTURE_2D, gLightMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gLightMap, 0);
@@ -134,27 +134,6 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	Sets::UpdateVisibility();
 	Blocks::Draw();
 
-	unsigned int lightTexture;
-	{//Lighting
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glDisable(GL_BLEND);
-		//glDisable(GL_DEPTH_TEST);
-
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		lightTexture = Scene::Lights::DrawSpots(_gameData, gPosition, gNormal, gAlbedoSpec, gEffects);
-	}
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
-	glClearColor(clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	Camera* cam = Scene::World::GetCamera();
-	_gameData->shaders[Shaders::RENDER]->use();
-	_gameData->shaders[Shaders::RENDER]->setVec3("viewPos", cam->Position);
-	_gameData->shaders[Shaders::RENDER]->setVec4("clearColor", clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
 	glActiveTexture(GL_TEXTURE1);
@@ -165,6 +144,21 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	glBindTexture(GL_TEXTURE_2D, gEffects);
 	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, gLightMap);
+
+	{//Lighting
+		Scene::Lights::DrawSpots(_gameData);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
+	glClearColor(clearColor.values[0], clearColor.values[1], clearColor.values[2], 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	Camera* cam = Scene::World::GetCamera();
+	_gameData->shaders[Shaders::RENDER]->use();
+	_gameData->shaders[Shaders::RENDER]->setVec3("viewPos", cam->Position);
+	_gameData->shaders[Shaders::RENDER]->setVec4("clearColor", clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
+
 
 	RenderQuad();
 

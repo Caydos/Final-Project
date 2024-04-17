@@ -26,7 +26,7 @@ namespace Lighting
 
 		bool active;
 	};
-
+#pragma pack(push, 1)
 	struct Spot
 	{
 		glm::vec3 position;
@@ -40,9 +40,10 @@ namespace Lighting
 		float linear;
 		float quadratic;
 
-		bool active;
+		float activation;
 		glm::mat4 modelMatrix;
 	};
+#pragma pack(pop)
 	void UpdateSpot(Spot* _spot);
 }
 
