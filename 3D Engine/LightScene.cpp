@@ -7,7 +7,7 @@ static unsigned int spotVertexVBO;
 static unsigned int spotInstanceVBO;
 static Shaders::Shader* spotShader;
 
-#define SPOT_MAX_COUNT 1
+#define SPOT_MAX_COUNT 800
 
 void Scene::Lights::Initialize(GameData* _gameData)
 {
@@ -206,12 +206,12 @@ void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 				std::cerr << "OpenGL error after glBindBuffer: " << std::hex << err << std::endl;
 			}
 
-			glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, _spot, GL_DYNAMIC_DRAW);
+			//glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, _spot, GL_DYNAMIC_DRAW);
+			glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
 			err = glGetError();
 			if (err != GL_NO_ERROR) {
 				std::cerr << "OpenGL error after glBufferData: " << std::hex << err << std::endl;
 			}
-			//glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
 
 			break;
 		}

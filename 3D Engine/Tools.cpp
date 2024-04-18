@@ -59,8 +59,8 @@ void Tools::Initialize(GameData* _gameData)
 	spot->constant = 1.0f;
 	spot->linear = 0.09f;
 	spot->quadratic = 0.0032f;
-	spot->cutOff = glm::radians(55.0f);
-	spot->outerCutOff = glm::radians(95.0f);
+	spot->cutOff = glm::cos(glm::radians(55.0f));
+	spot->outerCutOff = glm::cos(glm::radians(95.0f));
 
 	Maze::GenerateMaze(3, 1);
 

@@ -37,21 +37,21 @@ void LightMenu::Basic(GameData* _gameData)
 					needUpdate = true;
 				}
 
-				float cutOff = glm::degrees(actualSpot->cutOff);
-				float outerCutOff = glm::degrees(actualSpot->outerCutOff);
+				float cutOff = glm::degrees(glm::acos(actualSpot->cutOff));
+				float outerCutOff = glm::degrees(glm::acos(actualSpot->outerCutOff));
 				if (ImGui::SliderFloat(("Inner Radius" + spotSubName).c_str(), &cutOff, 0.0f, outerCutOff))
 				{
 					needUpdate = true;
-					actualSpot->cutOff = glm::radians(cutOff);
+					actualSpot->cutOff = glm::cos(glm::radians(cutOff));
 				}
 				if (ImGui::SliderFloat(("Outer Raduis" + spotSubName).c_str(), &outerCutOff, 0.0f, 90.0f))
 				{
 					needUpdate = true;
 					if (cutOff > outerCutOff)
 					{
-						//actualSpot->cutOff = glm::radians(outerCutOff * 0.90);
+						actualSpot->cutOff = glm::cos(glm::radians(outerCutOff * 0.90));
 					}
-					actualSpot->outerCutOff = glm::radians(outerCutOff);
+					actualSpot->outerCutOff = glm::cos(glm::radians(outerCutOff));
 				}
 
 				if (ImGui::TreeNode(("Ambiant Alpha (Intensity)" + spotSubName).c_str()))
