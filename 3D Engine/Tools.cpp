@@ -53,14 +53,14 @@ void Tools::Initialize(GameData* _gameData)
 
 	spot = Scene::Lights::CreateSpot();
 	spot->activation = 1.0f;
-	spot->ambient = glm::vec3(0.228f, 0.228f, 0.228f);
-	spot->diffuse = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->ambient = glm::vec3(0.0f,0.0f,0.0f);
+	spot->diffuse = glm::vec3(0.5f);
 	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-	spot->constant = 1.0f;
-	spot->linear = 0.09f;
-	spot->quadratic = 0.0032f;
-	spot->cutOff = glm::cos(glm::radians(55.0f));
-	spot->outerCutOff = glm::cos(glm::radians(95.0f));
+	spot->constant = 0.5f;
+	spot->linear = 0.0f;
+	spot->quadratic = 0.0f;
+	spot->cutOff = glm::cos(glm::radians(20.0f));
+	spot->outerCutOff = glm::cos(glm::radians(40.0f));
 
 	Maze::GenerateMaze(3, 1);
 
