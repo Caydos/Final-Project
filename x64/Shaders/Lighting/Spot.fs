@@ -49,31 +49,6 @@ vec3 CalcSpotLight(vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, fl
     return (ambient + diffuse + specular);
 }
 
-// vec3 CalcSpotLight(vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, float _specular, float _shininess)
-// {
-//     vec3 lightDir = normalize(outPosition - _worldPos);
-//     // diffuse shading
-//     float diff = max(dot(_normal, lightDir), 0.0);
-//     // specular shading
-//     vec3 reflectDir = reflect(-lightDir, _normal);
-//     float spec = pow(max(dot(_viewDir, reflectDir), 0.0), _shininess);
-//     // attenuation
-//     float distance = length(outPosition - _worldPos);
-//     float attenuation = 1.0 / (outConstant + outLinear * distance + outQuadratic * (distance * distance));    
-//     // spotlight intensity
-//     float theta = dot(lightDir, normalize(-outDirection)); 
-//     float epsilon = outCutOff - outOuterCutOff;
-//     float intensity = clamp((theta - outOuterCutOff) / epsilon, 0.0, 1.0);
-//     // combine results
-//     vec3 ambient = outAmbient * _albedo;
-//     vec3 diffuse = outDiffuse * diff * _albedo;
-//     vec3 specular = outSpecular * spec * vec3(_specular,_specular,_specular);
-//     ambient *= attenuation * intensity;
-//     diffuse *= attenuation * intensity;
-//     specular *= attenuation * intensity;
-//     return (ambient + diffuse + specular);
-// }
-
 uniform vec3 viewPos;
 uniform vec4 clearColor;
 uniform vec2 screenSize;
