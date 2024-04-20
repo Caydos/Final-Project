@@ -169,9 +169,9 @@ void Blocks::Load(std::string _name)
 			{
 				block->SetTexture(texture);
 			}
-			else if (filename_without_extension == "map")
+			else if (filename_without_extension == "normal")
 			{
-				block->SetEffectsTexture(texture);
+				block->SetNormalMap(texture);
 			}
 		}
 	}

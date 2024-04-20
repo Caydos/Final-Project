@@ -34,8 +34,8 @@ vec3 CalcSpotLight(vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, fl
     float spec = pow(max(dot(_viewDir, reflectDir), 0.0), _shininess);
     // attenuation
     float distance = length(outPosition - _worldPos);
-    // float attenuation = 1.0 / (outConstant + outLinear * distance + outQuadratic * (distance * distance));    
-    float attenuation = 1.0 / (outConstant * distance * distance);    
+    float attenuation = 1.0 / (outConstant + outLinear * distance + outQuadratic * (distance * distance));    
+    // float attenuation = 1.0 / (outConstant * distance * distance);
     // spotlight intensity
     float theta = dot(lightDir, normalize(-outDirection)); 
     float epsilon = outCutOff - outOuterCutOff;
@@ -43,8 +43,8 @@ vec3 CalcSpotLight(vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, fl
     // combine results
     vec3 ambient = outAmbient * _albedo;
     vec3 diffuse = outDiffuse * diff * _albedo;
-    // vec3 specular = outSpecular * spec * vec3(_specular,_specular,_specular);
-    vec3 specular = vec3(0.0);
+    vec3 specular = outSpecular * spec * vec3(_specular,_specular,_specular);
+    // vec3 specular = vec3(0.0);
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;

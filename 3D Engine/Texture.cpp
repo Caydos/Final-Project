@@ -24,10 +24,17 @@ void Texture::LoadFromFile(const char* _path)
 	}
 
 	glGenTextures(1, &this->id);
+	if (glGetError() != GL_NO_ERROR) {
+		std::cerr << "Error after glGenTextures" << std::endl;
+	}
+
 	GLfloat maxAnisotropy;
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
 
 	glBindTexture(GL_TEXTURE_2D, this->id);
+	if (glGetError() != GL_NO_ERROR) {
+		std::cerr << "Error after glBindTexture" << std::endl;
+	}
 
 	// set texture wrapping to GL_REPEAT (default wrapping method)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

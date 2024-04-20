@@ -36,14 +36,14 @@ void Blocks::BlockType::SetTexture(Texture* _texture)
 	this->texture = _texture;
 }
 
-Texture* Blocks::BlockType::GetEffectsTexture()
+Texture* Blocks::BlockType::GetNormalMap()
 {
 	return this->effects;
 }
 
-void Blocks::BlockType::SetEffectsTexture(Texture* _effectsTexture)
+void Blocks::BlockType::SetNormalMap(Texture* _texture)
 {
-	this->effects = _effectsTexture;
+	this->effects = _texture;
 }
 
 Colors::Color Blocks::BlockType::GetColor()

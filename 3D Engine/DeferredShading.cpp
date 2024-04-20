@@ -69,7 +69,7 @@ void DeferredShading::Initialize(GameData* _gameData)
 	}
 	_gameData->shaders[Shaders::GEOMETRY]->use();
 	_gameData->shaders[Shaders::GEOMETRY]->setInt("textureX", 0);
-	_gameData->shaders[Shaders::GEOMETRY]->setInt("effectsTexture", 1);
+	_gameData->shaders[Shaders::GEOMETRY]->setInt("normalMap", 1);
 
 	_gameData->shaders[Shaders::RENDER]->use();
 	_gameData->shaders[Shaders::RENDER]->setInt("gPosition", 0);

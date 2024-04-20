@@ -73,8 +73,8 @@ namespace Blocks
 		Texture* GetTexture();
 		void SetTexture(Texture* _texture);
 
-		Texture* GetEffectsTexture();
-		void SetEffectsTexture(Texture* _effectsTexture);
+		Texture* GetNormalMap();
+		void SetNormalMap(Texture* _texture);
 
 		Colors::Color GetColor();
 		void SetColor(Colors::Color _color);
