@@ -34,7 +34,7 @@ static char filename[128] = ""; // Buffer for the filename
 static bool showFilenameInput = false; // To toggle the visibility of input field
 static float mainMenuBarHeight = 0;
 static bool isLeftSideMenuOpen = true;
-
+static bool blockClosure = false;
 
 void Editor::Menu(GameData* _gameData)
 {
@@ -166,8 +166,15 @@ void Editor::Menu(GameData* _gameData)
 
 	if (ImGui::BeginPopupModal("Enter Filename", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
+		Editor::SetClosureLock(true);
+		if (ImGui::IsWindowAppearing())
+		{
+			ImGui::SetKeyboardFocusHere();
+		}
 		ImGui::InputText("Filename", filename, IM_ARRAYSIZE(filename));
-		if (ImGui::Button("OK"))
+		if (ImGui::Button("OK")
+			|| _gameData->window.IsKeyPressed(Keys::ENTER)
+			|| _gameData->window.IsKeyPressed(Keys::KP_ENTER))
 		{
 			switch (outputFileType)
 			{
@@ -187,7 +194,8 @@ void Editor::Menu(GameData* _gameData)
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Cancel"))
+		if (ImGui::Button("Cancel")
+			|| _gameData->window.IsKeyPressed(Keys::ESCAPE))
 		{
 			showFilenameInput = false;
 			ImGui::CloseCurrentPopup();
@@ -196,12 +204,18 @@ void Editor::Menu(GameData* _gameData)
 	}
 }
 
+void Editor::SetClosureLock(bool _state)
+{
+	blockClosure = _state;
+}
+
 #pragma endregion
 
 
 void Editor::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
+	Editor::SetClosureLock(false);
 	if (displayed)
 	{
 		Menu(_gameData);
@@ -214,7 +228,7 @@ void Editor::Tick(GameData* _gameData)
 	}
 	else if (_gameData->window.IsKeyPressed(Keys::ESCAPE) && inputClock.GetElapsedTime() > 125)
 	{
-		if (displayed)
+		if (displayed && !blockClosure)
 		{
 			SetDisplay(false);
 			_gameData->window.Focus(true);

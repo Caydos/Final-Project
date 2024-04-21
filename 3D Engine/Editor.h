@@ -21,7 +21,7 @@ namespace Editor
 	void SetDisplay(bool _status = true);
 
 	void Menu(GameData* _gameData);
-	void CleanUp();
+	void SetClosureLock(bool _state);
 
 	void Tick(GameData* _gameData);
 

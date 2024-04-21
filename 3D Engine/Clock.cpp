@@ -1,4 +1,4 @@
-#include "Clock.h"
+ï»¿#include "Clock.h"
 #include <algorithm>
 
 
@@ -28,7 +28,8 @@ float Clock::GetElapsedTime()
         elapsedTime = duration.count() + timeSave;
     }
 
-    return std::min(elapsedTime, 100000.0f); //Bloquer a 100 secondes le slider
+
+    return elapsedTime;
 }
 
 void Clock::SetElapsedTime(float _time)
@@ -40,12 +41,12 @@ void Clock::SetElapsedTime(float _time)
     }
     else
     {
-        //Calculer un nouveau point de départ
+        //Calculer un nouveau point de dï¿½part
         auto now = std::chrono::high_resolution_clock::now();
         auto adjusted_time = now - std::chrono::milliseconds(int(_time));
         clock = adjusted_time;
 
-        //Réinitialiser timeSave
+        //Rï¿½initialiser timeSave
         timeSave = 0;
     }
 }
@@ -69,4 +70,3 @@ void Clock::Play(void)
         isPaused = false;
     }
 }
-
