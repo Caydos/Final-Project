@@ -95,7 +95,7 @@ void Peds::Ped::Run()
 void Peds::Ped::Simulate(GameData* _gameData)
 {
 	std::vector<Sets::Set*> sets = Sets::GetAllParents();
-
+	this->lastCollision = false;
 	if (this->body.type == Physics::Type::STATIC || this->body.type == Physics::Type::RIGID)
 	{
 		if (this->body.type == Physics::Type::RIGID)
@@ -107,7 +107,17 @@ void Peds::Ped::Simulate(GameData* _gameData)
 			if (sets[setId] == this) { continue; }
 			if (sets[setId]->GetName() == "Monster") { continue; }
 			Bounds::Box setBox = this->GetBoundingBox();
+			glm::vec3 tempVelocity = this->body.velocity;
 			this->body.velocity = sets[setId]->ComputeCollisions(setBox, this->body.velocity);
+			if (tempVelocity.x != this->body.velocity.x || tempVelocity.z != this->body.velocity.z)
+			{
+				this->lastCollision = true;
+				std::cout << "test" << std::endl;
+			}
+			else if (tempVelocity.x)
+			{
+
+			}
 			//if (Collisions::CalculateCollisionResponse(setBox, sets[setId]->GetBoundingBox(), this->body.velocity) != glm::vec3(0.0))
 			//{
 			//	std::vector<Blocks::Block>* blocks = sets[setId]->GetBlocks();
@@ -142,6 +152,12 @@ void Peds::Ped::Simulate(GameData* _gameData)
 		this->SetRotation(glm::vec3(.0f, -this->camera->Yaw + 90.0, .0f) + additionalRotation);
 	}
 }
+
+bool Peds::Ped::GetCollision()
+{
+	return this->lastCollision;
+}
+
 
 void Peds::Ped::SetAdditionalRotation(glm::vec3 _rotation)
 {

@@ -128,7 +128,7 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 {
 	if (_stageNb == 0)//!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		_stage.type = LIBRARY;
+		_stage.type = HOSPITALS;
 	}
 	else
 	{

@@ -7,6 +7,8 @@
 #include "Scene.h"
 #include "Clock.h"
 #include "MapManager.h"
+#include "Monster.h"
+#include "Player.h"
 
 static bool initialized = false;
 
@@ -15,6 +17,12 @@ static Clock inputClock;
 
 static float MovementSpeed = 2.25f;
 static Lighting::Spot* spot;
+static Monster::Monster* monster = nullptr; //Mob
+static Players::Player* player = nullptr;
+
+
+
+
 void Tools::Initialize(GameData* _gameData)
 {
 	std::cout << "Initialization" << std::endl;
@@ -36,7 +44,7 @@ void Tools::Initialize(GameData* _gameData)
 
 	spot = Scene::Lights::CreateSpot();
 	spot->activation = 1.0f;
-	spot->ambient = glm::vec3(0.0f,0.0f,0.0f);
+	spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 	spot->diffuse = glm::vec3(0.5f);
 	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
 	spot->constant = 0.5f;
@@ -45,7 +53,8 @@ void Tools::Initialize(GameData* _gameData)
 	spot->cutOff = glm::cos(glm::radians(20.0f));
 	spot->outerCutOff = glm::cos(glm::radians(40.0f));
 
-	Map::GenerateMaze(7, 2);
+	Map::GenerateMaze(5, 1);
+	_gameData->dt = std::min(_gameData->dt, 1.0f);
 
 	//Sets::Set* room = Sets::Create();
 	//room->GenerateRenderingInstance();
@@ -62,6 +71,30 @@ void Tools::Initialize(GameData* _gameData)
 	//		light->SetName("Light");
 	//	}
 	//}
+
+	// MONSTER
+
+	monster = Monster::Create();
+	Peds::Ped* monsterPed = Peds::Create();
+	monsterPed->Initialize();
+	monsterPed->GenerateRenderingInstance();
+	monsterPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_VendinMachin.json")));
+	monsterPed->SetName("Monster");
+	monsterPed->SetScale(0.2);
+	glm::vec3 initialPosition = glm::vec3(1.0f, 1.2f, 3.0f);
+	monsterPed->SetBodyType(Physics::Type::RIGID);
+	monster->SetVelocity(glm::vec3(0, 0, 0));
+	monster->SetDirection(1);
+	monster->SetPed(monsterPed);
+
+	monsterPed->SetPosition(initialPosition);
+	monsterPed->SetRotation(glm::vec3(0.0));
+	monster->SetTargetPlayer(player);
+
+
+
+
+
 	initialized = true;
 }
 
@@ -125,6 +158,11 @@ void Tools::Tick(GameData* _gameData)
 	spot->direction = _gameData->camera->Front;
 	Lighting::UpdateSpot(spot);
 	Scene::Lights::UpdateSpot(spot);
+
+	Peds::Simulate(_gameData);
+
+	monster->Update(_gameData);
+
 
 	Scene::Tick(_gameData);
 	// Needs to be called after the inputs that enables it
