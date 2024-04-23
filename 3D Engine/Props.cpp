@@ -1,47 +1,35 @@
 #include "Set.h"
 #include "Props.h"
-//
-//void Props::Text()
-//{
-//	ManagmentText text;
-//	text.hospital.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //LABY
-//	text.hospital.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //GARDEN
-//	text.hospital.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //HOSPITAL
-//	text.hospital.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //EXIT
-//	text.hospital.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //ROOM
-//	text.hospital.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //PARCEL
-//	text.hospital.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //BALCONY
-//	text.hospital.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //EMPTY
-//
-//	text.library.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
-//	text.library.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
-//	text.library.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
-//	text.library.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
-//	text.library.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
-//	text.library.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
-//	text.library.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
-//
-//	text.labo.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
-//	text.labo.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
-//	text.labo.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
-//	text.labo.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
-//	text.labo.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
-//	text.labo.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
-//	text.labo.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
-//
-//	text.hall.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
-//	text.hall.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
-//	text.hall.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
-//	text.hall.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
-//	text.hall.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
-//	text.hall.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
-//	text.hall.push_back("../Sets/HOSPITAL/Map/HSP_Wall1.json");
-//}
-//
-Maze::Decor Props::Generate(int _chunckType, glm::vec3 _cellPos, int _line, int _column, int _name)
+
+
+Map::ManagmentTextProps Props::TextChunck(int _stageType)
+{
+	Map::ManagmentTextProps text;
+
+	if (_stageType == Map::HOSPITALS)
+	{
+		//text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json");
+		//text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json");
+		text.room.push_back("../Sets/HOSPITAL/Map/HSP_WaitingRoom.json");
+		text.room.push_back("../Sets/HOSPITAL/Map/HSP_WeirdRoomChair.json");
+		text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoom.json");
+		text.room.push_back("../Sets/HOSPITAL/Map/HSP_GiantBedRoom.json");
+
+	}
+	if (_stageType == Map::LIBRARY)
+	{
+		text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json");
+	}
+
+	return text;
+}
+
+
+std::vector<Map::Decor> Props::Generate(Map::Cell _cell)
 {
 	/////////////////////////////////////////////////////// INIT Props //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	Maze::Decor decor{};
+
+	std::vector<Map::Decor> propList;
 	std::vector<const char*> txtProps{};
 
 	txtProps.push_back("../Sets/HOSPITAL/Props/HSP_Pancarte01.json");
@@ -55,171 +43,286 @@ Maze::Decor Props::Generate(int _chunckType, glm::vec3 _cellPos, int _line, int 
 	randomLuck = rand() % 100;
 	//std::cout << randomLuck << std::endl;
 
-	if (_chunckType == Maze::HOSPITAL)
+	//if (_chunckType == Map::HOSPITAL)
+	//{
+	//	if (_name == Props::CORRIDOR)
+	//	{
+	//		if (randomLuck > PROPS_LUCK)
+	//		{
+	//			if (_column == NB_CELL / 2 && _line != NB_CELL / 2)
+	//			{
+	//				decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ + CELL_W - BRICK_W);
+	//				decor.rot = glm::vec3(0, 0, 0);
+	//				decor.isVisible = true;
+	//				decor.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
+	//			}
+	//		}
+	//		//} 
+	//		else if (randomLuck < 100 - PROPS_LUCK)
+	//		{
+	//			//if (_name == Props::BENCH)
+	//			//{
+	//			if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
+	//			{
+	//				//decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z /*+ 2 * (CELL_W / 3)*/ + BRICK_W / 2 + CELL_W);
+	//				decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3);
+	//				decor.rot = glm::vec3(0, 0, 0);
+	//				decor.isVisible = true;
+	//				decor.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
+	//			}
+	//		}
+	//		else if (25 < randomLuck < 35)
+	//		{
+	//			//if (_name == Props::BENCH)
+	//			//{
+	//			if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
+	//			{
+	//				//decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z /*+ 2 * (CELL_W / 3)*/ + BRICK_W / 2 + CELL_W);
+	//				decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W + BRICK_W * 3 + BRICK_W/2, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + CELL_W/2);
+	//				decor.rot = glm::vec3(0, -90, 0);
+	//				decor.isVisible = true;
+	//				decor.name = "../Sets/HOSPITAL/Props/HSP_VendingMachine.json";
+	//			}
+	//		}
+	//	}
+
+
+	/////SPAWN DOOR/////
+	for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
 	{
-		if (_name == Props::CORRIDOR)
+		if (_cell.wallList[wallId].name == "../Sets/HOSPITAL/Map/HSP_Door.json" && _cell.wallList[wallId].isVisible)
 		{
-			if (randomLuck > PROPS_LUCK)
+			Map::Decor door;
+			if (wallId == Maze::BOTTOM)
 			{
-				if (_column == NB_CELL / 2 && _line != NB_CELL / 2)
-				{
-					decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ + CELL_W - BRICK_W);
-					decor.rot = glm::vec3(0, 0, 0);
-					decor.isVisible = true;
-					decor.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
-				}
+				door.pos = glm::vec3(_cell.wallList[wallId].pos.x + BRICK_W * 3, _cell.wallList[wallId].pos.y, _cell.wallList[wallId].pos.z);
 			}
-			//} 
-			else if (randomLuck < 100 - PROPS_LUCK)
+			else
 			{
-				//if (_name == Props::BENCH)
-				//{
-				if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
-				{
-					//decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z /*+ 2 * (CELL_W / 3)*/ + BRICK_W / 2 + CELL_W);
-					decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3);
-					decor.rot = glm::vec3(0, 0, 0);
-					decor.isVisible = true;
-					decor.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
-				}
+				door.pos = glm::vec3(_cell.wallList[wallId].pos.x, _cell.wallList[wallId].pos.y, _cell.wallList[wallId].pos.z + BRICK_W * 3);
 			}
-			else if (25 < randomLuck < 35)
-			{
-				//if (_name == Props::BENCH)
-				//{
-				if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
-				{
-					//decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z /*+ 2 * (CELL_W / 3)*/ + BRICK_W / 2 + CELL_W);
-					decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W + BRICK_W * 3 + BRICK_W/2, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + CELL_W/2);
-					decor.rot = glm::vec3(0, -90, 0);
-					decor.isVisible = true;
-					decor.name = "../Sets/HOSPITAL/Props/HSP_VendingMachine.json";
-				}
-			}
+			door.rot = _cell.wallList[wallId].rot;
+			door.isVisible = _cell.wallList[wallId].isVisible;
+			door.name = "../Sets/HOSPITAL/Props/HSP_RoomDoor.json";
+			propList.push_back(door);
 		}
-		if (_name == Props::AD)
-		{
-			if (randomLuck < PROPS_LUCK)
-			{
-				if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
-				{
-					decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W * 4 + BRICK_W / 2, _cellPos.y + BRICK_W / 3 + CELL_W / 2, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3);
-					decor.rot = glm::vec3(0, 0, 0);
-					decor.isVisible = true;
-					decor.name = txtProps[rand() % txtProps.size()]/* "../Sets/HOSPITAL/Props/HSP_Pancarte06.json"*/;
-				}
-			}
-		}
-		if (_name == Props::DOOR)
-		{
-			if (_column != NB_CELL / 2 && _line == NB_CELL / 2 || _column != NB_CELL / 2 && _line == NB_CELL / 2 - 1)
-			{
-				//Maze::Decor door;
+	}
 
-				decor.pos = glm::vec3(_cellPos.x - BRICK_W * 3 - BRICK_W / 2 - 0.025, _cellPos.y, _cellPos.z);
-				decor.rot = glm::vec3(0, 0, 0);
-				decor.isVisible = true;
-				decor.name = "../Sets/HOSPITAL/Props/HSP_RoomDoor.json";
 
-				//return door;
-			}
-		}
-		if (_name == Props::LIGHT)
+	/////SPAWN PANCARTES/////
+	///// BEDROOM ET CORRIDOR SONT INVERSER ->> bedroom = corridor / corridor = bedroom /////
+	if (_cell.type == Maze::BEDROOM) //PANCARTE DANS LES CORRIDOR MURS LEFT ET BOTTOM
+	{
+		//std::cout << _cell.type << std::endl;
+
+		for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
 		{
-			decor.pos = glm::vec3(_cellPos.x - CELL_W / 2 - BRICK_W, _cellPos.y + CELL_W - BRICK_W, _cellPos.z + CELL_W / 2 - BRICK_W / 2/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*//* + BRICK_W * 3*/);;
-			decor.rot = glm::vec3(0, 0, 0);
-			decor.isVisible = true;
-			decor.name = "../Sets/HOSPITAL/Props/HSP_Light.json";
-		}
-		if (_name == Props::PANELEXIT)
-		{
-			if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line == NB_CELL / 2)
+			if (_cell.wallList[wallId].name == "../Sets/HOSPITAL/Map/HSP_Wall2.json" && _cell.wallList[wallId].isVisible == true)
 			{
-				decor.pos = glm::vec3(_cellPos.x /*- CELL_W / 2*/ /*- BRICK_W*//* - BRICK_W/2*/, _cellPos.y + CELL_W - BRICK_W, _cellPos.z + CELL_W / 2/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*//* + BRICK_W * 3*/);;
-				decor.rot = glm::vec3(0, 0, 0);
-				decor.isVisible = true;
-				decor.name = "../Sets/HOSPITAL/Props/HSP_Exit2.json";
-			}
-		}
-		if (_name == Props::RAIL)
-		{
-			if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
-			{
-				decor.pos = glm::vec3(_cellPos.x - CELL_W - BRICK_W - 0.02, _cellPos.y + BRICK_W, _cellPos.z + BRICK_W);
-				decor.rot = glm::vec3(0, 0, 0);
-				decor.isVisible = true;
-				decor.name = "../Sets/HOSPITAL/Props/HSP_Rail1.json";
-			}
-		}
-		if (_name == Props::BOOK)
-		{
-			if (_line == 0 && _column == 0 || _line == 0 && _column == NB_CELL / 2 + 1 || _line == NB_CELL / 2 + 1 && _column == NB_CELL / 2 + 1 || _line == NB_CELL / 2 + 1 && _column == 0)
-			{
-				decor.pos = glm::vec3(_cellPos.x - CELL_W/* + BRICK_W + BRICK_W * 3 - BRICK_W * 2*/ + BRICK_W / 2, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 /*+ BRICK_W*3*/ + CELL_W - BRICK_W / 2);
-				decor.rot = glm::vec3(0, 0, 0);
-				decor.isVisible = false;
-				decor.name = "../Sets/HOSPITAL/Props/HSP_Shelf.json";
+				if (randomLuck > PROPS_LUCK)
+				{
+					Map::Decor ad;
+
+					if (wallId == Maze::LEFT)
+					{
+						ad.pos = glm::vec3(_cell.wallList[wallId].pos.x - CELL_W / 2 + BRICK_W * 5 + (BRICK_W / 2), _cell.wallList[wallId].pos.y + BRICK_W / 3 + CELL_W / 2 /*(laisser ca c'est la hauteur sur le mur)*/, _cell.wallList[wallId].pos.z + 2 * (CELL_W / 3) + BRICK_W / 2 /*+ CELL_W*/ /*+ BRICK_W * 3*/);
+						ad.rot = glm::vec3(0, 180, 0);
+					}
+					else if (wallId == Maze::BOTTOM)
+					{
+						ad.pos = glm::vec3(_cell.wallList[wallId].pos.x - CELL_W / 2 + BRICK_W * 8, _cell.wallList[wallId].pos.y + BRICK_W / 3 + CELL_W / 2 /*(laisser ca c'est la hauteur sur le mur)*/, _cell.wallList[wallId].pos.z + 2 * (CELL_W / 3) + BRICK_W / 2 /*+ CELL_W*/ - 1.67);
+						ad.rot = glm::vec3(0, 90, 0);
+					}
+					ad.name = txtProps[rand() % txtProps.size()];
+					ad.isVisible = true;
+					propList.push_back(ad);
+				}
 			}
 		}
 	}
-	return decor;
+	if (_cell.type == Maze::CORRIDOR) //PANCARTES DANS LES BEDROOM MURS LEFT ET BOTTOM
+	{
+		for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
+		{
+			if (_cell.wallList[wallId].name == "../Sets/HOSPITAL/Map/HSP_Wall2.json" && _cell.wallList[wallId].isVisible == true)
+			{
+				Map::Decor ad;
+				if (randomLuck > PROPS_LUCK)
+				{
+					if (wallId == Maze::LEFT)
+					{
+						ad.pos = glm::vec3(_cell.wallList[wallId].pos.x - CELL_W / 2 + BRICK_W * 5 + (BRICK_W / 2), _cell.wallList[wallId].pos.y + BRICK_W / 3 + CELL_W / 2 /*(laisser ca c'est la hauteur sur le mur)*/, _cell.wallList[wallId].pos.z + 2 * (CELL_W / 3) + BRICK_W / 2 /*+ CELL_W*/ /*+ BRICK_W * 3*/);
+						ad.rot = glm::vec3(0, 180, 0);
+					}
+					else if (wallId == Maze::BOTTOM)
+					{
+						ad.pos = glm::vec3(_cell.wallList[wallId].pos.x - CELL_W / 2 + BRICK_W * 8, _cell.wallList[wallId].pos.y + BRICK_W / 3 + CELL_W / 2 /*(laisser ca c'est la hauteur sur le mur)*/, _cell.wallList[wallId].pos.z + 2 * (CELL_W / 3) + BRICK_W / 2 /*+ CELL_W*/ - 1.67);
+						ad.rot = glm::vec3(0, 90, 0);
+					}
+					ad.name = txtProps[rand() % txtProps.size()];
+					ad.isVisible = true;
+					propList.push_back(ad);
+				}
+			}
+		}
+	}
+
+	////// SPAWN LIGHT ////
+	// V1 LIGHT AVEC MURS
+	//for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
+	//{
+	//	if (_cell.wallList[wallId].name == "../Sets/HOSPITAL/Map/HSP_Wall2.json" || _cell.wallList[wallId].name == "../Sets/HOSPITAL/Map/HSP_Door.json" || _cell.wallList[wallId].name == "../Sets/HOSPITAL/Map/Wall1.json" && _cell.wallList[wallId].isVisible == true)
+	//	{
+	//		Map::Decor light;
+
+	//		if (wallId == Maze::LEFT)
+	//		{
+	//			light.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.03, _cell.wallList[wallId].pos.y + CELL_W - BRICK_W + 0.04, _cell.wallList[wallId].pos.z + 1.15);
+	//			light.rot = glm::vec3(0, 0, 0);
+	//			light.name = "../Sets/HOSPITAL/Props/HSP_Light.json";
+	//			light.isVisible = true;
+	//		}
+	//		else if (wallId == Maze::BOTTOM)
+	//		{
+	//			light.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.15, _cell.wallList[wallId].pos.y + CELL_W - BRICK_W + 0.04, _cell.wallList[wallId].pos.z + 1.03);
+	//			light.rot = glm::vec3(0, 0, 0);
+	//			light.name = "../Sets/HOSPITAL/Props/HSP_Light.json";
+	//			light.isVisible = true;
+	//		}
+	//		propList.push_back(light);
+	//	}
+	//}
+
+	/////V2 LIGHT AVEC PLAFOND/////
+	for (int roofId = 0; roofId < _cell.ground.size(); roofId++)
+	{
+		if (_cell.ground[roofId].name == "../Sets/HOSPITAL/Map/PLF_HSP.json" && _cell.ground[roofId].isVisible == true)
+		{
+			Map::Decor light;
+
+			light.pos = glm::vec3(_cell.wallList[roofId].pos.x - 1.47, _cell.wallList[roofId].pos.y + CELL_W - BRICK_W + 0.04, _cell.wallList[roofId].pos.z + 1.15);
+			light.rot = glm::vec3(0, 0, 0);
+			light.name = "../Sets/HOSPITAL/Props/HSP_Light.json";
+			light.isVisible = true;
+			propList.push_back(light);
+		}
+	}
+
+
+
+	/////SPAWN REMBARDE AUX MURS/////
+	if (_cell.type == Maze::BEDROOM) //REMBARDE DANS LES CORRIDOR MURS LEFT ET BOTTOM
+	{
+		for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
+		{
+			if (_cell.wallList[wallId].name == "../Sets/HOSPITAL/Map/HSP_Wall2.json" && _cell.wallList[wallId].isVisible == true)
+			{
+				Map::Decor rail;
+				if (wallId == Maze::LEFT)
+				{
+					rail.pos = glm::vec3(_cell.wallList[wallId].pos.x - CELL_W - BRICK_W + 3.02, _cell.wallList[wallId].pos.y + BRICK_W - 0.042, _cell.wallList[wallId].pos.z + BRICK_W + 2.3);
+					rail.rot = glm::vec3(180, 0, 180);
+					rail.isVisible = true;
+					rail.name = "../Sets/HOSPITAL/Props/HSP_Rail1.json";
+					//propList.push_back(rail);
+				}
+				else if (wallId == Maze::BOTTOM)
+				{
+					rail.pos = glm::vec3(_cell.wallList[wallId].pos.x + BRICK_W, _cell.wallList[wallId].pos.y + BRICK_W - 0.042, _cell.wallList[wallId].pos.z + BRICK_W * 1.1);
+					rail.rot = glm::vec3(0, 90, 0);
+					rail.isVisible = true;
+					rail.name = "../Sets/HOSPITAL/Props/HSP_Rail1.json";
+				}
+				propList.push_back(rail);
+			}
+		}
+	}
+	if (_cell.type == Maze::CORRIDOR) //REMBARDE DANS LES BEDROOM MURS LEFT ET BOTTOM
+	{
+		for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
+		{
+			if (_cell.wallList[wallId].name == "../Sets/HOSPITAL/Map/HSP_Wall2.json" && _cell.wallList[wallId].isVisible == true)
+			{
+				Map::Decor rail;
+				if (wallId == Maze::LEFT)
+				{
+					rail.pos = glm::vec3(_cell.wallList[wallId].pos.x - CELL_W - BRICK_W + 3.02, _cell.wallList[wallId].pos.y + BRICK_W - 0.042, _cell.wallList[wallId].pos.z + 2.5);
+					rail.rot = glm::vec3(180, 0, 180);
+					rail.isVisible = true;
+					rail.name = "../Sets/HOSPITAL/Props/HSP_Rail1.json";
+				}
+				else if (wallId == Maze::BOTTOM)
+				{
+					rail.pos = glm::vec3(_cell.wallList[wallId].pos.x + BRICK_W, _cell.wallList[wallId].pos.y + BRICK_W - 0.042, _cell.wallList[wallId].pos.z + BRICK_W * 1.1);
+					rail.rot = glm::vec3(0, 90, 0);
+					rail.isVisible = true;
+					rail.name = "../Sets/HOSPITAL/Props/HSP_Rail1.json";
+				}
+				propList.push_back(rail);
+			}
+		}
+	}
+
+	//if (_name == Props::RAIL)
+	//{
+	//	if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line != NB_CELL / 2)
+	//	{
+	//		decor.pos = glm::vec3(_cellPos.x - CELL_W - BRICK_W - 0.02, _cellPos.y + BRICK_W, _cellPos.z + BRICK_W);
+	//		decor.rot = glm::vec3(0, 0, 0);
+	//		decor.isVisible = true;
+	//		decor.name = "../Sets/HOSPITAL/Props/HSP_Rail1.json";
+	//	}
+	//}
+
+
+	//if (_name == Props::PANELEXIT)
+	//{
+	//	if (_column == NB_CELL / 2 /*&& randomLuck < (100 - PROPS_LUCK)*/ && _line == NB_CELL / 2)
+	//	{
+	//		decor.pos = glm::vec3(_cellPos.x /*- CELL_W / 2*/ /*- BRICK_W*//* - BRICK_W/2*/, _cellPos.y + CELL_W - BRICK_W, _cellPos.z + CELL_W / 2/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*//* + BRICK_W * 3*/);;
+	//		decor.rot = glm::vec3(0, 0, 0);
+	//		decor.isVisible = true;
+	//		decor.name = "../Sets/HOSPITAL/Props/HSP_Exit2.json";
+	//	}
+	//}
+
+
+	//if (_name == Props::BOOK)
+	//{
+	//	if (_line == 0 && _column == 0 || _line == 0 && _column == NB_CELL / 2 + 1 || _line == NB_CELL / 2 + 1 && _column == NB_CELL / 2 + 1 || _line == NB_CELL / 2 + 1 && _column == 0)
+	//	{
+	//		decor.pos = glm::vec3(_cellPos.x - CELL_W/* + BRICK_W + BRICK_W * 3 - BRICK_W * 2*/ + BRICK_W / 2, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 /*+ BRICK_W*3*/ + CELL_W - BRICK_W / 2);
+	//		decor.rot = glm::vec3(0, 0, 0);
+	//		decor.isVisible = false;
+	//		decor.name = "../Sets/HOSPITAL/Props/HSP_Shelf.json";
+	//	}
+	//}
+	//}
+
+	return propList;
 }
 
-std::vector<Maze::Decor> Props::GenerateBedRoom(int _chunckType, glm::vec3 _cellPos, int _line, int _column)
+
+/////SPAWN ROOM/////
+std::vector<Map::Decor> Props::GenerateRoom(Map::Chunck _chunk)
 {
+	////////////////////////////////////////////////// INIT Room ///////////////////////////////////////////////////////
 
-	std::vector<Maze::Decor> room;
+	//scale les ballon x3 pour la playroom//
 
-	if (_chunckType == Maze::HOSPITAL)
-	{
-		if (_line == 0 && _column == 0 || _line == 0 && _column == NB_CELL / 2 + 1 || _line == NB_CELL / 2 + 1 && _column == NB_CELL / 2 + 1 || _line == NB_CELL / 2 + 1 && _column == 0)
-		{
-			Maze::Decor bed1;
-			Maze::Decor bed2;
-			Maze::Decor name;
-			Maze::Decor book;
-			Maze::Decor chair;
-			Maze::Decor table;
-			Maze::Decor perch;
+	std::vector<Map::Decor> roomList;
 
-			bed1.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W * 2, _cellPos.y + BRICK_W / 3, _cellPos.z + BRICK_W * 3 + CELL_W - BRICK_W/* + CELL_W/2*/);
-			bed1.rot = glm::vec3(0, 90, 0);
-			bed1.isVisible = true;
-			bed1.name = "../Sets/HOSPITAL/Props/HSP_Bed.json";
+	Map::Decor room;
+	int randomRoom = 0;
+	randomRoom = rand() % _chunk.txtRoom.size();
 
-			bed2.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W * 2 + CELL_W / 2 + BRICK_W, _cellPos.y + BRICK_W / 3, _cellPos.z + BRICK_W * 3 + CELL_W - BRICK_W * 3 - BRICK_W / 3/* + CELL_W/2*/);
-			bed2.rot = glm::vec3(0, -90, 0);
-			bed2.isVisible = true;
-			bed2.name = "../Sets/HOSPITAL/Props/HSP_Bed.json";
+	room.pos = glm::vec3(_chunk.cellList[0].ground[0].pos.x - BRICK_W / 2, _chunk.cellList[0].ground[0].pos.y + BRICK_W + (BRICK_W / 5), _chunk.cellList[0].ground[0].pos.z);
+	room.rot = glm::vec3(0, 0, 0);
+	room.isVisible = true;
+	room.name = _chunk.txtRoom[randomRoom]  /*"../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json"*/;
+	roomList.push_back(room);
+	std::cout << _chunk.txtRoom[randomRoom] << std::endl;
+	_chunk.txtRoom.erase(_chunk.txtRoom.begin() + randomRoom);
 
-			chair.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W + BRICK_W * 3 - BRICK_W * 2, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 + BRICK_W);
-			chair.rot = glm::vec3(0, rand() % 90, 0);
-			chair.isVisible = true;
-			chair.name = "../Sets/HOSPITAL/Props/HSP_Table.json";
-
-			book.pos = glm::vec3(_cellPos.x - CELL_W/* + BRICK_W + BRICK_W * 3 - BRICK_W * 2*/ + BRICK_W/2, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 /*+ BRICK_W*3*/ + CELL_W - BRICK_W/2);
-			book.rot = glm::vec3(0, 0, 0);
-			book.isVisible = true;
-			book.name = "../Sets/HOSPITAL/Props/HSP_Shelf.json";
-
-			table.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W + BRICK_W * 2 + BRICK_W * 3, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 + BRICK_W * 2 - BRICK_W * 3);
-			table.rot = glm::vec3(0, 90, 0);
-			table.isVisible = true;
-			table.name = "../Sets/HOSPITAL/Props/HSP_Armchair.json";
-
-			perch.pos = glm::vec3(_cellPos.x - CELL_W / 2 + BRICK_W + BRICK_W * 2 + BRICK_W * 3, _cellPos.y + BRICK_W / 3, _cellPos.z/* + 2 * (CELL_W / 3) + BRICK_W / 2*/ /*+ CELL_W*/ + BRICK_W * 3 + BRICK_W * 2 - BRICK_W * 3);
-			perch.rot = glm::vec3(0, 0, 0);
-			perch.isVisible = true;
-			perch.name = "../Sets/HOSPITAL/Props/HSP_Perch.json";
-
-			room.push_back(bed1);
-			room.push_back(bed2);
-			room.push_back(chair);
-			//room.push_back(book);
-			room.push_back(table);
-			room.push_back(perch);
-
-		}
-	}
-	return room;
+	return roomList;
 }

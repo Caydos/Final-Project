@@ -177,6 +177,8 @@ void Scene::Lights::EraseSpot(Lighting::Spot* _spot)
 	{
 		if (spotLights[spotId] == _spot)
 		{
+			spotLights[spotId]->activation = false;
+			Scene::Lights::UpdateSpot(_spot);
 			delete spotLights[spotId];
 			spotLights.erase(spotLights.begin() + spotId);
 			break;
@@ -191,28 +193,8 @@ void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 		if (spotLights[spotId] == _spot)
 		{
 			glBindVertexArray(spotVAO);
-			//glBindBuffer(GL_ARRAY_BUFFER, spotInstanceVBO);
-			////glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, _spot, GL_DYNAMIC_DRAW); // Allocate new size
-			//glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
-
-			//GLenum err;
-			//while ((err = glGetError()) != GL_NO_ERROR) {
-			//	std::cerr << "OpenGL error: " << std::hex << err << std::endl;
-			//}
-			GLenum err;
 			glBindBuffer(GL_ARRAY_BUFFER, spotInstanceVBO);
-			err = glGetError();
-			if (err != GL_NO_ERROR) {
-				std::cerr << "OpenGL error after glBindBuffer: " << std::hex << err << std::endl;
-			}
-
-			//glBufferData(GL_ARRAY_BUFFER, sizeof(Lighting::Spot) * SPOT_MAX_COUNT, _spot, GL_DYNAMIC_DRAW);
 			glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
-			err = glGetError();
-			if (err != GL_NO_ERROR) {
-				std::cerr << "OpenGL error after glBufferData: " << std::hex << err << std::endl;
-			}
-
 			break;
 		}
 	}

@@ -1,7 +1,7 @@
 #include "Scripting.h"
 #include "Scene.h"
 #include "Player.h"
-#include "Maze.h"
+#include "MapManager.h"
 #include "Collisions.h"
 #include "Monster.h"
 #include "LoadingScreen.h"
@@ -67,7 +67,7 @@ void Generation()
 
 	Clock loadingClock;
 	loadingClock.Restart();
-	Maze::GenerateMaze(3, 1);
+	Map::GenerateMaze(7, 2);
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	//Mob
 	monster = Monster::Create();

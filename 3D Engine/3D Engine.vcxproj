@@ -162,6 +162,7 @@
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="FrustumCulling.cpp" />
     <ClCompile Include="GhostBlocks.cpp" />
+    <ClCompile Include="Hospital.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Lighting.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
@@ -222,6 +224,7 @@
     <ClInclude Include="EventListing.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="FrustumCulling.h" />
+    <ClInclude Include="Hospital.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LightMenu.h" />
@@ -230,6 +233,7 @@
     <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="MapManager.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Network.h" />

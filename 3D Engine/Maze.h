@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "Scene.h"
 #include "Set.h"
+#include "MapManager.h"
 
 //////////////////////////////////////// CELL PRESET ////////////////////////////////////////
 #define NB_CELL 5
@@ -18,7 +19,7 @@
 #define MAP_W (CELL_W*NB_CELL)
 //////////////////////////////////////// DENSITY ////////////////////////////////////////
 #define SHORTCUT_LUCK 75
-#define BUILDING_LUCK 40
+#define DOOR_LUCK 25
 
 namespace Maze
 {
@@ -36,93 +37,81 @@ namespace Maze
 		CORRIDOR,
 	};
 
-	enum ChunckEnum
-	{
-		LABY,
-		GARDEN,
-		HOSPITAL,
-		EXIT,
-		ROOM,
-		PARCEL,
-		BALCONY,
-		EMPTY,
-	};
+	//struct Decor
+	//{
+	//	Sets::Set* decor;
+	//	bool isVisible;
+	//	const char* name;
+	//	glm::vec3 pos;
+	//	glm::vec3 rot;
+	//};
 
-	enum StageEnum
-	{
-		HOSPITALS,
-		FACTORY,
-		LABO,
-		FIELDS,
-	};
+	//struct Cell
+	//{
+	//	bool isVisited;
+	//	int lastCase;
+	//	std::vector<Decor> wallMissingList;
+	//	std::vector<Decor> ground;
+	//	std::vector<Decor> wallList;
+	//	std::vector<Decor> wallOutList;
+	//	std::vector<Decor> props;
+	//	std::vector<Decor> bedroom;
+	//};
 
-	struct Decor
-	{
-		Sets::Set* decor;
-		bool isVisible;
-		const char* name;
-		glm::vec3 pos;
-		glm::vec3 rot;
-	};
+	//struct Chunck
+	//{
+	//	Sets::Set* parentSet = nullptr;
+	//	std::vector<Cell> cellList;
+	//	std::vector<Decor> decor;
 
-	struct Cell
-	{
-		bool isVisited;
-		int lastCase;
-		std::vector<Decor> wallMissingList;
-		std::vector<Decor> ground;
-		std::vector<Decor> wallList;
-		std::vector<Decor> wallOutList;
-		std::vector<Decor> props;
-		std::vector<Decor> bedroom;
-	};
+	//	int type;
+	//	float sizeOf;
+	//};
 
-	struct Chunck
-	{
-		Sets::Set* parentSet = nullptr;
-		std::vector<Cell> cellList;
-		std::vector<Decor> decor;
+	//struct Stage
+	//{
+	//	Chunck chunk;
+	//	int type;
+	//	float sizeOf;
+	//};
 
-		int type;
-		float sizeOf;
-	};
+	//struct MegaChunck
+	//{
+	//	std::vector<Stage> stageList;
+	//	//std::vector<Decor> ObjectiveList;
+	//};
 
-	struct Stage
-	{
-		Chunck chunk;
-		int type;
-		float sizeOf;
-	};
+	//struct ManagmentText
+	//{
+	//	std::vector<const char*> ground;
+	//	std::vector<const char*> wallBot;
+	//	std::vector<const char*> wallBotWindow;
+	//	std::vector<const char*> wallLeftWindow;
+	//	std::vector<const char*> wallLeft;
+	//	std::vector<const char*> roof;
+	//	std::vector<const char*> propsBuilding;
+	//	std::vector<const char*> garden;
+	//	std::vector<const char*> gardenRot;
+	//};
 
-	struct MegaChunck
-	{
-		std::vector<Stage> stageList;
-		//std::vector<Decor> ObjectiveList;
-	};
+	//void Generate();
+	//void Create();
 
-	struct ManagmentText
-	{
-		std::vector<const char*> ground;
-		std::vector<const char*> wallBot;
-		std::vector<const char*> wallBotWindow;
-		std::vector<const char*> wallLeftWindow;
-		std::vector<const char*> wallLeft;
-		std::vector<const char*> roof;
-		std::vector<const char*> propsBuilding;
-		std::vector<const char*> garden;
-		std::vector<const char*> gardenRot;
-	};
+	//ManagmentText InitProps();
+	//void GenerateMaze(int _mapW, int _nbStage);
+	//void StageManagment(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck, Stage& _stage, int _mapW, int _nbStage);
+	void InitCell(Map::Stage& _stage, int _stageNb, int _mapW, int _nbStage);
 
-	void Generate();
-	void Create();
-
-	ManagmentText InitProps();
-	void GenerateMaze(int _mapW, int _nbStage);
-	void StageManagment(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck, Stage& _stage, int _mapW, int _nbStage);
-	void InitCell(int _mapColumn, int _mapLine, int _stageNb, Chunck& _chunck, ManagmentText _text, int _mapW, int _nbStage);
-	void InitLaby(Chunck& _chunck);
-	void InitHospital(int _mapNb, int _stageNb, int _mapW, int _nbStage);
-	void InitSpecialChuncks(int _mapNb, int _stageNb, int _cell, ManagmentText _text, int _mapW, int _nbStage);
-	void CreateMaze();
+	void InitLaby(Map::Stage& _stage, int _mapW);
+	void InitGarden(Map::Stage& _stage, int _mapW, int _stageNb);
+	void InitExit(Map::Stage& _stage, int _mapW, int _stageNb);
+	void InitRoom(Map::Stage& _stage, int _mapW, int _stageNb);
+	void InitPlace(Map::Stage& _stage, int _mapW, int _stageNb);
+	void InitLibrary(Map::Stage& _stage, int _mapW, int _stageNb);
+	void InitHospital(Map::Stage& _stage, int _mapW, int _stageNb);
+	void InitLibraryStairs(Map::Stage& _stage, int _mapW, int _stageNb);
+	//void InitHospital(int _mapNb, int _stageNb, int _mapW, int _nbStage);
+	//void InitSpecialChuncks(int _mapNb, int _stageNb, int _cell, ManagmentText _text, int _mapW, int _nbStage);
+	//void CreateMaze();
 }
 #endif // !OBSTACLE_H

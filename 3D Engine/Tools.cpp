@@ -6,7 +6,8 @@
 #include "Crosshair.h"
 #include "Scene.h"
 #include "Clock.h"
-#include "Maze.h"
+#include "MapManager.h"
+
 static bool initialized = false;
 
 static unsigned int FPVCam;
@@ -45,7 +46,7 @@ void Tools::Initialize(GameData* _gameData)
 	spot->cutOff = glm::cos(glm::radians(20.0f));
 	spot->outerCutOff = glm::cos(glm::radians(40.0f));
 
-	Maze::GenerateMaze(3, 1);
+	Map::GenerateMaze(7, 2);
 
 	//Sets::Set* room = Sets::Create();
 	//room->GenerateRenderingInstance();

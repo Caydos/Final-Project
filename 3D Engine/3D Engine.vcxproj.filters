@@ -172,6 +172,9 @@
     <Filter Include="Source Files\Engines\Rendering\Visual\Lighting">
       <UniqueIdentifier>{f2b46df8-c80d-46cf-a244-f104b7ac42d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripting\Levels">
+      <UniqueIdentifier>{684d8207-1a03-4c0c-99a8-cba8e3c17ae7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -341,6 +344,12 @@
     </ClCompile>
     <ClCompile Include="Lighting.cpp">
       <Filter>Source Files\Engines\Rendering\Visual\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Hospital.cpp">
+      <Filter>Source Files\Game\Scripting\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>Source Files\Game\Maze</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -526,6 +535,12 @@
     </ClInclude>
     <ClInclude Include="Lighting.h">
       <Filter>Source Files\Engines\Rendering\Visual\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Hospital.h">
+      <Filter>Source Files\Game\Scripting\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
+      <Filter>Source Files\Game\Maze</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
