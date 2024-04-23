@@ -12,8 +12,7 @@ static bool initialized = false;
 
 static unsigned int FPVCam;
 static Clock inputClock;
-//static Lighting::Light* flashLight;
-//static Lighting::Light* directionalLight;
+
 static float MovementSpeed = 2.25f;
 static Lighting::Spot* spot;
 void Tools::Initialize(GameData* _gameData)
