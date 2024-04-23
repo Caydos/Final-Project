@@ -30,6 +30,7 @@ namespace Peds
 		void Run();
 
 		void Simulate(GameData* _gameData);
+		bool GetCollision();
 
 		void SetAdditionalRotation(glm::vec3 _rotation);
 	private:
@@ -42,6 +43,7 @@ namespace Peds
 		float runningMultiplier;
 		bool running;
 		glm::vec3 additionalRotation;
+		bool lastCollision;
 	};
 
 	Ped* Create();

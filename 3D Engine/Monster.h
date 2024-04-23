@@ -20,20 +20,21 @@ namespace Monster
         Peds::Ped* GetPed();
         void SetPed(Peds::Ped* _ped);
         void SetTargetPlayer(Players::Player* _player);
+        void SetVelocity(glm::vec3 _velocity);
+        void SetDirection(int _direction);
 
     private:
         Peds::Ped* ped;
         Clock movementClock;
         Players::Player* targetPlayer = nullptr;
-        float directionX = 0.0f; 
-        float directionZ = 0.0f; 
-        bool changeInX = true; //Changement de direction soit X (true) ou Z (false)
-       
+        glm::vec3 velocity;
+        int direction;
+
     };
 
     Monster* Create();
     void Erase(Monster* monster);
-    std::vector<Monster*>* GetPool();
+    std::vector<Monster> GetPool();
 }
 
 #endif // MONSTER_H
