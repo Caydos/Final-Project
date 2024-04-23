@@ -222,6 +222,7 @@ void Inventory::Menu(GameData* _gameData)
 			if (ImGui::IsItemClicked(1))
 			{//Right Click
 				blocks[i]->GetTexture()->Refresh();
+				blocks[i]->GetNormalMap()->Refresh();
 			}
 			if (ImGui::IsItemClicked(2))
 			{

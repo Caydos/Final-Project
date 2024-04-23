@@ -1,9 +1,9 @@
 #version 430 core
-layout (location = 0) out vec3 gPosition;
-layout (location = 1) out vec3 gNormal;
-layout (location = 2) out vec4 gAlbedoSpec;
-layout (location = 3) out vec4 gEffects;
-layout (location = 4) out vec4 gLightingSpec;
+// layout (location = 0) out vec3 gPosition;
+// layout (location = 1) out vec3 gNormal;
+// layout (location = 2) out vec4 gAlbedoSpec;
+// layout (location = 3) out vec4 gEffects;
+layout (location = 0) out vec4 gLightingSpec;
 
 
 uniform sampler2D inPosition;

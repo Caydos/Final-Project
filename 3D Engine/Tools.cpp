@@ -34,23 +34,6 @@ void Tools::Initialize(GameData* _gameData)
 	//directionalLight->SetName("Directional");
 	//directionalLight->SetActive(true);
 
-	//Lighting::Light flashLight2;
-	//flashLight2.SetType(Lighting::LightType::SPOT);
-	//flashLight2.SetAmbient(glm::vec3(0.0f, 0.0f, 0.0f));
-	//flashLight2.SetDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
-	//flashLight2.SetSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
-	//flashLight2.SetConstant(1.0f);
-	//flashLight2.SetLinear(0.09f);
-	//flashLight2.SetQuadratic(0.0032f);
-
-	//flashLight2.SetCutOff(90.5f);
-	//flashLight2.SetOuterCutOff(90.5f);
-	//flashLight2.SetName("FlashLight");
-	//flashLight2.SetActive(true);
-	//Scene::Lights::InsertLight(_gameData, flashLight2);
-
-	//Scene::Lights::UpdateShader(_gameData);
-
 	spot = Scene::Lights::CreateSpot();
 	spot->activation = 1.0f;
 	spot->ambient = glm::vec3(0.0f,0.0f,0.0f);
@@ -140,22 +123,8 @@ void Tools::Tick(GameData* _gameData)
 	Inputs(_gameData);
 	spot->position = _gameData->camera->Position;
 	spot->direction = _gameData->camera->Front;
-	//spot->direction = glm::vec3(0.0,-1.0,0.0);
-	//std::cout << spot->active << std::endl;
 	Lighting::UpdateSpot(spot);
 	Scene::Lights::UpdateSpot(spot);
-	//std::vector<Lighting::Light>* lights = Scene::Lights::GetLights();
-	//for (size_t i = 0; i < lights->size(); i++)
-	//{
-	//	if (lights->at(i).GetName() == "FlashLight")
-	//	{
-	//		Camera* cam = Scene::World::GetCamera();
-	//		flashLight = &lights->at(i);
-	//		flashLight->SetPosition(cam->Position);
-	//		flashLight->SetDirection(cam->Front);
-	//		Scene::Lights::UpdateShader(_gameData);
-	//	}
-	//}
 
 	Scene::Tick(_gameData);
 	// Needs to be called after the inputs that enables it

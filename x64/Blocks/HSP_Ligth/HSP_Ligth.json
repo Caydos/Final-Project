@@ -1,23 +1,10 @@
 {
     "attributes":
     {
-		"scale": [0.5,0.05,0.5],
+		"scale": 0.05,
 		"lightDependent": true,
         "diffuse": [1.0, 0.5, 0.31],
         "specular": [0.5, 0.5, 0.5],
-        "shininess": 32.0,
-        "light":
-        {
-            "position": [0.0,0.0,0.0],
-            "direction": [0.0,-1.0,0.0],
-            "ambient": [0.0,0.0,0.0],
-            "diffuse": [0.228,0.228,0.228],
-            "specular": [0.0,0.0,0.0],
-            "constant":0.0,
-            "linear":0.189,
-            "quadratic":0.06,
-            "cutOff":0.0,
-            "outerCutOff":96.481
-        }
+        "shininess": 32.0
     }
 }

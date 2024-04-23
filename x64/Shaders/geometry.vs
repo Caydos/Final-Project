@@ -17,7 +17,7 @@ uniform bool instanceUsage;
 void main()
 {
     mat4 effectiveModel = instanceUsage ? aMatrice : model;
-
+    mat3 normalTransformation = mat3(transpose(inverse(effectiveModel)));
     vec3 tangent;
     vec3 bitangent;
     // Quad automation (only for quads)
@@ -46,15 +46,20 @@ void main()
         tangent = vec3(1.0, 0.0, 0.0);
         bitangent = vec3(0.0, 0.0, 1.0);
     }
-    {//Better normal interpolation (A bit more calculations ofc) - Gram-Schmidt process
-        tangent = vec3(vec4(tangent,0.0) * effectiveModel);
-        bitangent = vec3(vec4(bitangent,0.0) * effectiveModel);
+    tangent = normalize(normalTransformation * tangent);
+    bitangent = normalize(normalTransformation * bitangent);
+    TBN = mat3(tangent, bitangent, normalize(normalTransformation * aNormal));
 
-        tangent = normalize(tangent - dot(tangent, aNormal) * aNormal);
-        bitangent = cross(aNormal, tangent);
-    }
+    
+    // {//Better normal interpolation (A bit more calculations ofc) - Gram-Schmidt process
+    //     tangent = vec3(vec4(tangent,0.0) * effectiveModel);
+    //     bitangent = vec3(vec4(bitangent,0.0) * effectiveModel);
+
+    //     tangent = normalize(tangent - dot(tangent, aNormal) * aNormal);
+    //     bitangent = cross(aNormal, tangent);
+    // }
     // Create TBN matrix
-    TBN = mat3(tangent, bitangent, aNormal);
+    // TBN = mat3(tangent, bitangent, aNormal);
 
     WorldPos = vec3(effectiveModel * vec4(aPos, 1.0));
     Normal = mat3(transpose(inverse(effectiveModel))) * aNormal;

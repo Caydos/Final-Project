@@ -8,6 +8,7 @@ static bool initialized = false;
 static unsigned int quadVAO = 0;
 static unsigned int quadVBO;
 static GLuint gBuffer;
+static GLuint gLightBuffer;
 static GLuint gPosition, gNormal, gAlbedoSpec, gEffects, gLightMap;
 static GLuint rboDepth;
 
@@ -46,15 +47,15 @@ void DeferredShading::Initialize(GameData* _gameData)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, gEffects, 0);
 
-	glGenTextures(1, &gLightMap);
-	glBindTexture(GL_TEXTURE_2D, gLightMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gLightMap, 0);
+	//glGenTextures(1, &gLightMap);
+	//glBindTexture(GL_TEXTURE_2D, gLightMap);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, gLightMap, 0);
 
-	unsigned int attachments[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
-	glDrawBuffers(5, attachments);
+	unsigned int attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+	glDrawBuffers(4, attachments);
 
 
 	glGenRenderbuffers(1, &rboDepth);
@@ -67,6 +68,32 @@ void DeferredShading::Initialize(GameData* _gameData)
 	{
 		std::cout << "Framebuffer is not complete!" << std::endl;
 	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+	glGenFramebuffers(1, &gLightBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, gLightBuffer);
+
+	glGenTextures(1, &gLightMap);
+	glBindTexture(GL_TEXTURE_2D, gLightMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, _gameData->resolution[0], _gameData->resolution[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gLightMap, 0);
+
+	unsigned int attachments2[1] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(1, attachments2);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _gameData->resolution[0], _gameData->resolution[1]);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cout << "Framebuffer is not complete!" << std::endl;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	_gameData->shaders[Shaders::GEOMETRY]->use();
 	_gameData->shaders[Shaders::GEOMETRY]->setInt("textureX", 0);
 	_gameData->shaders[Shaders::GEOMETRY]->setInt("normalMap", 1);
@@ -78,7 +105,6 @@ void DeferredShading::Initialize(GameData* _gameData)
 	_gameData->shaders[Shaders::RENDER]->setInt("gEffects", 3);
 	_gameData->shaders[Shaders::RENDER]->setInt("gLighting", 4);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//Skybox::Load(_gameData);
 
 	initialized = true;
@@ -146,6 +172,10 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 	glBindTexture(GL_TEXTURE_2D, gLightMap);
 
 	{//Lighting
+		glBindFramebuffer(GL_FRAMEBUFFER, gLightBuffer);
+		glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
+		glClearColor(clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
+		glClear(GL_DEPTH_BUFFER_BIT);
 		Scene::Lights::DrawSpots(_gameData);
 	}
 
@@ -164,6 +194,6 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
-
+	glEnable(GL_BLEND);
 	glActiveTexture(GL_TEXTURE0);
 }
