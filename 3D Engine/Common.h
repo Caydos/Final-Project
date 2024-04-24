@@ -21,8 +21,6 @@ enum Gamestate
 	MAIN_MENU,
 	TOOLS,
 	GAME,
-	VICTORY,
-	LOSE,
 };
 
 #include "Camera.h"

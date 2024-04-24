@@ -356,7 +356,7 @@ void Sets::Set::SetParent(Set* _parent, bool _boundsCalculation)
 	}
 }
 
-std::vector<Sets::Set*> Sets::Set::GetChilds()
+std::vector<Sets::Set*> Sets::Set::GetChildArray()
 {
 	return this->childs;
 }

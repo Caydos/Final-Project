@@ -53,7 +53,7 @@ void Tools::Initialize(GameData* _gameData)
 	spot->cutOff = glm::cos(glm::radians(20.0f));
 	spot->outerCutOff = glm::cos(glm::radians(40.0f));
 
-	Map::GenerateMaze(7, 2);
+	//Map::GenerateMaze(7, 2);
 	_gameData->dt = std::min(_gameData->dt, 1.0f);
 
 	//Sets::Set* room = Sets::Create();
@@ -159,9 +159,9 @@ void Tools::Tick(GameData* _gameData)
 	Lighting::UpdateSpot(spot);
 	Scene::Lights::UpdateSpot(spot);
 
-	Peds::Simulate(_gameData);
+	//Peds::Simulate(_gameData);
 
-	monster->Update(_gameData);
+	//monster->Update(_gameData);
 
 
 	Scene::Tick(_gameData);

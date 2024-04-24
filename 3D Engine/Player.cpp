@@ -62,31 +62,14 @@ void Players::Player::Control(GameData* _gameData)
 		}
 		if (_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
 		{
-			if (!this->footSteps->IsPlaying())
-			{
-				this->footSteps->Play();
-			}
 			this->ped->Run();
 			velocityVec.x *= this->ped->GetRunningMultiplier();
 			velocityVec.z *= this->ped->GetRunningMultiplier();
-			this->footSteps->SetPosition(this->ped->GetPosition());
-		}
-		else
-		{
-			if (this->footSteps->IsPlaying())
-			{
-				this->footSteps->Pause();
-			}
-		}
-		if (velocityVec.x != 0 || velocityVec.z)
-		{
-
 		}
 
 		this->ped->PushVelocity(velocityVec, true);
 		//this->ped->Update();
 	}
-	footSteps->SetPosition(this->ped->GetPosition());
 }
 std::vector<Players::Player*> playerPool;
 
