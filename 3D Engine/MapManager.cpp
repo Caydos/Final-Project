@@ -132,17 +132,18 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 {
 	if (_stageNb == 0)//!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		_stage.type = HOSPITALS;
+		_stage.type = LIBRARY;
 	}
 	else
 	{
-		_stage.type = LIBRARY;
+		_stage.type = HOSPITALS;
 	}
 
 	//_stage.type = _stageNb;
 
 	int infoRoomNb = Props::TextChunck(_stage.type).room.size();
 	_stage.txtRoom = Props::TextChunck(_stage.type).room;
+	//_stage.chunckList[randomRoom].nameRoom = _stage.txtRoom[randomRoomTxt]
 	//Map::ManagmentTextProps txtRoom = Props::TextChunck(_stage.type);
 	//std::cout << infoRoomNb << std::endl;
 
@@ -228,6 +229,7 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		} while (_stage.chunckList[randomExit].type == GARDEN);
 
 		_stage.chunckList[randomExit].type = EXIT;
+		_stage.chunckList[randomExit].nameRoom = Props::TextChunck(_stage.type).exit[_stageNb];
 	}
 
 	for (int i = 0; i < _mapW * _mapW; i++)
@@ -235,6 +237,7 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		if (_stageNb > 0 && map[_stageNb - 1].chunckList[i].type == Map::EXIT)
 		{
 			_stage.chunckList[i].type = Map::ENTRANCE;
+			_stage.chunckList[i].nameRoom = Props::TextChunck(_stage.type).entrance[_stageNb];
 		}
 	}
 
@@ -251,7 +254,6 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		} while (_stage.chunckList[randomRoom].type == ENTRANCE);
 		_stage.chunckList[randomRoom].type = ROOM;
 		_stage.chunckList[randomRoom].nameRoom = _stage.txtRoom[randomRoomTxt];
-		std::cout << _stage.txtRoom[randomRoomTxt] << std::endl;
 		_stage.txtRoom.erase(_stage.txtRoom.begin() + randomRoomTxt);
 	}
 	for (int i = 0; i < _mapW * _mapW; i++)
@@ -449,4 +451,9 @@ void Map::CreateMaze()
 			//}
 		}
 	}
+}
+
+std::vector<Map::Stage> Map::GetMap()
+{
+	return map;
 }

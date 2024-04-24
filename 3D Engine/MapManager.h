@@ -47,9 +47,8 @@ namespace Map
 	struct ManagmentTextProps
 	{
 		std::vector<const char*> room;
-		std::vector<const char*> library;
-		std::vector<const char*> labo;
-		std::vector<const char*> hall;
+		std::vector<const char*> entrance;
+		std::vector<const char*> exit;
 	};
 
 	struct ManagmentText
@@ -111,6 +110,7 @@ namespace Map
 	void StageManagment(Stage& stage, int _stageNb, int _mapW, int _nbStage);
 	void GenerateMaze(int _mapW, int _nbStage);
 	void CreateMaze();
+	std::vector<Map::Stage> GetMap();
 	//void Text();
 }
 #endif // !OBSTACLE_H

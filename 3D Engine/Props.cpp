@@ -9,19 +9,26 @@ Map::ManagmentTextProps Props::TextChunck(int _stageType)
 	if (_stageType == Map::HOSPITALS)
 	{
 		//text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json");
-		//text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json");
-		//text.room.push_back("../Sets/HOSPITAL/Map/HSP_WaitingRoom.json");
+		text.room.push_back("../Sets/HOSPITAL/Map/HSP_WaitingRoom.json");
 		text.room.push_back("../Sets/HOSPITAL/Map/HSP_WeirdRoomChair.json");
 		text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoom.json");
-		//text.room.push_back("../Sets/HOSPITAL/Map/HSP_GiantBedRoom.json");
-		text.room.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
-		text.room.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+		text.room.push_back("../Sets/HOSPITAL/Map/HSP_GiantBedRoom.json");
+		//text.room.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
+		//text.room.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
 
 	}
 	if (_stageType == Map::LIBRARY)
 	{
 		text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json");
 	}
+
+	text.exit.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+	text.exit.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+	text.exit.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+
+	text.entrance.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
+	text.entrance.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
+	text.entrance.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
 
 	return text;
 }
