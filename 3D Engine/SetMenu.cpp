@@ -11,7 +11,7 @@ static bool showFilenameInput = false; // To toggle the visibility of input fiel
 
 bool Sets::ChildTree(GameData* _gameData, Set* _parentSet)
 {
-	std::vector<Set*> childs = _parentSet->GetChilds();
+	std::vector<Set*> childs = _parentSet->GetChildArray();
 	std::string name = std::string("Childrens" + std::string("##sets-") + std::to_string((int)_parentSet));
 	if (ImGui::TreeNode(name.c_str()))
 	{

@@ -36,7 +36,7 @@ namespace Sets
 		Set* GetParent();
 		void SetParent(Set* _parent, bool _boundsCalculation = true);
 
-		std::vector<Set*> GetChilds();
+		std::vector<Set*> GetChildArray();
 		void AddChild(Set* _child, bool _boundsCalculation = true);
 		void RemoveChild(Set* _child, bool _boundsCalculation = true);
 		glm::mat4 GetBone();

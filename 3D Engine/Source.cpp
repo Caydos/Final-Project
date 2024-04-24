@@ -24,17 +24,6 @@ GameData* GetGameData() { return &gameData; }
 ALCdevice* device;
 ALCcontext* context;
 
-static Sprite winSprite;
-static Sprite loseSprite;
-void WinTick(GameData* _gameData)
-{
-	winSprite.Draw();
-}
-void LoseTick(GameData* _gameData)
-{
-	loseSprite.Draw();
-}
-
 int main()
 {
 	//{//Audio
@@ -106,9 +95,7 @@ int main()
 
 	gameData.gameStates[TOOLS] = &Tools::Tick;
 	gameData.gameStates[GAME] = &Scritping::Tick;
-	gameData.gameStates[VICTORY] = &WinTick;
-	gameData.gameStates[LOSE] = &LoseTick;
-	gameData.gameState = TOOLS;
+	gameData.gameState = GAME;
 
 #ifdef _DEBUG
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -126,8 +113,6 @@ int main()
 	ImGui_ImplGlfw_InitForOpenGL(gameData.window.GetWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 430 core");
 
-	winSprite.Load("../Textures/ScreenWin.png", glm::vec3(0, 0, 0), glm::vec3(1920, 1080, 0), 1);
-	loseSprite.Load("../Textures/ScreenLoose.png", glm::vec3(0, 0, 0), glm::vec3(1920, 1080, 0), 1);
 	// Initialize variables
 	float lastFPSCalculationTime = 0.0f;
 	int frameCount = 0;
