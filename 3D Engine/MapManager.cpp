@@ -128,7 +128,7 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 {
 	if (_stageNb == 0)//!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		_stage.type = HOSPITALS;
+		_stage.type = LIBRARY;
 	}
 	else
 	{
@@ -138,6 +138,7 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 	//_stage.type = _stageNb;
 
 	int infoRoomNb = Props::TextChunck(_stage.type).room.size();
+	_stage.txtRoom = Props::TextChunck(_stage.type).room;
 	//Map::ManagmentTextProps txtRoom = Props::TextChunck(_stage.type);
 	//std::cout << infoRoomNb << std::endl;
 
@@ -175,8 +176,6 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		chunck.size = NORMAL * NB_CELL;
 		chunck.w = CELL_W / NORMAL;
 		chunck.txt = InitText(NORMAL);
-
-		chunck.txtRoom = Props::TextChunck(_stage.type).room;
 
 		if (_stage.type == HOSPITALS)
 		{
@@ -225,10 +224,6 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		} while (_stage.chunckList[randomExit].type == GARDEN);
 
 		_stage.chunckList[randomExit].type = EXIT;
-		//if (_stageNb < _nbStage)
-		//{
-		//	map[_stageNb + 1].chunckList[randomExit].type = ENTRANCE;
-		//}
 	}
 
 	for (int i = 0; i < _mapW * _mapW; i++)
@@ -242,6 +237,7 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 	for (int i = 0; i < infoRoomNb; i++)
 	{
 		int randomRoom = 0;
+		int randomRoomTxt = rand() % _stage.txtRoom.size();
 		do
 		{
 			do
@@ -250,6 +246,9 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 			} while (_stage.chunckList[randomRoom].type == GARDEN);
 		} while (_stage.chunckList[randomRoom].type == ENTRANCE);
 		_stage.chunckList[randomRoom].type = ROOM;
+		_stage.chunckList[randomRoom].nameRoom = _stage.txtRoom[randomRoomTxt];
+		std::cout << _stage.txtRoom[randomRoomTxt] << std::endl;
+		_stage.txtRoom.erase(_stage.txtRoom.begin() + randomRoomTxt);
 	}
 	for (int i = 0; i < _mapW * _mapW; i++)
 	{

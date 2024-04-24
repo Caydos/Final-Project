@@ -304,7 +304,7 @@ std::vector<Map::Decor> Props::Generate(Map::Cell _cell)
 
 
 /////SPAWN ROOM/////
-std::vector<Map::Decor> Props::GenerateRoom(Map::Chunck _chunk)
+std::vector<Map::Decor> Props::GenerateRoom(Map::Chunck& _chunk)
 {
 	////////////////////////////////////////////////// INIT Room ///////////////////////////////////////////////////////
 
@@ -313,16 +313,14 @@ std::vector<Map::Decor> Props::GenerateRoom(Map::Chunck _chunk)
 	std::vector<Map::Decor> roomList;
 
 	Map::Decor room;
-	int randomRoom = 0;
-	randomRoom = rand() % _chunk.txtRoom.size();
 
-	room.pos = glm::vec3(_chunk.cellList[0].ground[0].pos.x - BRICK_W / 2, _chunk.cellList[0].ground[0].pos.y + BRICK_W + (BRICK_W / 5), _chunk.cellList[0].ground[0].pos.z);
+	room.pos = glm::vec3(_chunk.cellList[0].ground[0].pos.x - BRICK_W / 2, _chunk.cellList[0].ground[0].pos.y + BRICK_W + (BRICK_W / 5), _chunk.cellList[0].ground[0].pos.z + BRICK_W/2);
 	room.rot = glm::vec3(0, 0, 0);
 	room.isVisible = true;
-	room.name = _chunk.txtRoom[randomRoom]  /*"../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json"*/;
+	room.name = _chunk.nameRoom  /*"../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json"*/;
 	roomList.push_back(room);
-	std::cout << _chunk.txtRoom[randomRoom] << std::endl;
-	_chunk.txtRoom.erase(_chunk.txtRoom.begin() + randomRoom);
+	//std::cout << _chunk.txtRoom[randomRoom] << std::endl;
+	//_chunk.txtRoom.erase(_chunk.txtRoom.begin() + randomRoom);
 
 	return roomList;
 }

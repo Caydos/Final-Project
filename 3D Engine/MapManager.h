@@ -95,7 +95,7 @@ namespace Map
 		float size;
 		float w;
 		ManagmentText txt;
-		std::vector<const char*> txtRoom;
+		const char* nameRoom;
 	};
 
 	struct Stage
@@ -104,6 +104,7 @@ namespace Map
 		int type;
 		float sizeOf;
 		int hightScale;
+		std::vector<const char*> txtRoom;
 	};
 
 	ManagmentText InitText(int _size);
