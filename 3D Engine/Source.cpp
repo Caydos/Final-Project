@@ -94,7 +94,7 @@ int main()
 
 
 	gameData.gameStates[TOOLS] = &Tools::Tick;
-	gameData.gameStates[GAME] = &Scritping::Tick;
+	gameData.gameStates[GAME] = &Scripting::Tick;
 	gameData.gameState = GAME;
 
 #ifdef _DEBUG

@@ -111,6 +111,8 @@ namespace Map
 	void StageManagment(Stage& stage, int _stageNb, int _mapW, int _nbStage);
 	void GenerateMaze(int _mapW, int _nbStage);
 	void CreateMaze();
+
+	Stage* GetStage(Map::StageEnum _type);
 	//void Text();
 }
 #endif // !OBSTACLE_H

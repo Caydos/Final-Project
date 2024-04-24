@@ -9,6 +9,8 @@
 #include "Sprite.h"
 #include "Audio.h"
 #include "Crosshair.h"
+#include "Hospital.h"
+
 
 static bool initialized = false;
 static Players::Player* player = nullptr;
@@ -25,7 +27,6 @@ static glm::vec3 spawnPoint(11.05, 1.850, 21.250);
 static float spawnYaw = 0.0f;
 
 
-
 void Generation()
 {
 	Clock loadingClock;
@@ -33,10 +34,12 @@ void Generation()
 	Map::GenerateMaze(7, 1);
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	
+
+
 	generated = true;
 }
 
-void Scritping::Tick(GameData* _gameData)
+void Scripting::Tick(GameData* _gameData)
 {
 	if (!initialized)
 	{
@@ -105,6 +108,8 @@ void Scritping::Tick(GameData* _gameData)
 		mazeThread.detach();
 
 
+		//Hospital::Initialize(_gameData);
+
 		initialized = true;
 	}
 	Scene::Tick(_gameData);
@@ -136,10 +141,16 @@ void Scritping::Tick(GameData* _gameData)
 			{
 				player->GetPed()->SetPosition(spawnPoint);
 			}
+			Hospital::Tick(_gameData);
 		}
 	}
 	else
 	{
 		LoadingScreen::Render(_gameData);
 	}
+}
+
+Players::Player* Scripting::GetPlayer()
+{
+	return player;
 }

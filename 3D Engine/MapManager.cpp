@@ -456,3 +456,15 @@ void Map::CreateMaze()
 		}
 	}
 }
+
+Map::Stage* Map::GetStage(Map::StageEnum _type)
+{
+	for (size_t i = 0; i < map.size(); i++)
+	{
+		if (map[i].type == _type)
+		{
+			return &map[i];
+		}
+	}
+	return nullptr;
+}
