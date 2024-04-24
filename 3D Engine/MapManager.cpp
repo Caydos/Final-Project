@@ -31,16 +31,20 @@ Map::ManagmentText Map::InitText(int _size)
 		text.roof.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
 		text.roof.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
 
-		text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
-		text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
+		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
+		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
+		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
+		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
-		text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
-		text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
+		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
+		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
+		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
+		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
 
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
@@ -128,11 +132,11 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 {
 	if (_stageNb == 0)//!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		_stage.type = LIBRARY;
+		_stage.type = HOSPITALS;
 	}
 	else
 	{
-		_stage.type = HOSPITALS;
+		_stage.type = LIBRARY;
 	}
 
 	//_stage.type = _stageNb;
