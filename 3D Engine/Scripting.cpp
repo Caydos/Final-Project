@@ -9,10 +9,12 @@
 #include "Sprite.h"
 #include "Audio.h"
 #include "Crosshair.h"
+#include "Interaction.h"
 #include "Hospital.h"
 
 
 static bool initialized = false;
+std::thread interactionThread;
 static Players::Player* player = nullptr;
 static unsigned int FPVCam;
 static Lighting::Spot* flashLight;
@@ -31,11 +33,8 @@ void Generation()
 {
 	Clock loadingClock;
 	loadingClock.Restart();
-	Map::GenerateMaze(7, 1);
+	Map::GenerateMaze(7, 2);
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
-	
-
-
 	generated = true;
 }
 
@@ -43,6 +42,10 @@ void Scripting::Tick(GameData* _gameData)
 {
 	if (!initialized)
 	{
+		// WARNING : ZOMBIE THREAD RN
+		interactionThread = std::thread(&Interactions::Thread, true);
+		interactionThread.detach();
+
 		Scene::Initialize(_gameData);
 		Scene::World::SetSkyboxState(false);
 
@@ -68,11 +71,11 @@ void Scripting::Tick(GameData* _gameData)
 				break;
 			}
 		}
-	
+
 		playerPed->SetCamera(_gameData->camera);
 		playerPed->SetBodyType(Physics::Type::RIGID);
 		player->SetPed(playerPed);
-		playerPed->SetAdditionalRotation(glm::vec3(0.0,-90.0,0.0));
+		playerPed->SetAdditionalRotation(glm::vec3(0.0, -90.0, 0.0));
 
 		playerPed->SetPosition(spawnPoint, true);
 		playerPed->SetRotation(glm::vec3(0.0, spawnYaw, 0.0), true);
@@ -86,11 +89,6 @@ void Scripting::Tick(GameData* _gameData)
 		//directionalLight->SetDirection(glm::vec3(0.0f, 1.0f, 0.0f));
 		//directionalLight->SetName("Directional");
 		//directionalLight->SetActive(true);
-
-		//flashLight->SetCutOff(90.339f);
-		//flashLight->SetOuterCutOff(90.764f);
-		//flashLight->SetName("FlashLight");
-		//flashLight->SetActive(false);
 
 
 		flashLight = Scene::Lights::CreateSpot();
@@ -106,6 +104,9 @@ void Scripting::Tick(GameData* _gameData)
 
 		mazeThread = std::thread(Generation);
 		mazeThread.detach();
+
+
+		Hospital::RegisterInteractions();
 
 		initialized = true;
 	}
@@ -138,8 +139,8 @@ void Scripting::Tick(GameData* _gameData)
 			{
 				player->GetPed()->SetPosition(spawnPoint);
 			}
-			Hospital::Tick(_gameData);
 		}
+		Hospital::Tick(_gameData);
 	}
 	else
 	{
@@ -150,4 +151,10 @@ void Scripting::Tick(GameData* _gameData)
 Players::Player* Scripting::GetPlayer()
 {
 	return player;
+}
+
+
+Peds::Ped* Scripting::GetPlayerPed()
+{
+	return player->GetPed();
 }

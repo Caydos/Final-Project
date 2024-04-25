@@ -87,7 +87,7 @@ namespace Interactions
 		((interaction.SerializeArg(_args)), ...);
 		interaction.buffer[interaction.bufferSize - 2] = END_CHARACTER;
 		interaction.buffer[interaction.bufferSize - 1] = '\0';
-		Interaction::AddWaiting(interaction.buffer);
+		AddWaiting(interaction.buffer);
 		delete[] targetString;
 		delete[] interaction.buffer;
 		interaction.buffer = nullptr;

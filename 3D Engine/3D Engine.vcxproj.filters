@@ -178,6 +178,12 @@
     <Filter Include="Source Files\Game\Scripting\Interaction">
       <UniqueIdentifier>{5967bd4f-65f2-4f36-a3cc-2466fb62476e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripting\Levels\Hospital">
+      <UniqueIdentifier>{1b41de48-8d35-4927-85ab-a7cef2f2a6f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Levels\Hospital\KeyPad">
+      <UniqueIdentifier>{0d425235-ec70-4ef1-95d9-56586a134302}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -348,14 +354,17 @@
     <ClCompile Include="Lighting.cpp">
       <Filter>Source Files\Engines\Rendering\Visual\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="Hospital.cpp">
-      <Filter>Source Files\Game\Scripting\Levels</Filter>
-    </ClCompile>
     <ClCompile Include="MapManager.cpp">
       <Filter>Source Files\Game\Maze</Filter>
     </ClCompile>
     <ClCompile Include="Interaction.cpp">
       <Filter>Source Files\Game\Scripting\Interaction</Filter>
+    </ClCompile>
+    <ClCompile Include="Hospital.cpp">
+      <Filter>Source Files\Game\Scripting\Levels\Hospital</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyPad.cpp">
+      <Filter>Source Files\Game\Scripting\Levels\Hospital\KeyPad</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -542,14 +551,17 @@
     <ClInclude Include="Lighting.h">
       <Filter>Source Files\Engines\Rendering\Visual\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="Hospital.h">
-      <Filter>Source Files\Game\Scripting\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="MapManager.h">
       <Filter>Source Files\Game\Maze</Filter>
     </ClInclude>
     <ClInclude Include="Interaction.h">
       <Filter>Source Files\Game\Scripting\Interaction</Filter>
+    </ClInclude>
+    <ClInclude Include="Hospital.h">
+      <Filter>Source Files\Game\Scripting\Levels\Hospital</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyPad.h">
+      <Filter>Source Files\Game\Scripting\Levels\Hospital\KeyPad</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

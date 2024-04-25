@@ -132,11 +132,11 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 {
 	if (_stageNb == 0)//!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		_stage.type = LIBRARY;
+		_stage.type = HOSPITALS;
 	}
 	else
 	{
-		_stage.type = HOSPITALS;
+		_stage.type = LIBRARY;
 	}
 
 	//_stage.type = _stageNb;
@@ -463,3 +463,41 @@ std::vector<Map::Stage> Map::GetMap()
 {
 	return map;
 }
+
+
+Map::Stage* Map::GetStage(Map::StageEnum _stageEnum)
+{
+	for (int i = 0; i < map.size(); i++)
+	{
+		if (map[i].type == _stageEnum)
+		{
+			return &map[i];
+		}
+	}
+	return nullptr;
+}
+
+Sets::Set* Map::SearchForSetInStage(Stage* _stage, const char* _roomName)
+{
+	for (size_t chunkId = 0; chunkId < _stage->chunckList.size(); chunkId++)
+	{
+		if (_stage->chunckList[chunkId].nameRoom == nullptr)
+		{
+			continue;
+		}
+
+		if (!strcmp(_roomName, _stage->chunckList[chunkId].nameRoom))
+		{
+			std::vector<Map::Decor> decors = _stage->chunckList[chunkId].decor;
+			for (size_t i = 0; i < decors.size(); i++)
+			{
+				if (!strcmp(_roomName, decors[i].name))
+				{
+					return decors[i].decor;
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+

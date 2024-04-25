@@ -164,6 +164,16 @@ void Peds::Ped::SetAdditionalRotation(glm::vec3 _rotation)
 	this->additionalRotation = _rotation;
 }
 
+void Peds::Ped::SetHeading(float _heading)
+{
+	this->SetRotation(glm::vec3(.0f, _heading, .0f) + additionalRotation);
+	if (this->camera != nullptr)
+	{
+		this->camera->Yaw = -270 + _heading;
+		//this->SetRotation(glm::vec3(.0f, -this->camera->Yaw + 90.0, .0f) + additionalRotation);
+	}
+}
+
 
 std::vector<Peds::Ped*> pedPool;
 

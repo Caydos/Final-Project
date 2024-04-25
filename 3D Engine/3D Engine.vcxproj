@@ -166,6 +166,7 @@
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="KeyPad.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="LightMenu.cpp" />
     <ClCompile Include="LightScene.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="Hospital.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Inventory.h" />
+    <ClInclude Include="KeyPad.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LightMenu.h" />
     <ClInclude Include="Lighting.h" />

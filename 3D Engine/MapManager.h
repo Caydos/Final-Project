@@ -111,6 +111,8 @@ namespace Map
 	void GenerateMaze(int _mapW, int _nbStage);
 	void CreateMaze();
 	std::vector<Map::Stage> GetMap();
+	Stage* GetStage(Map::StageEnum _stageEnum);
+	Sets::Set* SearchForSetInStage(Stage* _stage, const char* _roomName);
 	//void Text();
 }
 #endif // !OBSTACLE_H
