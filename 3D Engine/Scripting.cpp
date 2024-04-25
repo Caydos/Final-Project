@@ -107,9 +107,6 @@ void Scripting::Tick(GameData* _gameData)
 		mazeThread = std::thread(Generation);
 		mazeThread.detach();
 
-
-		//Hospital::Initialize(_gameData);
-
 		initialized = true;
 	}
 	Scene::Tick(_gameData);
@@ -122,7 +119,7 @@ void Scripting::Tick(GameData* _gameData)
 			Crosshairs::Get()->SetColor(Colors::White);
 			player->Control(_gameData);
 			Peds::Simulate(_gameData);
-			//player->GetPed()->DrawBoundingBox();
+
 			flashLight->position = _gameData->camera->Position;
 			flashLight->direction = _gameData->camera->Front;
 			Lighting::UpdateSpot(flashLight);

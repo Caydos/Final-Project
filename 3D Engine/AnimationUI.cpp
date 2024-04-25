@@ -2,7 +2,7 @@
 #include "Clock.h"
 #include "Set.h"
 #include "Editor.h"
-#define bzero(b,len) (memset((b), '\0', (len)), (void) 0)  
+
 
 static bool loopTimer = false;
 static std::vector<Animations::Animation>* animationCreation = nullptr;

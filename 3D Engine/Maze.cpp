@@ -360,6 +360,7 @@ void Maze::InitExit(Map::Stage& _stage, int _mapW, int _stageNb) // !!!!!!!!! EX
 					}
 				}
 			}
+			_stage.chunckList[map].decor = Props::GenerateRoom(_stage.chunckList[map]);
 		}
 	}
 }

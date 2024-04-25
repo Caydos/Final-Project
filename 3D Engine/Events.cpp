@@ -4,7 +4,6 @@
 #include <WinSock2.h>
 #include "EventListing.h"
 
-#define bzero(b,len) (memset((b), '\0', (len)), (void) 0)  
 
 static bool initialized;
 
@@ -60,8 +59,8 @@ public:
 	}
 };
 
-Event* events = nullptr;
-unsigned int count = 0;
+static Event* events = nullptr;
+static unsigned int count = 0;
 
 void Events::Listener(int socketfd)
 {

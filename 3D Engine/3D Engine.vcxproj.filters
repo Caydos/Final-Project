@@ -175,6 +175,9 @@
     <Filter Include="Source Files\Game\Scripting\Levels">
       <UniqueIdentifier>{684d8207-1a03-4c0c-99a8-cba8e3c17ae7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripting\Interaction">
+      <UniqueIdentifier>{5967bd4f-65f2-4f36-a3cc-2466fb62476e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -350,6 +353,9 @@
     </ClCompile>
     <ClCompile Include="MapManager.cpp">
       <Filter>Source Files\Game\Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="Interaction.cpp">
+      <Filter>Source Files\Game\Scripting\Interaction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -541,6 +547,9 @@
     </ClInclude>
     <ClInclude Include="MapManager.h">
       <Filter>Source Files\Game\Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="Interaction.h">
+      <Filter>Source Files\Game\Scripting\Interaction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
