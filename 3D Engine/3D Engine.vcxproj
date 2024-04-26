@@ -161,6 +161,7 @@
     <ClCompile Include="DeferredShading.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="FrustumCulling.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GhostBlocks.cpp" />
     <ClCompile Include="Hospital.cpp" />
     <ClCompile Include="Instance.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="EventListing.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="FrustumCulling.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Hospital.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Inventory.h" />

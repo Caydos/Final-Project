@@ -33,7 +33,7 @@ void Generation()
 {
 	Clock loadingClock;
 	loadingClock.Restart();
-	Map::GenerateMaze(7, 2);
+	Map::GenerateMaze(8, 1);
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	generated = true;
 }
