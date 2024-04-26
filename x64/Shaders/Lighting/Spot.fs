@@ -74,6 +74,6 @@ void main()
     //     return;
     // }
 
-    gLightingSpec = vec4(CalcSpotLight(norm, WorldPos, viewDir, Albedo, Specular, Shininess*100), 1.0);
-    // gLightingSpec = vec4(Albedo, 1.0);
+    // gLightingSpec = vec4(CalcSpotLight(norm, WorldPos, viewDir, Albedo, Specular, Shininess*100), 1.0);
+    gLightingSpec = vec4(Albedo, 1.0);
 }

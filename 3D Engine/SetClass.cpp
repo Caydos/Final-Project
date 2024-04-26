@@ -229,6 +229,17 @@ void Sets::Set::CheckVisibility()
 	}
 	//else if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
 
+
+	if (glm::distance(GetGameData()->camera->Position, this->boundingBox.GetBox().min) > 50.0f
+		&& glm::distance(GetGameData()->camera->Position, this->boundingBox.GetBox().max) > 50.0f)
+	{
+		if (!this->visible) { return; }
+		this->visible = false;
+		this->AppplyVisibility();
+		return;
+	}
+
+
 	if (FrustumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.GetBox().min, this->boundingBox.GetBox().max))
 	{
 		if (this->visible) { return; }
@@ -730,7 +741,7 @@ void Sets::Set::DrawBoundingBox()
 	this->boundingBox.Draw();
 }
 
-glm::vec3 Sets::Set::ComputeCollisions(Bounds::Box _boudingBox,glm::vec3 _velocity)
+glm::vec3 Sets::Set::ComputeCollisions(Bounds::Box _boudingBox, glm::vec3 _velocity)
 {
 	if (Collisions::CalculateCollisionResponse(_boudingBox, this->GetBoundingBox(), _velocity) != glm::vec3(0.0))
 	{

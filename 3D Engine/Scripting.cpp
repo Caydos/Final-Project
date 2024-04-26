@@ -73,7 +73,7 @@ void Scripting::Tick(GameData* _gameData)
 		}
 
 		playerPed->SetCamera(_gameData->camera);
-		playerPed->SetBodyType(Physics::Type::RIGID);
+		playerPed->SetBodyType(Physics::Type::GHOST);
 		player->SetPed(playerPed);
 		playerPed->SetAdditionalRotation(glm::vec3(0.0, -90.0, 0.0));
 
