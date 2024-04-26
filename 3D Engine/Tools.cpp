@@ -25,7 +25,6 @@ static Players::Player* player = nullptr;
 
 void Tools::Initialize(GameData* _gameData)
 {
-	std::cout << "Initialization" << std::endl;
 	Scene::Initialize(_gameData);
 	Scene::World::SetSkyboxState(false);
 

@@ -33,6 +33,7 @@ namespace Peds
 		bool GetCollision();
 
 		void SetAdditionalRotation(glm::vec3 _rotation);
+		void SetHeading(float _heading);
 	private:
 		std::shared_mutex mutex;
 		Camera* camera;

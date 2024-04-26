@@ -92,7 +92,6 @@ public:
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		this->SetInitialize(true);
-
 	}
 
 	Colors::Color GetColor() { return this->color; }
@@ -169,7 +168,7 @@ private:
 	Colors::Color color;
 	float vertices[SPRITE_VERTEX_COUNT];
 	int vertexCount;
-	int mode;
+	int mode = 1;
 };
 
 
