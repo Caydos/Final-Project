@@ -35,7 +35,7 @@ Map::ManagmentText Map::InitText(int _size)
 		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
 		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
 		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
-		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
+		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
@@ -56,25 +56,25 @@ Map::ManagmentText Map::InitText(int _size)
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
+
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.garden.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 	}
-
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 
 	if (_size == TINY)
 	{

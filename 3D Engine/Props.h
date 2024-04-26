@@ -25,6 +25,9 @@ namespace Props
 
 	std::vector<Map::Decor> Generate(Map::Cell _cell);
 	std::vector<Map::Decor> GenerateRoom(Map::Chunck& _chunk);
+	std::vector<Map::Decor> GenerateColumn(Map::Cell _cell);
+	std::vector<Map::Decor> GenerateLight(Map::Cell _cell);
+	std::vector<Map::Decor> GeneratePropsForCell(Map::Cell& cell, int _random);
 	Map::ManagmentTextProps TextChunck(int _stageType);
 }
 #endif // !OBSTACLE_H
