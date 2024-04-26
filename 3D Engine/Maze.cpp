@@ -29,8 +29,8 @@ void Maze::InitCell(Map::Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 					///////////////////////////////////////////////////// INIT ROOF //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 					Map::Decor roof;
 
-					roof.pos = (glm::vec3(w * column + mapColumn * MAP_W, _stage.sizeOf * CELL_W + BRICK_W - BRICK_W / 4, w * line - BRICK_W / 2 + mapLine * MAP_W + BRICK_W));
-					roof.isVisible = false;
+					roof.pos = (glm::vec3(w * column + mapColumn * MAP_W, _stage.hightScale * CELL_W + BRICK_W - BRICK_W / 4 - CELL_W, w * line - BRICK_W / 2 + mapLine * MAP_W + BRICK_W));
+					roof.isVisible = true;
 					roof.name = txt.roof[_stage.chunckList[mapColumn + mapLine * _mapW].type];
 					cell.ground.push_back(roof);
 
@@ -309,6 +309,10 @@ void Maze::InitGarden(Map::Stage& _stage, int _mapW, int _stageNb)
 						}
 					}
 				}
+				for (int wall = 0; wall < _stage.chunckList[map].cellList[cell].wallList.size(); wall++)
+				{
+					_stage.chunckList[map].cellList[cell].wallList[wall].name = txt.garden[_stage.type];
+				}
 			}
 		}
 	}
@@ -326,7 +330,7 @@ void Maze::InitExit(Map::Stage& _stage, int _mapW, int _stageNb) // !!!!!!!!! EX
 		{
 			for (int cell = 0; cell < nbCell * nbCell; cell++)
 			{
-				_stage.chunckList[map].cellList[cell].ground[1].isVisible = false;
+				//_stage.chunckList[map].cellList[cell].ground[1].isVisible = false;
 
 				for (int wall = 0; wall < _stage.chunckList[map].cellList[cell].wallMissingList.size(); wall++)
 				{
@@ -440,6 +444,7 @@ void Maze::InitPlace(Map::Stage& _stage, int _mapW, int _stageNb) // !!!!!!!!! P
 				}
 
 				_stage.chunckList[map].cellList[cell].ground[1].isVisible = true;
+				_stage.chunckList[map].cellList[cell].type = CORRIDOR;
 			}
 		}
 	}
@@ -862,6 +867,16 @@ void Maze::InitHospital(Map::Stage& _stage, int _mapW, int _stageNb)
 			for (int cell = 0; cell < nbCell * nbCell; cell++)
 			{
 				_stage.chunckList[map].cellList[cell].props = Props::Generate(_stage.chunckList[map].cellList[cell]);
+			}
+		}
+
+		int randomColumnProps = 0;
+		randomColumnProps = rand() % 50;
+		for (int cell = 0; cell < nbCell * nbCell; cell++)
+		{
+			if (_stage.chunckList[map].type == Map::PLACE)
+			{
+				_stage.chunckList[map].cellList[cell].props = Props::GeneratePropsForCell(_stage.chunckList[map].cellList[cell], randomColumnProps);
 			}
 		}
 	}

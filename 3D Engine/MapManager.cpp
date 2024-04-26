@@ -17,8 +17,8 @@ Map::ManagmentText Map::InitText(int _size)
 		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //PARCEL
 		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //BALCONY
 		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //EMPTY
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //EMPTY
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //EMPTY
+		text.ground.push_back("../Sets/LIBRARY/Map/LBR_S.json"); //EMPTY
+		text.ground.push_back("../Sets/LIBRARY/Map/LBR_S.json"); //EMPTY
 
 		text.roof.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
 		text.roof.push_back("../Sets/HOSPITAL/Map/PLF_HSP.json");
@@ -35,7 +35,7 @@ Map::ManagmentText Map::InitText(int _size)
 		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
 		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
 		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
-		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
+		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
@@ -56,25 +56,25 @@ Map::ManagmentText Map::InitText(int _size)
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
+
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.garden.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 	}
-
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-	text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 
 	if (_size == TINY)
 	{
@@ -132,11 +132,11 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 {
 	if (_stageNb == 0)//!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		_stage.type = LIBRARY;
+		_stage.type = HOSPITALS;
 	}
 	else
 	{
-		_stage.type = HOSPITALS;
+		_stage.type = LIBRARY;
 	}
 
 	//_stage.type = _stageNb;
@@ -220,6 +220,14 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		}
 	}
 
+	for (int i = 0; i < _mapW * _mapW; i++)
+	{
+		if (_stageNb > 0 && map[_stageNb - 1].chunckList[i].type == Map::GARDEN)
+		{
+			_stage.chunckList[i].type = Map::GARDEN;
+		}
+	}
+
 	for (int i = 0; i < 1; i++)
 	{
 		int randomExit = 0;
@@ -229,16 +237,31 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		} while (_stage.chunckList[randomExit].type == GARDEN);
 
 		_stage.chunckList[randomExit].type = EXIT;
-		_stage.chunckList[randomExit].nameRoom = Props::TextChunck(_stage.type).exit[_stageNb];
+		_stage.chunckList[randomExit].nameRoom = Props::TextChunck(_stage.type).exit[_stage.type];
 	}
 
 	for (int i = 0; i < _mapW * _mapW; i++)
 	{
+
 		if (_stageNb > 0 && map[_stageNb - 1].chunckList[i].type == Map::EXIT)
 		{
 			_stage.chunckList[i].type = Map::ENTRANCE;
-			_stage.chunckList[i].nameRoom = Props::TextChunck(_stage.type).entrance[_stageNb];
+			_stage.chunckList[i].nameRoom = Props::TextChunck(_stage.type).entrance[_stage.type];
 		}
+	}
+
+	if (_stageNb == 0)
+	{
+		int randomEntrance = 0;
+		do
+		{
+			do
+			{
+				randomEntrance = rand() % sizeMap;
+			} while (_stage.chunckList[randomEntrance].type == GARDEN);
+		} while (_stage.chunckList[randomEntrance].type == EXIT);
+		_stage.chunckList[randomEntrance].type = ENTRANCE;
+		_stage.chunckList[randomEntrance].nameRoom = Props::TextChunck(_stage.type).entrance[_stage.type];
 	}
 
 	for (int i = 0; i < infoRoomNb; i++)
@@ -249,9 +272,12 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		{
 			do
 			{
-				randomRoom = rand() % sizeMap;
-			} while (_stage.chunckList[randomRoom].type == GARDEN);
-		} while (_stage.chunckList[randomRoom].type == ENTRANCE);
+				do
+				{
+					randomRoom = rand() % sizeMap;
+				} while (_stage.chunckList[randomRoom].type == GARDEN);
+			} while (_stage.chunckList[randomRoom].type == ENTRANCE);
+		} while (_stage.chunckList[randomRoom].type == EXIT);
 		_stage.chunckList[randomRoom].type = ROOM;
 		_stage.chunckList[randomRoom].nameRoom = _stage.txtRoom[randomRoomTxt];
 		_stage.txtRoom.erase(_stage.txtRoom.begin() + randomRoomTxt);
