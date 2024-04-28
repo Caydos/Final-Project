@@ -73,14 +73,14 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
-	//glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+	glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 		// Get the primary monitor
 	//GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 
 	//// Get the video mode for the primary monitor
 	//const GLFWvidmode* vidmode = glfwGetVideoMode(monitor);
 
-	glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+	//glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
 
 	gameData.window.Create("3D Rendering Engine", gameData.resolution[0], gameData.resolution[1]);
