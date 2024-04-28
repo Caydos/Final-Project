@@ -12,6 +12,7 @@ in mat3 TBN;
 
 uniform sampler2D textureX;
 uniform sampler2D normalMap;
+uniform sampler2D depthMap;
 
 uniform float shininess;
 

@@ -1,16 +1,26 @@
 #include "Hospital.h"
 #include "Sprite.h"
 #include "Interaction.h"
+#include "GameObject.h"
 #include "KeyPad.h"
-
 
 static bool initialized = false;
 static Map::Stage* stage = nullptr;
 Sets::Set* vendingMachine = nullptr;
 void Hospital::RegisterInteractions()
 {
-	Interactions::Register("KeyPad", &KeyPad::Interaction);
+	//Interactions::Register("KeyPad", &KeyPad::Interaction);
 }
+
+void HoveredVendingMachine()
+{
+	Scripting::SetCrosshairOpacity(1.0f);
+}
+void InteractVendingMachine(Sets::Set* _set)
+{
+	KeyPad::Interaction();
+}
+
 
 void Hospital::Initialize(GameData* _gameData)
 {
@@ -60,6 +70,12 @@ void Hospital::Initialize(GameData* _gameData)
 		Logger::Write("Unable to find spawn room in hospital stage\n");
 	}
 
+
+	if (vendingMachine != nullptr)
+	{
+		GameObjects::Register(vendingMachine, 2.0f, 1000.0, &HoveredVendingMachine, &InteractVendingMachine);
+	}
+
 	initialized = true;
 }
 
@@ -67,9 +83,17 @@ void Hospital::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
 	KeyPad::Tick(_gameData);
-	if (_gameData->window.IsKeyPressed(Keys::F4))
+	if (_gameData->window.IsFocused())
 	{
-		Interactions::Trigger("KeyPad", "");
+		if (vendingMachine != nullptr)
+		{
+			if (_gameData->window.IsKeyPressed(Keys::KP_0))
+			{
+				Peds::Ped* playerPed = Scripting::GetPlayerPed();
+				playerPed->SetPosition(vendingMachine->GetWorldPosition(), true);
+			}
+			vendingMachine->DrawBoundingBox();
+		}
 	}
 }
 

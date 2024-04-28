@@ -13,6 +13,10 @@ void Settings::Load(GameData* _gameData)
 		_gameData->settings.sentivity = savedSettingsObj["sensitivity"];
 		_gameData->camera->MouseSensitivity = _gameData->settings.sentivity;
 	}
+	if (savedSettingsObj.contains("renderDistance"))
+	{
+		_gameData->settings.renderDistance = savedSettingsObj["renderDistance"];
+	}
 	if (savedSettingsObj.contains("crosshair"))
 	{
 		std::string path = savedSettingsObj["crosshair"];

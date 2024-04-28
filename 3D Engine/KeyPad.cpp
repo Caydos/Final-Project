@@ -7,7 +7,7 @@ static std::shared_mutex mtx;
 static bool displayKeyPad = false;
 static Sprite keypadSprites[13];
 static const glm::vec2 keypadBackSize(486, 525);
-static const glm::vec2 keypadPosition(1920 / 2 - keypadBackSize.x, 1080 / 2 - keypadBackSize.y);
+static const glm::vec2 keypadPosition(1920- keypadBackSize.x, 1080- keypadBackSize.y);
 static const glm::vec2 keypadKeySize(133.5, 117.75);
 
 bool displayed = false;
@@ -70,7 +70,7 @@ void KeyPad::CleanUp()
 {
 }
 
-void KeyPad::Interaction(char** _args)
+void KeyPad::Interaction()
 {
 	std::unique_lock<std::shared_mutex> lock(mtx);
 	displayed = true;

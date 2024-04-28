@@ -106,13 +106,25 @@ void Peds::Ped::Simulate(GameData* _gameData)
 		{
 			if (sets[setId] == this) { continue; }
 			if (sets[setId]->GetName() == "Monster") { continue; }
-			Bounds::Box setBox = this->GetBoundingBox();
+
+			Bounds::Box actualBox = this->GetBoundingBox();
+			Bounds::Box testedBox = sets[setId]->GetBoundingBox();
+			float actualSize = glm::distance(actualBox.min, actualBox.max);
+			float testedSize = glm::distance(testedBox.min, testedBox.max);
+			glm::vec3 actualMidpoint = (actualBox.min + actualBox.max) / 2.0f;
+			glm::vec3 testedMidpoint = (testedBox.min + testedBox.max) / 2.0f;
+
+			if (glm::distance(actualMidpoint, testedMidpoint) > actualSize + testedSize)
+			{
+				continue;
+			}
+
 			glm::vec3 tempVelocity = this->body.velocity;
-			this->body.velocity = sets[setId]->ComputeCollisions(setBox, this->body.velocity);
+			this->body.velocity = sets[setId]->ComputeCollisions(actualBox, this->body.velocity);
 			if (tempVelocity.x != this->body.velocity.x || tempVelocity.z != this->body.velocity.z)
 			{
 				this->lastCollision = true;
-				std::cout << "test" << std::endl;
+				//std::cout << "test" << std::endl;
 			}
 			else if (tempVelocity.x)
 			{

@@ -76,6 +76,9 @@ namespace Blocks
 		Texture* GetNormalMap();
 		void SetNormalMap(Texture* _texture);
 
+		Texture* GetHeightMap();
+		void SetHeightMap(Texture* _texture);
+
 		Colors::Color GetColor();
 		void SetColor(Colors::Color _color);
 
@@ -117,7 +120,8 @@ namespace Blocks
 
 		Shaders::Shader* shader;
 		Texture* texture;
-		Texture* effects;
+		Texture* normal;
+		Texture* height;
 		Colors::Color color;
 
 		glm::vec3 scale;

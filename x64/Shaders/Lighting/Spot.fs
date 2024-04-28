@@ -1,8 +1,4 @@
 #version 430 core
-// layout (location = 0) out vec3 gPosition;
-// layout (location = 1) out vec3 gNormal;
-// layout (location = 2) out vec4 gAlbedoSpec;
-// layout (location = 3) out vec4 gEffects;
 layout (location = 0) out vec4 gLightingSpec;
 
 
@@ -22,6 +18,7 @@ in vec3 outSpecular;
 in float outConstant;
 in float outLinear;
 in float outQuadratic;
+in float outActivation;
 
 // calculates the color when using a spot light.
 vec3 CalcSpotLight(vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, float _specular, float _shininess)
@@ -56,6 +53,12 @@ uniform vec4 clearColor;
 uniform vec2 screenSize;
 void main() 
 {
+    if (outActivation == 0)
+    {
+        gLightingSpec = vec4(1.0,0.0,0.0,1.0);
+        discard;
+        // return;
+    }
     vec2 ndc = gl_FragCoord.xy / screenSize;
     vec3 WorldPos = texture(inPosition, ndc).rgb;
     vec3 Normal = texture(inNormal, ndc).rgb;
@@ -74,6 +77,6 @@ void main()
     //     return;
     // }
 
-    // gLightingSpec = vec4(CalcSpotLight(norm, WorldPos, viewDir, Albedo, Specular, Shininess*100), 1.0);
-    gLightingSpec = vec4(Albedo, 1.0);
+    gLightingSpec = vec4(CalcSpotLight(norm, WorldPos, viewDir, Albedo, Specular, Shininess*100), 1.0);
+    // gLightingSpec = vec4(Albedo, 1.0);
 }

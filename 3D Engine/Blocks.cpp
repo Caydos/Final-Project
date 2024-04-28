@@ -173,6 +173,10 @@ void Blocks::Load(std::string _name)
 			{
 				block->SetNormalMap(texture);
 			}
+			else if (filename_without_extension == "height")
+			{
+				block->SetHeightMap(texture);
+			}
 		}
 	}
 	block->SetShader(GetGameData()->shaders[Shaders::GEOMETRY]);

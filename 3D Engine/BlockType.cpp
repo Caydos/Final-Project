@@ -38,12 +38,22 @@ void Blocks::BlockType::SetTexture(Texture* _texture)
 
 Texture* Blocks::BlockType::GetNormalMap()
 {
-	return this->effects;
+	return this->normal;
 }
 
 void Blocks::BlockType::SetNormalMap(Texture* _texture)
 {
-	this->effects = _texture;
+	this->normal = _texture;
+}
+
+Texture* Blocks::BlockType::GetHeightMap()
+{
+	return this->height;
+}
+
+void Blocks::BlockType::SetHeightMap(Texture* _texture)
+{
+	this->height = _texture;
 }
 
 Colors::Color Blocks::BlockType::GetColor()
@@ -189,7 +199,9 @@ void Blocks::BlockType::Draw()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, this->texture->id);
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, this->effects->id);
+		glBindTexture(GL_TEXTURE_2D, this->normal->id);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, this->height->id);
 
 		if (this->color.values[3] > 0.0f)
 		{

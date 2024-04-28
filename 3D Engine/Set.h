@@ -56,6 +56,8 @@ namespace Sets
 		void SetPosition(float _x, float _y, float _z, bool _computeTransformation = true);
 		void SetPosition(glm::vec3 _position, bool _computeTransformation = true);
 
+		glm::vec3 GetWorldPosition();
+
 		void Move(glm::vec3 _position, bool _computeTransformation = true);
 		void Move(float _x, float _y, float _z, bool _computeTransformation = true);
 

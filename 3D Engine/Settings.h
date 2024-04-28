@@ -10,6 +10,7 @@ namespace Settings
 	struct Profile
 	{
 		float sentivity;
+		float renderDistance;
 	};
 	void Load(GameData* _gameData);
 	void Save(GameData* _gameData);

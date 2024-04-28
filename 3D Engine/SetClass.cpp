@@ -229,9 +229,9 @@ void Sets::Set::CheckVisibility()
 	}
 	//else if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
 
-
-	if (glm::distance(GetGameData()->camera->Position, this->boundingBox.GetBox().min) > 50.0f
-		&& glm::distance(GetGameData()->camera->Position, this->boundingBox.GetBox().max) > 50.0f)
+	GameData* _gameData = GetGameData();
+	if (glm::distance(_gameData->camera->Position, this->boundingBox.GetBox().min) > _gameData->settings.renderDistance
+		&& glm::distance(_gameData->camera->Position, this->boundingBox.GetBox().max) > _gameData->settings.renderDistance)
 	{
 		if (!this->visible) { return; }
 		this->visible = false;
@@ -521,6 +521,16 @@ void Sets::Set::SetPosition(glm::vec3 _position, bool _computeTransformation)
 	{
 		ApplyTransformation();
 	}
+}
+glm::vec3 Sets::Set::GetWorldPosition()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(*this->bone, scale, rotation, translation, skew, perspective);
+	return translation;
 }
 void Sets::Set::Move(glm::vec3 _position, bool _computeTransformation)
 {

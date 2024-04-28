@@ -8,7 +8,7 @@ namespace KeyPad
 	void Tick(GameData* _gameData);
 	void CleanUp();
 
-	void Interaction(char** _args);
+	void Interaction();
 }
 
 #endif // !KEYPAD_H

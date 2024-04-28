@@ -11,6 +11,7 @@
 #include "Crosshair.h"
 #include "Interaction.h"
 #include "Hospital.h"
+#include "GameObject.h"
 
 
 static bool initialized = false;
@@ -27,7 +28,9 @@ static Clock inputClock;
 
 static glm::vec3 spawnPoint(11.05, 1.850, 21.250);
 static float spawnYaw = 0.0f;
-
+static Sprite camOverlay;
+static Sprite crosshair;
+const float crosshairSize = 10.f;
 
 void Generation()
 {
@@ -61,6 +64,7 @@ void Scripting::Tick(GameData* _gameData)
 		playerPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_CharacterV3.json")));
 		playerPed->SetName("Character");
 		playerPed->SetPath("../Sets/MC/");
+		playerPed->SetScale(glm::vec3(1.5f), true);
 
 		std::vector<Sets::Set*> children = playerPed->GetChildArray();
 		for (size_t i = 0; i < children.size(); i++)
@@ -107,6 +111,10 @@ void Scripting::Tick(GameData* _gameData)
 
 
 		Hospital::RegisterInteractions();
+		camOverlay.Load("../Textures/Overlay.png", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1],0.0), 1);
+		crosshair.Load("../Textures/RoundCrossHair.png", 
+			glm::vec3(_gameData->resolution[0] / 2 - crosshairSize / 2, _gameData->resolution[1] / 2 - crosshairSize / 2,0.0), 
+			glm::vec3(crosshairSize, crosshairSize,0.0), 1);
 
 		initialized = true;
 	}
@@ -114,9 +122,10 @@ void Scripting::Tick(GameData* _gameData)
 
 	if (generated)
 	{
+		crosshair.SetOpacity(0.5f);
 		if (_gameData->window.IsFocused())
 		{
-			Crosshairs::Draw();
+			//Crosshairs::Draw();
 			Crosshairs::Get()->SetColor(Colors::White);
 			player->Control(_gameData);
 			Peds::Simulate(_gameData);
@@ -141,6 +150,11 @@ void Scripting::Tick(GameData* _gameData)
 			}
 		}
 		Hospital::Tick(_gameData);
+
+		GameObjects::Tick(_gameData);
+
+		crosshair.Draw();
+		camOverlay.Draw();
 	}
 	else
 	{
@@ -157,4 +171,9 @@ Players::Player* Scripting::GetPlayer()
 Peds::Ped* Scripting::GetPlayerPed()
 {
 	return player->GetPed();
+}
+
+void Scripting::SetCrosshairOpacity(float _opacity)
+{
+	crosshair.SetOpacity(_opacity);
 }
