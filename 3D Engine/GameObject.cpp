@@ -69,7 +69,9 @@ void GameObjects::Tick(GameData* _gameData)
 			{
 				//Interactions::Trigger(objectArray[objectId].interactionName.c_str());
 				objectArray[objectId].clock.Restart();
+				lock.unlock();//Dead lock prevention if need to Unregister the interaction
 				objectArray[objectId].interactFunction(objectArray[objectId].set);
+				lock.lock();
 			}
 			break;
 		}

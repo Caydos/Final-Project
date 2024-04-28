@@ -22,7 +22,10 @@ void Texture::LoadFromFile(const char* _path)
 	{
 		format = GL_RGBA;
 	}
-
+	if (glGetError() != GL_NO_ERROR)
+	{
+		std::cout << "Error before texture" << std::endl;
+	}
 	glGenTextures(1, &this->id);
 	if (glGetError() != GL_NO_ERROR) {
 		std::cerr << "Error after glGenTextures " << _path << std::endl;

@@ -7,6 +7,7 @@
 static bool initialized = false;
 static Map::Stage* stage = nullptr;
 Sets::Set* vendingMachine = nullptr;
+Sets::Set* elevator = nullptr;
 Sets::Set* entryRoom = nullptr;
 Sets::Set* exitRoom = nullptr;
 Sets::Set* waitingRoom = nullptr;
@@ -21,8 +22,22 @@ enum SocketNames
 	RED,
 	YELLOW
 };
+const char* cubesPaths[] = {
+	"../Sets/HOSPITAL/Gameplay/HSP_N7BB.json",
+	"../Sets/HOSPITAL/Gameplay/HSP_N5BV.json",
+	"../Sets/HOSPITAL/Gameplay/HSP_N9BR.json",
+	"../Sets/HOSPITAL/Gameplay/HSP_N1BJ.json",
+};
+const char* socketPaths[] = {
+	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockBlue.json",
+	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockGreen.json",
+	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockRed.json",
+	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockYellow.json",
+};
+
 Sets::Set* sockets[4] = { nullptr };
 Sets::Set* cubes[4] = { nullptr };
+bool validCubes[4] = { false };
 
 glm::vec3 socketInPosition(0.05, 0.05, 0.0);
 std::vector<glm::vec3> socketsPositions = {
@@ -38,15 +53,65 @@ void Hospital::RegisterInteractions()
 	//Interactions::Register("KeyPad", &KeyPad::Interaction);
 }
 
-void HoveredVendingMachine()
-{
-	Scripting::SetCrosshairOpacity(1.0f);
-}
 void InteractVendingMachine(Sets::Set* _set)
 {
 	KeyPad::Interaction();
 }
+void SocketInteraction(Sets::Set* _set)
+{
+	std::string socketName = _set->GetName();
+	std::string path;
+	int index = 0;
+	for (size_t i = 0; i < 4; i++)
+	{
+		if (socketName == socketPaths[i])
+		{
+			path = cubesPaths[i];
+			cubes[i] = Sets::Create();
+			cubes[i]->SetParent(_set, true);
+			cubes[i]->SetRenderingInstance(_set->GetRenderingInstance());
+			cubes[i]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[i])), false);
+			cubes[i]->SetPosition(socketInPosition, true);
+			cubes[i]->SetName(cubesPaths[i]);
+			cubes[i]->CheckVisibility();
+			break;
+		}
+	}
+	GameObjects::UnRegister(_set);
+}
+void CubePickup(Sets::Set* _set)
+{
+	std::string cubeName = _set->GetName();
+	if (cubeName == cubesPaths[BLUE])
+	{
+		std::cout << "Picked up : Blue"<< std::endl;
+		GameObjects::Register(sockets[BLUE], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
+	}
+	else if (cubeName == cubesPaths[GREEN])
+	{
+		std::cout << "Picked up : Green"<< std::endl;
+		GameObjects::Register(sockets[GREEN], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
+	}
+	else if (cubeName == cubesPaths[RED])
+	{
+		std::cout << "Picked up : Red"<< std::endl;
+		GameObjects::Register(sockets[RED], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
+	}
+	else if (cubeName == cubesPaths[YELLOW])
+	{
+		std::cout << "Picked up : Yellow"<< std::endl;
+		GameObjects::Register(sockets[YELLOW], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
+	}
+	GameObjects::UnRegister(_set);
+	//Sets::Erase(_set);
+	_set->Move(glm::vec3(0.0, -2.0f, 0.0f), false);
+	_set->Scale(glm::vec3(0.0), true);
+}
 
+void InteractExit(Sets::Set* _set)
+{
+	std::cout << "WINNNN" << std::endl;
+}
 
 void Hospital::Initialize(GameData* _gameData)
 {
@@ -61,6 +126,28 @@ void Hospital::Initialize(GameData* _gameData)
 	}
 
 	exitRoom = Map::SearchForSetInStage(stage, "../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+	if (exitRoom != nullptr)
+	{
+		std::vector<Sets::Set*> children = exitRoom->GetChildArray();
+		for (size_t childId = 0; childId < children.size(); childId++)
+		{
+			if (children[childId]->GetName() == "HSP_Elevator")
+			{
+				elevator = children[childId];
+				break;
+			}
+		}
+		if (elevator == nullptr)
+		{
+			Logger::Write("Unable to find elevator in hospital stage\n");
+		}
+	}
+	else
+	{
+		Logger::Write("Unable to find exit room in hospital stage\n");
+	}
+
+
 	entryRoom = Map::SearchForSetInStage(stage, "../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
 	if (entryRoom != nullptr)
 	{
@@ -84,25 +171,23 @@ void Hospital::Initialize(GameData* _gameData)
 			glm::vec3(10.05,0.3,6.45),
 		};
 
-		const char* paths[] = {
-			"../Sets/HOSPITAL/Gameplay/HSP_CubeStockBlue.json",
-			"../Sets/HOSPITAL/Gameplay/HSP_CubeStockGreen.json",
-			"../Sets/HOSPITAL/Gameplay/HSP_CubeStockRed.json",
-			"../Sets/HOSPITAL/Gameplay/HSP_CubeStockYellow.json",
-		};
-		for (size_t i = 0; i < 4; i++)
-		{
-			sockets[i] = Sets::Create();
-			sockets[i]->SetParent(playRoom, true);
-			sockets[i]->SetRenderingInstance(playRoom->GetRenderingInstance());
-			sockets[i]->LoadFromJson(json::parse(Files::GetFileContent(paths[i])), false);
-			sockets[i]->SetPosition(socketsPositions[i], true);
+		{// Fucked up because not following the enum
+			for (size_t i = 0; i < 4; i++)
+			{
+				sockets[i] = Sets::Create();
+				sockets[i]->SetParent(playRoom, true);
+				sockets[i]->SetRenderingInstance(playRoom->GetRenderingInstance());
+				sockets[i]->LoadFromJson(json::parse(Files::GetFileContent(socketPaths[i])), false);
+				sockets[i]->SetPosition(socketsPositions[i], true);
+				sockets[i]->SetName(socketPaths[i]);
+			}
 		}
 		cubes[BLUE] = Sets::Create();
 		cubes[BLUE]->SetParent(playRoom, true);
 		cubes[BLUE]->SetRenderingInstance(playRoom->GetRenderingInstance());
-		cubes[BLUE]->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Gameplay/HSP_N3BB.json")), false);
+		cubes[BLUE]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[BLUE])), false);
 		cubes[BLUE]->SetPosition(playRoomPositions[rand() % playRoomPositions.size()], true);
+		cubes[BLUE]->SetName(cubesPaths[BLUE]);
 	}
 	else
 	{
@@ -120,8 +205,9 @@ void Hospital::Initialize(GameData* _gameData)
 		cubes[GREEN] = Sets::Create();
 		cubes[GREEN]->SetParent(giantBedRoom, true);
 		cubes[GREEN]->SetRenderingInstance(giantBedRoom->GetRenderingInstance());
-		cubes[GREEN]->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Gameplay/HSP_N3BV.json")), false);
+		cubes[GREEN]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[GREEN])), false);
 		cubes[GREEN]->SetPosition(giantBedroomPositions[rand() % giantBedroomPositions.size()], true);
+		cubes[GREEN]->SetName(cubesPaths[GREEN]);
 	}
 	else
 	{
@@ -155,8 +241,9 @@ void Hospital::Initialize(GameData* _gameData)
 		cubes[RED] = Sets::Create();
 		cubes[RED]->SetParent(waitingRoom, true);
 		cubes[RED]->SetRenderingInstance(waitingRoom->GetRenderingInstance());
-		cubes[RED]->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Gameplay/HSP_N3BR.json")), false);
+		cubes[RED]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[RED])), false);
 		cubes[RED]->SetPosition(waitingRoomPositions[rand() % waitingRoomPositions.size()], true);
+		cubes[RED]->SetName(cubesPaths[RED]);
 	}
 	else
 	{
@@ -177,8 +264,9 @@ void Hospital::Initialize(GameData* _gameData)
 		cubes[YELLOW] = Sets::Create();
 		cubes[YELLOW]->SetParent(breakRoom, true);
 		cubes[YELLOW]->SetRenderingInstance(breakRoom->GetRenderingInstance());
-		cubes[YELLOW]->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Gameplay/HSP_N3BJ.json")), false);
+		cubes[YELLOW]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[YELLOW])), false);
 		cubes[YELLOW]->SetPosition(breakRoomPositions[rand() % breakRoomPositions.size()], true);
+		cubes[YELLOW]->SetName(cubesPaths[YELLOW]);
 	}
 	else
 	{
@@ -188,9 +276,18 @@ void Hospital::Initialize(GameData* _gameData)
 
 	if (vendingMachine != nullptr)
 	{
-		GameObjects::Register(vendingMachine, 2.0f, 1000.0, &HoveredVendingMachine, &InteractVendingMachine);
+		GameObjects::Register(vendingMachine, 2.0f, 1000.0, &Scripting::HoveredCrosshair, &InteractVendingMachine);
 	}
 
+	for (size_t i = 0; i < 4; i++)
+	{
+		if (cubes[i] != nullptr)
+		{
+			GameObjects::Register(cubes[i], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &CubePickup);
+		}
+	}
+
+	KeyPad::Initialize(_gameData);
 	initialized = true;
 }
 
@@ -207,6 +304,42 @@ void Hospital::Tick(GameData* _gameData)
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();
 				playerPed->SetPosition(vendingMachine->GetWorldPosition(), true);
 			}
+			if (_gameData->window.IsKeyPressed(Keys::KP_1))
+			{
+				Peds::Ped* playerPed = Scripting::GetPlayerPed();
+				for (size_t i = 0; i < 4; i++)
+				{
+					if (cubes[i] != nullptr && cubes[i]->GetScale().x >= 1.0 && cubes[i]->GetParent()->GetName() != socketPaths[i])
+					{
+						playerPed->SetPosition(cubes[i]->GetWorldPosition(), true);
+					}
+				}
+			}
+			if (_gameData->window.IsKeyPressed(Keys::KP_2))
+			{
+				Peds::Ped* playerPed = Scripting::GetPlayerPed();
+				playerPed->SetPosition(playRoom->GetWorldPosition(), true);
+			}
+			if (_gameData->window.IsKeyPressed(Keys::KP_3))
+			{
+				Peds::Ped* playerPed = Scripting::GetPlayerPed();
+				playerPed->SetPosition(elevator->GetWorldPosition(), true);
+			}
+		}
+	}
+}
+
+void Hospital::UnlockExit()
+{
+	GameObjects::Register(elevator, 2.0f, 1000.0, &Scripting::HoveredCrosshair, &InteractExit);
+	GameObjects::UnRegister(vendingMachine);
+	std::vector<Sets::Set*> children = vendingMachine->GetChildArray();
+	for (size_t childId = 0; childId < children.size(); childId++)
+	{
+		if (children[childId]->GetName() == "HSP_Card")
+		{
+			children[childId]->Move(glm::vec3(0.0, -1.0, 0.0), true);
+			break;
 		}
 	}
 }

@@ -10,6 +10,7 @@ namespace Hospital
 	void Initialize(GameData* _gameData);
 	void Tick(GameData* _gameData);
 
+	void UnlockExit();
 	void CleanUp(GameData* _gameData);
 }
 

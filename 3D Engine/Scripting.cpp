@@ -32,11 +32,34 @@ static Sprite camOverlay;
 static Sprite crosshair;
 const float crosshairSize = 10.f;
 
+void DoorInteraction(Sets::Set* _set)
+{
+	if (_set->GetRotation().y == 0)
+	{
+		_set->SetRotation(glm::vec3(0.0, 90.0f, 0.0));
+	}
+	else
+	{
+		_set->SetRotation(glm::vec3(0.0, 0.0f, 0.0));
+	}
+}
+void Scripting::HoveredCrosshair()
+{
+	Scripting::SetCrosshairOpacity(1.0f);
+}
 void Generation()
 {
 	Clock loadingClock;
 	loadingClock.Restart();
 	Map::GenerateMaze(8, 1);
+	std::vector<Sets::Set*>*  sets = Sets::GetAll();
+	for (size_t i = 0; i < sets->size(); i++)
+	{
+		if (sets->at(i)->GetName() == "Door")
+		{
+			GameObjects::Register(sets->at(i), 2.0f, 1000.0, &Scripting::HoveredCrosshair, &DoorInteraction);
+		}
+	}
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	generated = true;
 }
