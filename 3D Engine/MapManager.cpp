@@ -138,7 +138,7 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 	{
 		_stage.type = LIBRARY;
 	}
-	std::cout << _stage.type << std::endl;
+	//std::cout << _stage.type << std::endl;
 
 	//_stage.type = _stageNb;
 

@@ -201,7 +201,7 @@ std::vector<Map::Decor> Props::Generate(Map::Cell _cell)
 	//PANCARTE DANS LES CORRIDOR MURS LEFT ET BOTTOM
 	if (_cell.type == Maze::BEDROOM)
 	{
-		std::cout << _cell.type << std::endl;
+		//std::cout << _cell.type << std::endl;
 
 		for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
 		{
@@ -680,7 +680,7 @@ std::vector<Map::Decor> Props::GeneratePropsForCell(Map::Cell& cell, int _random
 	// D�cider une fois si des colonnes doivent �tre ajout�es � cette cellule
 	bool shouldAddColumns = (rand() % 100 < 50);  // 50% de chance de g�n�rer des colonnes
 
-	std::cout << "Colonne apparaisse si 1 sinon apparait pas si 0 : " << shouldAddColumns << std::endl;
+	//std::cout << "Colonne apparaisse si 1 sinon apparait pas si 0 : " << shouldAddColumns << std::endl;
 
 	//if (shouldAddColumns == true)  // Si vrai, g�n�rer et ajouter toutes les colonnes
 	//{

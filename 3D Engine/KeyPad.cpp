@@ -7,7 +7,7 @@ static std::shared_mutex mtx;
 static bool displayKeyPad = false;
 static Sprite keypadSprites[13];
 static const glm::vec2 keypadBackSize(486, 525);
-static const glm::vec2 keypadPosition(1920- keypadBackSize.x, 1080- keypadBackSize.y);
+static const glm::vec2 keypadPosition(1920 - keypadBackSize.x, 1080 - keypadBackSize.y);
 static const glm::vec2 keypadKeySize(133.5, 117.75);
 
 bool displayed = false;
@@ -26,6 +26,10 @@ static const char* keyNames[] = {
 	"Button 0.jpg",
 	"Button #.jpg",
 };
+
+static int combination[4] = { 0 };
+static int password[4] = { 1,2,3,4 };
+static Clock keyClock;
 
 void KeyPad::Initialize(GameData* _gameData)
 {
@@ -54,8 +58,30 @@ void KeyPad::Tick(GameData* _gameData)
 	std::unique_lock<std::shared_mutex> lock(mtx);
 	if (displayed)
 	{
+		glm::vec2 mousePosition = _gameData->window.GetCursorPosition();
 		for (size_t spriteId = 0; spriteId < 13; spriteId++)
 		{
+			if (spriteId)
+			{//Avoid the background
+				if (keypadSprites[spriteId].IsMouseOverQuad(mousePosition))
+				{
+					if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_LEFT) && keyClock.GetElapsedTime() > 150)
+					{
+						keypadSprites[spriteId].SetScale(glm::vec3(0.8f * keypadKeySize, 0.0f));
+						for (size_t combId = 1; combId < 4; combId++)
+						{
+							combination[combId - 1] = combination[combId];
+						}
+						combination[3] = spriteId;
+						std::cout << combination[0] << combination[1] << combination[2] << combination[3] << std::endl;
+						keyClock.Restart();
+					}
+				}
+				else
+				{
+					keypadSprites[spriteId].SetScale(glm::vec3(1.0f * keypadKeySize, 0.0f));
+				}
+			}
 			keypadSprites[spriteId].Draw();
 		}
 		if (_gameData->window.IsKeyPressed(Keys::ESCAPE))

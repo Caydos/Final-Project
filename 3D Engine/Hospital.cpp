@@ -92,7 +92,6 @@ void Hospital::Tick(GameData* _gameData)
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();
 				playerPed->SetPosition(vendingMachine->GetWorldPosition(), true);
 			}
-			vendingMachine->DrawBoundingBox();
 		}
 	}
 }

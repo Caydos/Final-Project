@@ -64,7 +64,7 @@ void Scripting::Tick(GameData* _gameData)
 		playerPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/MC/MC_CharacterV3.json")));
 		playerPed->SetName("Character");
 		playerPed->SetPath("../Sets/MC/");
-		playerPed->SetScale(glm::vec3(1.5f), true);
+		playerPed->SetScale(glm::vec3(1.35f), true);
 
 		std::vector<Sets::Set*> children = playerPed->GetChildArray();
 		for (size_t i = 0; i < children.size(); i++)
