@@ -32,6 +32,9 @@ static float spawnYaw = 0.0f;
 static Sprite camOverlay;
 static Sprite crosshair;
 const float crosshairSize = 10.f;
+
+static Audio::Sound* footSteps;
+static Audio::Sound* footRun;
 struct Door
 {
 	Sets::Set* set = nullptr;
@@ -121,6 +124,16 @@ void Scripting::Tick(GameData* _gameData)
 		playerPed->SetBodyType(Physics::Type::GHOST);
 		player->SetPed(playerPed);
 		playerPed->SetAdditionalRotation(glm::vec3(0.0, -90.0, 0.0));
+
+		footSteps = Audio::CreateSound();
+		footSteps->LoadFromFile("../Sounds/Footsteps2.wav");
+		footSteps->Loop(true);
+		player->SetFootStepSound(footSteps);
+
+		footRun = Audio::CreateSound();
+		footRun->LoadFromFile("../Sounds/Footsteps.wav");
+		footRun->Loop(true);
+		player->SetFootStepSound2(footRun);
 
 		playerPed->SetPosition(spawnPoint, true);
 		playerPed->SetRotation(glm::vec3(0.0, spawnYaw, 0.0), true);
