@@ -35,6 +35,7 @@ const char* socketPaths[] = {
 	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockYellow.json",
 };
 
+Sets::Set* clown = nullptr;
 Sets::Set* sockets[4] = { nullptr };
 Sets::Set* cubes[4] = { nullptr };
 bool validCubes[4] = { false };
@@ -46,7 +47,7 @@ std::vector<glm::vec3> socketsPositions = {
 	glm::vec3(9.35,0.85,11.230),
 	glm::vec3(9.35,0.85,11.360),
 };
-
+glm::vec3 clownSpawnPoint(1.150, 1.9, 1.0);
 
 void Hospital::RegisterInteractions()
 {
@@ -59,7 +60,6 @@ void InteractVendingMachine(Sets::Set* _set)
 }
 void SocketInteraction(Sets::Set* _set)
 {
-	std::cout << "SocketInteraction" << std::endl;
 	std::string socketName = _set->GetName();
 	std::string path;
 	int index = 0;
@@ -82,29 +82,28 @@ void SocketInteraction(Sets::Set* _set)
 		}
 	}
 	GameObjects::UnRegister(_set);
-	std::cout << "Placing in socket" << std::endl;
 }
 void CubePickup(Sets::Set* _set)
 {
 	std::string cubeName = _set->GetName();
 	if (cubeName == cubesPaths[BLUE])
 	{
-		std::cout << "Picked up : Blue"<< std::endl;
+		std::cout << "Picked up : Blue" << std::endl;
 		GameObjects::Register(sockets[BLUE], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
 	}
 	else if (cubeName == cubesPaths[GREEN])
 	{
-		std::cout << "Picked up : Green"<< std::endl;
+		std::cout << "Picked up : Green" << std::endl;
 		GameObjects::Register(sockets[GREEN], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
 	}
 	else if (cubeName == cubesPaths[RED])
 	{
-		std::cout << "Picked up : Red"<< std::endl;
+		std::cout << "Picked up : Red" << std::endl;
 		GameObjects::Register(sockets[RED], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
 	}
 	else if (cubeName == cubesPaths[YELLOW])
 	{
-		std::cout << "Picked up : Yellow"<< std::endl;
+		std::cout << "Picked up : Yellow" << std::endl;
 		GameObjects::Register(sockets[YELLOW], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
 	}
 	GameObjects::UnRegister(_set);
@@ -297,6 +296,13 @@ void Hospital::Initialize(GameData* _gameData)
 	}
 
 	KeyPad::Initialize(_gameData);
+	clown = Sets::Create();
+	clown->GenerateRenderingInstance();
+	clown->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")), false);
+	clown->SetRotation(glm::vec3(0.0, 90.0f, 0.0f), false);
+	clown->SetPosition(clownSpawnPoint, false);
+	clown->SetScale(glm::vec3(0.6),true);
+	clown->SetName("Clown");
 	initialized = true;
 }
 
@@ -313,26 +319,40 @@ void Hospital::Tick(GameData* _gameData)
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();
 				playerPed->SetPosition(vendingMachine->GetWorldPosition(), true);
 			}
-			if (_gameData->window.IsKeyPressed(Keys::KP_1))
+		}
+		if (_gameData->window.IsKeyPressed(Keys::KP_1))
+		{
+			Peds::Ped* playerPed = Scripting::GetPlayerPed();
+			for (size_t i = 0; i < 4; i++)
 			{
-				Peds::Ped* playerPed = Scripting::GetPlayerPed();
-				for (size_t i = 0; i < 4; i++)
+				if (cubes[i] != nullptr && cubes[i]->GetPosition().y >= 0.0 && !validCubes[i])
 				{
-					if (cubes[i] != nullptr && cubes[i]->GetPosition().y >= 0.0 && !validCubes[i])
-					{
-						playerPed->SetPosition(cubes[i]->GetWorldPosition(), true);
-					}
+					playerPed->SetPosition(cubes[i]->GetWorldPosition(), true);
 				}
 			}
+		}
+		if (playRoom != nullptr)
+		{
 			if (_gameData->window.IsKeyPressed(Keys::KP_2))
 			{
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();
 				playerPed->SetPosition(playRoom->GetWorldPosition(), true);
 			}
+		}
+		if (elevator != nullptr)
+		{
 			if (_gameData->window.IsKeyPressed(Keys::KP_3))
 			{
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();
 				playerPed->SetPosition(elevator->GetWorldPosition(), true);
+			}
+		}
+		if (clown != nullptr)
+		{
+			if (_gameData->window.IsKeyPressed(Keys::KP_4))
+			{
+				Peds::Ped* playerPed = Scripting::GetPlayerPed();
+				playerPed->SetPosition(clown->GetWorldPosition(), true);
 			}
 		}
 	}
