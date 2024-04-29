@@ -379,14 +379,14 @@ std::vector<Map::Decor> Props::Generate(Map::Cell _cell)
 						Map::Decor bench;
 						if (wallId == Maze::LEFT)
 						{
-							bench.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.9, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 2);
+							bench.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.98, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
 							bench.rot = glm::vec3(0, 180, 0);
 							bench.isVisible = true;
 							bench.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
 						}
 						else if (wallId == Maze::BOTTOM)
 						{
-							bench.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.8, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 0.9);
+							bench.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.8, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.98);
 							bench.rot = glm::vec3(0, 90, 0);
 							bench.isVisible = true;
 							bench.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
@@ -398,14 +398,14 @@ std::vector<Map::Decor> Props::Generate(Map::Cell _cell)
 						Map::Decor bed;
 						if (wallId == Maze::LEFT)
 						{
-							bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 2);
+							bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
 							bed.rot = glm::vec3(0, 0, 0);
 							bed.isVisible = true;
 							bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
 						}
 						else if (wallId == Maze::BOTTOM)
 						{
-							bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.9, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 0.8);
+							bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.9, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.9);
 							bed.rot = glm::vec3(0, 90, 0);
 							bed.isVisible = true;
 							bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
@@ -429,14 +429,14 @@ std::vector<Map::Decor> Props::Generate(Map::Cell _cell)
 						Map::Decor extinguisher;
 						if (wallId == Maze::LEFT)
 						{
-							extinguisher.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.3, _cell.wallList[wallId].pos.y + 0.2, _cell.wallList[wallId].pos.z + 1.25);
+							extinguisher.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.25, _cell.wallList[wallId].pos.y + 0.4, _cell.wallList[wallId].pos.z + 1.25);
 							extinguisher.rot = glm::vec3(0, 0, 0);
 							extinguisher.isVisible = true;
 							extinguisher.name = "../Sets/HOSPITAL/Props/HSP_Extinguisher.json";
 						}
 						else if (wallId == Maze::BOTTOM)
 						{
-							extinguisher.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.25, _cell.wallList[wallId].pos.y + 0.2, _cell.wallList[wallId].pos.z + 0.3);
+							extinguisher.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.25, _cell.wallList[wallId].pos.y + 0.4, _cell.wallList[wallId].pos.z + 0.25);
 							extinguisher.rot = glm::vec3(0, -90, 0);
 							extinguisher.isVisible = true;
 							extinguisher.name = "../Sets/HOSPITAL/Props/HSP_Extinguisher.json";
@@ -465,14 +465,14 @@ std::vector<Map::Decor> Props::Generate(Map::Cell _cell)
 					Map::Decor bed;
 					if (wallId == Maze::LEFT)
 					{
-						bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 2);
+						bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
 						bed.rot = glm::vec3(0, 0, 0);
 						bed.isVisible = true;
 						bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
 					}
 					else if (wallId == Maze::BOTTOM)
 					{
-						bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.9, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 0.8);
+						bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.9, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.98);
 						bed.rot = glm::vec3(0, 90, 0);
 						bed.isVisible = true;
 						bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
@@ -512,7 +512,7 @@ std::vector<Map::Decor> Props::Generate(Map::Cell _cell)
 						}
 						else if (wallId == Maze::BOTTOM)
 						{
-							perch.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z - 0.25);
+							perch.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z - 0.5);
 							perch.rot = glm::vec3(0, 90, 0);
 							perch.isVisible = true;
 							perch.name = "../Sets/HOSPITAL/Props/HSP_Perch.json";

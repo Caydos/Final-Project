@@ -12,6 +12,7 @@
 #include "Interaction.h"
 #include "Hospital.h"
 #include "GameObject.h"
+#include "MainMenu.h"
 
 
 static bool initialized = false;
@@ -31,16 +32,29 @@ static float spawnYaw = 0.0f;
 static Sprite camOverlay;
 static Sprite crosshair;
 const float crosshairSize = 10.f;
+struct Door
+{
+	Sets::Set* set = nullptr;
+	bool opened = false;
+};
+std::vector<Door> doors;
 
 void DoorInteraction(Sets::Set* _set)
 {
-	if (_set->GetRotation().y == 0)
+	for (size_t i = 0; i < doors.size(); i++)
 	{
-		_set->SetRotation(glm::vec3(0.0, 90.0f, 0.0));
-	}
-	else
-	{
-		_set->SetRotation(glm::vec3(0.0, 0.0f, 0.0));
+		if (doors[i].set == _set)
+		{
+			if (doors[i].opened)
+			{
+				_set->Rotate(glm::vec3(0.0, -90.0f, 0.0));
+			}
+			else
+			{
+				_set->Rotate(glm::vec3(0.0, 90.0f, 0.0));
+			}
+			doors[i].opened = !doors[i].opened;
+		}
 	}
 }
 void Scripting::HoveredCrosshair()
@@ -57,7 +71,11 @@ void Generation()
 	{
 		if (sets->at(i)->GetName() == "Door")
 		{
-			GameObjects::Register(sets->at(i), 2.0f, 1000.0, &Scripting::HoveredCrosshair, &DoorInteraction);
+			GameObjects::Register(sets->at(i), 4.0f, 200.0, &Scripting::HoveredCrosshair, &DoorInteraction);
+			Door door;
+			door.set = sets->at(i);
+			door.opened = false;
+			doors.push_back(door);
 		}
 	}
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
@@ -89,15 +107,15 @@ void Scripting::Tick(GameData* _gameData)
 		playerPed->SetPath("../Sets/MC/");
 		playerPed->SetScale(glm::vec3(1.35f), true);
 
-		std::vector<Sets::Set*> children = playerPed->GetChildArray();
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			if (children[i]->GetName() == "MC_HeadV3")
-			{
-				Sets::Erase(children[i]);
-				break;
-			}
-		}
+		//std::vector<Sets::Set*> children = playerPed->GetChildArray();
+		//for (size_t i = 0; i < children.size(); i++)
+		//{
+		//	if (children[i]->GetName() == "MC_HeadV3")
+		//	{
+		//		Sets::Erase(children[i]);
+		//		break;
+		//	}
+		//}
 
 		playerPed->SetCamera(_gameData->camera);
 		playerPed->SetBodyType(Physics::Type::GHOST);
@@ -171,12 +189,12 @@ void Scripting::Tick(GameData* _gameData)
 			{
 				player->GetPed()->SetPosition(spawnPoint);
 			}
+			GameObjects::Tick(_gameData);
+			crosshair.Draw();
 		}
 		Hospital::Tick(_gameData);
 
-		GameObjects::Tick(_gameData);
-
-		crosshair.Draw();
+		MainMenu::Tick(_gameData);
 		camOverlay.Draw();
 	}
 	else

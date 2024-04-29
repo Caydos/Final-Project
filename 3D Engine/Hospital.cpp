@@ -59,6 +59,7 @@ void InteractVendingMachine(Sets::Set* _set)
 }
 void SocketInteraction(Sets::Set* _set)
 {
+	std::cout << "SocketInteraction" << std::endl;
 	std::string socketName = _set->GetName();
 	std::string path;
 	int index = 0;
@@ -67,17 +68,21 @@ void SocketInteraction(Sets::Set* _set)
 		if (socketName == socketPaths[i])
 		{
 			path = cubesPaths[i];
-			cubes[i] = Sets::Create();
-			cubes[i]->SetParent(_set, true);
-			cubes[i]->SetRenderingInstance(_set->GetRenderingInstance());
-			cubes[i]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[i])), false);
-			cubes[i]->SetPosition(socketInPosition, true);
-			cubes[i]->SetName(cubesPaths[i]);
-			cubes[i]->CheckVisibility();
+			validCubes[i] = true;
+			//cubes[i] = Sets::Create();
+			////cubes[i]->SetParent(_set, true);
+			////cubes[i]->SetRenderingInstance(_set->GetRenderingInstance());
+			//cubes[i]->GenerateRenderingInstance();
+			//cubes[i]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[i])), false);
+			cubes[i]->SetPosition(sockets[i]->GetWorldPosition() + socketInPosition, true);
+			//cubes[i]->SetName(cubesPaths[i]);
+			//cubes[i]->CheckVisibility();
+			std::cout << cubesPaths[i] << std::endl;
 			break;
 		}
 	}
 	GameObjects::UnRegister(_set);
+	std::cout << "Placing in socket" << std::endl;
 }
 void CubePickup(Sets::Set* _set)
 {
@@ -104,8 +109,8 @@ void CubePickup(Sets::Set* _set)
 	}
 	GameObjects::UnRegister(_set);
 	//Sets::Erase(_set);
-	_set->Move(glm::vec3(0.0, -2.0f, 0.0f), false);
-	_set->Scale(glm::vec3(0.0), true);
+	_set->Move(glm::vec3(0.0, -2.0f, 0.0f), true);
+	//_set->Scale(glm::vec3(0.0), true);
 }
 
 void InteractExit(Sets::Set* _set)
@@ -183,10 +188,11 @@ void Hospital::Initialize(GameData* _gameData)
 			}
 		}
 		cubes[BLUE] = Sets::Create();
-		cubes[BLUE]->SetParent(playRoom, true);
-		cubes[BLUE]->SetRenderingInstance(playRoom->GetRenderingInstance());
+		//cubes[BLUE]->SetParent(playRoom, true);
+		//cubes[BLUE]->SetRenderingInstance(playRoom->GetRenderingInstance());
+		cubes[BLUE]->GenerateRenderingInstance();
 		cubes[BLUE]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[BLUE])), false);
-		cubes[BLUE]->SetPosition(playRoomPositions[rand() % playRoomPositions.size()], true);
+		cubes[BLUE]->SetPosition(playRoom->GetWorldPosition() + (playRoomPositions[rand() % playRoomPositions.size()]), true);
 		cubes[BLUE]->SetName(cubesPaths[BLUE]);
 	}
 	else
@@ -203,10 +209,11 @@ void Hospital::Initialize(GameData* _gameData)
 		};
 
 		cubes[GREEN] = Sets::Create();
-		cubes[GREEN]->SetParent(giantBedRoom, true);
-		cubes[GREEN]->SetRenderingInstance(giantBedRoom->GetRenderingInstance());
+		//cubes[GREEN]->SetParent(giantBedRoom, true);
+		//cubes[GREEN]->SetRenderingInstance(giantBedRoom->GetRenderingInstance());
+		cubes[GREEN]->GenerateRenderingInstance();
 		cubes[GREEN]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[GREEN])), false);
-		cubes[GREEN]->SetPosition(giantBedroomPositions[rand() % giantBedroomPositions.size()], true);
+		cubes[GREEN]->SetPosition(giantBedRoom->GetWorldPosition() + giantBedroomPositions[rand() % giantBedroomPositions.size()], true);
 		cubes[GREEN]->SetName(cubesPaths[GREEN]);
 	}
 	else
@@ -239,10 +246,11 @@ void Hospital::Initialize(GameData* _gameData)
 
 
 		cubes[RED] = Sets::Create();
-		cubes[RED]->SetParent(waitingRoom, true);
-		cubes[RED]->SetRenderingInstance(waitingRoom->GetRenderingInstance());
+		//cubes[RED]->SetParent(waitingRoom, true);
+		//cubes[RED]->SetRenderingInstance(waitingRoom->GetRenderingInstance());
+		cubes[RED]->GenerateRenderingInstance();
 		cubes[RED]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[RED])), false);
-		cubes[RED]->SetPosition(waitingRoomPositions[rand() % waitingRoomPositions.size()], true);
+		cubes[RED]->SetPosition(waitingRoom->GetWorldPosition() + waitingRoomPositions[rand() % waitingRoomPositions.size()], true);
 		cubes[RED]->SetName(cubesPaths[RED]);
 	}
 	else
@@ -262,10 +270,11 @@ void Hospital::Initialize(GameData* _gameData)
 
 
 		cubes[YELLOW] = Sets::Create();
-		cubes[YELLOW]->SetParent(breakRoom, true);
-		cubes[YELLOW]->SetRenderingInstance(breakRoom->GetRenderingInstance());
+		//cubes[YELLOW]->SetParent(breakRoom, true);
+		//cubes[YELLOW]->SetRenderingInstance(breakRoom->GetRenderingInstance());
+		cubes[YELLOW]->GenerateRenderingInstance();
 		cubes[YELLOW]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[YELLOW])), false);
-		cubes[YELLOW]->SetPosition(breakRoomPositions[rand() % breakRoomPositions.size()], true);
+		cubes[YELLOW]->SetPosition(breakRoom->GetWorldPosition() + breakRoomPositions[rand() % breakRoomPositions.size()], true);
 		cubes[YELLOW]->SetName(cubesPaths[YELLOW]);
 	}
 	else
@@ -309,7 +318,7 @@ void Hospital::Tick(GameData* _gameData)
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();
 				for (size_t i = 0; i < 4; i++)
 				{
-					if (cubes[i] != nullptr && cubes[i]->GetScale().x >= 1.0 && cubes[i]->GetParent()->GetName() != socketPaths[i])
+					if (cubes[i] != nullptr && cubes[i]->GetPosition().y >= 0.0 && !validCubes[i])
 					{
 						playerPed->SetPosition(cubes[i]->GetWorldPosition(), true);
 					}

@@ -1,6 +1,7 @@
 #include "Blocks.h"
 #include "Files.h"
 #include "Set.h"
+#include "Scene.h"
 
 static std::vector<Blocks::BlockType*> blocks;
 static std::vector<Blocks::Instance*> generationQueue;
@@ -92,66 +93,68 @@ void Blocks::Load(std::string _name)
 					}
 
 
-					/*if (content["attributes"].contains("light"))
+					if (content["attributes"].contains("light"))
 					{
 						std::cout << "Loading block Light" << std::endl;
-						Lighting::Light light;
+						Lighting::Spot light;
 						if (content["attributes"]["light"].contains("position"))
 						{
-							light.SetPosition(glm::vec3(content["attributes"]["light"]["position"][0],
+							light.position = glm::vec3(content["attributes"]["light"]["position"][0],
 								content["attributes"]["light"]["position"][1],
-								content["attributes"]["light"]["position"][2]));
+								content["attributes"]["light"]["position"][2]);
 						}
 						if (content["attributes"]["light"].contains("direction"))
 						{
-							light.SetDirection(glm::vec3(content["attributes"]["light"]["direction"][0],
-														content["attributes"]["light"]["direction"][1], 
-														content["attributes"]["light"]["direction"][2]));
+							light.direction = glm::vec3(content["attributes"]["light"]["direction"][0],
+								content["attributes"]["light"]["direction"][1],
+								content["attributes"]["light"]["direction"][2]);
 						}
 						if (content["attributes"]["light"].contains("ambient"))
 						{
-							light.SetAmbient(glm::vec3(content["attributes"]["light"]["ambient"][0],
+							light.ambient = glm::vec3(content["attributes"]["light"]["ambient"][0],
 								content["attributes"]["light"]["ambient"][1],
-								content["attributes"]["light"]["ambient"][2]));
+								content["attributes"]["light"]["ambient"][2]);
 						}
 						if (content["attributes"]["light"].contains("diffuse"))
 						{
-							light.SetDiffuse(glm::vec3(content["attributes"]["light"]["diffuse"][0],
+							light.diffuse = glm::vec3(content["attributes"]["light"]["diffuse"][0],
 								content["attributes"]["light"]["diffuse"][1],
-								content["attributes"]["light"]["diffuse"][2]));
+								content["attributes"]["light"]["diffuse"][2]);
 						}
 						if (content["attributes"]["light"].contains("specular"))
 						{
-							light.SetSpecular(glm::vec3(content["attributes"]["light"]["specular"][0],
+							light.specular = glm::vec3(content["attributes"]["light"]["specular"][0],
 								content["attributes"]["light"]["specular"][1],
-								content["attributes"]["light"]["specular"][2]));
+								content["attributes"]["light"]["specular"][2]);
 						}
 						if (content["attributes"]["light"].contains("constant"))
 						{
-							light.SetConstant(content["attributes"]["light"]["constant"]);
+							light.constant = content["attributes"]["light"]["constant"];
 						}
 						if (content["attributes"]["light"].contains("linear"))
 						{
-							light.SetLinear(content["attributes"]["light"]["linear"]);
+							light.linear = content["attributes"]["light"]["linear"];
 						}
 						if (content["attributes"]["light"].contains("quadratic"))
 						{
-							light.SetQuadratic(content["attributes"]["light"]["quadratic"]);
+							light.quadratic = content["attributes"]["light"]["quadratic"];
 						}
 						if (content["attributes"]["light"].contains("cutOff"))
 						{
-							light.SetCutOff(content["attributes"]["light"]["cutOff"]);
+							light.cutOff = glm::cos(glm::radians(content["attributes"]["light"]["cutOff"] + .0f));
 						}
 						if (content["attributes"]["light"].contains("outerCutOff"))
 						{
-							light.SetOuterCutOff(content["attributes"]["light"]["outerCutOff"]);
+							light.outerCutOff = glm::cos(glm::radians(content["attributes"]["light"]["outerCutOff"] + .0f));
 						}
-						light.SetActive(true);
-						light.SetType(Lighting::SPOT);
-						light.SetName(block->GetName() + " spot light");
+						light.activation = true;
+
+						//light.SetActive(true);
+						//light.SetType(Lighting::SPOT);
+						//light.SetName(block->GetName() + " spot light");
 						block->SetLightEmission(true);
 						block->SetLight(light);
-					}*/
+					}
 				}
 			}
 			catch (nlohmann::json::parse_error& e)

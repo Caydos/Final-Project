@@ -67,13 +67,22 @@ void GameObjects::Tick(GameData* _gameData)
 				&& _gameData->window.IsKeyPressed(Keys::E) 
 				&& objectArray[objectId].clock.GetElapsedTime() > objectArray[objectId].cooldown)
 			{
+				std::cout << "Called" << std::endl;
 				//Interactions::Trigger(objectArray[objectId].interactionName.c_str());
 				objectArray[objectId].clock.Restart();
 				lock.unlock();//Dead lock prevention if need to Unregister the interaction
 				objectArray[objectId].interactFunction(objectArray[objectId].set);
 				lock.lock();
 			}
+			//else
+			//{
+			//	if (objectArray[objectId].interactFunction == nullptr) { std::cout << "Null funk" << std::endl; }
+			//	if (!(objectArray[objectId].clock.GetElapsedTime() > objectArray[objectId].cooldown)) { std::cout << "Not time yet" << std::endl; }
+			//}
 			break;
 		}
 	}
+
+
+	lock.unlock();
 }

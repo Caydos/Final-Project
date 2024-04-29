@@ -440,7 +440,7 @@ void Map::CreateMaze()
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetParent(map[stageNb].chunckList[mapNb].parentSet, true);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetRenderingInstance(instanceAddr);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->LoadFromJson(json::parse(Files::GetFileContent(map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name)), false);
-						if (map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name == "../Sets/HOSPITAL/Map/HSP_Door.json")
+						if (map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name == "../Sets/HOSPITAL/Props/HSP_RoomDoor.json")
 						{
 							map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetName("Door");
 						}

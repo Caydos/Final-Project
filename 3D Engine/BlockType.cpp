@@ -178,15 +178,15 @@ void Blocks::BlockType::SetLightEmission(bool _state)
 	this->lightEmission = _state;
 }
 
-//Lighting::Light Blocks::BlockType::GetLight()
-//{
-//	return this->lightEmitter;
-//}
-//
-//void Blocks::BlockType::SetLight(Lighting::Light _light)
-//{
-//	this->lightEmitter = _light;
-//}
+Lighting::Spot Blocks::BlockType::GetLight()
+{
+	return this->lightEmitter;
+}
+
+void Blocks::BlockType::SetLight(Lighting::Spot _light)
+{
+	this->lightEmitter = _light;
+}
 
 void Blocks::BlockType::Draw()
 {
