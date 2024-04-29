@@ -1,6 +1,5 @@
 #include "MapManager.h"
 #include "Props.h"
-#include "Maze.h"
 
 std::vector<Map::Stage> map;
 
