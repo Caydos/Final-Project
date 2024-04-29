@@ -141,7 +141,7 @@ void Scripting::Tick(GameData* _gameData)
 		flashLight->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 		flashLight->diffuse = glm::vec3(0.5f);
 		flashLight->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-		flashLight->constant = 0.5f;
+		flashLight->constant = 0.0005f;
 		flashLight->linear = 0.0f;
 		flashLight->quadratic = 0.0f;
 		flashLight->cutOff = glm::cos(glm::radians(20.0f));

@@ -128,6 +128,7 @@ Map::ManagmentText Map::InitText(int _size)
 	return text;
 }
 
+int lgCount = 0;
 void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 {
 	if (_stageNb == 0)//!!!!!!!!!!!!!!!!!!!!!!!
@@ -440,6 +441,10 @@ void Map::CreateMaze()
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetParent(map[stageNb].chunckList[mapNb].parentSet, true);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetRenderingInstance(instanceAddr);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->LoadFromJson(json::parse(Files::GetFileContent(map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name)), false);
+						if (map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name == "../Sets/HOSPITAL/Props/HSP_Light.json")
+						{
+							lgCount++;
+						}
 						if (map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name == "../Sets/HOSPITAL/Props/HSP_RoomDoor.json")
 						{
 							map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetName("Door");
@@ -491,6 +496,7 @@ void Map::CreateMaze()
 			//}
 		}
 	}
+	std::cout << lgCount << std::endl;
 }
 
 std::vector<Map::Stage> Map::GetMap()

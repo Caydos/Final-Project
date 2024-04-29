@@ -67,7 +67,6 @@ void GameObjects::Tick(GameData* _gameData)
 				&& _gameData->window.IsKeyPressed(Keys::E) 
 				&& objectArray[objectId].clock.GetElapsedTime() > objectArray[objectId].cooldown)
 			{
-				std::cout << "Called" << std::endl;
 				//Interactions::Trigger(objectArray[objectId].interactionName.c_str());
 				objectArray[objectId].clock.Restart();
 				lock.unlock();//Dead lock prevention if need to Unregister the interaction

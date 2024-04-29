@@ -46,13 +46,13 @@ void Tools::Initialize(GameData* _gameData)
 	spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 	spot->diffuse = glm::vec3(0.5f);
 	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-	spot->constant = 0.5f;
+	spot->constant = 0.0000f;
 	spot->linear = 0.0f;
 	spot->quadratic = 0.0f;
 	spot->cutOff = glm::cos(glm::radians(20.0f));
 	spot->outerCutOff = glm::cos(glm::radians(40.0f));
 
-	//Map::GenerateMaze(7, 1);
+	Map::GenerateMaze(8, 1);
 	_gameData->dt = std::min(_gameData->dt, 1.0f);
 
 	//Sets::Set* room = Sets::Create();
