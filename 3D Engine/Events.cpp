@@ -110,6 +110,10 @@ void Events::Listener(int socketfd)
 void Events::Unserialize(char* _buffer)
 {
 	void* result = std::memchr(_buffer, SEPARATOR_CHARACTER, strlen(_buffer));
+	if (result == nullptr)
+	{
+		result = std::memchr(_buffer, END_CHARACTER, strlen(_buffer));
+	}
 	if (result != nullptr)
 	{//Found
 		char* position = (char*)result;

@@ -12,6 +12,8 @@ namespace Scripting
 	Peds::Ped* GetPlayerPed();
 	void HoveredCrosshair();
 	void SetCrosshairOpacity(float _opacity);
+
+	void PlayerUpdate(char** _args);
 }
 
 #endif // !SCRIPTING_H

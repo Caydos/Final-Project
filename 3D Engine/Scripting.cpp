@@ -13,6 +13,7 @@
 #include "Hospital.h"
 #include "GameObject.h"
 #include "MainMenu.h"
+#include "Network.h"
 
 
 static bool initialized = false;
@@ -24,15 +25,16 @@ static Lighting::Spot* flashLight;
 static Sets::Set* set;
 static std::thread mazeThread;
 static bool generated = false;
+static std::shared_mutex playerLock;
 
 static Clock inputClock;
 
 static glm::vec3 spawnPoint(11.05, 1.850, 21.250);
 static float spawnYaw = 0.0f;
+static Texture* camOverlays[2] = { nullptr };
 static Sprite camOverlay;
 static Sprite crosshair;
 const float crosshairSize = 10.f;
-
 static Audio::Sound* footSteps;
 static Audio::Sound* footRun;
 struct Door
@@ -41,6 +43,7 @@ struct Door
 	bool opened = false;
 };
 std::vector<Door> doors;
+static bool connected = false;
 
 void DoorInteraction(Sets::Set* _set)
 {
@@ -89,6 +92,11 @@ void Scripting::Tick(GameData* _gameData)
 {
 	if (!initialized)
 	{
+		std::unique_lock<std::shared_mutex> lock(playerLock);
+		if (!Network::Connection::Create("51.178.46.32", 55301))
+		{
+			Logger::Write("Failed to connect");
+		}
 		// WARNING : ZOMBIE THREAD RN
 		interactionThread = std::thread(&Interactions::Thread, true);
 		interactionThread.detach();
@@ -166,7 +174,12 @@ void Scripting::Tick(GameData* _gameData)
 
 
 		Hospital::RegisterInteractions();
-		camOverlay.Load("../Textures/Overlay.png", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1],0.0), 1);
+		camOverlays[0] = new Texture;
+		camOverlays[0]->LoadFromFile("../Textures/OverlayOff.png");
+		camOverlays[1] = new Texture;
+		camOverlays[1]->LoadFromFile("../Textures/Overlay.png");
+
+		camOverlay.Load("", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1],0.0), 1);
 		crosshair.Load("../Textures/RoundCrossHair.png", 
 			glm::vec3(_gameData->resolution[0] / 2 - crosshairSize / 2, _gameData->resolution[1] / 2 - crosshairSize / 2,0.0), 
 			glm::vec3(crosshairSize, crosshairSize,0.0), 1);
@@ -209,6 +222,11 @@ void Scripting::Tick(GameData* _gameData)
 		Hospital::Tick(_gameData);
 
 		MainMenu::Tick(_gameData);
+		camOverlay.SetTexture(camOverlays[0]);
+		if (connected)
+		{
+			camOverlay.SetTexture(camOverlays[1]);
+		}
 		camOverlay.Draw();
 	}
 	else
@@ -225,10 +243,25 @@ Players::Player* Scripting::GetPlayer()
 
 Peds::Ped* Scripting::GetPlayerPed()
 {
+	std::shared_lock<std::shared_mutex> lock(playerLock);
+	if (player == nullptr)
+	{
+		return nullptr;
+	}
 	return player->GetPed();
 }
 
 void Scripting::SetCrosshairOpacity(float _opacity)
 {
 	crosshair.SetOpacity(_opacity);
+}
+
+void Scripting::PlayerUpdate(char** _args)
+{
+	int x = ToFloat(_args[0]);
+	int y = ToFloat(_args[1]);
+	int z = ToFloat(_args[2]);
+	int heading = ToFloat(_args[3]);
+
+	std::cout << heading << std::endl;
 }

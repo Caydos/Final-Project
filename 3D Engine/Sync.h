@@ -2,12 +2,11 @@
 #define SYNC_H
 #include "Common.h"
 
-#define SYNC_TIME 200
+#define SYNC_TIME 2000
 
 namespace Synchronization
 {
 	void Loop(void);
-	void NodeCallback(char** _args);
 
 	void PedSyncEvents(void);
 	int GetServerId();

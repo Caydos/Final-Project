@@ -12,6 +12,9 @@ namespace Hospital
 
 	void UnlockExit();
 	void CleanUp(GameData* _gameData);
+
+	void ClownUpdate(char** _args);
+	void TeddyUpdate(char** _args);
 }
 
 #endif // !HOSPITAL_H

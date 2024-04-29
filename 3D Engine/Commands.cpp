@@ -15,7 +15,6 @@ void Commands::Thread(bool _running)
 			if (!Network::Connection::Create("51.178.46.32", 55301))
 			{
 				Logger::Write("Failed to connect");
-				//Hud::Notify("Failed to connect", 6);
 			}
 		}
 		command.clear();

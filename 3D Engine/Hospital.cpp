@@ -3,6 +3,7 @@
 #include "Interaction.h"
 #include "GameObject.h"
 #include "KeyPad.h"
+#include "Reading.h"
 
 static bool initialized = false;
 static Map::Stage* stage = nullptr;
@@ -377,4 +378,30 @@ void Hospital::CleanUp(GameData* _gameData)
 {
 
 	initialized = false;
+}
+
+
+void Hospital::ClownUpdate(char** _args)
+{
+	int x = ToFloat(_args[0]);
+	int y = ToFloat(_args[1]);
+	int z = ToFloat(_args[2]);
+	int heading = ToFloat(_args[3]);
+
+	if (clown != nullptr)
+	{
+		std::cout << "Setting clown pos : " << x << " " << y << " " << z << std::endl;
+		clown->SetPosition(glm::vec3(x, y, z),false);
+		clown->SetRotation(glm::vec3(0.0, heading, 0.0),true);
+	}
+}
+
+void Hospital::TeddyUpdate(char** _args)
+{
+	int x = ToFloat(_args[0]);
+	int y = ToFloat(_args[1]);
+	int z = ToFloat(_args[2]);
+	int heading = ToFloat(_args[3]);
+
+	std::cout << heading << std::endl;
 }
