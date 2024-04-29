@@ -1,5 +1,6 @@
 #include "MapManager.h"
 #include "Props.h"
+#include "Maze.h"
 
 std::vector<Map::Stage> map;
 
@@ -127,13 +128,205 @@ Map::ManagmentText Map::InitText(int _size)
 	return text;
 }
 
-int lgCount = 0;
 void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 {
+	if (_stageNb == 0)//!!!!!!!!!!!!!!!!!!!!!!!
+	{
+		_stage.type = HOSPITALS;
+	}
+	else
+	{
+		_stage.type = LIBRARY;
+	}
+	//std::cout << _stage.type << std::endl;
+
+	//_stage.type = _stageNb;
+
+	int infoRoomNb = Props::TextChunck(_stage.type).room.size();
+	_stage.txtRoom = Props::TextChunck(_stage.type).room;
+	//_stage.chunckList[randomRoom].nameRoom = _stage.txtRoom[randomRoomTxt]
+	//Map::ManagmentTextProps txtRoom = Props::TextChunck(_stage.type);
+	//std::cout << infoRoomNb << std::endl;
+
+	if (_stage.type == HOSPITALS)
+	{
+		_stage.hightScale = SIZE_HOSPITALS;
+	}
+	else if (_stage.type == LABO)
+	{
+		_stage.hightScale = SIZE_LABO;
+	}
+	else if (_stage.type == LIBRARY)
+	{
+		_stage.hightScale = SIZE_LIBRARY;
+	}
+	else if (_stage.type == FIELDS)
+	{
+		_stage.hightScale = SIZE_FIELDS;
+	}
+
+	if (_stageNb != 0)
+	{
+		_stage.sizeOf += map[_stageNb - 1].hightScale;
+		_stage.hightScale += _stage.sizeOf;
+	}
+	else
+	{
+		_stage.sizeOf = 0;
+	}
+
+	for (int i = 0; i < _mapW * _mapW; i++)
+	{
+		Chunck chunck;
+
+		chunck.size = NORMAL * NB_CELL;
+		chunck.w = CELL_W / NORMAL;
+		chunck.txt = InitText(NORMAL);
+
+		if (_stage.type == HOSPITALS)
+		{
+			if (rand() % 100 < SHORTCUT_LUCK + 10)
+			{
+				chunck.type = Map::HOSPITAL;
+			}
+			else
+			{
+				chunck.type = Map::PLACE;
+			}
+		}//!!!!!!!!!!!!!!!!!!!!!!!!!
+		else if (_stage.type == LIBRARY) //!!!!!!!!!!!!!!!!!!!!!!!!!
+		{//!!!!!!!!!!!!!!!!!!!!!!!!!
+			if (rand() % 100 < SHORTCUT_LUCK + 10)
+			{
+				chunck.type = Map::LIBRARIES;
+			}
+			else
+			{
+				chunck.type = Map::LIBRARYSTAIRS;
+			}
+		}
+		else if (_stage.type == LABO)
+		{
+			chunck.type = Map::LABY;
+		}
+		_stage.chunckList.push_back(chunck);
+	}
+
+	int sizeMap = _mapW * _mapW;
+	for (int garden = 0; garden < 2; garden++)
+	{
+		if (_stageNb == 0)
+		{
+			_stage.chunckList[rand() % sizeMap].type = GARDEN;
+		}
+	}
+
+	for (int i = 0; i < _mapW * _mapW; i++)
+	{
+		if (_stageNb > 0 && map[_stageNb - 1].chunckList[i].type == Map::GARDEN)
+		{
+			_stage.chunckList[i].type = Map::GARDEN;
+		}
+	}
+
+	for (int i = 0; i < 1; i++)
+	{
+		int randomExit = 0;
+		do
+		{
+			randomExit = rand() % sizeMap;
+		} while (_stage.chunckList[randomExit].type == GARDEN);
+
+		_stage.chunckList[randomExit].type = EXIT;
+		_stage.chunckList[randomExit].nameRoom = Props::TextChunck(_stage.type).exit[_stage.type];
+	}
+
+	for (int i = 0; i < _mapW * _mapW; i++)
+	{
+
+		if (_stageNb > 0 && map[_stageNb - 1].chunckList[i].type == Map::EXIT)
+		{
+			_stage.chunckList[i].type = Map::ENTRANCE;
+			_stage.chunckList[i].nameRoom = Props::TextChunck(_stage.type).entrance[_stage.type];
+		}
+	}
+
+	if (_stageNb == 0)
+	{
+		int randomEntrance = 0;
+		do
+		{
+			do
+			{
+				randomEntrance = rand() % sizeMap;
+			} while (_stage.chunckList[randomEntrance].type == GARDEN);
+		} while (_stage.chunckList[randomEntrance].type == EXIT);
+		_stage.chunckList[randomEntrance].type = ENTRANCE;
+		_stage.chunckList[randomEntrance].nameRoom = Props::TextChunck(_stage.type).entrance[_stage.type];
+	}
+
+	for (int i = 0; i < infoRoomNb; i++)
+	{
+		int randomRoom = 0;
+		int randomRoomTxt = rand() % _stage.txtRoom.size();
+		do
+		{
+			do
+			{
+				do
+				{
+					randomRoom = rand() % sizeMap;
+				} while (_stage.chunckList[randomRoom].type == GARDEN);
+			} while (_stage.chunckList[randomRoom].type == ENTRANCE);
+		} while (_stage.chunckList[randomRoom].type == EXIT);
+		_stage.chunckList[randomRoom].type = ROOM;
+		_stage.chunckList[randomRoom].nameRoom = _stage.txtRoom[randomRoomTxt];
+		_stage.txtRoom.erase(_stage.txtRoom.begin() + randomRoomTxt);
+	}
+	for (int i = 0; i < _mapW * _mapW; i++)
+	{
+		if (_stage.chunckList[i].type == Map::GARDEN)
+		{
+			if (i > 0)
+			{
+				_stage.chunckList[i - 1].size = NORMAL * NB_CELL;
+				_stage.chunckList[i - 1].w = CELL_W / NORMAL;
+				_stage.chunckList[i - 1].txt = InitText(NORMAL);
+			}
+			if (i >= _mapW)
+			{
+				_stage.chunckList[i - _mapW].size = NORMAL * NB_CELL;
+				_stage.chunckList[i - _mapW].w = CELL_W / NORMAL;
+				_stage.chunckList[i - _mapW].txt = InitText(NORMAL);
+			}
+		}
+	}
 }
 
 void Map::GenerateMaze(int _mapW, int _nbStage)
 {
+	for (int stageNb = 0; stageNb < _nbStage; stageNb++)
+	{
+		Stage stage;
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		StageManagment(stage, stageNb, _mapW, _nbStage);
+		Maze::InitCell(stage, stageNb, _mapW, _nbStage);
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		Maze::InitLibrary(stage, _mapW, stageNb);
+		Maze::InitLibraryStairs(stage, _mapW, stageNb);
+		Maze::InitLaby(stage, _mapW);
+		Maze::InitPlace(stage, _mapW, stageNb);
+		Maze::InitHospital(stage, _mapW, stageNb);
+
+		Maze::InitGarden(stage, _mapW, stageNb);
+		Maze::InitExit(stage, _mapW, stageNb);
+		Maze::InitRoom(stage, _mapW, stageNb);
+		map.push_back(stage);
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	}
+	CreateMaze();
 }
 
 
@@ -247,10 +440,6 @@ void Map::CreateMaze()
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetParent(map[stageNb].chunckList[mapNb].parentSet, true);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetRenderingInstance(instanceAddr);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->LoadFromJson(json::parse(Files::GetFileContent(map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name)), false);
-						if (map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name == "../Sets/HOSPITAL/Props/HSP_Light.json")
-						{
-							lgCount++;
-						}
 						if (map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name == "../Sets/HOSPITAL/Props/HSP_RoomDoor.json")
 						{
 							map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetName("Door");
@@ -302,7 +491,6 @@ void Map::CreateMaze()
 			//}
 		}
 	}
-	std::cout << lgCount << std::endl;
 }
 
 std::vector<Map::Stage> Map::GetMap()
