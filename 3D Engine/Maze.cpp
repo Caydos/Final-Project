@@ -29,7 +29,7 @@ void Maze::InitCell(Map::Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 					///////////////////////////////////////////////////// INIT ROOF //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 					Map::Decor roof;
 
-					roof.pos = (glm::vec3(w * column + mapColumn * MAP_W, _stage.sizeOf * CELL_W + BRICK_W - BRICK_W / 4 - CELL_W, w * line - BRICK_W / 2 + mapLine * MAP_W + BRICK_W));
+					roof.pos = (glm::vec3(w * column + mapColumn * MAP_W, _stage.sizeOf * CELL_W + BRICK_W - BRICK_W / 4/* - CELL_W*/, w * line - BRICK_W / 2 + mapLine * MAP_W + BRICK_W));
 					roof.isVisible = true;
 					roof.name = txt.roof[_stage.chunckList[mapColumn + mapLine * _mapW].type];
 					cell.ground.push_back(roof);
