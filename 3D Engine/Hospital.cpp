@@ -391,7 +391,7 @@ void Hospital::ClownUpdate(char** _args)
 	if (clown != nullptr)
 	{
 		std::cout << "Setting clown pos : " << x << " " << y << " " << z << std::endl;
-		clown->SetPosition(glm::vec3(x, y, z),false);
+		clown->SetPosition(glm::vec3(x, clownSpawnPoint.y, z),false);
 		clown->SetRotation(glm::vec3(0.0, heading, 0.0),true);
 	}
 }
