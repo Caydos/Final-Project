@@ -228,7 +228,7 @@ void Scripting::Tick(GameData* _gameData)
 		if (_gameData->window.IsFocused())
 		{
 
-			if (ambientClock.GetElapsedTime() > 25000)
+			if (ambientClock.GetElapsedTime() > 50000)
 			{
 				ambientLaugh->SetPosition(glm::vec3(rand() % 50, 1.5f, rand() % 50));
 				ambientLaugh->Play();
