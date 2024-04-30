@@ -108,7 +108,7 @@ void Scripting::Tick(GameData* _gameData)
 		std::unique_lock<std::shared_mutex> lock(playerLock);
 		if (!Network::Connection::Create("51.178.46.32", 55301))
 		{
-			Logger::Write("Failed to connect");
+			//Logger::Write("Failed to connect");
 		}
 		// WARNING : ZOMBIE THREAD RN
 		interactionThread = std::thread(&Interactions::Thread, true);

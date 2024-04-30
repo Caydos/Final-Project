@@ -23,7 +23,7 @@ bool Network::Connection::Create(const char* _address, unsigned int _port)
 		WSADATA wsdata;
 		if (WSAStartup(MAKEWORD(2, 2), &wsdata) != 0)
 		{
-			Logger::Write("Socket Initialization fail.", "\n");
+			//Logger::Write("Socket Initialization fail.", "\n");
 			return false;
 		}
 		connection->socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -41,11 +41,11 @@ bool Network::Connection::Create(const char* _address, unsigned int _port)
 	int cd = connect(connection->socket, (SOCKADDR*)(&connection->address), sizeof(connection->address));
 	if (cd != 0)
 	{
-		Logger::Write("Failed to connect to socket at address : ", connection->ip, " - ", connection->port, " Code : ", cd, "\n");
+		//Logger::Write("Failed to connect to socket at address : ", connection->ip, " - ", connection->port, " Code : ", cd, "\n");
 		delete connection;
 		return false;
 	}
-	Logger::Write("Connection established at address : ", connection->ip, " - ", connection->port, "\n");
+	//Logger::Write("Connection established at address : ", connection->ip, " - ", connection->port, "\n");
 	connection->eventListener = std::thread(&Events::Listener, connection->socket);
 	connection->eventListener.detach();
 
