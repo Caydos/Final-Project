@@ -14,6 +14,7 @@ namespace Scripting
 	void SetCrosshairOpacity(float _opacity);
 
 	void PlayerUpdate(char** _args);
+	void SetConnectionState(bool _state);
 }
 
 #endif // !SCRIPTING_H

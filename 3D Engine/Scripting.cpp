@@ -36,9 +36,6 @@ static Sprite camOverlay;
 static Sprite crosshair;
 const float crosshairSize = 10.f;
 
-static Clock ambientClock;
-static Audio::Sound* ambientLaugh;
-static Audio::Sound* ambient;
 
 static Audio::Sound* footSteps;
 static Audio::Sound* footRun;
@@ -157,8 +154,8 @@ void Scripting::Tick(GameData* _gameData)
 		doorOpen = Audio::CreateSound();
 		doorOpen->LoadFromFile("../Sounds/DoorOpen.wav");
 
-		ambientLaugh = Audio::CreateSound();
-		ambientLaugh->LoadFromFile("../Sounds/LaughChild.wav");
+		//ambientLaugh = Audio::CreateSound();
+		//ambientLaugh->LoadFromFile("../Sounds/LaughChild.wav");
 
 		doorClose = Audio::CreateSound();
 		doorClose->LoadFromFile("../Sounds/DoorClose.wav");
@@ -169,10 +166,10 @@ void Scripting::Tick(GameData* _gameData)
 		footRun->SetPosition(playerPed->GetPosition());
 		player->SetFootStepSound2(footRun);
 
-		ambient = Audio::CreateSound();
-		ambient->LoadFromFile("../Sounds/AmbiantSound.wav");
-		ambient->Loop(true);
-		ambient->Play();
+		//ambient = Audio::CreateSound();
+		//ambient->LoadFromFile("../Sounds/AmbiantSound.wav");
+		//ambient->Loop(true);
+		//ambient->Play();
 
 
 		playerPed->SetPosition(spawnPoint, true);
@@ -228,12 +225,12 @@ void Scripting::Tick(GameData* _gameData)
 		if (_gameData->window.IsFocused())
 		{
 
-			if (ambientClock.GetElapsedTime() > 25000)
-			{
-				ambientLaugh->SetPosition(glm::vec3(rand() % 50, 1.5f, rand() % 50));
-				ambientLaugh->Play();
-				ambientClock.Restart();
-			}
+			//if (ambientClock.GetElapsedTime() > 25000)
+			//{
+			//	ambientLaugh->SetPosition(glm::vec3(rand() % 50, 1.5f, rand() % 50));
+			//	ambientLaugh->Play();
+			//	ambientClock.Restart();
+			//}
 
 
 
@@ -309,4 +306,10 @@ void Scripting::PlayerUpdate(char** _args)
 	int heading = ToFloat(_args[3]);
 
 	std::cout << heading << std::endl;
+}
+
+
+void Scripting::SetConnectionState(bool _state)
+{
+	connected = _state;
 }

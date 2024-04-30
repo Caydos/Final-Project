@@ -34,11 +34,13 @@ void Established(char** _args)
 	char* message = _args[0];
 	serverId = ToInt(_args[1]);
 
-	std::cout << message << std::endl;
-	std::cout << "My server id is : " << serverId << "." << std::endl;
+	//std::cout << message << std::endl;
+	//std::cout << "My server id is : " << serverId << "." << std::endl;
 
 	syncThread = std::thread(&Synchronization::Loop);
 	syncThread.detach();
+
+	Scripting::SetConnectionState(true);
 }
 
 void Synchronization::PedSyncEvents(void)

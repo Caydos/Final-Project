@@ -93,7 +93,7 @@ glm::vec3 Audio::Sound::GetPosition()
 
 void Audio::Sound::SetPosition(glm::vec3 _position)
 {
-	std::unique_lock<std::shared_mutex> lock(this->mutex);
+	//std::unique_lock<std::shared_mutex> lock(this->mutex);
 	this->position = _position;
 	//if (this->initialized)
 	{
