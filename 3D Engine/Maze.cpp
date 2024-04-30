@@ -381,7 +381,7 @@ void Maze::InitRoom(Map::Stage& _stage, int _mapW, int _stageNb) // !!!!!!!!! RO
 			for (int cell = 0; cell < nbCell * nbCell; cell++)
 			{
 				//_stage.chunckList[map].cellList[cell].ground[1].isVisible = false;
-				//_stage.chunckList[map].cellList[cell].ground[0].isVisible = false;
+				_stage.chunckList[map].cellList[cell].ground[0].isVisible = false;
 				for (int wall = 0; wall < _stage.chunckList[map].cellList[cell].wallMissingList.size(); wall++)
 				{
 					_stage.chunckList[map].cellList[cell].wallMissingList[wall].isVisible = false;
