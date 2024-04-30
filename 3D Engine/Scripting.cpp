@@ -42,14 +42,18 @@ static Audio::Sound* footRun;
 static Audio::Sound* tampon;
 static Audio::Sound* doorOpen;
 static Audio::Sound* doorClose;
-
 struct Door
 {
 	Sets::Set* set = nullptr;
 	bool opened = false;
 };
 std::vector<Door> doors;
+
 static bool connected = false;
+static int gameState = 0;
+static std::shared_mutex gameStateMutex;
+static Sprite winSprite;
+static Sprite looseSprite;
 
 void DoorInteraction(Sets::Set* _set)
 {
@@ -102,10 +106,10 @@ void Scripting::Tick(GameData* _gameData)
 	if (!initialized)
 	{
 		std::unique_lock<std::shared_mutex> lock(playerLock);
-		/*if (!Network::Connection::Create("51.178.46.32", 55301))
+		if (!Network::Connection::Create("51.178.46.32", 55301))
 		{
 			Logger::Write("Failed to connect");
-		}*/
+		}
 		// WARNING : ZOMBIE THREAD RN
 		interactionThread = std::thread(&Interactions::Thread, true);
 		interactionThread.detach();
@@ -208,6 +212,10 @@ void Scripting::Tick(GameData* _gameData)
 		camOverlays[1] = new Texture;
 		camOverlays[1]->LoadFromFile("../Textures/Overlay.png");
 
+
+		winSprite.Load("../Textures/ScreenWin.png", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0), 1);
+		looseSprite.Load("../Textures/ScreenLoose.png", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0), 1);
+
 		camOverlay.Load("", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0), 1);
 		crosshair.Load("../Textures/RoundCrossHair.png",
 			glm::vec3(_gameData->resolution[0] / 2 - crosshairSize / 2, _gameData->resolution[1] / 2 - crosshairSize / 2, 0.0),
@@ -222,48 +230,49 @@ void Scripting::Tick(GameData* _gameData)
 
 
 		crosshair.SetOpacity(0.5f);
-		if (_gameData->window.IsFocused())
+		std::shared_lock<std::shared_mutex> lock(gameStateMutex);
+		if (gameState == 0)
 		{
-
-			if (ambientClock.GetElapsedTime() > 50000)
+			lock.unlock();
+			if (_gameData->window.IsFocused())
 			{
-				ambientLaugh->SetPosition(glm::vec3(rand() % 50, 1.5f, rand() % 50));
-				ambientLaugh->Play();
-				ambientClock.Restart();
+				Crosshairs::Get()->SetColor(Colors::White);
+				player->Control(_gameData);
+				Peds::Simulate(_gameData);
+
+				flashLight->position = _gameData->camera->Position;
+				flashLight->direction = _gameData->camera->Front;
+				Lighting::UpdateSpot(flashLight);
+				Scene::Lights::UpdateSpot(flashLight);
+
+				// Cheat code
+				if (_gameData->window.IsKeyPressed(Keys::F1))
+				{
+					player->GetPed()->SetBodyType(Physics::Type::GHOST);
+				}
+				if (_gameData->window.IsKeyPressed(Keys::F2))
+				{
+					player->GetPed()->SetBodyType(Physics::Type::RIGID);
+				}
+				if (_gameData->window.IsKeyPressed(Keys::F3))
+				{
+					player->GetPed()->SetPosition(spawnPoint);
+				}
+				GameObjects::Tick(_gameData);
+				crosshair.Draw();
 			}
+			Hospital::Tick(_gameData);
 
-
-
-
-			//Crosshairs::Draw();
-			Crosshairs::Get()->SetColor(Colors::White);
-			player->Control(_gameData);
-			Peds::Simulate(_gameData);
-
-			flashLight->position = _gameData->camera->Position;
-			flashLight->direction = _gameData->camera->Front;
-			Lighting::UpdateSpot(flashLight);
-			Scene::Lights::UpdateSpot(flashLight);
-
-			// Cheat code
-			if (_gameData->window.IsKeyPressed(Keys::F1))
-			{
-				player->GetPed()->SetBodyType(Physics::Type::GHOST);
-			}
-			if (_gameData->window.IsKeyPressed(Keys::F2))
-			{
-				player->GetPed()->SetBodyType(Physics::Type::RIGID);
-			}
-			if (_gameData->window.IsKeyPressed(Keys::F3))
-			{
-				player->GetPed()->SetPosition(spawnPoint);
-			}
-			GameObjects::Tick(_gameData);
-			crosshair.Draw();
+			MainMenu::Tick(_gameData);
 		}
-		Hospital::Tick(_gameData);
-
-		MainMenu::Tick(_gameData);
+		else if (gameState == 1)
+		{
+			winSprite.Draw();
+		}
+		else if (gameState == -1)
+		{
+			looseSprite.Draw();
+		}
 		camOverlay.SetTexture(camOverlays[0]);
 		if (connected)
 		{
@@ -305,11 +314,16 @@ void Scripting::PlayerUpdate(char** _args)
 	int z = ToFloat(_args[2]);
 	int heading = ToFloat(_args[3]);
 
-	std::cout << heading << std::endl;
+	//std::cout << heading << std::endl;
 }
 
 
 void Scripting::SetConnectionState(bool _state)
 {
 	connected = _state;
+}
+void Scripting::SetgameState(int _state)
+{
+	std::unique_lock<std::shared_mutex> lock(gameStateMutex);
+	gameState = _state;
 }

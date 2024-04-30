@@ -15,6 +15,7 @@ namespace Scripting
 
 	void PlayerUpdate(char** _args);
 	void SetConnectionState(bool _state);
+	void SetgameState(int _state);
 }
 
 #endif // !SCRIPTING_H

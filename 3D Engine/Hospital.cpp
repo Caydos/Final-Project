@@ -118,7 +118,7 @@ void CubePickup(Sets::Set* _set)
 
 void InteractExit(Sets::Set* _set)
 {
-	std::cout << "WINNNN" << std::endl;
+	Scripting::SetgameState(1);
 }
 
 void Hospital::Initialize(GameData* _gameData)
@@ -373,6 +373,10 @@ void Hospital::Tick(GameData* _gameData)
 			{
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();
 				playerPed->SetPosition(clown->GetWorldPosition(), true);
+			}
+			if (_gameData->window.IsKeyPressed(Keys::KP_9))
+			{
+				Scripting::SetgameState(-1);
 			}
 		}
 	}
