@@ -31,13 +31,13 @@ int main()
 		device = alcOpenDevice(NULL);
 		if (!device)
 		{
-			return 0;
+			//return 0;
 		}
 
 		context = alcCreateContext(device, NULL);
 		if (!context) {
 			alcCloseDevice(device);
-			return 0;
+			//return 0;
 		}
 		alcMakeContextCurrent(context);
 

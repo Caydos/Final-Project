@@ -52,7 +52,7 @@ void Tools::Initialize(GameData* _gameData)
 	spot->cutOff = glm::cos(glm::radians(20.0f));
 	spot->outerCutOff = glm::cos(glm::radians(40.0f));
 
-	Map::GenerateMaze(8, 1);
+	Map::GenerateMaze(8, 3);
 	_gameData->dt = std::min(_gameData->dt, 1.0f);
 
 	//Sets::Set* room = Sets::Create();

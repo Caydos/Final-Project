@@ -102,10 +102,10 @@ void Scripting::Tick(GameData* _gameData)
 	if (!initialized)
 	{
 		std::unique_lock<std::shared_mutex> lock(playerLock);
-		if (!Network::Connection::Create("51.178.46.32", 55301))
+		/*if (!Network::Connection::Create("51.178.46.32", 55301))
 		{
 			Logger::Write("Failed to connect");
-		}
+		}*/
 		// WARNING : ZOMBIE THREAD RN
 		interactionThread = std::thread(&Interactions::Thread, true);
 		interactionThread.detach();
@@ -225,12 +225,12 @@ void Scripting::Tick(GameData* _gameData)
 		if (_gameData->window.IsFocused())
 		{
 
-			//if (ambientClock.GetElapsedTime() > 25000)
-			//{
-			//	ambientLaugh->SetPosition(glm::vec3(rand() % 50, 1.5f, rand() % 50));
-			//	ambientLaugh->Play();
-			//	ambientClock.Restart();
-			//}
+			if (ambientClock.GetElapsedTime() > 50000)
+			{
+				ambientLaugh->SetPosition(glm::vec3(rand() % 50, 1.5f, rand() % 50));
+				ambientLaugh->Play();
+				ambientClock.Restart();
+			}
 
 
 

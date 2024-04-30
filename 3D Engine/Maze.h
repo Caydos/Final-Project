@@ -106,6 +106,7 @@ namespace Maze
 	void InitGarden(Map::Stage& _stage, int _mapW, int _stageNb);
 	void InitExit(Map::Stage& _stage, int _mapW, int _stageNb);
 	void InitRoom(Map::Stage& _stage, int _mapW, int _stageNb);
+	void InitProps(Map::Stage& _stage, int _mapW, int _stageNb);
 	void InitPlace(Map::Stage& _stage, int _mapW, int _stageNb);
 	void InitLibrary(Map::Stage& _stage, int _mapW, int _stageNb);
 	void InitHospital(Map::Stage& _stage, int _mapW, int _stageNb);
