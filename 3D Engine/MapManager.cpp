@@ -34,7 +34,7 @@ Map::ManagmentText Map::InitText(int _size)
 		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
 		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
 		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
-		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
+		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
@@ -134,9 +134,13 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 	{
 		_stage.type = HOSPITALS;
 	}
-	else
+	else if (_stageNb == 1)
 	{
 		_stage.type = LIBRARY;
+	}
+	else
+	{
+		_stage.type = LABO;
 	}
 
 	//_stage.type = _stageNb;
@@ -166,13 +170,16 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 
 	if (_stageNb != 0)
 	{
-		_stage.sizeOf += map[_stageNb - 1].hightScale;
+		_stage.sizeOf = map[_stageNb - 1].hightScale;
 		_stage.hightScale += _stage.sizeOf;
 	}
 	else
 	{
 		_stage.sizeOf = 0;
+		//_stage.hightScale = 0;
 	}
+
+	std::cout << "size " << _stage.hightScale << std::endl;
 
 	for (int i = 0; i < _mapW * _mapW; i++)
 	{
@@ -184,7 +191,7 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 
 		if (_stage.type == HOSPITALS)
 		{
-			if (rand() % 100 < SHORTCUT_LUCK + 10)
+			if (rand() % 100 < SHORTCUT_LUCK)
 			{
 				chunck.type = Map::HOSPITAL;
 			}
@@ -195,14 +202,14 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		}//!!!!!!!!!!!!!!!!!!!!!!!!!
 		else if (_stage.type == LIBRARY) //!!!!!!!!!!!!!!!!!!!!!!!!!
 		{//!!!!!!!!!!!!!!!!!!!!!!!!!
-			if (rand() % 100 < SHORTCUT_LUCK + 10)
-			{
-				chunck.type = Map::LIBRARIES;
-			}
-			else
-			{
-				chunck.type = Map::LIBRARYSTAIRS;
-			}
+			//if (rand() % 100 < SHORTCUT_LUCK + 10)
+			//{
+			chunck.type = Map::LIBRARIES;
+			//}
+			//else
+			//{
+			//	chunck.type = Map::LIBRARYSTAIRS;
+			//}
 		}
 		else if (_stage.type == LABO)
 		{
@@ -233,8 +240,12 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		int randomExit = 0;
 		do
 		{
-			randomExit = rand() % sizeMap;
-		} while (_stage.chunckList[randomExit].type == GARDEN);
+			do
+			{
+				randomExit = rand() % sizeMap;
+			} while (_stage.chunckList[randomExit].type == GARDEN);
+		} while (randomExit < _mapW || randomExit >= _mapW * _mapW - _mapW || randomExit % _mapW == 0 || (randomExit + 1) % _mapW == 0);
+
 
 		_stage.chunckList[randomExit].type = EXIT;
 		_stage.chunckList[randomExit].nameRoom = Props::TextChunck(_stage.type).exit[_stage.type];
@@ -257,9 +268,12 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 		{
 			do
 			{
-				randomEntrance = rand() % sizeMap;
-			} while (_stage.chunckList[randomEntrance].type == GARDEN);
-		} while (_stage.chunckList[randomEntrance].type == EXIT);
+				do
+				{
+					randomEntrance = rand() % sizeMap;
+				} while (_stage.chunckList[randomEntrance].type == GARDEN);
+			} while (_stage.chunckList[randomEntrance].type == EXIT);
+		} while (randomEntrance < _mapW || randomEntrance >= _mapW * _mapW - _mapW || randomEntrance % _mapW == 0 || (randomEntrance + 1) % _mapW == 0);
 		_stage.chunckList[randomEntrance].type = ENTRANCE;
 		_stage.chunckList[randomEntrance].nameRoom = Props::TextChunck(_stage.type).entrance[_stage.type];
 	}
@@ -268,16 +282,25 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 	{
 		int randomRoom = 0;
 		int randomRoomTxt = rand() % _stage.txtRoom.size();
+		//do
+		//{
 		do
 		{
 			do
 			{
 				do
 				{
-					randomRoom = rand() % sizeMap;
-				} while (_stage.chunckList[randomRoom].type == GARDEN);
-			} while (_stage.chunckList[randomRoom].type == ENTRANCE);
-		} while (_stage.chunckList[randomRoom].type == EXIT);
+					do
+					{
+						do
+						{
+							randomRoom = rand() % sizeMap;
+						} while (_stage.chunckList[randomRoom].type == GARDEN);
+					} while (_stage.chunckList[randomRoom].type == ENTRANCE);
+				} while (_stage.chunckList[randomRoom].type == EXIT);
+			} while (_stage.chunckList[randomRoom].type == ROOM);
+		} while (randomRoom < _mapW || randomRoom >= _mapW * _mapW - _mapW || randomRoom % _mapW == 0 || (randomRoom + 1) % _mapW == 0);
+
 		_stage.chunckList[randomRoom].type = ROOM;
 		_stage.chunckList[randomRoom].nameRoom = _stage.txtRoom[randomRoomTxt];
 		_stage.txtRoom.erase(_stage.txtRoom.begin() + randomRoomTxt);
@@ -322,6 +345,7 @@ void Map::GenerateMaze(int _mapW, int _nbStage)
 		Maze::InitGarden(stage, _mapW, stageNb);
 		Maze::InitExit(stage, _mapW, stageNb);
 		Maze::InitRoom(stage, _mapW, stageNb);
+		Maze::InitProps(stage, _mapW, stageNb);
 		map.push_back(stage);
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	}
