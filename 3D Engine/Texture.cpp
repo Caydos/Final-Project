@@ -22,10 +22,13 @@ void Texture::LoadFromFile(const char* _path)
 	{
 		format = GL_RGBA;
 	}
-
+	if (glGetError() != GL_NO_ERROR)
+	{
+		std::cout << "Error before texture" << std::endl;
+	}
 	glGenTextures(1, &this->id);
 	if (glGetError() != GL_NO_ERROR) {
-		std::cerr << "Error after glGenTextures" << std::endl;
+		std::cerr << "Error after glGenTextures " << _path << std::endl;
 	}
 
 	GLfloat maxAnisotropy;
@@ -33,7 +36,7 @@ void Texture::LoadFromFile(const char* _path)
 
 	glBindTexture(GL_TEXTURE_2D, this->id);
 	if (glGetError() != GL_NO_ERROR) {
-		std::cerr << "Error after glBindTexture" << std::endl;
+		std::cerr << "Error after glBindTexture " << _path << std::endl;
 	}
 
 	// set texture wrapping to GL_REPEAT (default wrapping method)

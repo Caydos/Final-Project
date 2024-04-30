@@ -463,7 +463,14 @@ void Map::CreateMaze()
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetParent(map[stageNb].chunckList[mapNb].parentSet, true);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetRenderingInstance(instanceAddr);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->LoadFromJson(json::parse(Files::GetFileContent(map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name)), false);
-						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetName("props");
+						if (map[stageNb].chunckList[mapNb].cellList[cell].props[Props].name == "../Sets/HOSPITAL/Props/HSP_RoomDoor.json")
+						{
+							map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetName("Door");
+						}
+						else
+						{
+							map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetName("props");
+						}
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetPath("../Sets/");
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetRotation(map[stageNb].chunckList[mapNb].cellList[cell].props[Props].rot, true);
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetPosition(map[stageNb].chunckList[mapNb].cellList[cell].props[Props].pos);
@@ -513,7 +520,6 @@ std::vector<Map::Stage> Map::GetMap()
 {
 	return map;
 }
-
 
 Map::Stage* Map::GetStage(Map::StageEnum _stageEnum)
 {

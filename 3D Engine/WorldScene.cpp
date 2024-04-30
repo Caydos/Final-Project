@@ -146,6 +146,8 @@ void Scene::World::Render(GameData* _gameData)
         _gameData->shaders[Shaders::GEOMETRY]->setMat4("projection", projection);
         _gameData->shaders[Shaders::GEOMETRY]->setMat4("view", view);
         _gameData->shaders[Shaders::GEOMETRY]->setBool("instanceUsage", true);
+        _gameData->shaders[Shaders::GEOMETRY]->setVec3("viewPos", camera->Position);
+        _gameData->shaders[Shaders::GEOMETRY]->setFloat("heightScale", 0.1f);
 
     }
 	DeferredShading::Draw(_gameData, skyboxState);

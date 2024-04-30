@@ -29,20 +29,11 @@ out vec3 outSpecular;
 out float outConstant;
 out float outLinear;
 out float outQuadratic;
+out float outActivation;
 
 
 void main()
 {
-    if (activation == 0)
-    {
-        return;
-    }
-    vec4 worldPosition = modelMatrix * vec4(vertexPos, 1.0);
-    vec4 viewPosition = view * worldPosition;
-    gl_Position = projection * viewPosition;
-
-
-
     outPosition = position;
     outDirection = direction;
     outCutOff = cutOff;
@@ -53,4 +44,14 @@ void main()
     outConstant = constant;
     outLinear = linear;
     outQuadratic = quadratic;
+    outActivation = activation;
+
+    if (activation == 0)
+    {
+        gl_Position = vec4(-9999.0, -9999.0, -9999.0, 1.0);
+        return;
+    }
+    vec4 worldPosition = modelMatrix * vec4(vertexPos, 1.0);
+    vec4 viewPosition = view * worldPosition;
+    gl_Position = projection * viewPosition;
 }

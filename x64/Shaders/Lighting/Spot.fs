@@ -1,8 +1,4 @@
 #version 430 core
-// layout (location = 0) out vec3 gPosition;
-// layout (location = 1) out vec3 gNormal;
-// layout (location = 2) out vec4 gAlbedoSpec;
-// layout (location = 3) out vec4 gEffects;
 layout (location = 0) out vec4 gLightingSpec;
 
 
@@ -22,6 +18,7 @@ in vec3 outSpecular;
 in float outConstant;
 in float outLinear;
 in float outQuadratic;
+in float outActivation;
 
 // calculates the color when using a spot light.
 vec3 CalcSpotLight(vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, float _specular, float _shininess)
@@ -34,8 +31,10 @@ vec3 CalcSpotLight(vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, fl
     float spec = pow(max(dot(_viewDir, reflectDir), 0.0), _shininess);
     // attenuation
     float distance = length(outPosition - _worldPos);
-    float attenuation = 1.0 / (outConstant + outLinear * distance + outQuadratic * (distance * distance));    
-    // float attenuation = 1.0 / (outConstant * distance * distance);
+    // float attenuation = 1.0 / (outConstant + outLinear * distance + outQuadratic * (distance * distance));    
+    float attenuation = 1.0 / (outConstant * distance * distance* distance * distance* distance * distance);
+    attenuation = min(attenuation, 1.0);
+
     // spotlight intensity
     float theta = dot(lightDir, normalize(-outDirection)); 
     float epsilon = outCutOff - outOuterCutOff;
@@ -43,8 +42,8 @@ vec3 CalcSpotLight(vec3 _normal, vec3 _worldPos, vec3 _viewDir, vec3 _albedo, fl
     // combine results
     vec3 ambient = outAmbient * _albedo;
     vec3 diffuse = outDiffuse * diff * _albedo;
-    vec3 specular = outSpecular * spec * vec3(_specular,_specular,_specular);
-    // vec3 specular = vec3(0.0);
+    // vec3 specular = outSpecular * spec * vec3(_specular,_specular,_specular);
+    vec3 specular = vec3(0.0);
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
@@ -56,6 +55,12 @@ uniform vec4 clearColor;
 uniform vec2 screenSize;
 void main() 
 {
+    if (outActivation == 0)
+    {
+        gLightingSpec = vec4(1.0,0.0,0.0,1.0);
+        discard;
+        // return;
+    }
     vec2 ndc = gl_FragCoord.xy / screenSize;
     vec3 WorldPos = texture(inPosition, ndc).rgb;
     vec3 Normal = texture(inNormal, ndc).rgb;

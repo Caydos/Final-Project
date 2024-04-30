@@ -229,6 +229,17 @@ void Sets::Set::CheckVisibility()
 	}
 	//else if (!this->blocks.size()) { return; }//Prevent underdered since It has been applied for visibility
 
+	GameData* _gameData = GetGameData();
+	if (glm::distance(_gameData->camera->Position, this->boundingBox.GetBox().min) > _gameData->settings.renderDistance
+		&& glm::distance(_gameData->camera->Position, this->boundingBox.GetBox().max) > _gameData->settings.renderDistance)
+	{
+		if (!this->visible) { return; }
+		this->visible = false;
+		this->AppplyVisibility();
+		return;
+	}
+
+
 	if (FrustumCulling::IsBoxInFrustum(Scene::World::GetProjection(), Scene::World::GetView(), this->boundingBox.GetBox().min, this->boundingBox.GetBox().max))
 	{
 		if (this->visible) { return; }
@@ -511,6 +522,16 @@ void Sets::Set::SetPosition(glm::vec3 _position, bool _computeTransformation)
 		ApplyTransformation();
 	}
 }
+glm::vec3 Sets::Set::GetWorldPosition()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(*this->bone, scale, rotation, translation, skew, perspective);
+	return translation;
+}
 void Sets::Set::Move(glm::vec3 _position, bool _computeTransformation)
 {
 	this->position += _position;
@@ -730,7 +751,7 @@ void Sets::Set::DrawBoundingBox()
 	this->boundingBox.Draw();
 }
 
-glm::vec3 Sets::Set::ComputeCollisions(Bounds::Box _boudingBox,glm::vec3 _velocity)
+glm::vec3 Sets::Set::ComputeCollisions(Bounds::Box _boudingBox, glm::vec3 _velocity)
 {
 	if (Collisions::CalculateCollisionResponse(_boudingBox, this->GetBoundingBox(), _velocity) != glm::vec3(0.0))
 	{

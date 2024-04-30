@@ -3,6 +3,7 @@
 Players::Player::Player()
 {
 	this->footSteps = nullptr;
+	this->footSteps2 = nullptr;
 }
 
 Players::Player::~Player()
@@ -13,6 +14,11 @@ const float sideSpeedMultiplier = 0.8f;
 void Players::Player::SetFootStepSound(Audio::Sound* _sound)
 {
 	this->footSteps = _sound;
+}
+
+void Players::Player::SetFootStepSound2(Audio::Sound* _sound)
+{
+	this->footSteps2 = _sound;
 }
 
 void Players::Player::Control(GameData* _gameData)
@@ -28,18 +34,41 @@ void Players::Player::Control(GameData* _gameData)
 		if (_gameData->window.IsKeyPressed(Keys::W))
 		{
 			velocityVec += horizontalFront * velocity;
+			if (!this->footSteps->IsPlaying() && !_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
+			{
+				this->footSteps->Play();
+			}
+		}
+		else
+		{
+			if (this->footSteps->IsPlaying())
+			{
+				this->footSteps->Pause();
+			}
 		}
 		if (_gameData->window.IsKeyPressed(Keys::S))
 		{
 			velocityVec -= horizontalFront * velocity;
+			if (!this->footSteps->IsPlaying() && !_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
+			{
+				this->footSteps->Play();
+			}
 		}
 		if (_gameData->window.IsKeyPressed(Keys::A))
 		{
 			velocityVec -= glm::normalize(glm::vec3(camera->Right.x, 0.0f, camera->Right.z)) * velocity * sideSpeedMultiplier;
+			if (!this->footSteps->IsPlaying() && !_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
+			{
+				this->footSteps->Play();
+			}
 		}
 		if (_gameData->window.IsKeyPressed(Keys::D))
 		{
 			velocityVec += glm::normalize(glm::vec3(camera->Right.x, 0.0f, camera->Right.z)) * velocity * sideSpeedMultiplier;
+			if (!this->footSteps->IsPlaying() && !_gameData->window.IsKeyPressed(Keys::LEFT_SHIFT))
+			{
+				this->footSteps->Play();
+			}
 		}
 		if (_gameData->window.IsKeyPressed(Keys::SPACE) && jumpClock.GetElapsedTime() > 500/* && this->ped->GetBody().velocity.y == 0*/)
 		{
@@ -65,6 +94,18 @@ void Players::Player::Control(GameData* _gameData)
 			this->ped->Run();
 			velocityVec.x *= this->ped->GetRunningMultiplier();
 			velocityVec.z *= this->ped->GetRunningMultiplier();
+			if (!this->footSteps2->IsPlaying())
+			{
+				this->footSteps2->Play();
+				this->footSteps->Pause();
+			}
+		}
+		else
+		{
+			if (this->footSteps2->IsPlaying())
+			{
+				this->footSteps2->Pause();
+			}
 		}
 
 		this->ped->PushVelocity(velocityVec, true);

@@ -13,16 +13,17 @@ namespace Players
 		~Player();
 
 		void SetFootStepSound(Audio::Sound* _sound);
+		void SetFootStepSound2(Audio::Sound* _sound);
 		void Control(GameData* _gameData);
 
 		Peds::Ped* GetPed();
 		void SetPed(Peds::Ped* _ped);
-
 	private:
 		//int serverId;
 		Peds::Ped* ped;
 		Clock jumpClock;
 		Audio::Sound* footSteps;
+		Audio::Sound* footSteps2;
 	};
 	Player* Create();
 	void Erase(Player* _player);

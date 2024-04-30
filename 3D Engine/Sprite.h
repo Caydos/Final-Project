@@ -152,8 +152,8 @@ public:
 		glm::vec2 halfScale(scale.x / 2, scale.y / 2);
 		if (mousePos.x >= position.x
 			&& mousePos.x <= position.x + scale.x
-			&& mousePos.y >= position.y - scale.y
-			&& mousePos.y <= position.y
+			&& mousePos.y >= position.y
+			&& mousePos.y <= position.y + scale.y
 			)
 		{
 			return true;

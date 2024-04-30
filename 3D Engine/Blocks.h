@@ -76,6 +76,9 @@ namespace Blocks
 		Texture* GetNormalMap();
 		void SetNormalMap(Texture* _texture);
 
+		Texture* GetHeightMap();
+		void SetHeightMap(Texture* _texture);
+
 		Colors::Color GetColor();
 		void SetColor(Colors::Color _color);
 
@@ -107,8 +110,8 @@ namespace Blocks
 
 		bool IsLightEmitter();
 		void SetLightEmission(bool _state);
-		//Lighting::Light GetLight();
-		//void SetLight(Lighting::Light _light);
+		Lighting::Spot GetLight();
+		void SetLight(Lighting::Spot _light);
 
 		void Draw();
 
@@ -117,7 +120,8 @@ namespace Blocks
 
 		Shaders::Shader* shader;
 		Texture* texture;
-		Texture* effects;
+		Texture* normal;
+		Texture* height;
 		Colors::Color color;
 
 		glm::vec3 scale;
@@ -129,7 +133,7 @@ namespace Blocks
 		std::vector<Instance*> instances;
 
 		bool lightEmission;
-		//Lighting::Light lightEmitter;
+		Lighting::Spot lightEmitter;
 	};
 
 	class Block
@@ -188,7 +192,7 @@ namespace Blocks
 		glm::vec3 scale;
 		Bounds::Box boundingBox;
 
-		//Lighting::Light* light;
+		Lighting::Spot* light;
 	};
 
 	void Initialize();

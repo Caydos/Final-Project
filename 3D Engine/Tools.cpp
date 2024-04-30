@@ -46,7 +46,7 @@ void Tools::Initialize(GameData* _gameData)
 	spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
 	spot->diffuse = glm::vec3(0.5f);
 	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-	spot->constant = 0.5f;
+	spot->constant = 0.0000f;
 	spot->linear = 0.0f;
 	spot->quadratic = 0.0f;
 	spot->cutOff = glm::cos(glm::radians(20.0f));
@@ -73,22 +73,22 @@ void Tools::Initialize(GameData* _gameData)
 
 	// MONSTER
 
-	monster = Monster::Create();
-	Peds::Ped* monsterPed = Peds::Create();
-	monsterPed->Initialize();
-	monsterPed->GenerateRenderingInstance();
-	monsterPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_VendinMachin.json")));
-	monsterPed->SetName("Monster");
-	monsterPed->SetScale(0.2);
-	glm::vec3 initialPosition = glm::vec3(1.0f, 1.2f, 3.0f);
-	monsterPed->SetBodyType(Physics::Type::RIGID);
-	monster->SetVelocity(glm::vec3(0, 0, 0));
-	monster->SetDirection(1);
-	monster->SetPed(monsterPed);
+	//monster = Monster::Create();
+	//Peds::Ped* monsterPed = Peds::Create();
+	//monsterPed->Initialize();
+	//monsterPed->GenerateRenderingInstance();
+	//monsterPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_VendinMachin.json")));
+	//monsterPed->SetName("Monster");
+	//monsterPed->SetScale(0.2);
+	//glm::vec3 initialPosition = glm::vec3(1.0f, 1.2f, 3.0f);
+	//monsterPed->SetBodyType(Physics::Type::RIGID);
+	//monster->SetVelocity(glm::vec3(0, 0, 0));
+	//monster->SetDirection(1);
+	//monster->SetPed(monsterPed);
 
-	monsterPed->SetPosition(initialPosition);
-	monsterPed->SetRotation(glm::vec3(0.0));
-	monster->SetTargetPlayer(player);
+	//monsterPed->SetPosition(initialPosition);
+	//monsterPed->SetRotation(glm::vec3(0.0));
+	//monster->SetTargetPlayer(player);
 
 
 

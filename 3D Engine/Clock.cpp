@@ -5,6 +5,8 @@
 Clock::Clock() : isPaused(false), pausedTime(0)
 {
     clock = std::chrono::high_resolution_clock::now();
+    isPaused = false;
+    timeSave = 0;
 }
 
 void Clock::Restart(void)

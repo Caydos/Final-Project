@@ -1,7 +1,8 @@
 #ifndef INTERACTION_H
 #define INTERACTION_H
 #include "Common.h"
-
+#include "RayCasting.h"
+#include "Set.h"
 
 namespace Interactions
 {

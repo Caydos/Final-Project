@@ -26,29 +26,29 @@ ALCcontext* context;
 
 int main()
 {
-	//{//Audio
-	//	// Initialize OpenAL device and context
-	//	device = alcOpenDevice(NULL);
-	//	if (!device)
-	//	{
-	//		return 0;
-	//	}
+	{//Audio
+		// Initialize OpenAL device and context
+		device = alcOpenDevice(NULL);
+		if (!device)
+		{
+			return 0;
+		}
 
-	//	context = alcCreateContext(device, NULL);
-	//	if (!context) {
-	//		alcCloseDevice(device);
-	//		return 0;
-	//	}
-	//	alcMakeContextCurrent(context);
+		context = alcCreateContext(device, NULL);
+		if (!context) {
+			alcCloseDevice(device);
+			return 0;
+		}
+		alcMakeContextCurrent(context);
 
-	//	// Set Listener properties
-	//	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); // Position of the listener
-	//	ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
-	//	alListenerfv(AL_ORIENTATION, orientation);
+		// Set Listener properties
+		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); // Position of the listener
+		ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
+		alListenerfv(AL_ORIENTATION, orientation);
 
-	//	// Set Distance Model (optional, depending on your needs)
-	//	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
-	//}
+		// Set Distance Model (optional, depending on your needs)
+		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+	}
 	std::thread audioThread(Audio::Tick);
 	audioThread.detach();
 
@@ -73,7 +73,15 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
-	glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+	//glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+		// Get the primary monitor
+	//GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+	//// Get the video mode for the primary monitor
+	//const GLFWvidmode* vidmode = glfwGetVideoMode(monitor);
+
+	//glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
 
 	gameData.window.Create("3D Rendering Engine", gameData.resolution[0], gameData.resolution[1]);
 
@@ -95,7 +103,7 @@ int main()
 
 	gameData.gameStates[TOOLS] = &Tools::Tick;
 	gameData.gameStates[GAME] = &Scripting::Tick;
-	gameData.gameState = TOOLS;
+	gameData.gameState = GAME;
 
 #ifdef _DEBUG
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -160,8 +168,8 @@ int main()
 	ImGui::DestroyContext();
 	glfwTerminate();
 
-	//alcDestroyContext(context);
-	//alcCloseDevice(device);
+	alcDestroyContext(context);
+	alcCloseDevice(device);
 
 	system("pause");
 	return 0;

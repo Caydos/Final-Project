@@ -184,6 +184,12 @@
     <Filter Include="Source Files\Game\Scripting\Levels\Hospital\KeyPad">
       <UniqueIdentifier>{0d425235-ec70-4ef1-95d9-56586a134302}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripting\Interaction\GameObject">
+      <UniqueIdentifier>{272d05af-2175-4424-aa10-f07259508773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\MainMenu">
+      <UniqueIdentifier>{8202fc3c-40f2-4267-a5d7-e627892b777c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -365,6 +371,12 @@
     </ClCompile>
     <ClCompile Include="KeyPad.cpp">
       <Filter>Source Files\Game\Scripting\Levels\Hospital\KeyPad</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Game\Scripting\Interaction\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files\Game\Scripting\MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -562,6 +574,12 @@
     </ClInclude>
     <ClInclude Include="KeyPad.h">
       <Filter>Source Files\Game\Scripting\Levels\Hospital\KeyPad</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Source Files\Game\Scripting\Interaction\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Source Files\Game\Scripting\MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
