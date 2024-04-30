@@ -35,8 +35,17 @@ static Texture* camOverlays[2] = { nullptr };
 static Sprite camOverlay;
 static Sprite crosshair;
 const float crosshairSize = 10.f;
+
+static Clock ambientClock;
+static Audio::Sound* ambientLaugh;
+static Audio::Sound* ambient;
+
 static Audio::Sound* footSteps;
 static Audio::Sound* footRun;
+static Audio::Sound* tampon;
+static Audio::Sound* doorOpen;
+static Audio::Sound* doorClose;
+
 struct Door
 {
 	Sets::Set* set = nullptr;
@@ -53,10 +62,12 @@ void DoorInteraction(Sets::Set* _set)
 		{
 			if (doors[i].opened)
 			{
+				doorClose->Play();
 				_set->Rotate(glm::vec3(0.0, -90.0f, 0.0));
 			}
 			else
 			{
+				doorOpen->Play();
 				_set->Rotate(glm::vec3(0.0, 90.0f, 0.0));
 			}
 			doors[i].opened = !doors[i].opened;
@@ -69,10 +80,11 @@ void Scripting::HoveredCrosshair()
 }
 void Generation()
 {
+
 	Clock loadingClock;
 	loadingClock.Restart();
 	Map::GenerateMaze(8, 1);
-	std::vector<Sets::Set*>*  sets = Sets::GetAll();
+	std::vector<Sets::Set*>* sets = Sets::GetAll();
 	for (size_t i = 0; i < sets->size(); i++)
 	{
 		if (sets->at(i)->GetName() == "Door")
@@ -136,12 +148,32 @@ void Scripting::Tick(GameData* _gameData)
 		footSteps = Audio::CreateSound();
 		footSteps->LoadFromFile("../Sounds/Footsteps2.wav");
 		footSteps->Loop(true);
+		footSteps->SetPosition(playerPed->GetPosition());
 		player->SetFootStepSound(footSteps);
+
+		//tampon = Audio::CreateSound();
+//tampon->LoadFromFile("../Sounds/Tampon.wav");
+// 
+		doorOpen = Audio::CreateSound();
+		doorOpen->LoadFromFile("../Sounds/DoorOpen.wav");
+
+		ambientLaugh = Audio::CreateSound();
+		ambientLaugh->LoadFromFile("../Sounds/LaughChild.wav");
+
+		doorClose = Audio::CreateSound();
+		doorClose->LoadFromFile("../Sounds/DoorClose.wav");
 
 		footRun = Audio::CreateSound();
 		footRun->LoadFromFile("../Sounds/Footsteps.wav");
 		footRun->Loop(true);
+		footRun->SetPosition(playerPed->GetPosition());
 		player->SetFootStepSound2(footRun);
+
+		ambient = Audio::CreateSound();
+		ambient->LoadFromFile("../Sounds/AmbiantSound.wav");
+		ambient->Loop(true);
+		ambient->Play();
+
 
 		playerPed->SetPosition(spawnPoint, true);
 		playerPed->SetRotation(glm::vec3(0.0, spawnYaw, 0.0), true);
@@ -179,10 +211,10 @@ void Scripting::Tick(GameData* _gameData)
 		camOverlays[1] = new Texture;
 		camOverlays[1]->LoadFromFile("../Textures/Overlay.png");
 
-		camOverlay.Load("", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1],0.0), 1);
-		crosshair.Load("../Textures/RoundCrossHair.png", 
-			glm::vec3(_gameData->resolution[0] / 2 - crosshairSize / 2, _gameData->resolution[1] / 2 - crosshairSize / 2,0.0), 
-			glm::vec3(crosshairSize, crosshairSize,0.0), 1);
+		camOverlay.Load("", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0), 1);
+		crosshair.Load("../Textures/RoundCrossHair.png",
+			glm::vec3(_gameData->resolution[0] / 2 - crosshairSize / 2, _gameData->resolution[1] / 2 - crosshairSize / 2, 0.0),
+			glm::vec3(crosshairSize, crosshairSize, 0.0), 1);
 
 		initialized = true;
 	}
@@ -190,9 +222,22 @@ void Scripting::Tick(GameData* _gameData)
 
 	if (generated)
 	{
+
+
 		crosshair.SetOpacity(0.5f);
 		if (_gameData->window.IsFocused())
 		{
+
+			if (ambientClock.GetElapsedTime() > 25000)
+			{
+				ambientLaugh->SetPosition(glm::vec3(rand() % 50, 1.5f, rand() % 50));
+				ambientLaugh->Play();
+				ambientClock.Restart();
+			}
+
+
+
+
 			//Crosshairs::Draw();
 			Crosshairs::Get()->SetColor(Colors::White);
 			player->Control(_gameData);

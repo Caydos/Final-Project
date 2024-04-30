@@ -40,6 +40,7 @@ void MainMenu::Initialize(GameData* _gameData)
 
 	gresillement = Audio::CreateSound();
 	gresillement->LoadFromFile("../Sounds/Gresillement.wav");
+
 	beep = Audio::CreateSound();
 	beep->LoadFromFile("../Sounds/Beep.wav");
 
@@ -62,8 +63,18 @@ void MainMenu::Tick(GameData* _gameData)
 			selection.SetPosition(glm::vec3(1700, 500, 0));
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
+				if (!beep->IsPlaying())
+				{
 				beep->Play();
+				}
 				Close();
+			}
+			else 
+			{
+				if (beep->IsPlaying())
+				{
+					beep->Pause();
+				}
 			}
 		}
 		if (options.IsMouseOverQuad(mousePos))
@@ -71,7 +82,17 @@ void MainMenu::Tick(GameData* _gameData)
 			selection.SetPosition(glm::vec3(1750, 665, 0));
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
-				beep->Play();
+				if (!beep->IsPlaying())
+				{
+					beep->Play();
+				}
+			}
+			else
+			{
+				if (beep->IsPlaying())
+				{
+					beep->Pause();
+				}
 			}
 		}
 		if (quit.IsMouseOverQuad(mousePos))
@@ -79,8 +100,18 @@ void MainMenu::Tick(GameData* _gameData)
 			selection.SetPosition(glm::vec3(1700, 830, 0));
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
-				beep->Play();
+				if (!beep->IsPlaying())
+				{
+					beep->Play();
+				}
 				_gameData->window.Close();
+			}
+			else
+			{
+				if (beep->IsPlaying())
+				{
+					beep->Pause();
+				}
 			}
 		}
 
@@ -91,7 +122,7 @@ void MainMenu::Tick(GameData* _gameData)
 
 			if ((animation.imageCourante == animation.textures.size() - 1) && (animation.clock.GetElapsedTime() / 1000 >= animation.tempsMax))
 			{
-				gresillement->Play();
+				//gresillement->Play();
 				tempClock.Restart();
 				animation.Animate(&title);
 				title.SetTexture(textureTitle);

@@ -16,6 +16,7 @@ Sets::Set* playRoom = nullptr;
 Sets::Set* giantBedRoom = nullptr;
 Sets::Set* breakRoom = nullptr;
 
+
 enum SocketNames
 {
 	BLUE,
@@ -124,6 +125,7 @@ void Hospital::Initialize(GameData* _gameData)
 	Players::Player* player = Scripting::GetPlayer();
 	Peds::Ped* playerPed = Scripting::GetPlayerPed();
 	stage = Map::GetStage(Map::StageEnum::HOSPITALS);
+
 	if (stage == nullptr)
 	{
 		Logger::Write("Unable to find hospital level stage\n");
