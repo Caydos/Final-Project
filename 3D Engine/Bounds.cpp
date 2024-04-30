@@ -12,21 +12,21 @@ Bounds::BoundingBox::~BoundingBox() {}
 void Bounds::BoundingBox::Initialize()
 {
     // Create VBO and VAO
-    glGenBuffers(1, &this->VBO);
-    glGenVertexArrays(1, &this->VAO);
+    //glGenBuffers(1, &this->VBO);
+    //glGenVertexArrays(1, &this->VAO);
 
-    // Bind VAO and VBO, upload vertex data
-    glBindVertexArray(this->VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(this->lines), this->lines, GL_STATIC_DRAW);
+    //// Bind VAO and VBO, upload vertex data
+    //glBindVertexArray(this->VAO);
+    //glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(this->lines), this->lines, GL_STATIC_DRAW);
 
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    //// Position attribute
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    //glEnableVertexAttribArray(0);
 
-    // Unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    //// Unbind
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glBindVertexArray(0);
     this->shader = GetGameData()->shaders[Shaders::SINGLE_DRAW];
     this->initialized = true;
 }
@@ -44,13 +44,13 @@ void Bounds::BoundingBox::Draw()
     this->shader->setMat4("model", glm::mat4(1.0f));
     this->shader->setVec4("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     this->shader->setFloat("opacity", 1.0f);
-    glBindVertexArray(this->VAO);
+    //glBindVertexArray(this->VAO);
 
-    // Draw the lines
-    glDrawArrays(GL_LINES, 0, 24);
+    //// Draw the lines
+    //glDrawArrays(GL_LINES, 0, 24);
 
-    // Unbind the VAO
-    glBindVertexArray(0);
+    //// Unbind the VAO
+    //glBindVertexArray(0);
 }
 
 Bounds::Box Bounds::BoundingBox::GetBox()
@@ -97,9 +97,9 @@ void Bounds::BoundingBox::SetBox(Box _box)
 
     if (initialized)
     {
-        glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(this->lines), this->lines, GL_DYNAMIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        //glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+        //glBufferData(GL_ARRAY_BUFFER, sizeof(this->lines), this->lines, GL_DYNAMIC_DRAW);
+        //glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 }
 

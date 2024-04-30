@@ -2,7 +2,7 @@
 #define SYNC_H
 #include "Common.h"
 
-#define SYNC_TIME 2000
+#define SYNC_TIME 25
 
 namespace Synchronization
 {
