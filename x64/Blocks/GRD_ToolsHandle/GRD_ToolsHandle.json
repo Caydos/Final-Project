@@ -1,0 +1,10 @@
+{
+    "attributes":
+    {
+		"scale": [0.03,1.2,0.03],
+		"lightDependent": true,
+        "diffuse": [0.03, 0.9, 0.3],
+        "specular": [0.5, 0.5, 0.5],
+        "shininess": 32.0
+    }
+}

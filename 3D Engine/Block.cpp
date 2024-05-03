@@ -21,7 +21,7 @@ Blocks::BlockType* Blocks::Block::GetType()
 void Blocks::Block::SetType(BlockType* _type)
 {
 	this->type = _type;
-	//std::cout << "Type set once" << std::endl;
+	std::cout << "Type set once" << std::endl;
 	if (_type->IsLightEmitter() && this->light == nullptr)
 	{
 
@@ -96,7 +96,7 @@ void Blocks::Block::ApplyTransformation()
 
 
 	this->CalculateBoundingBox();
-	if (this->type->IsLightEmitter() && this->light != nullptr)
+	if (this->type != nullptr && this->type->IsLightEmitter() && this->light != nullptr)
 	{
 		//*this->light = this->type->GetLight();
 		// Transform the position

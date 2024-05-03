@@ -41,35 +41,35 @@ void Tools::Initialize(GameData* _gameData)
 	//directionalLight->SetName("Directional");
 	//directionalLight->SetActive(true);
 
-	spot = Scene::Lights::CreateSpot();
-	spot->activation = 1.0f;
-	spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	spot->diffuse = glm::vec3(0.5f);
-	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-	spot->constant = 0.0000f;
-	spot->linear = 0.0f;
-	spot->quadratic = 0.0f;
-	spot->cutOff = glm::cos(glm::radians(20.0f));
-	spot->outerCutOff = glm::cos(glm::radians(40.0f));
+	//spot = Scene::Lights::CreateSpot();
+	//spot->activation = 1.0f;
+	//spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
+	//spot->diffuse = glm::vec3(0.5f);
+	//spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
+	//spot->constant = 0.0000f;
+	//spot->linear = 0.0f;
+	//spot->quadratic = 0.0f;
+	//spot->cutOff = glm::cos(glm::radians(20.0f));
+	//spot->outerCutOff = glm::cos(glm::radians(40.0f));
 
-	Map::GenerateMaze(8, 3);
+	//Map::GenerateMaze(8, 3);
 	_gameData->dt = std::min(_gameData->dt, 1.0f);
 
-	//Sets::Set* room = Sets::Create();
-	//room->GenerateRenderingInstance();
-	//room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_Room.json")));
-	//room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
-	//for (size_t i = 0; i < 5; i++)
-	//{
-	//	for (size_t j = 0; j < 5; j++)
-	//	{
-	//		Sets::Set* light = Sets::Create();
-	//		light->GenerateRenderingInstance();
-	//		light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")));
-	//		light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j));
-	//		light->SetName("Light");
-	//	}
-	//}
+	Sets::Set* room = Sets::Create();
+	room->GenerateRenderingInstance();
+	room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_PlayRoom.json")));
+	room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
+	for (size_t i = 0; i < 5; i++)
+	{
+		for (size_t j = 0; j < 5; j++)
+		{
+			Sets::Set* light = Sets::Create();
+			light->GenerateRenderingInstance();
+			light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")));
+			light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j));
+			light->SetName("Light");
+		}
+	}
 
 	// MONSTER
 
@@ -153,10 +153,10 @@ void Tools::Tick(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 
 	Inputs(_gameData);
-	spot->position = _gameData->camera->Position;
-	spot->direction = _gameData->camera->Front;
-	Lighting::UpdateSpot(spot);
-	Scene::Lights::UpdateSpot(spot);
+	//spot->position = _gameData->camera->Position;
+	//spot->direction = _gameData->camera->Front;
+	//Lighting::UpdateSpot(spot);
+	//Scene::Lights::UpdateSpot(spot);
 
 	//Peds::Simulate(_gameData);
 

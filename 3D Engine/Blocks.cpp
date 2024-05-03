@@ -42,12 +42,12 @@ void Blocks::Load(std::string _name)
 {
 	Blocks::BlockType* block = new Blocks::BlockType;
 	std::vector<std::string> files = Files::GetAllAtPath((std::string(BLOCKS_DIRECTORY) + _name).c_str());
+	//std::cout << _name << std::endl;
 	for (size_t fileId = 0; fileId < files.size(); fileId++)
 	{
 		size_t lastindex = files[fileId].find_last_of(".");
 		std::string extension = files[fileId].substr(lastindex);
 		std::string filename_without_extension = files[fileId].substr(0, lastindex);
-
 		if (extension == BLOCKS_FILE_EXTENSION)
 		{
 			std::string rawName = files[fileId].substr(0, lastindex);
