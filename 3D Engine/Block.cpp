@@ -131,8 +131,8 @@ void Blocks::Block::ApplyTransformation()
 
 		Lighting::UpdateSpot(this->light);
 		Scene::Lights::UpdateSpot(this->light);
-		//std::cout << newLightPosition.x << " " << newLightPosition.y << " " << newLightPosition.z << std::endl;
-		//std::cout << newLightDirection.x << " " << newLightDirection.y << " " << newLightDirection.z << std::endl << std::endl;
+		std::cout << newLightPosition.x << " " << newLightPosition.y << " " << newLightPosition.z << std::endl;
+		std::cout << newLightDirection.x << " " << newLightDirection.y << " " << newLightDirection.z << std::endl << std::endl;
 	}
 }
 

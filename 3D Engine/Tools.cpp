@@ -58,7 +58,7 @@ void Tools::Initialize(GameData* _gameData)
 	Sets::Set* room = Sets::Create();
 	room->GenerateRenderingInstance();
 	room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_PlayRoom.json")));
-	room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
+	//room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
 	for (size_t i = 0; i < 5; i++)
 	{
 		for (size_t j = 0; j < 5; j++)
