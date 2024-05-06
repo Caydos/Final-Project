@@ -7,7 +7,7 @@ static unsigned int spotVertexVBO;
 static unsigned int spotInstanceVBO;
 static Shaders::Shader* spotShader;
 
-#define SPOT_MAX_COUNT 1
+#define SPOT_MAX_COUNT 1000
 
 void Scene::Lights::Initialize(GameData* _gameData)
 {
@@ -194,6 +194,10 @@ void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 			glBindVertexArray(spotVAO);
 			glBindBuffer(GL_ARRAY_BUFFER, spotInstanceVBO);
 			glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
+			if (!_spot->activation)
+			{
+				std::cout << "Offline" << std::endl;
+			}
 			break;
 		}
 	}

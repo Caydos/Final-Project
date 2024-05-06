@@ -21,14 +21,13 @@ Blocks::BlockType* Blocks::Block::GetType()
 void Blocks::Block::SetType(BlockType* _type)
 {
 	this->type = _type;
-	std::cout << "Type set once" << std::endl;
 	if (_type->IsLightEmitter() && this->light == nullptr)
 	{
-
+		std::cout << "Type set once" << std::endl;
 		this->light = Scene::Lights::CreateSpot();
 		*this->light = _type->GetLight();
 		// Transform the position
-		glm::vec4 transformedLightPosition = glm::vec4(this->light->position, 1.0f) * *this->model;
+		glm::vec4 transformedLightPosition = glm::vec4(this->light->position, 0.0f) * *this->model;
 		glm::vec3 newLightPosition = glm::vec3(transformedLightPosition);
 
 		// Transform the direction
@@ -110,11 +109,11 @@ void Blocks::Block::ApplyTransformation()
 
 		this->light->constant = typeLight.constant;
 		this->light->linear = typeLight.linear;
-		this->light->quadratic= typeLight.quadratic;
+		this->light->quadratic = typeLight.quadratic;
 
 
-		this->light->cutOff= typeLight.cutOff;
-		this->light->outerCutOff= typeLight.outerCutOff;
+		this->light->cutOff = typeLight.cutOff;
+		this->light->outerCutOff = typeLight.outerCutOff;
 
 
 		glm::vec4 transformedLightPosition = *this->model * glm::vec4(this->light->position, 1.0f);
@@ -122,8 +121,9 @@ void Blocks::Block::ApplyTransformation()
 
 		// Transform the direction
 		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(*this->model)));
-		glm::vec3 newLightDirection = normalMatrix * this->light->direction;
+		glm::vec3 newLightDirection = glm::normalize(normalMatrix * this->light->direction);
 
+		newLightPosition = glm::vec3(3,2,2);
 
 		this->light->position = newLightPosition;
 		this->light->direction = newLightDirection;
@@ -131,7 +131,10 @@ void Blocks::Block::ApplyTransformation()
 
 		Lighting::UpdateSpot(this->light);
 		Scene::Lights::UpdateSpot(this->light);
-		std::cout << newLightPosition.x << " " << newLightPosition.y << " " << newLightPosition.z << std::endl;
+
+		std::cout << "New light pos : " << std::endl;
+		std::cout << (int)newLightPosition.x << " " << (int)newLightPosition.y << " " << (int)newLightPosition.z << std::endl;
+		std::cout << "New light direction : " << std::endl;
 		std::cout << newLightDirection.x << " " << newLightDirection.y << " " << newLightDirection.z << std::endl << std::endl;
 	}
 }

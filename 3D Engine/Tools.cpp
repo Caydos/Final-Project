@@ -41,17 +41,6 @@ void Tools::Initialize(GameData* _gameData)
 	//directionalLight->SetName("Directional");
 	//directionalLight->SetActive(true);
 
-	//spot = Scene::Lights::CreateSpot();
-	//spot->activation = 1.0f;
-	//spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	//spot->diffuse = glm::vec3(0.5f);
-	//spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-	//spot->constant = 0.0000f;
-	//spot->linear = 0.0f;
-	//spot->quadratic = 0.0f;
-	//spot->cutOff = glm::cos(glm::radians(20.0f));
-	//spot->outerCutOff = glm::cos(glm::radians(40.0f));
-
 	//Map::GenerateMaze(8, 3);
 	_gameData->dt = std::min(_gameData->dt, 1.0f);
 
@@ -70,6 +59,17 @@ void Tools::Initialize(GameData* _gameData)
 			light->SetName("Light");
 		}
 	}
+	spot = Scene::Lights::CreateSpot();
+	spot->activation = 1.0f;
+	spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->diffuse = glm::vec3(0.5f);
+	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->constant = 0.0000f;
+	spot->linear = 0.0f;
+	spot->quadratic = 0.0f;
+	spot->cutOff = glm::cos(glm::radians(20.0f));
+	spot->outerCutOff = glm::cos(glm::radians(40.0f));
+
 
 	// MONSTER
 
@@ -91,8 +91,12 @@ void Tools::Initialize(GameData* _gameData)
 	//monster->SetTargetPlayer(player);
 
 
-
-
+	std::cout << "Pos setup" << std::endl;
+	std::vector<Lighting::Spot*>* spots = Scene::Lights::GetSpots();
+	for (size_t i = 0; i < spots->size(); i++)
+	{
+		std::cout << spots->at(i)->position.x << " " << spots->at(i)->position.y << " " << spots->at(i)->position.z << std::endl;
+	}
 
 	initialized = true;
 }

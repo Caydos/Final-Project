@@ -176,7 +176,7 @@ void DeferredShading::Draw(GameData* _gameData, bool _skyboxUsage)
 		glBindFramebuffer(GL_FRAMEBUFFER, gLightBuffer);
 		glViewport(0, 0, _gameData->resolution[0], _gameData->resolution[1]);
 		glClearColor(clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
-		glClear(GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		Scene::Lights::DrawSpots(_gameData);
 	}
 
