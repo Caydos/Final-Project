@@ -14,7 +14,7 @@
 #include "GameObject.h"
 #include "MainMenu.h"
 #include "Network.h"
-
+#include "PauseMenu.h"
 
 static bool initialized = false;
 std::thread interactionThread;
@@ -84,7 +84,7 @@ void Generation()
 
 	Clock loadingClock;
 	loadingClock.Restart();
-	Map::GenerateMaze(8, 1);
+	//Map::GenerateMaze(8, 1);
 	std::vector<Sets::Set*>* sets = Sets::GetAll();
 	for (size_t i = 0; i < sets->size(); i++)
 	{
@@ -258,12 +258,18 @@ void Scripting::Tick(GameData* _gameData)
 				{
 					player->GetPed()->SetPosition(spawnPoint);
 				}
+				if (_gameData->window.IsKeyPressed(Keys::ESCAPE))
+				{
+					PauseMenu::Open();
+				}
 				GameObjects::Tick(_gameData);
 				crosshair.Draw();
 			}
 			Hospital::Tick(_gameData);
 
 			MainMenu::Tick(_gameData);
+			PauseMenu::Tick(_gameData);
+
 		}
 		else if (gameState == 1)
 		{

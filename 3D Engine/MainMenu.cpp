@@ -65,11 +65,11 @@ void MainMenu::Tick(GameData* _gameData)
 			{
 				if (!beep->IsPlaying())
 				{
-				beep->Play();
+					beep->Play();
 				}
 				Close();
 			}
-			else 
+			else
 			{
 				if (beep->IsPlaying())
 				{
@@ -146,18 +146,12 @@ void MainMenu::Tick(GameData* _gameData)
 		options.Draw();
 		selection.Draw();
 	}
-	else
-	{
-		if (_gameData->window.IsKeyPressed(Keys::ESCAPE) && _gameData->window.IsFocused())
-		{
-			Open();
-		}
-	}
 }
 
 void MainMenu::CleanUp()
 {
 }
+
 
 void MainMenu::Open()
 {
@@ -173,4 +167,12 @@ void MainMenu::Close()
 {
 	GetGameData()->window.Focus(true);
 	displayed = false;
+}
+
+bool MainMenu::IsOpen()
+{
+	if (displayed == true)
+	{
+		return true;
+	}
 }

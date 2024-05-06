@@ -1,15 +1,14 @@
-#ifndef MAIN_MENU_H
-#define MAIN_MENU_H
+#ifndef PAUSEMENU_H
+#define PAUSEMENU_H
 #include "Common.h"
 
-namespace MainMenu
+namespace PauseMenu
 {
 	void Initialize(GameData* _gameData);
 	void Tick(GameData* _gameData);
 	void CleanUp();
-	bool IsOpen();
 	void Open();
 	void Close();
 }
 
-#endif // !MAIN_MENU_H
+#endif // !PAUSEMENU_H

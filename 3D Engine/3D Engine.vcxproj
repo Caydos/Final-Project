@@ -179,6 +179,7 @@
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Peds.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="ObjectsMenu.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Peds.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
