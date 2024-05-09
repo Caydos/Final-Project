@@ -8,7 +8,7 @@
 #include "Set.h"
 
 static bool initialized = false;
-static Colors::Color clearColor = Colors::LimedSpruce;
+static Colors::Color clearColor = Colors::Black;
 
 Colors::Color Scene::GetClearColor()
 {

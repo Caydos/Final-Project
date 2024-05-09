@@ -121,7 +121,7 @@ void Sets::Set::LoadFromJson(json _content, bool _computeTransformation)
 					block.EraseModel();
 					continue;
 				}
-				block.SetScale(type->GetScale());
+				block.SetScale(type->GetScale(), false);
 			}
 			else
 			{
@@ -132,13 +132,14 @@ void Sets::Set::LoadFromJson(json _content, bool _computeTransformation)
 			if (object.contains("position"))
 			{
 				glm::vec3 position(object["position"][0], object["position"][1], object["position"][2]);
-				block.SetPosition(position);
+				block.SetPosition(position, false);
 			}
 			if (object.contains("rotation"))
 			{
 				glm::vec3 rotation(object["rotation"][0], object["rotation"][1], object["rotation"][2]);
-				block.SetRotation(rotation);
+				block.SetRotation(rotation, false);
 			}
+			block.ApplyTransformation();
 			this->InsertBlock(block, false);
 		}
 	}

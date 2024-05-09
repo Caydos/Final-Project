@@ -156,29 +156,33 @@ namespace Blocks
 		void ApplyTransformation();
 
 		glm::vec3 GetPosition();
-		void SetPosition(float _x, float _y, float _z);
-		void SetPosition(glm::vec3 _position);
+		void SetPosition(float _x, float _y, float _z, bool _computeTransformation = true);
+		void SetPosition(glm::vec3 _position, bool _computeTransformation = true);
 
-		void Move(glm::vec3 _position);
-		void Move(float _x, float _y, float _z);
+		glm::vec3 GetWorldPosition();
+
+		void Move(glm::vec3 _position, bool _computeTransformation = true);
+		void Move(float _x, float _y, float _z, bool _computeTransformation = true);
 
 		glm::vec3 GetRotation();
-		void SetRotation(float _x, float _y, float _z);
-		void SetRotation(glm::vec3 _rotation);
+		void SetRotation(float _x, float _y, float _z, bool _computeTransformation = true);
+		void SetRotation(glm::vec3 _rotation, bool _computeTransformation = true);
 
-		void Rotate(glm::vec3 _rotation);
-		void Rotate(float _x, float _y, float _z);
+		void Rotate(glm::vec3 _rotation, bool _computeTransformation = true);
+		void Rotate(float _x, float _y, float _z, bool _computeTransformation = true);
 
 		glm::vec3 GetScale();
-		void SetScale(float _x, float _y, float _z);
-		void SetScale(float _scale);
-		void SetScale(glm::vec3 _scale);
+		void SetScale(float _x, float _y, float _z, bool _computeTransformation = true);
+		void SetScale(float _scale, bool _computeTransformation = true);
+		void SetScale(glm::vec3 _scale, bool _computeTransformation = true);
 
-		void Scale(glm::vec3 _scale);
-		void Scale(float _x, float _y, float _z);
+		void Scale(glm::vec3 _scale, bool _computeTransformation = true);
+		void Scale(float _x, float _y, float _z, bool _computeTransformation = true);
 
 		Bounds::Box GetBoundingBox();
 		void CalculateBoundingBox();
+
+		void RefreshLight();
 	private:
 		bool inScene;
 

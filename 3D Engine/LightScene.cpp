@@ -7,7 +7,7 @@ static unsigned int spotVertexVBO;
 static unsigned int spotInstanceVBO;
 static Shaders::Shader* spotShader;
 
-#define SPOT_MAX_COUNT 1000
+#define SPOT_MAX_COUNT 20000
 
 void Scene::Lights::Initialize(GameData* _gameData)
 {
@@ -187,6 +187,7 @@ void Scene::Lights::EraseSpot(Lighting::Spot* _spot)
 
 void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 {
+	if (!initialized) { Initialize(GetGameData()); }
 	for (size_t spotId = 0; spotId < spotLights.size(); spotId++)
 	{
 		if (spotLights[spotId] == _spot)
@@ -194,10 +195,6 @@ void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 			glBindVertexArray(spotVAO);
 			glBindBuffer(GL_ARRAY_BUFFER, spotInstanceVBO);
 			glBufferSubData(GL_ARRAY_BUFFER, spotId * sizeof(Lighting::Spot), sizeof(Lighting::Spot), _spot);
-			if (!_spot->activation)
-			{
-				std::cout << "Offline" << std::endl;
-			}
 			break;
 		}
 	}
@@ -216,6 +213,10 @@ void Scene::Lights::DrawSpots(GameData* _gameData)
 
 	Colors::Color clearColor = Scene::GetClearColor();
 	spotShader->setVec4("clearColor", clearColor.values[0], clearColor.values[1], clearColor.values[2], clearColor.values[3]);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+
 	glDepthMask(GL_FALSE);  // Disable depth writing
 
 	glBindVertexArray(spotVAO);
@@ -234,6 +235,7 @@ void Scene::Lights::DrawSpots(GameData* _gameData)
 	glDisable(GL_CULL_FACE);
 	glDepthMask(GL_TRUE);  // Disable depth writing
 	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 std::vector<Lighting::Spot*>* Scene::Lights::GetSpots()

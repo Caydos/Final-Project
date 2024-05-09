@@ -9,7 +9,7 @@ Blocks::Block::Block()
 	this->parent = nullptr;
 	this->parent = nullptr;
 	this->model = nullptr;
-	//this->light = nullptr;
+	this->light = nullptr;
 }
 Blocks::Block::~Block() {}
 
@@ -21,24 +21,7 @@ Blocks::BlockType* Blocks::Block::GetType()
 void Blocks::Block::SetType(BlockType* _type)
 {
 	this->type = _type;
-	if (_type->IsLightEmitter() && this->light == nullptr)
-	{
-		std::cout << "Type set once" << std::endl;
-		this->light = Scene::Lights::CreateSpot();
-		*this->light = _type->GetLight();
-		// Transform the position
-		glm::vec4 transformedLightPosition = glm::vec4(this->light->position, 0.0f) * *this->model;
-		glm::vec3 newLightPosition = glm::vec3(transformedLightPosition);
-
-		// Transform the direction
-		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(*this->model)));
-		glm::vec3 newLightDirection = normalMatrix * this->light->direction;
-
-		this->light->position = newLightPosition;
-		this->light->direction = newLightDirection;
-		Lighting::UpdateSpot(this->light);
-		Scene::Lights::UpdateSpot(this->light);
-	}
+	this->RefreshLight();
 }
 
 glm::mat4* Blocks::Block::GetParent()
@@ -95,125 +78,135 @@ void Blocks::Block::ApplyTransformation()
 
 
 	this->CalculateBoundingBox();
-	if (this->type != nullptr && this->type->IsLightEmitter() && this->light != nullptr)
-	{
-		//*this->light = this->type->GetLight();
-		// Transform the position
-		Lighting::Spot typeLight = this->type->GetLight();
-		this->light->direction = typeLight.direction;
-		this->light->position = typeLight.position;
-
-		this->light->ambient = typeLight.ambient;
-		this->light->diffuse = typeLight.diffuse;
-		this->light->specular = typeLight.specular;
-
-		this->light->constant = typeLight.constant;
-		this->light->linear = typeLight.linear;
-		this->light->quadratic = typeLight.quadratic;
-
-
-		this->light->cutOff = typeLight.cutOff;
-		this->light->outerCutOff = typeLight.outerCutOff;
-
-
-		glm::vec4 transformedLightPosition = *this->model * glm::vec4(this->light->position, 1.0f);
-		glm::vec3 newLightPosition = glm::vec3(transformedLightPosition);
-
-		// Transform the direction
-		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(*this->model)));
-		glm::vec3 newLightDirection = glm::normalize(normalMatrix * this->light->direction);
-
-		newLightPosition = glm::vec3(3,2,2);
-
-		this->light->position = newLightPosition;
-		this->light->direction = newLightDirection;
-
-
-		Lighting::UpdateSpot(this->light);
-		Scene::Lights::UpdateSpot(this->light);
-
-		std::cout << "New light pos : " << std::endl;
-		std::cout << (int)newLightPosition.x << " " << (int)newLightPosition.y << " " << (int)newLightPosition.z << std::endl;
-		std::cout << "New light direction : " << std::endl;
-		std::cout << newLightDirection.x << " " << newLightDirection.y << " " << newLightDirection.z << std::endl << std::endl;
-	}
+	this->RefreshLight();
 }
 
 glm::vec3 Blocks::Block::GetPosition() { return this->position; }
-void Blocks::Block::SetPosition(float _x, float _y, float _z)
+void Blocks::Block::SetPosition(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->position = glm::vec3(_x, _y, _z);
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::SetPosition(glm::vec3 _position)
+void Blocks::Block::SetPosition(glm::vec3 _position, bool _computeTransformation)
 {
 	this->position = _position;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::Move(glm::vec3 _position)
+
+glm::vec3 Blocks::Block::GetWorldPosition()
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(*this->model, scale, rotation, translation, skew, perspective);
+	return translation;
+}
+
+void Blocks::Block::Move(glm::vec3 _position, bool _computeTransformation)
 {
 	this->position += _position;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::Move(float _x, float _y, float _z)
+void Blocks::Block::Move(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->position.x += _x;
 	this->position.y += _y;
 	this->position.z += _z;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
 
 glm::vec3 Blocks::Block::GetRotation() { return this->rotation; }
-void Blocks::Block::SetRotation(float _x, float _y, float _z)
+void Blocks::Block::SetRotation(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->rotation = glm::vec3(_x, _y, _z);
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::SetRotation(glm::vec3 _rotation)
+void Blocks::Block::SetRotation(glm::vec3 _rotation, bool _computeTransformation)
 {
 	this->rotation = _rotation;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::Rotate(glm::vec3 _rotation)
+void Blocks::Block::Rotate(glm::vec3 _rotation, bool _computeTransformation)
 {
 	this->rotation += _rotation;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::Rotate(float _x, float _y, float _z)
+void Blocks::Block::Rotate(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->rotation.x += _x;
 	this->rotation.y += _y;
 	this->rotation.z += _z;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
 
 glm::vec3 Blocks::Block::GetScale() { return this->scale; }
-void Blocks::Block::SetScale(float _x, float _y, float _z)
+void Blocks::Block::SetScale(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->scale = glm::vec3(_x, _y, _z);
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::SetScale(float _scale)
+void Blocks::Block::SetScale(float _scale, bool _computeTransformation)
 {
 	this->scale = glm::vec3(_scale, _scale, _scale);
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::SetScale(glm::vec3 _scale)
+void Blocks::Block::SetScale(glm::vec3 _scale, bool _computeTransformation)
 {
 	this->scale = _scale;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::Scale(glm::vec3 _scale)
+void Blocks::Block::Scale(glm::vec3 _scale, bool _computeTransformation)
 {
 	this->scale += _scale;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
-void Blocks::Block::Scale(float _x, float _y, float _z)
+void Blocks::Block::Scale(float _x, float _y, float _z, bool _computeTransformation)
 {
 	this->scale.x += _x;
 	this->scale.y += _y;
 	this->scale.z += _z;
-	ApplyTransformation();
+	if (_computeTransformation)
+	{
+		ApplyTransformation();
+	}
 }
 
 Bounds::Box Blocks::Block::GetBoundingBox()
@@ -279,4 +272,27 @@ void Blocks::Block::CalculateBoundingBox()
 
 	//boundingBox.min = translation - scale / 2.0f;
 	//boundingBox.max = translation + scale / 2.0f;
+}
+
+void Blocks::Block::RefreshLight()
+{
+	if (this->type != nullptr && this->type->IsLightEmitter())
+	{
+		if (this->light == nullptr)
+		{
+			this->light = Scene::Lights::CreateSpot();
+			//std::cout << "Creation" << std::endl;
+		}
+		*this->light = this->type->GetLight();
+
+		glm::vec4 transformedLightPos = *this->model * glm::vec4(this->light->position, 1.0f);
+		this->light->position = glm::vec3(transformedLightPos);
+
+		glm::mat3 normalMatrix = glm::mat3(*this->model);// in mat3 we skip the translation component and it's required for the direction
+		glm::vec3 transformedLightDir = normalMatrix * this->light->direction;
+		this->light->direction = glm::normalize(transformedLightDir);
+
+		Lighting::UpdateSpot(this->light);
+		Scene::Lights::UpdateSpot(this->light);
+	}
 }

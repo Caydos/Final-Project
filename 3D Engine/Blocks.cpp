@@ -141,19 +141,20 @@ void Blocks::Load(std::string _name)
 						}
 						if (content["attributes"]["light"].contains("cutOff"))
 						{
-							light.cutOff = glm::cos(glm::radians(content["attributes"]["light"]["cutOff"] + .0f));
+							float cutOff = content["attributes"]["light"]["cutOff"] + .0f;
+							std::cout << "cutOff : " << cutOff << std::endl;
+							light.cutOff = glm::cos(glm::radians(cutOff));
 						}
 						if (content["attributes"]["light"].contains("outerCutOff"))
 						{
-							light.outerCutOff = glm::cos(glm::radians(content["attributes"]["light"]["outerCutOff"] + .0f));
+							float outerCutOff = content["attributes"]["light"]["outerCutOff"] + .0f;
+							std::cout << "outerCutOff : " << outerCutOff << std::endl;
+							light.outerCutOff = glm::cos(glm::radians(outerCutOff));
 						}
 						light.activation = true;
 
-						//light.SetActive(true);
-						//light.SetType(Lighting::SPOT);
-						//light.SetName(block->GetName() + " spot light");
-						block->SetLightEmission(true);
-						block->SetLight(light);
+						//block->SetLightEmission(true);
+						//block->SetLight(light);
 					}
 				}
 			}

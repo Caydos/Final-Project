@@ -54,23 +54,24 @@ void Tools::Initialize(GameData* _gameData)
 		{
 			Sets::Set* light = Sets::Create();
 			light->GenerateRenderingInstance();
-			light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")));
-			light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j));
+			light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")), false);
+			light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j), true);
 			light->SetName("Light");
 		}
 	}
-	spot = Scene::Lights::CreateSpot();
-	spot->activation = 1.0f;
-	spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	spot->diffuse = glm::vec3(0.5f);
-	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-	spot->constant = 0.0000f;
-	spot->linear = 0.0f;
-	spot->quadratic = 0.0f;
-	spot->cutOff = glm::cos(glm::radians(20.0f));
-	spot->outerCutOff = glm::cos(glm::radians(40.0f));
-
-
+	//spot = Scene::Lights::CreateSpot();
+	//spot->activation = 1.0f;
+	//spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
+	//spot->diffuse = glm::vec3(0.5f);
+	//spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
+	//spot->constant = 0.0000f;
+	//spot->linear = 0.0f;
+	//spot->quadratic = 0.0f;
+	//spot->cutOff = glm::cos(glm::radians(20.0f));
+	//spot->outerCutOff = glm::cos(glm::radians(40.0f));
+	//spot->position = glm::vec3(0.0);
+	//Lighting::UpdateSpot(spot);
+	//Scene::Lights::UpdateSpot(spot);
 	// MONSTER
 
 	//monster = Monster::Create();
@@ -158,6 +159,7 @@ void Tools::Tick(GameData* _gameData)
 
 	Inputs(_gameData);
 	//spot->position = _gameData->camera->Position;
+	//spot->position = glm::vec3(0.0);
 	//spot->direction = _gameData->camera->Front;
 	//Lighting::UpdateSpot(spot);
 	//Scene::Lights::UpdateSpot(spot);

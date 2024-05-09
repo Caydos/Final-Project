@@ -84,7 +84,7 @@ void Generation()
 
 	Clock loadingClock;
 	loadingClock.Restart();
-	//Map::GenerateMaze(8, 1);
+	Map::GenerateMaze(8, 1);
 	std::vector<Sets::Set*>* sets = Sets::GetAll();
 	for (size_t i = 0; i < sets->size(); i++)
 	{
@@ -106,10 +106,10 @@ void Scripting::Tick(GameData* _gameData)
 	if (!initialized)
 	{
 		std::unique_lock<std::shared_mutex> lock(playerLock);
-		if (!Network::Connection::Create("51.178.46.32", 55301))
-		{
-			//Logger::Write("Failed to connect");
-		}
+		//if (!Network::Connection::Create("51.178.46.32", 55301))
+		//{
+		//	//Logger::Write("Failed to connect");
+		//}
 		// WARNING : ZOMBIE THREAD RN
 		interactionThread = std::thread(&Interactions::Thread, true);
 		interactionThread.detach();
