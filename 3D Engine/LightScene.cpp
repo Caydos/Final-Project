@@ -221,15 +221,17 @@ void Scene::Lights::DrawSpots(GameData* _gameData)
 
 	glBindVertexArray(spotVAO);
 	glEnable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
 
 	// Double the draw call to ensure only one draw depending if I'm inside or outside the light cone
-	glCullFace(GL_BACK);
-	glEnable(GL_DEPTH_TEST);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
-
 	glCullFace(GL_FRONT);
+	//glEnable(GL_DEPTH_TEST);
 	glDisable(GL_DEPTH_TEST);
 	glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
+
+	//glCullFace(GL_FRONT);
+	//glDisable(GL_DEPTH_TEST);
+	//glDrawArraysInstanced(GL_TRIANGLES, 0, 36, SPOT_MAX_COUNT);
 
 	glBindVertexArray(0);
 	glDisable(GL_CULL_FACE);
