@@ -25,6 +25,7 @@ static Players::Player* player = nullptr;
 
 void Tools::Initialize(GameData* _gameData)
 {
+	std::cout << "Init" << std::endl;
 	Scene::Initialize(_gameData);
 	Scene::World::SetSkyboxState(false);
 
@@ -41,24 +42,24 @@ void Tools::Initialize(GameData* _gameData)
 	//directionalLight->SetName("Directional");
 	//directionalLight->SetActive(true);
 
-	//Map::GenerateMaze(8, 3);
+	Map::GenerateMaze(8, 1);
 	_gameData->dt = std::min(_gameData->dt, 1.0f);
 
-	Sets::Set* room = Sets::Create();
-	room->GenerateRenderingInstance();
-	room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_PlayRoom.json")));
-	//room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
-	for (size_t i = 0; i < 5; i++)
-	{
-		for (size_t j = 0; j < 5; j++)
-		{
-			Sets::Set* light = Sets::Create();
-			light->GenerateRenderingInstance();
-			light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")), false);
-			light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j), true);
-			light->SetName("Light");
-		}
-	}
+	//Sets::Set* room = Sets::Create();
+	//room->GenerateRenderingInstance();
+	//room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_PlayRoom.json")));
+	////room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
+	//for (size_t i = 0; i < 5; i++)
+	//{
+	//	for (size_t j = 0; j < 5; j++)
+	//	{
+	//		Sets::Set* light = Sets::Create();
+	//		light->GenerateRenderingInstance();
+	//		light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")), false);
+	//		light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j), true);
+	//		light->SetName("Light");
+	//	}
+	//}
 	//spot = Scene::Lights::CreateSpot();
 	//spot->activation = 1.0f;
 	//spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -92,12 +93,9 @@ void Tools::Initialize(GameData* _gameData)
 	//monster->SetTargetPlayer(player);
 
 
-	std::cout << "Pos setup" << std::endl;
 	std::vector<Lighting::Spot*>* spots = Scene::Lights::GetSpots();
-	for (size_t i = 0; i < spots->size(); i++)
-	{
-		std::cout << spots->at(i)->position.x << " " << spots->at(i)->position.y << " " << spots->at(i)->position.z << std::endl;
-	}
+
+	std::cout << spots->size() << " Lights in the scene" << std::endl;
 
 	initialized = true;
 }

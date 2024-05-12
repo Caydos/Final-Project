@@ -97,6 +97,9 @@ void Generation()
 			doors.push_back(door);
 		}
 	}
+	std::vector<Lighting::Spot*>* spots = Scene::Lights::GetSpots();
+
+	std::cout << spots->size() << " Lights in the scene" << std::endl;
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	generated = true;
 }
@@ -202,8 +205,9 @@ void Scripting::Tick(GameData* _gameData)
 		flashLight->cutOff = glm::cos(glm::radians(20.0f));
 		flashLight->outerCutOff = glm::cos(glm::radians(40.0f));
 
-		mazeThread = std::thread(Generation);
-		mazeThread.detach();
+		//mazeThread = std::thread(Generation);
+		//mazeThread.detach();
+		Generation();
 
 
 		Hospital::RegisterInteractions();

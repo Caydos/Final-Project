@@ -188,6 +188,7 @@ void Scene::Lights::EraseSpot(Lighting::Spot* _spot)
 void Scene::Lights::UpdateSpot(Lighting::Spot* _spot)
 {
 	if (!initialized) { Initialize(GetGameData()); }
+	std::cout << "Called" << std::endl;
 	for (size_t spotId = 0; spotId < spotLights.size(); spotId++)
 	{
 		if (spotLights[spotId] == _spot)
