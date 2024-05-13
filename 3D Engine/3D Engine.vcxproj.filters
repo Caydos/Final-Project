@@ -193,6 +193,9 @@
     <Filter Include="Source Files\Game\Scripting\MenuPause">
       <UniqueIdentifier>{6fd93dcc-8f5f-4397-b921-aa939bd7d12e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripting\Playtest">
+      <UniqueIdentifier>{834c7aab-83d0-4aee-9eb2-e594c04f72d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -383,6 +386,9 @@
     </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
       <Filter>Source Files\Game\Scripting\MenuPause</Filter>
+    </ClCompile>
+    <ClCompile Include="Playtest.cpp">
+      <Filter>Source Files\Game\Scripting\Playtest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -589,6 +595,9 @@
     </ClInclude>
     <ClInclude Include="PauseMenu.h">
       <Filter>Source Files\Game\Scripting\MenuPause</Filter>
+    </ClInclude>
+    <ClInclude Include="Playtest.h">
+      <Filter>Source Files\Game\Scripting\Playtest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

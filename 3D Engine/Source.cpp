@@ -13,6 +13,7 @@
 #include "Network.h"
 #include "Audio.h"
 #include "Scripting.h"
+#include "Playtest.h"
 #include "Tools.h"
 #include "Sprite.h"
 
@@ -103,6 +104,7 @@ int main()
 
 	gameData.gameStates[TOOLS] = &Tools::Tick;
 	gameData.gameStates[GAME] = &Scripting::Tick;
+	//gameData.gameStates[GAME] = &Playtest::Tick;
 	gameData.gameState = GAME;
 
 #ifdef _DEBUG

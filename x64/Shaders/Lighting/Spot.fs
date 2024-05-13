@@ -59,7 +59,7 @@ void main()
     {
         gLightingSpec = vec4(1.0,0.0,0.0,1.0);
         discard;
-        // return;
+        return;
     }
     vec2 ndc = gl_FragCoord.xy / screenSize;
     vec3 WorldPos = texture(inPosition, ndc).rgb;

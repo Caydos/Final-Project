@@ -15,8 +15,8 @@ layout (location = 12) in mat4 modelMatrix;
 
 uniform mat4 view;
 uniform mat4 projection;
-
-
+uniform float renderDistance;
+uniform vec3 viewPos;
 
 
 out vec3 outPosition;
@@ -32,6 +32,7 @@ out float outQuadratic;
 out float outActivation;
 
 
+
 void main()
 {
     outPosition = position;
@@ -44,13 +45,19 @@ void main()
     outConstant = constant;
     outLinear = linear;
     outQuadratic = quadratic;
-    outActivation = activation;
 
     if (activation == 0)
     {
         gl_Position = vec4(-9999.0, -9999.0, -9999.0, 1.0);
         return;
     }
+    if (distance(viewPos, position) > 15.0)
+    {
+        gl_Position = vec4(-9999.0, -9999.0, -9999.0, 1.0);
+        outActivation = 0;
+        return;
+    }
+    outActivation = activation;
     vec4 worldPosition = modelMatrix * vec4(vertexPos, 1.0);
     vec4 viewPosition = view * worldPosition;
     gl_Position = projection * viewPosition;

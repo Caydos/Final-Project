@@ -25,7 +25,6 @@ static Players::Player* player = nullptr;
 
 void Tools::Initialize(GameData* _gameData)
 {
-	std::cout << "Init" << std::endl;
 	Scene::Initialize(_gameData);
 	Scene::World::SetSkyboxState(false);
 
@@ -42,37 +41,37 @@ void Tools::Initialize(GameData* _gameData)
 	//directionalLight->SetName("Directional");
 	//directionalLight->SetActive(true);
 
-	Map::GenerateMaze(8, 1);
+	//Map::GenerateMaze(8, 1);
 	_gameData->dt = std::min(_gameData->dt, 1.0f);
 
-	//Sets::Set* room = Sets::Create();
-	//room->GenerateRenderingInstance();
-	//room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_PlayRoom.json")));
-	////room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
-	//for (size_t i = 0; i < 5; i++)
-	//{
-	//	for (size_t j = 0; j < 5; j++)
-	//	{
-	//		Sets::Set* light = Sets::Create();
-	//		light->GenerateRenderingInstance();
-	//		light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")), false);
-	//		light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j), true);
-	//		light->SetName("Light");
-	//	}
-	//}
-	//spot = Scene::Lights::CreateSpot();
-	//spot->activation = 1.0f;
-	//spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	//spot->diffuse = glm::vec3(0.5f);
-	//spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-	//spot->constant = 0.0000f;
-	//spot->linear = 0.0f;
-	//spot->quadratic = 0.0f;
-	//spot->cutOff = glm::cos(glm::radians(20.0f));
-	//spot->outerCutOff = glm::cos(glm::radians(40.0f));
-	//spot->position = glm::vec3(0.0);
-	//Lighting::UpdateSpot(spot);
-	//Scene::Lights::UpdateSpot(spot);
+	Sets::Set* room = Sets::Create();
+	room->GenerateRenderingInstance();
+	room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_PlayRoom.json")));
+	//room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
+	for (size_t i = 0; i < 5; i++)
+	{
+		for (size_t j = 0; j < 5; j++)
+		{
+			Sets::Set* light = Sets::Create();
+			light->GenerateRenderingInstance();
+			light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")), false);
+			light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j), true);
+			light->SetName("Light");
+		}
+	}
+	spot = Scene::Lights::CreateSpot();
+	spot->activation = 1.0f;
+	spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->diffuse = glm::vec3(0.5f);
+	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->constant = 0.000001;
+	spot->linear = 0.0f;
+	spot->quadratic = 0.0f;
+	spot->cutOff = glm::cos(glm::radians(20.0f));
+	spot->outerCutOff = glm::cos(glm::radians(40.0f));
+	spot->position = glm::vec3(0.0);
+	Lighting::UpdateSpot(spot);
+	Scene::Lights::UpdateSpot(spot);
 	// MONSTER
 
 	//monster = Monster::Create();
@@ -157,7 +156,6 @@ void Tools::Tick(GameData* _gameData)
 
 	Inputs(_gameData);
 	//spot->position = _gameData->camera->Position;
-	//spot->position = glm::vec3(0.0);
 	//spot->direction = _gameData->camera->Front;
 	//Lighting::UpdateSpot(spot);
 	//Scene::Lights::UpdateSpot(spot);
