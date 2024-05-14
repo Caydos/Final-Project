@@ -153,8 +153,8 @@ void Blocks::Load(std::string _name)
 						}
 						light.activation = true;
 
-						block->SetLightEmission(true);
-						block->SetLight(light);
+						//block->SetLightEmission(true);
+						//block->SetLight(light);
 					}
 				}
 			}

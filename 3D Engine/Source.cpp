@@ -22,36 +22,11 @@ float lastFrame = 0.0f;
 GameData gameData;
 
 GameData* GetGameData() { return &gameData; }
-ALCdevice* device;
-ALCcontext* context;
+
 
 int main()
 {
-	{//Audio
-		// Initialize OpenAL device and context
-		device = alcOpenDevice(NULL);
-		if (!device)
-		{
-			//return 0;
-		}
-
-		context = alcCreateContext(device, NULL);
-		if (!context) {
-			alcCloseDevice(device);
-			//return 0;
-		}
-		alcMakeContextCurrent(context);
-
-		// Set Listener properties
-		alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); // Position of the listener
-		ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
-		alListenerfv(AL_ORIENTATION, orientation);
-
-		// Set Distance Model (optional, depending on your needs)
-		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
-	}
-	std::thread audioThread(Audio::Tick);
-	audioThread.detach();
+	Audio::Initialize();
 
 
 	bool running = true;
@@ -129,10 +104,7 @@ int main()
 
 	while (gameData.window.IsActive())
 	{
-		// Set Listener properties
-		alListener3f(AL_POSITION, gameData.camera->Position.x, gameData.camera->Position.y, gameData.camera->Position.z); // Position of the listener
-		ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
-		alListenerfv(AL_ORIENTATION, orientation);
+		Audio::Tick(gameData.camera->Position, gameData.camera->Front, gameData.camera->Up);
 
 		float currentFrame = static_cast<float>(glfwGetTime());
 		gameData.dt = currentFrame - lastFrame;
@@ -140,19 +112,15 @@ int main()
 
 		frameCount++;
 
-		// Calculate elapsed time since last FPS calculation
 		float elapsedTime = currentFrame - lastFPSCalculationTime;
 
-		if (elapsedTime >= 1.0f) // If one second has passed
+		if (elapsedTime >= 1.0f)
 		{
-			// Calculate FPS
 			int fps = frameCount / elapsedTime;
 
-			// Reset frame count and timer
 			frameCount = 0;
 			lastFPSCalculationTime = currentFrame;
 
-			// Update window title with FPS (optional)
 			std::string title = "FPS: " + std::to_string(fps);
 			gameData.window.SetTitle(title.c_str());
 		}
@@ -170,8 +138,7 @@ int main()
 	ImGui::DestroyContext();
 	glfwTerminate();
 
-	alcDestroyContext(context);
-	alcCloseDevice(device);
+	Audio::Destroy();
 
 	system("pause");
 	return 0;

@@ -18,7 +18,7 @@ namespace Logger
 		//}
 
 		(std::cout << ... << _args);
-
+		std::cout << "\n";
 		//file.close();
 	}
 }

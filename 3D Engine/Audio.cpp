@@ -16,62 +16,66 @@ Audio::Sound::Sound()
 	this->loop = false;
 	this->paused = false;
 	this->finished = false;
+	this->buffer = 0;
+	this->source = 0;
+	this->channelCount = 0;
+
+	this->referenceDistance = 0.0;
+	this->maxDistance = 0.0;
+	this->rollOffFactor = 0.0;
+
+	this->position = glm::vec3(0);
+	this->velocity = glm::vec3(0);
 }
 
 Audio::Sound::~Sound()
 {
 }
 
-void Audio::Sound::Initialize()
-{
-	//std::unique_lock<std::shared_mutex> lock(this->mutex);
-	//alGenSources(1, &this->source);
-	//alGenBuffers(1, &this->buffer);
-	//std::cout << "created" << std::endl;
-	this->initialized = true;
-}
-
 void Audio::Sound::LoadFromFile(const char* _path)
 {
-	//std::unique_lock<std::shared_mutex> lock(this->mutex);
+	if (!this->source) { alGenSources(1, &this->source); }
 	LoadWavFile(_path, buffer);
-	alGenSources(1, &this->source);
+	ALint channels;
+	alGetBufferi(this->buffer, AL_CHANNELS, &channels);
+	this->channelCount = channels;
+
 	alSourcei(this->source, AL_BUFFER, buffer);
+
+	alGetSourcef(this->source, AL_REFERENCE_DISTANCE, &this->referenceDistance);
+	alGetSourcef(this->source, AL_MAX_DISTANCE, &this->maxDistance);
+	alGetSourcef(this->source, AL_ROLLOFF_FACTOR, &this->rollOffFactor);
 }
 
 void Audio::Sound::Erase()
 {
-	//std::unique_lock<std::shared_mutex> lock(this->mutex);
-	if (this->initialized)
+	if (this->source)
 	{
 		alDeleteSources(1, &this->source);
+	}
+	if (this->buffer)
+	{
 		alDeleteBuffers(1, &this->buffer);
 	}
 }
 
 void Audio::Sound::Loop(bool _state)
 {
-	//std::unique_lock<std::shared_mutex> lock(this->mutex);
+	if (!this->source) { alGenSources(1, &this->source); }
 	this->loop = _state;
 	alSourcei(this->source, AL_LOOPING, this->loop);
-
 }
 
 void Audio::Sound::Play()
 {
-	//std::unique_lock<std::shared_mutex> lock(this->mutex);.
+	if (!this->source) { alGenSources(1, &this->source); }
 	this->paused = false;
 	alSourcePlay(this->source);
-	ALenum error = alGetError();
-	if (error != AL_NO_ERROR)
-	{
-		std::cout << "Error playing source: " << error << std::endl;
-	}
 }
 
 void Audio::Sound::Pause()
 {
-	//std::unique_lock<std::shared_mutex> lock(this->mutex);
+	if (!this->source) { alGenSources(1, &this->source); }
 	this->paused = true;
 	alSourcePause(this->source);
 }
@@ -86,6 +90,42 @@ bool Audio::Sound::HasFinished()
 	return this->finished;
 }
 
+float Audio::Sound::GetReferenceDistance()
+{
+	return this->referenceDistance;
+}
+
+void Audio::Sound::SetReferenceDistance(float _referenceDistance)
+{
+	if (!this->source) { alGenSources(1, &this->source); }
+	this->referenceDistance = _referenceDistance;
+	alSourcef(this->source, AL_REFERENCE_DISTANCE, this->referenceDistance);
+}
+
+float Audio::Sound::GetMaxDistance()
+{
+	return this->maxDistance;
+}
+
+void Audio::Sound::SetMaxDistance(float _maxDistance)
+{
+	if (!this->source) { alGenSources(1, &this->source); }
+	this->maxDistance = _maxDistance;
+	alSourcef(this->source, AL_MAX_DISTANCE, this->maxDistance);
+}
+
+float Audio::Sound::GetRollOffFactor()
+{
+	return this->rollOffFactor;
+}
+
+void Audio::Sound::SetRollOffFactor(float _rollOffFactor)
+{
+	if (!this->source) { alGenSources(1, &this->source); }
+	this->rollOffFactor = _rollOffFactor;
+	alSourcef(this->source, AL_ROLLOFF_FACTOR, this->rollOffFactor);
+}
+
 glm::vec3 Audio::Sound::GetPosition()
 {
 	return this->position;
@@ -93,12 +133,15 @@ glm::vec3 Audio::Sound::GetPosition()
 
 void Audio::Sound::SetPosition(glm::vec3 _position)
 {
-	//std::unique_lock<std::shared_mutex> lock(this->mutex);
-	this->position = _position;
-	//if (this->initialized)
+	if (!this->source) { alGenSources(1, &this->source); }
+	if (this->channelCount != 1)
 	{
-		alSource3f(source, AL_POSITION, this->position.x, this->position.y, this->position.z);
+		Logger::Write("Unable to set a position to a stereo source");
+		return;
 	}
+	this->position = _position;
+
+	alSource3f(this->source, AL_POSITION, this->position.x, this->position.y, this->position.z);
 }
 
 glm::vec3 Audio::Sound::GetVelocity()
@@ -108,19 +151,16 @@ glm::vec3 Audio::Sound::GetVelocity()
 
 void Audio::Sound::SetVelocity(glm::vec3 _velocity)
 {
-	std::unique_lock<std::shared_mutex> lock(this->mutex);
+	if (!this->source) { alGenSources(1, &this->source); }
 	this->velocity = _velocity;
-	//if (this->initialized)
-	{
-		alSource3f(source, AL_VELOCITY, this->velocity.x, this->velocity.y, this->velocity.z);
-	}
+	alSource3f(this->source, AL_VELOCITY, this->velocity.x, this->velocity.y, this->velocity.z);
 }
 
 void Audio::Sound::Update()
 {
-	//std::unique_lock<std::shared_mutex> lock(this->mutex);
+	if (!this->source) { alGenSources(1, &this->source); }
 	ALint sourceState;
-    alGetSourcei(source, AL_SOURCE_STATE, &sourceState);
+    alGetSourcei(this->source, AL_SOURCE_STATE, &sourceState);
 	if (sourceState == AL_PLAYING)
 	{
 		this->finished = false;
@@ -140,52 +180,54 @@ void Audio::Sound::Update()
 static std::shared_mutex mutex;
 static std::vector<Audio::Sound*> sounds;
 static std::thread thread;
+static ALCdevice* device;
+static ALCcontext* context;
 
 void Audio::Initialize()
 {
-	//// Initialize OpenAL device and context
-	//ALCdevice* device = alcOpenDevice(NULL);
-	//if (!device)
-	//{
-	//	return;
-	//}
+	// Initialize OpenAL device and context
+	device = alcOpenDevice(NULL);
+	if (!device)
+	{
+		//return 0;
+	}
 
-	//ALCcontext* context = alcCreateContext(device, NULL);
-	//if (!context) {
-	//	alcCloseDevice(device);
-	//	return;
-	//}
-	//alcMakeContextCurrent(context);
+	context = alcCreateContext(device, NULL);
+	if (!context) {
+		alcCloseDevice(device);
+		//return 0;
+	}
+	alcMakeContextCurrent(context);
 
-	//// Set Listener properties
-	//alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f); // Position of the listener
-	//ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f }; // Orientation (facing direction and up vector)
-	//alListenerfv(AL_ORIENTATION, orientation);
+	alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
+	ALfloat orientation[] = { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f };
+	alListenerfv(AL_ORIENTATION, orientation);
 
-	//// Set Distance Model (optional, depending on your needs)
-	//alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
-
-	//alcDestroyContext(context);
-	//alcCloseDevice(device);
+	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 }
 
-void Audio::Tick()
+void Audio::Tick(glm::vec3 _position, glm::vec3 _frontVector, glm::vec3 _upVector)
 {
-	while (true)
+	alListener3f(AL_POSITION, _position.x, _position.y, _position.z);
+
+	float orientation[] = { _frontVector.x, _frontVector.y, _frontVector.z, _upVector.x, _upVector.y, _upVector.z };
+	alListenerfv(AL_ORIENTATION, orientation);
+
+	ALenum error;
+	if ((error = alGetError()) != AL_NO_ERROR)
 	{
-		//mutex.lock_shared();
-		//for (size_t soundId = 0; soundId < sounds.size(); soundId++)
-		//{
-		//	//alGetSourcei(source, AL_SOURCE_STATE, &sourceState);
-		//	sounds[soundId]->Update();
-		//}
-		//mutex.unlock_shared();
+		Logger::Write("OpenAL error: ", alGetString(error));
 	}
+}
+
+void Audio::Destroy()
+{
+	alcDestroyContext(context);
+	alcCloseDevice(device);
 }
 
 Audio::Sound* Audio::CreateSound()
 {
-	//std::unique_lock<std::shared_mutex> lock(mutex);
 	Audio::Sound* sound = new Audio::Sound;
 	sounds.push_back(sound);
 	return sound;
@@ -193,7 +235,6 @@ Audio::Sound* Audio::CreateSound()
 
 void Audio::EraseSound(Sound* _sound)
 {
-	//std::unique_lock<std::shared_mutex> lock(mutex);
 	for (size_t soundId = 0; soundId < sounds.size(); soundId++)
 	{
 		if (sounds[soundId] == _sound)
