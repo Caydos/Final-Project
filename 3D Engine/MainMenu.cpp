@@ -1,9 +1,11 @@
 #include "MainMenu.h"
 #include "Sprite.h"
 #include "Audio.h"
+#include "MenuOptions.h"
 
 static bool initialized = false;
 static bool displayed = true;
+static bool beenOpen = false;
 static AnimationM animation;
 static AnimationM animation2;
 static Sprite title;
@@ -67,7 +69,7 @@ void MainMenu::Tick(GameData* _gameData)
 				{
 					beep->Play();
 				}
-				Close();
+				MainMenu::Close();
 			}
 			else
 			{
@@ -86,6 +88,9 @@ void MainMenu::Tick(GameData* _gameData)
 				{
 					beep->Play();
 				}
+				MainMenu::Close();
+				MenuOptions::Open();
+				beenOpen = true;
 			}
 			else
 			{
@@ -167,6 +172,16 @@ void MainMenu::Close()
 {
 	GetGameData()->window.Focus(true);
 	displayed = false;
+}
+
+bool MainMenu::GetOpen()
+{
+	return beenOpen;
+}
+
+void MainMenu::SetOpen(bool _open)
+{
+	beenOpen = _open;
 }
 
 bool MainMenu::IsOpen()

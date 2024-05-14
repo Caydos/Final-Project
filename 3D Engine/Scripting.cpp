@@ -15,6 +15,7 @@
 #include "MainMenu.h"
 #include "Network.h"
 #include "PauseMenu.h"
+#include "MenuOptions.h"
 
 static bool initialized = false;
 std::thread interactionThread;
@@ -273,6 +274,7 @@ void Scripting::Tick(GameData* _gameData)
 
 			MainMenu::Tick(_gameData);
 			PauseMenu::Tick(_gameData);
+			MenuOptions::Tick(_gameData);
 
 		}
 		else if (gameState == 1)

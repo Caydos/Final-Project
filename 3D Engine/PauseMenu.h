@@ -9,6 +9,8 @@ namespace PauseMenu
 	void CleanUp();
 	void Open();
 	void Close();
+	bool GetOpen();
+	void SetOpen(bool _open);
 }
 
 #endif // !PAUSEMENU_H
