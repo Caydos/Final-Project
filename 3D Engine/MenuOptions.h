@@ -1,8 +1,8 @@
-#ifndef MAIN_MENU_H
-#define MAIN_MENU_H
+#ifndef MENU_OPTIONS_H
+#define MENU_OPTIONS_H
 #include "Common.h"
 
-namespace MainMenu
+namespace MenuOptions
 {
 	void Initialize(GameData* _gameData);
 	void Tick(GameData* _gameData);
@@ -10,8 +10,6 @@ namespace MainMenu
 	bool IsOpen();
 	void Open();
 	void Close();
-	bool GetOpen();
-	void SetOpen(bool _open);
 }
 
-#endif // !MAIN_MENU_H
+#endif // !MENU_OPTIONS_H

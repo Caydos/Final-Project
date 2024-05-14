@@ -2,9 +2,11 @@
 #include "Sprite.h"
 #include "Audio.h"
 #include "MainMenu.h"
+#include "MenuOptions.h"
 
 static bool initialized = false;
 static bool displayed = true;
+static bool beenOpen = false;
 static Sprite title;
 static Sprite background;
 static Sprite back;
@@ -63,6 +65,9 @@ void PauseMenu::Tick(GameData* _gameData)
 			selection.SetPosition(glm::vec3(100, 637, 0));
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
+				PauseMenu::Close();
+				MenuOptions::Open();
+				beenOpen = true;
 			}
 		}
 		if (back.IsMouseOverQuad(mousePos))
@@ -109,4 +114,14 @@ void PauseMenu::Close()
 {
 	GetGameData()->window.Focus(true);
 	displayed = false;
+}
+
+bool PauseMenu::GetOpen()
+{
+	return beenOpen;
+}
+
+void PauseMenu::SetOpen(bool _open)
+{
+	beenOpen = _open;
 }

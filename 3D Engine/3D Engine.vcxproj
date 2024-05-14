@@ -177,6 +177,7 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="MenuOptions.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="MenuOptions.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="ObjectsMenu.h" />
