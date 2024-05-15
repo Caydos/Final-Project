@@ -147,6 +147,7 @@
     <ClCompile Include="..\Libs\IMGUI\imgui_draw.cpp" />
     <ClCompile Include="..\Libs\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="..\Libs\IMGUI\imgui_widgets.cpp" />
+    <ClCompile Include="Ambiance.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationUI.cpp" />
     <ClCompile Include="Audio.cpp" />
@@ -154,11 +155,13 @@
     <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="BlockType.cpp" />
     <ClCompile Include="Bounds.cpp" />
+    <ClCompile Include="Cheats.cpp" />
     <ClCompile Include="Collisions.cpp" />
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="DeferredShading.cpp" />
+    <ClCompile Include="Doors.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="FrustumCulling.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -177,6 +180,7 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuOptions.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
@@ -196,6 +200,7 @@
     <ClCompile Include="SSAO.cpp" />
     <ClCompile Include="Sync.cpp" />
     <ClCompile Include="Tools.cpp" />
+    <ClCompile Include="VictoryDefeat.cpp" />
     <ClCompile Include="WorldScene.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="Files.cpp" />
@@ -216,10 +221,12 @@
     <ClInclude Include="..\Libs\IMGUI\imstb_rectpack.h" />
     <ClInclude Include="..\Libs\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\Libs\IMGUI\imstb_truetype.h" />
+    <ClInclude Include="Ambiance.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="Bounds.h" />
+    <ClInclude Include="Cheats.h" />
     <ClInclude Include="Collisions.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Crosshair.h" />
@@ -228,6 +235,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="DefaultVertices.h" />
     <ClInclude Include="DeferredShading.h" />
+    <ClInclude Include="Doors.h" />
     <ClInclude Include="EventListing.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="FrustumCulling.h" />
@@ -246,6 +254,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuOptions.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Network.h" />
@@ -269,6 +278,7 @@
     <ClInclude Include="Sync.h" />
     <ClInclude Include="Tools.h" />
     <ClInclude Include="Vectors.h" />
+    <ClInclude Include="VictoryDefeat.h" />
     <ClInclude Include="Wav.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Colors.h" />

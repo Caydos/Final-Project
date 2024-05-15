@@ -216,7 +216,7 @@ void Audio::Tick(glm::vec3 _position, glm::vec3 _frontVector, glm::vec3 _upVecto
 	ALenum error;
 	if ((error = alGetError()) != AL_NO_ERROR)
 	{
-		Logger::Write("OpenAL error: ", alGetString(error));
+		//Logger::Write("OpenAL error: ", alGetString(error));
 	}
 }
 

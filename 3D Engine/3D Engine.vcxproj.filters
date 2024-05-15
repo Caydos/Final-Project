@@ -187,14 +187,32 @@
     <Filter Include="Source Files\Game\Scripting\Interaction\GameObject">
       <UniqueIdentifier>{272d05af-2175-4424-aa10-f07259508773}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Scripting\MainMenu">
-      <UniqueIdentifier>{8202fc3c-40f2-4267-a5d7-e627892b777c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Scripting\MenuPause">
-      <UniqueIdentifier>{6fd93dcc-8f5f-4397-b921-aa939bd7d12e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Scripting\Playtest">
       <UniqueIdentifier>{834c7aab-83d0-4aee-9eb2-e594c04f72d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Ambiance">
+      <UniqueIdentifier>{9ab24be5-f78b-4bb9-bc93-975035725d7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Cheats">
+      <UniqueIdentifier>{44364ef7-f5cf-4de7-a54e-a4d466950972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Levels\Hospital\Doors">
+      <UniqueIdentifier>{99699975-a427-41c9-a546-fa9399896a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Menu">
+      <UniqueIdentifier>{1cba6c78-0a88-44c9-8576-da5da122852b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Menu\Main">
+      <UniqueIdentifier>{8202fc3c-40f2-4267-a5d7-e627892b777c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Menu\Pause">
+      <UniqueIdentifier>{6fd93dcc-8f5f-4397-b921-aa939bd7d12e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Menu\Settings">
+      <UniqueIdentifier>{af1ceeee-5d10-43e0-8dd1-fe0c84d2299f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Levels\Hospital\VictoryDefeat">
+      <UniqueIdentifier>{10f753db-800f-4c57-91dd-26054838a485}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -382,13 +400,31 @@
       <Filter>Source Files\Game\Scripting\Interaction\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="MainMenu.cpp">
-      <Filter>Source Files\Game\Scripting\MainMenu</Filter>
+      <Filter>Source Files\Game\Menu\Main</Filter>
     </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
-      <Filter>Source Files\Game\Scripting\MenuPause</Filter>
+      <Filter>Source Files\Game\Menu\Pause</Filter>
     </ClCompile>
     <ClCompile Include="Playtest.cpp">
       <Filter>Source Files\Game\Scripting\Playtest</Filter>
+    </ClCompile>
+    <ClCompile Include="Ambiance.cpp">
+      <Filter>Source Files\Game\Scripting\Ambiance</Filter>
+    </ClCompile>
+    <ClCompile Include="Cheats.cpp">
+      <Filter>Source Files\Game\Scripting\Cheats</Filter>
+    </ClCompile>
+    <ClCompile Include="Doors.cpp">
+      <Filter>Source Files\Game\Scripting\Levels\Hospital\Doors</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuOptions.cpp">
+      <Filter>Source Files\Game\Menu\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\Game\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="VictoryDefeat.cpp">
+      <Filter>Source Files\Game\Scripting\Levels\Hospital\VictoryDefeat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -591,13 +627,31 @@
       <Filter>Source Files\Game\Scripting\Interaction\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="MainMenu.h">
-      <Filter>Source Files\Game\Scripting\MainMenu</Filter>
+      <Filter>Source Files\Game\Menu\Main</Filter>
     </ClInclude>
     <ClInclude Include="PauseMenu.h">
-      <Filter>Source Files\Game\Scripting\MenuPause</Filter>
+      <Filter>Source Files\Game\Menu\Pause</Filter>
     </ClInclude>
     <ClInclude Include="Playtest.h">
       <Filter>Source Files\Game\Scripting\Playtest</Filter>
+    </ClInclude>
+    <ClInclude Include="Ambiance.h">
+      <Filter>Source Files\Game\Scripting\Ambiance</Filter>
+    </ClInclude>
+    <ClInclude Include="Cheats.h">
+      <Filter>Source Files\Game\Scripting\Cheats</Filter>
+    </ClInclude>
+    <ClInclude Include="Doors.h">
+      <Filter>Source Files\Game\Scripting\Levels\Hospital\Doors</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuOptions.h">
+      <Filter>Source Files\Game\Menu\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Source Files\Game\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="VictoryDefeat.h">
+      <Filter>Source Files\Game\Scripting\Levels\Hospital\VictoryDefeat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
