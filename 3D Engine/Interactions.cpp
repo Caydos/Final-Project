@@ -1,4 +1,5 @@
-#include "Interaction.h"
+#include "Interactions.h"
+#include "Sprite.h"
 
 
 static bool initialized;
@@ -244,3 +245,31 @@ void Interactions::Thread(bool _running)
 	}
 }
 
+
+
+static Sprite* crosshair;
+const float crosshairSize = 10.f;
+
+void Interactions::Overlay::Draw(GameData* _gameData)
+{
+	if (crosshair == nullptr)
+	{
+		crosshair = new Sprite;
+		crosshair->Load("../Textures/RoundCrossHair.png",
+			glm::vec3(_gameData->resolution[0] / 2 - crosshairSize / 2, _gameData->resolution[1] / 2 - crosshairSize / 2, 0.0),
+			glm::vec3(crosshairSize, crosshairSize, 0.0), 1);
+	}
+
+	crosshair->Draw();
+	crosshair->SetOpacity(0.5f);
+}
+
+void Interactions::Overlay::HoveredCrosshair()
+{
+
+	SetCrosshairOpacity(1.0f);
+}
+
+void Interactions::Overlay::SetCrosshairOpacity(float _opacity)
+{
+}

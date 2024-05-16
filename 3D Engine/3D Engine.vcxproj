@@ -162,15 +162,19 @@
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="DeferredShading.cpp" />
     <ClCompile Include="Doors.cpp" />
+    <ClCompile Include="Entrance.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="FrustumCulling.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Garden.cpp" />
     <ClCompile Include="GhostBlocks.cpp" />
     <ClCompile Include="Hospital.cpp" />
     <ClCompile Include="Instance.cpp" />
-    <ClCompile Include="Interaction.cpp" />
+    <ClCompile Include="Interactions.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="KeyPad.cpp" />
+    <ClCompile Include="Levels.cpp" />
+    <ClCompile Include="Library.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="LightMenu.cpp" />
     <ClCompile Include="LightScene.cpp" />
@@ -236,15 +240,19 @@
     <ClInclude Include="DefaultVertices.h" />
     <ClInclude Include="DeferredShading.h" />
     <ClInclude Include="Doors.h" />
+    <ClInclude Include="Entrance.h" />
     <ClInclude Include="EventListing.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="FrustumCulling.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Garden.h" />
     <ClInclude Include="Hospital.h" />
-    <ClInclude Include="Interaction.h" />
+    <ClInclude Include="Interactions.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="KeyPad.h" />
     <ClInclude Include="Keys.h" />
+    <ClInclude Include="Levels.h" />
+    <ClInclude Include="Library.h" />
     <ClInclude Include="LightMenu.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Line.h" />
@@ -267,6 +275,7 @@
     <ClInclude Include="Props.h" />
     <ClInclude Include="RayCasting.h" />
     <ClInclude Include="Reading.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scripting.h" />
     <ClInclude Include="Set.h" />
@@ -290,6 +299,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Arrows.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

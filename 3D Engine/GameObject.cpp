@@ -1,7 +1,7 @@
 #include "GameObject.h"
 #include "RayCasting.h"
 #include "Scene.h"
-#include "Interaction.h"
+#include "Interactions.h"
 
 static std::shared_mutex mutex;
 static std::vector<GameObjects::Object> objectArray;

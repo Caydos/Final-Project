@@ -94,6 +94,15 @@ namespace Interactions
 		interaction.buffer = nullptr;
 		interaction.bufferSize = 0;
 	}
+
+
+
+	namespace Overlay
+	{
+		void Draw(GameData* _gameData);
+		void HoveredCrosshair();
+		void SetCrosshairOpacity(float _opacity);
+	}
 }
 
 #endif // !INTERACTION_H

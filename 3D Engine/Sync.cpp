@@ -46,9 +46,6 @@ void Established(char** _args)
 void Synchronization::PedSyncEvents(void)
 {
 	Network::Events::Register("Connections::Established", &Established);
-	Network::Events::Register("Sync::PlayerUpdate", &Scripting::PlayerUpdate);
-	Network::Events::Register("Sync::ClownUpdate", &Hospital::ClownUpdate);
-	Network::Events::Register("Sync::TeddyUpdate", &Hospital::TeddyUpdate);
 }
 int Synchronization::GetServerId()
 {

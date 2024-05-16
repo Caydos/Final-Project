@@ -3,11 +3,7 @@
 #include "Player.h"
 #include "MapManager.h"
 #include "LoadingScreen.h"
-#include "Sprite.h"
 #include "Audio.h"
-#include "Crosshair.h"
-#include "Interaction.h"
-#include "Hospital.h"
 #include "Network.h"
 #include "Ambiance.h"
 #include "Cheats.h"
@@ -29,8 +25,6 @@ static glm::vec3 spawnPoint(11.05, 1.850, 21.250);
 static float spawnYaw = 0.0f;
 static Texture* camOverlays[2] = { nullptr };
 static Sprite camOverlay;
-static Sprite crosshair;
-const float crosshairSize = 10.f;
 
 
 static Audio::Sound* footSteps;
@@ -42,12 +36,6 @@ static bool connected = false;
 static int gameState = 0;
 static std::shared_mutex gameStateMutex;
 
-
-
-void Scripting::HoveredCrosshair()
-{
-	Scripting::SetCrosshairOpacity(1.0f);
-}
 void Generation()
 {
 	Clock loadingClock;
@@ -137,9 +125,6 @@ void Scripting::Initialize(GameData* _gameData)
 
 
 	camOverlay.Load("", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0), 1);
-	crosshair.Load("../Textures/RoundCrossHair.png",
-		glm::vec3(_gameData->resolution[0] / 2 - crosshairSize / 2, _gameData->resolution[1] / 2 - crosshairSize / 2, 0.0),
-		glm::vec3(crosshairSize, crosshairSize, 0.0), 1);
 
 	initialized = true;
 }
@@ -151,7 +136,6 @@ void Scripting::Tick(GameData* _gameData)
 
 	if (generated)
 	{
-		crosshair.SetOpacity(0.5f);
 		std::shared_lock<std::shared_mutex> lock(gameStateMutex);
 		if (gameState == 0)
 		{
@@ -168,12 +152,11 @@ void Scripting::Tick(GameData* _gameData)
 				
 				Cheats::Tick(_gameData);
 				GameObjects::Tick(_gameData);
-				crosshair.Draw();
+				Interactions::Overlay::Draw(_gameData); // Crosshair
 			}
-			Hospital::Tick(_gameData);
+			Levels::Tick(_gameData);
 
 			Menu::Tick(_gameData);
-
 		}
 		else
 		{
@@ -206,21 +189,6 @@ Peds::Ped* Scripting::GetPlayerPed()
 		return nullptr;
 	}
 	return player->GetPed();
-}
-
-void Scripting::SetCrosshairOpacity(float _opacity)
-{
-	crosshair.SetOpacity(_opacity);
-}
-
-void Scripting::PlayerUpdate(char** _args)
-{
-	int x = ToFloat(_args[0]);
-	int y = ToFloat(_args[1]);
-	int z = ToFloat(_args[2]);
-	int heading = ToFloat(_args[3]);
-
-	//std::cout << heading << std::endl;
 }
 
 

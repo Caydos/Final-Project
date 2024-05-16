@@ -1,17 +1,17 @@
-#ifndef HOSPITAL_H
-#define HOSPITAL_H
+#ifndef ENTRANCE_H
+#define ENTRANCE_H
+
 #include "Common.h"
 #include "Scripting.h"
 
 
-namespace Hospital
+namespace Entrance
 {
 	void RegisterInteractions();
 	void Initialize(GameData* _gameData);
 	void Tick(GameData* _gameData);
 
-	void UnlockExit();
 	void CleanUp(GameData* _gameData);
 }
 
-#endif // !HOSPITAL_H
+#endif // !ENTRANCE_H

@@ -2,7 +2,6 @@
 #include "MapManager.h"
 #include "Scripting.h"
 
-
 static Audio::Sound* doorOpen;
 static Audio::Sound* doorClose;
 struct Door
@@ -45,7 +44,7 @@ void Doors::RegisterAll()
 	{
 		if (sets->at(i)->GetName() == "Door")
 		{
-			GameObjects::Register(sets->at(i), 4.0f, 200.0, &Scripting::HoveredCrosshair, &DoorInteraction);
+			GameObjects::Register(sets->at(i), 4.0f, 200.0, &Interactions::Overlay::HoveredCrosshair, &DoorInteraction);
 			Door door;
 			door.set = sets->at(i);
 			door.opened = false;

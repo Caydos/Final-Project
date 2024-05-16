@@ -1,7 +1,4 @@
 #include "Hospital.h"
-#include "Sprite.h"
-#include "Interaction.h"
-#include "GameObject.h"
 #include "KeyPad.h"
 #include "Reading.h"
 
@@ -73,14 +70,8 @@ void SocketInteraction(Sets::Set* _set)
 		{
 			path = cubesPaths[i];
 			validCubes[i] = true;
-			//cubes[i] = Sets::Create();
-			////cubes[i]->SetParent(_set, true);
-			////cubes[i]->SetRenderingInstance(_set->GetRenderingInstance());
-			//cubes[i]->GenerateRenderingInstance();
-			//cubes[i]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[i])), false);
+			
 			cubes[i]->SetPosition(sockets[i]->GetWorldPosition() + socketInPosition, true);
-			//cubes[i]->SetName(cubesPaths[i]);
-			//cubes[i]->CheckVisibility();
 			std::cout << cubesPaths[i] << std::endl;
 			break;
 		}
@@ -93,27 +84,25 @@ void CubePickup(Sets::Set* _set)
 	if (cubeName == cubesPaths[BLUE])
 	{
 		std::cout << "Picked up : Blue" << std::endl;
-		GameObjects::Register(sockets[BLUE], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
+		GameObjects::Register(sockets[BLUE], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
 	}
 	else if (cubeName == cubesPaths[GREEN])
 	{
 		std::cout << "Picked up : Green" << std::endl;
-		GameObjects::Register(sockets[GREEN], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
+		GameObjects::Register(sockets[GREEN], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
 	}
 	else if (cubeName == cubesPaths[RED])
 	{
 		std::cout << "Picked up : Red" << std::endl;
-		GameObjects::Register(sockets[RED], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
+		GameObjects::Register(sockets[RED], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
 	}
 	else if (cubeName == cubesPaths[YELLOW])
 	{
 		std::cout << "Picked up : Yellow" << std::endl;
-		GameObjects::Register(sockets[YELLOW], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &SocketInteraction);
+		GameObjects::Register(sockets[YELLOW], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
 	}
 	GameObjects::UnRegister(_set);
-	//Sets::Erase(_set);
 	_set->Move(glm::vec3(0.0, -2.0f, 0.0f), true);
-	//_set->Scale(glm::vec3(0.0), true);
 }
 
 void InteractExit(Sets::Set* _set)
@@ -192,8 +181,6 @@ void Hospital::Initialize(GameData* _gameData)
 			}
 		}
 		cubes[BLUE] = Sets::Create();
-		//cubes[BLUE]->SetParent(playRoom, true);
-		//cubes[BLUE]->SetRenderingInstance(playRoom->GetRenderingInstance());
 		cubes[BLUE]->GenerateRenderingInstance();
 		cubes[BLUE]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[BLUE])), false);
 		cubes[BLUE]->SetPosition(playRoom->GetWorldPosition() + (playRoomPositions[rand() % playRoomPositions.size()]), true);
@@ -213,8 +200,6 @@ void Hospital::Initialize(GameData* _gameData)
 		};
 
 		cubes[GREEN] = Sets::Create();
-		//cubes[GREEN]->SetParent(giantBedRoom, true);
-		//cubes[GREEN]->SetRenderingInstance(giantBedRoom->GetRenderingInstance());
 		cubes[GREEN]->GenerateRenderingInstance();
 		cubes[GREEN]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[GREEN])), false);
 		cubes[GREEN]->SetPosition(giantBedRoom->GetWorldPosition() + giantBedroomPositions[rand() % giantBedroomPositions.size()], true);
@@ -250,8 +235,6 @@ void Hospital::Initialize(GameData* _gameData)
 
 
 		cubes[RED] = Sets::Create();
-		//cubes[RED]->SetParent(waitingRoom, true);
-		//cubes[RED]->SetRenderingInstance(waitingRoom->GetRenderingInstance());
 		cubes[RED]->GenerateRenderingInstance();
 		cubes[RED]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[RED])), false);
 		cubes[RED]->SetPosition(waitingRoom->GetWorldPosition() + waitingRoomPositions[rand() % waitingRoomPositions.size()], true);
@@ -274,8 +257,6 @@ void Hospital::Initialize(GameData* _gameData)
 
 
 		cubes[YELLOW] = Sets::Create();
-		//cubes[YELLOW]->SetParent(breakRoom, true);
-		//cubes[YELLOW]->SetRenderingInstance(breakRoom->GetRenderingInstance());
 		cubes[YELLOW]->GenerateRenderingInstance();
 		cubes[YELLOW]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[YELLOW])), false);
 		cubes[YELLOW]->SetPosition(breakRoom->GetWorldPosition() + breakRoomPositions[rand() % breakRoomPositions.size()], true);
@@ -289,14 +270,14 @@ void Hospital::Initialize(GameData* _gameData)
 
 	if (vendingMachine != nullptr)
 	{
-		GameObjects::Register(vendingMachine, 2.0f, 1000.0, &Scripting::HoveredCrosshair, &InteractVendingMachine);
+		GameObjects::Register(vendingMachine, 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &InteractVendingMachine);
 	}
 
 	for (size_t i = 0; i < 4; i++)
 	{
 		if (cubes[i] != nullptr)
 		{
-			GameObjects::Register(cubes[i], 2.0f, 1000.0, &Scripting::HoveredCrosshair, &CubePickup);
+			GameObjects::Register(cubes[i], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &CubePickup);
 		}
 	}
 
@@ -384,7 +365,7 @@ void Hospital::Tick(GameData* _gameData)
 
 void Hospital::UnlockExit()
 {
-	GameObjects::Register(elevator, 2.0f, 1000.0, &Scripting::HoveredCrosshair, &InteractExit);
+	GameObjects::Register(elevator, 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &InteractExit);
 	GameObjects::UnRegister(vendingMachine);
 	std::vector<Sets::Set*> children = vendingMachine->GetChildArray();
 	for (size_t childId = 0; childId < children.size(); childId++)
@@ -401,29 +382,4 @@ void Hospital::CleanUp(GameData* _gameData)
 {
 
 	initialized = false;
-}
-
-
-void Hospital::ClownUpdate(char** _args)
-{
-	int x = ToFloat(_args[0]);
-	int y = ToFloat(_args[1]);
-	int z = ToFloat(_args[2]);
-	int heading = ToFloat(_args[3]);
-
-	if (clown != nullptr)
-	{
-		clown->SetPosition(glm::vec3(x, clownSpawnPoint.y, z),false);
-		clown->SetRotation(glm::vec3(0.0, heading, 0.0),true);
-	}
-}
-
-void Hospital::TeddyUpdate(char** _args)
-{
-	int x = ToFloat(_args[0]);
-	int y = ToFloat(_args[1]);
-	int z = ToFloat(_args[2]);
-	int heading = ToFloat(_args[3]);
-
-	std::cout << heading << std::endl;
 }
