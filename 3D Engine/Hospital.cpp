@@ -48,8 +48,7 @@ std::vector<glm::vec3> socketsPositions = {
 };
 glm::vec3 clownSpawnPoint(1.150, 1.9, 1.0);
 static Clock ambientClock;
-static Audio::Sound* ambientLaugh;
-static Audio::Sound* ambient;
+
 void Hospital::RegisterInteractions()
 {
 	//Interactions::Register("KeyPad", &KeyPad::Interaction);
@@ -290,14 +289,6 @@ void Hospital::Initialize(GameData* _gameData)
 	clown->SetScale(glm::vec3(0.6),true);
 	clown->SetName("Clown");
 
-	ambientLaugh = Audio::CreateSound();
-	ambientLaugh->LoadFromFile("../Sounds/LaughChild.wav");
-
-	ambient = Audio::CreateSound();
-	ambient->LoadFromFile("../Sounds/AmbiantSound.wav");
-	ambient->Loop(true);
-	ambient->Play();
-
 	initialized = true;
 }
 
@@ -328,12 +319,6 @@ void Hospital::Tick(GameData* _gameData)
 		}
 		if (playRoom != nullptr)
 		{
-			if (ambientClock.GetElapsedTime() > 25000)
-			{
-				ambientLaugh->SetPosition(playRoom->GetWorldPosition());
-				ambientLaugh->Play();
-				ambientClock.Restart();
-			}
 			if (_gameData->window.IsKeyPressed(Keys::KP_2))
 			{
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();

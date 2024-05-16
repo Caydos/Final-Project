@@ -20,6 +20,7 @@ namespace Levels
 
 	void Initialize(GameData* _gameData);
 	void Tick(GameData* _gameData);
+	Level Get();
 	void Set(Level _level);
 }
 

@@ -6,9 +6,8 @@
 
 namespace Ambiance
 {
+	void Initialize(GameData* _gameData);
 	void Tick(GameData* _gameData);
-
-
 }
 
 

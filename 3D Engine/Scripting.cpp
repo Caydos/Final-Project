@@ -83,13 +83,13 @@ void Scripting::Initialize(GameData* _gameData)
 	playerPed->SetAdditionalRotation(glm::vec3(0.0, -90.0, 0.0));
 
 	footSteps = Audio::CreateSound();
-	footSteps->LoadFromFile("../Sounds/Footsteps2.wav");
+	footSteps->LoadFromFile("../Sounds/MC/Walk.wav");
 	footSteps->Loop(true);
 	footSteps->SetPosition(playerPed->GetPosition());
 	player->SetFootStepSound(footSteps);
 
 	footRun = Audio::CreateSound();
-	footRun->LoadFromFile("../Sounds/Footsteps.wav");
+	footRun->LoadFromFile("../Sounds/MC/Run.wav");
 	footRun->Loop(true);
 	footRun->SetPosition(playerPed->GetPosition());
 	player->SetFootStepSound2(footRun);

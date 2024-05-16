@@ -31,6 +31,10 @@ void Players::Player::Control(GameData* _gameData)
 		float velocity = this->ped->GetSpeed() * _gameData->dt;
 
 		glm::vec3 velocityVec(.0f);
+
+		glm::vec3 pedPosition = this->ped->GetPosition();
+		this->footSteps->SetPosition(pedPosition);
+		this->footSteps2->SetPosition(pedPosition);
 		if (_gameData->window.IsKeyPressed(Keys::W))
 		{
 			velocityVec += horizontalFront * velocity;
@@ -109,7 +113,6 @@ void Players::Player::Control(GameData* _gameData)
 		}
 
 		this->ped->PushVelocity(velocityVec, true);
-		//this->ped->Update();
 	}
 }
 std::vector<Players::Player*> playerPool;
