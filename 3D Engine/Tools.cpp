@@ -22,7 +22,6 @@ static Players::Player* player = nullptr;
 static Clock loadingClock;
 
 
-
 void Tools::Initialize(GameData* _gameData)
 {
 	Scene::Initialize(_gameData);
@@ -47,29 +46,6 @@ void Tools::Initialize(GameData* _gameData)
 
 	loadingClock.Restart();
 
-	std::vector<Sets::Set*> parents = Sets::GetAllParents();
-	for (size_t parentId = 0; parentId < parents.size(); parentId++)
-	{
-		if (parents[parentId]->GetName() == "Chunk")
-		{
-			std::vector<Sets::Set*> childArray = parents[parentId]->GetChildArray();
-			for (size_t childId = 0; childId < childArray.size(); childId++)
-			{
-				if (childArray[childId]->GetName() == "Ground")
-				{
-					glm::vec3 parentPos = childArray[childId]->GetWorldPosition();
-					Sets::Set* nodeSet = Sets::Create();
-					nodeSet->GenerateRenderingInstance();
-					Blocks::Block block;
-					block.GenerateModel();
-					Blocks::MaterialCheck(&block, "BCR_Blue");
-					block.SetScale(0.25f);
-					nodeSet->InsertBlock(block, true);
-					nodeSet->SetPosition(glm::vec3(parentPos.x + 1.25, parentPos.y + 1.0f, parentPos.z + 1.25), true);
-				}
-			}
-		}
-	}
 
 	std::cout << "Node gen time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	_gameData->dt = std::min(_gameData->dt, 1.0f);
@@ -110,7 +86,7 @@ void Tools::Initialize(GameData* _gameData)
 	//Peds::Ped* monsterPed = Peds::Create();
 	//monsterPed->Initialize();
 	//monsterPed->GenerateRenderingInstance();
-	//monsterPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_VendinMachin.json")));
+	//monsterPed->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")));
 	//monsterPed->SetName("Monster");
 	//monsterPed->SetScale(0.2);
 	//glm::vec3 initialPosition = glm::vec3(1.0f, 1.2f, 3.0f);

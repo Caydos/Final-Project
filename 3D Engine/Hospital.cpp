@@ -1,6 +1,12 @@
 #include "Hospital.h"
 #include "KeyPad.h"
 #include "Reading.h"
+#include "World.h"
+#include "Node.h"
+#include "Pathfinding.h"
+#include "Entity.h"
+#include "AiController.h"
+
 
 static bool initialized = false;
 static Map::Stage* stage = nullptr;
@@ -47,7 +53,50 @@ std::vector<glm::vec3> socketsPositions = {
 	glm::vec3(9.35,0.85,11.360),
 };
 glm::vec3 clownSpawnPoint(1.150, 1.9, 1.0);
-static Clock ambientClock;
+
+
+static AIController aiController;
+static Entity entity;
+static World world = World();
+
+
+void PathLoad(GameData* _gameData)
+{
+	world.addBlock(0, 0, 0);
+	Chunk* c = world.getChunk(0, 0, 0);
+
+
+	std::vector<Sets::Set*> parents = Sets::GetAllParents();
+	for (size_t parentId = 0; parentId < parents.size(); parentId++)
+	{
+		if (parents[parentId]->GetName() == "Chunk")
+		{
+			std::vector<Sets::Set*> childArray = parents[parentId]->GetChildArray();
+			for (size_t childId = 0; childId < childArray.size(); childId++)
+			{
+				if (childArray[childId]->GetName() == "Ground")
+				{
+					glm::vec3 parentPos = childArray[childId]->GetWorldPosition();
+					c->addBlock(parentPos.x + 1.25, parentPos.y + 1.0f, parentPos.z + 1.25);
+				}
+			}
+		}
+	}
+
+
+	Node startNode = Node(0, 0, 0);
+	Node endNode = Node(80, 0, 80);
+
+	VectorXYZ start = VectorXYZ(startNode.x, startNode.y, startNode.z);
+	VectorXYZ end = VectorXYZ(endNode.x, endNode.y, endNode.z);
+	Node* path = aStar(world, start, end, 0, 3);
+
+	glm::vec3 entityPos = glm::vec3(0.0, 20, 0.0);
+	glm::vec3 entityDim = glm::vec3(0.3, 0.3, 0.3);
+	entity = Entity(&world, entityDim, entityPos, 3.0, 0);
+
+	aiController = AIController(&entity, path);
+}
 
 void Hospital::RegisterInteractions()
 {
@@ -288,6 +337,7 @@ void Hospital::Initialize(GameData* _gameData)
 	clown->SetPosition(clownSpawnPoint, false);
 	clown->SetScale(glm::vec3(0.6),true);
 	clown->SetName("Clown");
+	//PathLoad(_gameData);
 
 	initialized = true;
 }
@@ -344,6 +394,9 @@ void Hospital::Tick(GameData* _gameData)
 			{
 				Scripting::SetgameState(-1);
 			}
+			//aiController.update();
+			//entity.update(_gameData->dt);
+			//clown->SetPosition(entity.position);
 		}
 	}
 }

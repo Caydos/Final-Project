@@ -36,6 +36,7 @@ static bool connected = false;
 static int gameState = 0;
 static std::shared_mutex gameStateMutex;
 
+
 void Generation()
 {
 	Clock loadingClock;
@@ -48,12 +49,8 @@ void Generation()
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 
 	loadingClock.Restart();
+	//PathLoad(GetGameData());
 
-	std::vector<Sets::Set*> parents = Sets::GetAllParents();
-	for (size_t parentId = 0; parentId < parents.size(); parentId++)
-	{
-		std::cout << parents[parentId]->GetName();
-	}
 
 	std::cout << "Node gen time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	generated = true;

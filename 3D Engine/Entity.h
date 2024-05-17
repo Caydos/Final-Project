@@ -1,5 +1,7 @@
 #pragma once
 #include "World.h"
+#include "Set.h"
+
 class Entity
 {
 public:
@@ -21,6 +23,7 @@ public:
 	bool isFlying = false;
 	unsigned int vao;
 
+	Entity();
 	Entity(World* w, glm::vec3& dim, glm::vec3 pos, float maxSpeed, int jumpHeight);
 	~Entity() = default;
 	void Collide(float deltaTime);
@@ -30,4 +33,6 @@ public:
 	void jump();
 	void crouch();
 	void update(float deltaTime);
+
+	Sets::Set* set;
 };

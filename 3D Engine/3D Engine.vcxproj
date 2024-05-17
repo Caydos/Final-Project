@@ -190,6 +190,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuOptions.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Nodes.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Peds.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Nodes.h" />
     <ClInclude Include="ObjectsMenu.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="PauseMenu.h" />

@@ -2,6 +2,10 @@
 #include <glm/glm.hpp>
 #include <cmath>
 
+AIController::AIController()
+{
+}
+
 AIController::AIController(Entity* entity, Node* path) {
 	this->entity = entity;
 	this->path = path;

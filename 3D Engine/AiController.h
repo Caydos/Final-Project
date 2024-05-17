@@ -8,6 +8,7 @@ class AIController
 	std::vector<Node*> nodes = std::vector<Node*>();
 	int index;
 public:
+	AIController();
 	AIController(Entity* entity, Node* path);
 	~AIController() = default;
 	void update();

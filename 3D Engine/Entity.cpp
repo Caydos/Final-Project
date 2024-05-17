@@ -4,6 +4,10 @@
 #include "Utils.h"
 
 
+Entity::Entity()
+{
+}
+
 Entity::Entity(World* w, glm::vec3& dim, glm::vec3 pos, float maxSpeed, int jumpHeight)
 {
     world = w;
