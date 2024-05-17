@@ -80,7 +80,7 @@ int main()
 	gameData.gameStates[TOOLS] = &Tools::Tick;
 	gameData.gameStates[GAME] = &Scripting::Tick;
 	//gameData.gameStates[GAME] = &Playtest::Tick;
-	gameData.gameState = GAME;
+	gameData.gameState = TOOLS;
 
 #ifdef _DEBUG
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

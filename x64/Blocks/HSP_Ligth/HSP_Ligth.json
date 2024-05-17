@@ -15,7 +15,7 @@
       "linear": 0.0,
       "quadratic": 0.0,
       "cutOff": 20.0,
-      "outerCutOff": 40.0
+      "outerCutOff": 70.0
     }
   }
 }

@@ -60,11 +60,11 @@ void Audio::Sound::LoadFromFile(const char* _path)
 			Logger::Write("[LoadWavFile] - OpenAL error: ", alGetString(error));
 		}
 	}
+
+	alSourcei(this->source, AL_BUFFER, buffer);
 	ALint channels;
 	alGetBufferi(this->buffer, AL_CHANNELS, &channels);
 	this->channelCount = channels;
-
-	alSourcei(this->source, AL_BUFFER, buffer);
 
 	alGetSourcef(this->source, AL_REFERENCE_DISTANCE, &this->referenceDistance);
 	alGetSourcef(this->source, AL_MAX_DISTANCE, &this->maxDistance);
@@ -172,7 +172,7 @@ void Audio::Sound::SetPosition(glm::vec3 _position)
 	if (!this->source) { alGenSources(1, &this->source); }
 	if (this->channelCount != 1)
 	{
-		Logger::Write("[SetPosition] - Unable to set a position to a stereo source");
+		//Logger::Write("[SetPosition] - Unable to set a position to a stereo source : ", this->name);
 		return;
 	}
 	this->position = _position;

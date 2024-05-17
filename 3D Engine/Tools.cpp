@@ -19,7 +19,7 @@ static float MovementSpeed = 2.25f;
 static Lighting::Spot* spot;
 static Monster::Monster* monster = nullptr; //Mob
 static Players::Player* player = nullptr;
-
+static Clock loadingClock;
 
 
 
@@ -41,37 +41,69 @@ void Tools::Initialize(GameData* _gameData)
 	//directionalLight->SetName("Directional");
 	//directionalLight->SetActive(true);
 
-	//Map::GenerateMaze(8, 1);
-	_gameData->dt = std::min(_gameData->dt, 1.0f);
+	loadingClock.Restart();
+	Map::GenerateMaze(8, 1);
+	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 
-	Sets::Set* room = Sets::Create();
-	room->GenerateRenderingInstance();
-	room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_PlayRoom.json")));
-	//room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
-	for (size_t i = 0; i < 50; i++)
+	loadingClock.Restart();
+
+	std::vector<Sets::Set*> parents = Sets::GetAllParents();
+	for (size_t parentId = 0; parentId < parents.size(); parentId++)
 	{
-		for (size_t j = 0; j < 50; j++)
+		if (parents[parentId]->GetName() == "Chunk")
 		{
-			Sets::Set* light = Sets::Create();
-			light->GenerateRenderingInstance();
-			light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")), false);
-			light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j), true);
-			light->SetName("Light");
+			std::vector<Sets::Set*> childArray = parents[parentId]->GetChildArray();
+			for (size_t childId = 0; childId < childArray.size(); childId++)
+			{
+				if (childArray[childId]->GetName() == "Ground")
+				{
+					glm::vec3 parentPos = childArray[childId]->GetWorldPosition();
+					Sets::Set* nodeSet = Sets::Create();
+					nodeSet->GenerateRenderingInstance();
+					Blocks::Block block;
+					block.GenerateModel();
+					Blocks::MaterialCheck(&block, "BCR_Blue");
+					block.SetScale(0.25f);
+					nodeSet->InsertBlock(block, true);
+					nodeSet->SetPosition(glm::vec3(parentPos.x + 1.25, parentPos.y + 1.0f, parentPos.z + 1.25), true);
+				}
+			}
 		}
 	}
-	//spot = Scene::Lights::CreateSpot();
-	//spot->activation = 1.0f;
-	//spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
-	//spot->diffuse = glm::vec3(0.5f);
-	//spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
-	//spot->constant = 0.000001;
-	//spot->linear = 0.0f;
-	//spot->quadratic = 0.0f;
-	//spot->cutOff = glm::cos(glm::radians(20.0f));
-	//spot->outerCutOff = glm::cos(glm::radians(40.0f));
-	//spot->position = glm::vec3(0.0);
-	//Lighting::UpdateSpot(spot);
-	//Scene::Lights::UpdateSpot(spot);
+
+	std::cout << "Node gen time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
+	_gameData->dt = std::min(_gameData->dt, 1.0f);
+
+	{
+		//Sets::Set* room = Sets::Create();
+		//room->GenerateRenderingInstance();
+		//room->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Map/HSP_PlayRoom.json")));
+		////room->SetPosition(glm::vec3(11.05, 0.0, -1.50));
+		//for (size_t i = 0; i < 50; i++)
+		//{
+		//	for (size_t j = 0; j < 50; j++)
+		//	{
+		//		Sets::Set* light = Sets::Create();
+		//		light->GenerateRenderingInstance();
+		//		light->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Props/HSP_Light.json")), false);
+		//		light->SetPosition(glm::vec3(2.5f * i, 2.5f, 2.5f * j), true);
+		//		light->SetName("Light");
+		//	}
+		//}
+	}
+	spot = Scene::Lights::CreateSpot();
+	spot->activation = 1.0f;
+	spot->ambient = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->diffuse = glm::vec3(0.5f);
+	spot->specular = glm::vec3(0.0f, 0.0f, 0.0f);
+	spot->constant = 0.000001;
+	spot->linear = 0.0f;
+	spot->quadratic = 0.0f;
+	spot->cutOff = glm::cos(glm::radians(20.0f));
+	spot->outerCutOff = glm::cos(glm::radians(40.0f));
+	spot->position = glm::vec3(0.0);
+	Lighting::UpdateSpot(spot);
+	Scene::Lights::UpdateSpot(spot);
 	// MONSTER
 
 	//monster = Monster::Create();
@@ -155,10 +187,10 @@ void Tools::Tick(GameData* _gameData)
 	if (!initialized) { Initialize(_gameData); }
 
 	Inputs(_gameData);
-	//spot->position = _gameData->camera->Position;
-	//spot->direction = _gameData->camera->Front;
-	//Lighting::UpdateSpot(spot);
-	//Scene::Lights::UpdateSpot(spot);
+	spot->position = _gameData->camera->Position;
+	spot->direction = _gameData->camera->Front;
+	Lighting::UpdateSpot(spot);
+	Scene::Lights::UpdateSpot(spot);
 
 	//Peds::Simulate(_gameData);
 

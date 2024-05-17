@@ -32,13 +32,8 @@ void Monster::Monster::Update(GameData* _gameData)
 	if (this->ped->GetCollision())
 	{
 
-		std::cout << "collision" << std::endl;
-
 		int tempRandom = (rand() % 4) + 1;
-		std::cout << tempRandom << std::endl;
-
-
-
+		//std::cout << tempRandom << std::endl;
 
 
 		if (tempRandom == 3 && this->direction != 3)
@@ -46,17 +41,17 @@ void Monster::Monster::Update(GameData* _gameData)
 			this->velocity = RIGHT_MONSTER;
 			this->direction = DIRECTION_RIGHT;
 		}
-		else if (tempRandom == 4 && this->direction != 4)
+		if (tempRandom == 4 && this->direction != 4)
 		{
 			this->velocity = LEFT_MONSTER;
 			this->direction = DIRECTION_LEFT;
 		}
-		else if (tempRandom == 1 && this->direction != 1)
+		if (tempRandom == 1 && this->direction != 1)
 		{
 			this->velocity = FRONT_MONSTER;
 			this->direction = DIRECTION_FRONT;
 		}
-		else if (tempRandom == 2 && this->direction != 2)
+		if (tempRandom == 2 && this->direction != 2)
 		{
 			this->velocity = BACK_MONSTER;
 			this->direction = DIRECTION_BACK;

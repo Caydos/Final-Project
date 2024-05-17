@@ -35,19 +35,19 @@ void Ambiance::Tick(GameData* _gameData)
 	}
 	case Levels::Level::HOSPITAL:
 	{
-		if (!hospitalAmbiance->IsPlaying())
-		{
-			hospitalAmbiance->Play();
-			std::cout << "Playing" << std::endl;
-		}
-		hospitalAmbiance->SetPosition(_gameData->camera->Position);
-		if (testClock.GetElapsedTime() < 15000)//miliseconds
-		{
-			break;
-		}
-		exampleSound->SetPosition(_gameData->camera->Position);
-		exampleSound->Play();
-		testClock.Restart();
+		//if (!hospitalAmbiance->IsPlaying())
+		//{
+		//	hospitalAmbiance->Play();
+		//	std::cout << "Playing" << std::endl;
+		//}
+		//hospitalAmbiance->SetPosition(_gameData->camera->Position);
+		//if (testClock.GetElapsedTime() < 15000)//miliseconds
+		//{
+		//	break;
+		//}
+		//exampleSound->SetPosition(_gameData->camera->Position);
+		//exampleSound->Play();
+		//testClock.Restart();
 		break;
 	}
 	case Levels::Level::LIBRARY:

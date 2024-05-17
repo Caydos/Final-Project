@@ -46,6 +46,16 @@ void Generation()
 
 	std::cout << spots->size() << " Lights in the scene" << std::endl;
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
+
+	loadingClock.Restart();
+
+	std::vector<Sets::Set*> parents = Sets::GetAllParents();
+	for (size_t parentId = 0; parentId < parents.size(); parentId++)
+	{
+		std::cout << parents[parentId]->GetName();
+	}
+
+	std::cout << "Node gen time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 	generated = true;
 }
 
@@ -83,12 +93,14 @@ void Scripting::Initialize(GameData* _gameData)
 	playerPed->SetAdditionalRotation(glm::vec3(0.0, -90.0, 0.0));
 
 	footSteps = Audio::CreateSound();
+	footSteps->SetName("Walk");
 	footSteps->LoadFromFile("../Sounds/MC/Walk.wav");
 	footSteps->Loop(true);
 	footSteps->SetPosition(playerPed->GetPosition());
 	player->SetFootStepSound(footSteps);
 
 	footRun = Audio::CreateSound();
+	footRun->SetName("Run");
 	footRun->LoadFromFile("../Sounds/MC/Run.wav");
 	footRun->Loop(true);
 	footRun->SetPosition(playerPed->GetPosition());
