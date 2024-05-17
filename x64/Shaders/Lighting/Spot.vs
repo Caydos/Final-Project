@@ -50,7 +50,7 @@ void main()
         gl_Position = vec4(-9999.0, -9999.0, -9999.0, 1.0);
         return;
     }
-    if (distance(viewPos, position) > 7.5)
+    if (distance(viewPos, position) > 10.5)
     {
         gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
     }

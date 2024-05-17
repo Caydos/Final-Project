@@ -7,6 +7,12 @@
 #include "Wav.h"
 
 
+static std::shared_mutex mutex;
+static bool audioDeviceActivated = false;
+static std::vector<Audio::Sound*> sounds;
+static std::thread thread;
+static ALCdevice* device;
+static ALCcontext* context;
 
 
 
@@ -26,16 +32,34 @@ Audio::Sound::Sound()
 
 	this->position = glm::vec3(0);
 	this->velocity = glm::vec3(0);
+	this->volume = 1.0f;
 }
 
 Audio::Sound::~Sound()
 {
 }
 
+std::string Audio::Sound::GetName()
+{
+	return this->name;
+}
+
+void Audio::Sound::SetName(std::string _name)
+{
+	this->name = _name;
+}
+
 void Audio::Sound::LoadFromFile(const char* _path)
 {
 	if (!this->source) { alGenSources(1, &this->source); }
 	LoadWavFile(_path, buffer);
+	{
+		ALenum error;
+		if ((error = alGetError()) != AL_NO_ERROR && audioDeviceActivated)
+		{
+			Logger::Write("[LoadWavFile] - OpenAL error: ", alGetString(error));
+		}
+	}
 	ALint channels;
 	alGetBufferi(this->buffer, AL_CHANNELS, &channels);
 	this->channelCount = channels;
@@ -45,6 +69,12 @@ void Audio::Sound::LoadFromFile(const char* _path)
 	alGetSourcef(this->source, AL_REFERENCE_DISTANCE, &this->referenceDistance);
 	alGetSourcef(this->source, AL_MAX_DISTANCE, &this->maxDistance);
 	alGetSourcef(this->source, AL_ROLLOFF_FACTOR, &this->rollOffFactor);
+
+	ALenum error;
+	if ((error = alGetError()) != AL_NO_ERROR && audioDeviceActivated)
+	{
+		Logger::Write("[LoadFromFile] - OpenAL error: ", alGetString(error));
+	}
 }
 
 void Audio::Sound::Erase()
@@ -82,7 +112,13 @@ void Audio::Sound::Pause()
 
 bool Audio::Sound::IsPlaying()
 {
-	return !this->paused;
+	ALint sourceState;
+	alGetSourcei(this->source, AL_SOURCE_STATE, &sourceState);
+	if (sourceState == AL_PLAYING)
+	{
+		return true;
+	}
+	return false;
 }
 
 bool Audio::Sound::HasFinished()
@@ -136,7 +172,7 @@ void Audio::Sound::SetPosition(glm::vec3 _position)
 	if (!this->source) { alGenSources(1, &this->source); }
 	if (this->channelCount != 1)
 	{
-		Logger::Write("Unable to set a position to a stereo source");
+		Logger::Write("[SetPosition] - Unable to set a position to a stereo source");
 		return;
 	}
 	this->position = _position;
@@ -154,6 +190,17 @@ void Audio::Sound::SetVelocity(glm::vec3 _velocity)
 	if (!this->source) { alGenSources(1, &this->source); }
 	this->velocity = _velocity;
 	alSource3f(this->source, AL_VELOCITY, this->velocity.x, this->velocity.y, this->velocity.z);
+}
+
+float Audio::Sound::GetVolume()
+{
+	return this->volume;
+}
+
+void Audio::Sound::SetVolume(float _volume)
+{
+	this->volume = _volume;
+	alSourcef(this->source, AL_GAIN, this->volume);
 }
 
 void Audio::Sound::Update()
@@ -177,23 +224,22 @@ void Audio::Sound::Update()
 
 
 
-static std::shared_mutex mutex;
-static std::vector<Audio::Sound*> sounds;
-static std::thread thread;
-static ALCdevice* device;
-static ALCcontext* context;
 
 void Audio::Initialize()
 {
 	// Initialize OpenAL device and context
+	audioDeviceActivated = true;
 	device = alcOpenDevice(NULL);
 	if (!device)
 	{
+		audioDeviceActivated = false;
 		//return 0;
 	}
 
 	context = alcCreateContext(device, NULL);
-	if (!context) {
+	if (!context)
+	{
+		audioDeviceActivated = false;
 		alcCloseDevice(device);
 		//return 0;
 	}
@@ -204,6 +250,11 @@ void Audio::Initialize()
 	alListenerfv(AL_ORIENTATION, orientation);
 
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+	ALenum error;
+	if ((error = alGetError()) != AL_NO_ERROR && audioDeviceActivated)
+	{
+		Logger::Write("[Initialize] - OpenAL error: ", alGetString(error));
+	}
 }
 
 void Audio::Tick(glm::vec3 _position, glm::vec3 _frontVector, glm::vec3 _upVector)
@@ -214,9 +265,9 @@ void Audio::Tick(glm::vec3 _position, glm::vec3 _frontVector, glm::vec3 _upVecto
 	alListenerfv(AL_ORIENTATION, orientation);
 
 	ALenum error;
-	if ((error = alGetError()) != AL_NO_ERROR)
+	if ((error = alGetError()) != AL_NO_ERROR && audioDeviceActivated)
 	{
-		//Logger::Write("OpenAL error: ", alGetString(error));
+		Logger::Write("[Tick] - OpenAL error: ", alGetString(error));
 	}
 }
 

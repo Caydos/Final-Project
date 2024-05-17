@@ -5,6 +5,7 @@
 
 static bool initialized = false;
 static Audio::Sound* exampleSound;
+static Audio::Sound* hospitalAmbiance;
 static Clock testClock;
 
 void Ambiance::Initialize(GameData* _gameData)
@@ -13,18 +14,17 @@ void Ambiance::Initialize(GameData* _gameData)
 	// Load de tous les sons ICI
 	exampleSound = Audio::CreateSound();
 	exampleSound->LoadFromFile("../Sounds/Hospital/LaughChild.wav");
-
-
+	
+	hospitalAmbiance = Audio::CreateSound();
+	hospitalAmbiance->LoadFromFile("../Sounds/Hospital/AmbiantSound1.wav");
+	hospitalAmbiance->Loop(true);
+	hospitalAmbiance->SetVolume(0.1f);
 	initialized = true;
 }
 
 void Ambiance::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
-	if (testClock.GetElapsedTime() < 15000)//miliseconds
-	{
-		return;
-	}
 
 	switch (Levels::Get())
 	{
@@ -35,7 +35,19 @@ void Ambiance::Tick(GameData* _gameData)
 	}
 	case Levels::Level::HOSPITAL:
 	{
+		if (!hospitalAmbiance->IsPlaying())
+		{
+			hospitalAmbiance->Play();
+			std::cout << "Playing" << std::endl;
+		}
+		hospitalAmbiance->SetPosition(_gameData->camera->Position);
+		if (testClock.GetElapsedTime() < 15000)//miliseconds
+		{
+			break;
+		}
+		exampleSound->SetPosition(_gameData->camera->Position);
 		exampleSound->Play();
+		testClock.Restart();
 		break;
 	}
 	case Levels::Level::LIBRARY:
@@ -51,5 +63,4 @@ void Ambiance::Tick(GameData* _gameData)
 	default:
 		break;
 	}
-	testClock.Restart();
 }

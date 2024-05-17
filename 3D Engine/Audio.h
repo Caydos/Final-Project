@@ -11,6 +11,9 @@ namespace Audio
 		Sound();
 		~Sound();
 
+		std::string GetName();
+		void SetName(std::string _name);
+
 		void LoadFromFile(const char* _path);
 		void Erase();
 
@@ -36,11 +39,14 @@ namespace Audio
 		glm::vec3 GetVelocity();
 		void SetVelocity(glm::vec3 _velocity);
 
+		float GetVolume();
+		void SetVolume(float _volume);
 
 		void Update();
 
 	private:
 		std::shared_mutex mutex;
+		std::string name;
 		bool initialized;
 		bool loop;
 		bool paused;
@@ -56,6 +62,8 @@ namespace Audio
 
 		glm::vec3 position;
 		glm::vec3 velocity;
+
+		float volume;
 	};
 	void Initialize();
 	void Tick(glm::vec3 _position, glm::vec3 _frontVector, glm::vec3 _upVector);
