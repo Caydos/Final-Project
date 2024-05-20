@@ -143,6 +143,9 @@ void Playtest::Initialize(GameData* _gameData)
 
 	path = Pathfinding::a_star(&cubes[0], &cubes[cubes.size() - 1], cubes, obstacles, 3.5f);
 
+
+	startCube->SetPosition(glm::vec3(cubes[0].x, 0.0, cubes[0].y));
+
 	for (size_t cubeId = 0; cubeId < path.size(); cubeId++)
 	{
 		Sets::Set* ctPart = Sets::Create();
@@ -179,6 +182,7 @@ void Playtest::Tick(GameData* _gameData)
 		Lighting::UpdateSpot(flashLight);
 		Scene::Lights::UpdateSpot(flashLight);
 		Tools::Inputs(_gameData);
+		follow_path(startCube, path, _gameData->dt);
 
 		//std::cout << entity.position.x << " " << entity.position.y + 1.0 << " " << entity.position.z << std::endl;
 		//startCube->SetPosition(glm::vec3(entity.position.x, entity.position.y + 1.0, entity.position.z));

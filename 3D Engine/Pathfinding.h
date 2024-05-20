@@ -4,7 +4,7 @@
 #include <vector>
 #include <queue>
 #include <unordered_map>
-
+#include "Set.h"
 
 namespace Pathfinding
 {
@@ -120,6 +120,56 @@ namespace Pathfinding
         }
 
         return {}; // No path found
+    }
+
+
+    // Function to calculate the distance between two points
+    float distance(float x1, float y1, float x2, float y2) {
+        return std::sqrt((x2 - x1) * (x2 - y1) * (x2 - y1));
+    }
+
+    const float speed = 1.0f;
+    // Function to move the entity towards the next point in the path
+    void move_towards(Sets::Set* entity, const Cube& target, float delta_time) {
+        glm::vec3 position = entity->GetPosition();
+        float dir_x = target.x - position.x;
+        float dir_y = target.y - position.z;
+        float length = std::sqrt(dir_x * dir_x + dir_y * dir_y);
+
+        // Normalize the direction vector
+        dir_x /= length;
+        dir_y /= length;
+
+        // Move the entity towards the target
+        position.x += dir_x * speed * delta_time;
+        position.z += dir_y * speed * delta_time;
+
+        // If the entity is very close to the target, snap to the target
+        if (distance(position.x, position.z, target.x, target.y) < speed * delta_time) {
+            //entity.x = target.x;
+            //entity.y = target.y;
+            entity->SetPosition(glm::vec3(target.x, position.y, target.y));
+        }
+    }
+
+    // Function to make the entity follow the path
+    void follow_path(Sets::Set* entity, const std::vector<Cube>& path, float delta_time) {
+        static size_t target_index = 0;
+
+        if (target_index < path.size()) {
+            move_towards(entity, path[target_index], delta_time);
+
+            glm::vec3 position = entity->GetPosition();
+            // If the entity has reached the current target, move to the next target
+            if (distance(position.x, position.z, path[target_index].x, path[target_index].y) < 0.2f)
+            {
+                target_index++;
+                std::cout << "Got it" << std::endl;
+            }
+            //if (position.x == path[target_index].x && position.z == path[target_index].y) {
+            //    target_index++;
+            //}
+        }
     }
 }
 
