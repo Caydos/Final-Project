@@ -1,218 +1,126 @@
-#pragma once
-#include "World.h"
-#include "Node.h"
-#include "VectorXYZ.h"
+#ifndef PATHFINDING_H
+#define PATHFINDING_H
 #include <cmath>
-#include <iostream>
+#include <vector>
+#include <queue>
+#include <unordered_map>
 
-unsigned int distance(VectorXYZ& startPos, VectorXYZ& endPos) {
-	return std::abs(startPos.x - endPos.x) + std::abs(startPos.y - endPos.y) + std::abs(startPos.z - endPos.z);
+
+namespace Pathfinding
+{
+    struct Cube {
+        int id; // Unique identifier for the cube
+        float x, y;
+        Cube(int id, float x, float y) : id(id), x(x), y(y) {}
+    };
+
+    struct Node {
+        Cube* cube;
+        float g; // Cost from start to current node
+        float h; // Heuristic cost from current node to target
+        Node* parent;
+        Node(Cube* cube, float g, float h, Node* parent = nullptr)
+            : cube(cube), g(g), h(h), parent(parent) {}
+
+        float f() const { return g + h; }
+    };
+
+    struct CompareNode {
+        bool operator()(const Node* lhs, const Node* rhs) const {
+            return lhs->f() > rhs->f();
+        }
+    };
+
+    float euclidean_distance(const Cube* a, const Cube* b) {
+        return std::sqrt((a->x - b->x) * (a->x - b->x) + (a->y - b->y) * (a->y - b->y));
+    }
+
+    // Function to check if two floats are nearly equal
+    bool nearly_equal(float a, float b, float epsilon = 1e-6) {
+        return std::fabs(a - b) < epsilon;
+    }
+
+    // Function to check if the middle cube is between start and end cubes
+    bool is_between(const Cube& start, const Cube& middle, const Cube& end) {
+        // Check if middle is collinear with start and end
+        float cross_product = (middle.y - start.y) * (end.x - start.x) - (middle.x - start.x) * (end.y - start.y);
+        if (!nearly_equal(cross_product, 0)) {
+            return false;
+        }
+
+        // Check if middle is within the bounding box of start and end
+        bool within_x_bounds = std::min(start.x, end.x) <= middle.x && middle.x <= std::max(start.x, end.x);
+        bool within_y_bounds = std::min(start.y, end.y) <= middle.y && middle.y <= std::max(start.y, end.y);
+
+        return within_x_bounds && within_y_bounds;
+    }
+
+    std::vector<Cube*> get_neighbors(Cube* current, const std::vector<Cube>& cubes, const std::vector<Cube>& obstacles, float neighbor_distance) {
+        std::vector<Cube*> neighbors;
+        for (const Cube& cube : cubes) {
+            if (cube.id != current->id && euclidean_distance(current, &cube) <= neighbor_distance) {
+                bool is_obstacle = false;
+                for (const Cube& obstacle : obstacles) {
+                    if (cube.id == obstacle.id) {
+                        is_obstacle = true;
+                        break;
+                    }
+                }
+                if (!is_obstacle) {
+                    neighbors.push_back(const_cast<Cube*>(&cube));
+                }
+            }
+        }
+        return neighbors;
+    }
+
+    std::vector<Cube> reconstruct_path(Node* node) {
+        std::vector<Cube> path;
+        while (node != nullptr) {
+            path.push_back(*(node->cube));
+            node = node->parent;
+        }
+        std::reverse(path.begin(), path.end());
+        return path;
+    }
+
+    std::vector<Cube> a_star(Cube* start, Cube* goal, const std::vector<Cube>& cubes, const std::vector<Cube>& obstacles, float neighbor_distance) {
+        std::priority_queue<Node*, std::vector<Node*>, CompareNode> open_set;
+        std::unordered_map<int, Node*> all_nodes; // To keep track of all created nodes
+
+        Node* start_node = new Node(start, 0, euclidean_distance(start, goal));
+        open_set.push(start_node);
+        all_nodes[start->id] = start_node;
+
+        while (!open_set.empty()) {
+            Node* current = open_set.top();
+            open_set.pop();
+
+            if (current->cube->id == goal->id) {
+                std::vector<Cube> path = reconstruct_path(current);
+                for (auto& pair : all_nodes) {
+                    delete pair.second; // Clean up
+                }
+                return path;
+            }
+
+            std::vector<Cube*> neighbors = get_neighbors(current->cube, cubes, obstacles, neighbor_distance);
+            for (Cube* neighbor : neighbors) {
+                float tentative_g = current->g + euclidean_distance(current->cube, neighbor);
+                if (all_nodes.find(neighbor->id) == all_nodes.end() || tentative_g < all_nodes[neighbor->id]->g) {
+                    Node* neighbor_node = new Node(neighbor, tentative_g, euclidean_distance(neighbor, goal), current);
+                    open_set.push(neighbor_node);
+                    all_nodes[neighbor->id] = neighbor_node;
+                }
+            }
+        }
+
+        for (auto& pair : all_nodes) {
+            delete pair.second; // Clean up
+        }
+
+        return {}; // No path found
+    }
 }
 
-Node* selectNode(std::vector<Node*>& nodes, Node& n) {
-	for (int i = 0; i < nodes.size(); i++) {
-		if (*nodes[i] == n) {
-			return nodes[i];
-		}
-	}
-
-	return nullptr;
-}
-
-bool hasNode(std::vector<Node*>& nodes, Node& n) {
-	for (int i = 0; i < nodes.size(); i++) {
-		if (*nodes[i] == n) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool sufficientHeight(World* w, int x, int y, int z, unsigned int height) {
-	for (unsigned int i = 0; i <= height; i++) {
-		if (w->getBlock(x, y - 1 - i, z)) {
-			return true;
-		}
-	}
-	return false;
-}
-
-bool isValid(World* w, Node* n, int x, int y, int z, bool gravity = false, unsigned int jumpHeight = 1, unsigned int maxFall = 3) {
-
-	int dx = x - n->x;
-	int dy = y - n->y;
-	int dz = z - n->z;
-
-	if (dx == 0 && dy == 0 && dz == 0) {
-		return false;
-	}
-
-	bool result = (!w->getBlock(n->x + dx, n->y, n->z) && !w->getBlock(n->x, n->y + dy, n->z) && !w->getBlock(n->x, n->y, n->z + dz));
-	if (!gravity || !result) {
-		return result;
-	}
-
-	int sum = std::abs(dx) + std::abs(dy) + std::abs(dz);
-	if (sum == 3) {
-		return false;
-	}
-	else if (sum == 2 && dy != 0) {
-		return false;
-	}
-
-	bool grounded = w->getBlock(n->x, n->y - 1, n->z);
-	bool targetGrounded = w->getBlock(x, y - 1, z);
-
-	if (!grounded) {
-		if (!targetGrounded) {
-			if (dy == 0) {
-				return false;
-			}
-			else if (dy == 1) {
-				return sufficientHeight(w, x, y, z, jumpHeight);
-			}
-			else {
-				return sufficientHeight(w, n->x, n->y, n->z, maxFall);
-			}
-		}
-		else {
-			if (dy == -1) {
-				return true;
-			}
-			else {
-				return sufficientHeight(w, n->x, n->y, n->z, jumpHeight);
-			}
-		}
-	}
-
-	if (!targetGrounded) {
-		if (dy == 1) {
-			return sufficientHeight(w, x, y, z, jumpHeight);
-		}
-		else {
-			return sufficientHeight(w, x, y, z, maxFall);
-		}
-	}
-
-	return true;
-}
-
-
-
-Node* aStar(World& world, VectorXYZ& startPos, VectorXYZ& endPos, unsigned int jumpHeight, unsigned int maxFall) {
-	Node* startNode = new Node(startPos.x, startPos.y, startPos.z, nullptr, 0, distance(startPos, endPos));
-	Node* endNode = new Node(endPos.x, endPos.y, endPos.z, nullptr, 100000, 0);
-
-	if (world.getBlock(endPos.x, endPos.y, endPos.z)) {
-		delete startNode;
-		return endNode;
-	}
-
-	std::vector<Node*> openedNodes = std::vector<Node*>();
-	openedNodes.push_back(startNode);
-	std::vector<Node*> closedNodes = std::vector<Node*>();
-
-	int count = 0;
-
-	while (openedNodes.size()) {
-
-		//Select node with the lowest 
-		std::sort(std::begin(openedNodes), std::end(openedNodes),
-			[](const auto& lhs, const auto& rhs) {
-				return lhs->f > rhs->f;
-			});
-		Node* node = openedNodes.back();
-
-		openedNodes.pop_back();
-
-		if (*node == *endNode) {
-			delete endNode;
-			endNode = node;
-			break;
-		}
-		if (++count > 10000) {
-			break;
-		}
-
-		closedNodes.push_back(node);
-		std::vector<Node*> adjacentNodes = std::vector<Node*>();
-		int x = node->x;
-		int y = node->y;
-		int z = node->z;
-
-		bool gravity = true;
-
-		for (int dx = -1; dx <= 1; dx++) {
-			for (int dy = -1; dy <= 1; dy++) {
-				for (int dz = -1; dz <= 1; dz++) {
-					if (isValid(&world, node, x + dx, y + dy, z + dz, gravity, jumpHeight, maxFall))
-						adjacentNodes.push_back(new Node(x + dx, y + dy, z + dz));
-				}
-			}
-		}
-
-
-		for (int i = 0; i < adjacentNodes.size(); i++) {
-			Node* n = adjacentNodes[i];
-			if (!hasNode(closedNodes, *n)) {
-				if (!hasNode(openedNodes, *n)) {
-					openedNodes.push_back(n);
-					VectorXYZ pos = VectorXYZ(n->x, n->y, n->z);
-					n->g = distance(pos, endPos);
-					n->f = n->h + n->g;
-				}
-				else {
-					Node* new_node = selectNode(openedNodes, *n);
-					delete n;
-					n = new_node;
-
-				}
-				float distance = 1.0;
-				int dx = n->x - x;
-				int dy = n->y - y;
-				int dz = n->z - z;
-				int sum = std::abs(dx) + std::abs(dy) + std::abs(dz);
-				if (sum == 2) {
-					distance = 1.4;
-				}
-				else if (sum == 3) {
-					distance = 1.7;
-				}
-
-				if (n->h > node->h + distance) {
-					n->h = node->h + distance;
-					n->f = n->h + n->g;
-					n->p = node;
-				}
-			}
-			else {
-				delete n;
-			}
-		}
-
-	}
-
-	std::vector<Node*> finalNodes = std::vector<Node*>();
-	Node* node = endNode;
-	while (node) {
-		finalNodes.push_back(node);
-		node = node->p;
-	}
-
-	for (int i = 0; i < openedNodes.size(); i++) {
-		Node* n = openedNodes[i];
-		if (!hasNode(finalNodes, *n)) {
-			delete n;
-		}
-	}
-
-	for (int i = 0; i < closedNodes.size(); i++) {
-		Node* n = closedNodes[i];
-		if (!hasNode(finalNodes, *n)) {
-			delete n;
-		}
-	}
-	std::cout << "Path distance: " << endNode->h << std::endl;
-	return endNode;
-}
+#endif // !PATHFINDING_H

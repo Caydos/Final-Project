@@ -175,17 +175,11 @@
     <Filter Include="Source Files\Game\Scripting\Levels">
       <UniqueIdentifier>{684d8207-1a03-4c0c-99a8-cba8e3c17ae7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Scripting\Interaction">
-      <UniqueIdentifier>{5967bd4f-65f2-4f36-a3cc-2466fb62476e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Scripting\Levels\Hospital">
       <UniqueIdentifier>{1b41de48-8d35-4927-85ab-a7cef2f2a6f1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Game\Scripting\Levels\Hospital\KeyPad">
       <UniqueIdentifier>{0d425235-ec70-4ef1-95d9-56586a134302}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Scripting\Interaction\GameObject">
-      <UniqueIdentifier>{272d05af-2175-4424-aa10-f07259508773}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Game\Scripting\Playtest">
       <UniqueIdentifier>{834c7aab-83d0-4aee-9eb2-e594c04f72d8}</UniqueIdentifier>
@@ -213,6 +207,24 @@
     </Filter>
     <Filter Include="Source Files\Game\Scripting\Levels\Hospital\VictoryDefeat">
       <UniqueIdentifier>{10f753db-800f-4c57-91dd-26054838a485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Levels\Entrance">
+      <UniqueIdentifier>{c2100ca8-9dad-4351-b16c-4352be689a08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Levels\Garden">
+      <UniqueIdentifier>{e1880fdb-91fb-4c4f-afd5-318cac2a4236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Levels\Library">
+      <UniqueIdentifier>{8373b0c3-4cb4-4a82-9d8a-c5840e8d7d2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Interactions">
+      <UniqueIdentifier>{5967bd4f-65f2-4f36-a3cc-2466fb62476e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Interactions\GameObject">
+      <UniqueIdentifier>{272d05af-2175-4424-aa10-f07259508773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripting\Pathfinding">
+      <UniqueIdentifier>{9cc3df80-cd1c-49dc-aad1-ed02ce746d4b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -387,9 +399,6 @@
     <ClCompile Include="MapManager.cpp">
       <Filter>Source Files\Game\Maze</Filter>
     </ClCompile>
-    <ClCompile Include="Interaction.cpp">
-      <Filter>Source Files\Game\Scripting\Interaction</Filter>
-    </ClCompile>
     <ClCompile Include="Hospital.cpp">
       <Filter>Source Files\Game\Scripting\Levels\Hospital</Filter>
     </ClCompile>
@@ -397,7 +406,7 @@
       <Filter>Source Files\Game\Scripting\Levels\Hospital\KeyPad</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Game\Scripting\Interaction\GameObject</Filter>
+      <Filter>Source Files\Game\Scripting\Interactions\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="MainMenu.cpp">
       <Filter>Source Files\Game\Menu\Main</Filter>
@@ -425,6 +434,24 @@
     </ClCompile>
     <ClCompile Include="VictoryDefeat.cpp">
       <Filter>Source Files\Game\Scripting\Levels\Hospital\VictoryDefeat</Filter>
+    </ClCompile>
+    <ClCompile Include="Entrance.cpp">
+      <Filter>Source Files\Game\Scripting\Levels\Entrance</Filter>
+    </ClCompile>
+    <ClCompile Include="Garden.cpp">
+      <Filter>Source Files\Game\Scripting\Levels\Garden</Filter>
+    </ClCompile>
+    <ClCompile Include="Library.cpp">
+      <Filter>Source Files\Game\Scripting\Levels\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Levels.cpp">
+      <Filter>Source Files\Game\Scripting\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactions.cpp">
+      <Filter>Source Files\Game\Scripting\Interactions</Filter>
+    </ClCompile>
+    <ClCompile Include="Pathfinding.cpp">
+      <Filter>Source Files\Game\Scripting\Pathfinding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -614,9 +641,6 @@
     <ClInclude Include="MapManager.h">
       <Filter>Source Files\Game\Maze</Filter>
     </ClInclude>
-    <ClInclude Include="Interaction.h">
-      <Filter>Source Files\Game\Scripting\Interaction</Filter>
-    </ClInclude>
     <ClInclude Include="Hospital.h">
       <Filter>Source Files\Game\Scripting\Levels\Hospital</Filter>
     </ClInclude>
@@ -624,7 +648,7 @@
       <Filter>Source Files\Game\Scripting\Levels\Hospital\KeyPad</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Source Files\Game\Scripting\Interaction\GameObject</Filter>
+      <Filter>Source Files\Game\Scripting\Interactions\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>Source Files\Game\Menu\Main</Filter>
@@ -652,6 +676,24 @@
     </ClInclude>
     <ClInclude Include="VictoryDefeat.h">
       <Filter>Source Files\Game\Scripting\Levels\Hospital\VictoryDefeat</Filter>
+    </ClInclude>
+    <ClInclude Include="Entrance.h">
+      <Filter>Source Files\Game\Scripting\Levels\Entrance</Filter>
+    </ClInclude>
+    <ClInclude Include="Garden.h">
+      <Filter>Source Files\Game\Scripting\Levels\Garden</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactions.h">
+      <Filter>Source Files\Game\Scripting\Interactions</Filter>
+    </ClInclude>
+    <ClInclude Include="Levels.h">
+      <Filter>Source Files\Game\Scripting\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Library.h">
+      <Filter>Source Files\Game\Scripting\Levels\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Pathfinding.h">
+      <Filter>Source Files\Game\Scripting\Pathfinding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

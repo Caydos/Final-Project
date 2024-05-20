@@ -147,7 +147,6 @@
     <ClCompile Include="..\Libs\IMGUI\imgui_draw.cpp" />
     <ClCompile Include="..\Libs\IMGUI\imgui_tables.cpp" />
     <ClCompile Include="..\Libs\IMGUI\imgui_widgets.cpp" />
-    <ClCompile Include="AiController.cpp" />
     <ClCompile Include="Ambiance.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationUI.cpp" />
@@ -157,14 +156,12 @@
     <ClCompile Include="BlockType.cpp" />
     <ClCompile Include="Bounds.cpp" />
     <ClCompile Include="Cheats.cpp" />
-    <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="Collisions.cpp" />
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="DeferredShading.cpp" />
     <ClCompile Include="Doors.cpp" />
-    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Entrance.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="FrustumCulling.cpp" />
@@ -190,8 +187,8 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuOptions.cpp" />
     <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="Nodes.cpp" />
     <ClCompile Include="ObjectsMenu.cpp" />
+    <ClCompile Include="Pathfinding.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Peds.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -208,9 +205,7 @@
     <ClCompile Include="SSAO.cpp" />
     <ClCompile Include="Sync.cpp" />
     <ClCompile Include="Tools.cpp" />
-    <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VictoryDefeat.cpp" />
-    <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldScene.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="Files.cpp" />
@@ -231,14 +226,12 @@
     <ClInclude Include="..\Libs\IMGUI\imstb_rectpack.h" />
     <ClInclude Include="..\Libs\IMGUI\imstb_textedit.h" />
     <ClInclude Include="..\Libs\IMGUI\imstb_truetype.h" />
-    <ClInclude Include="AiController.h" />
     <ClInclude Include="Ambiance.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="Bounds.h" />
     <ClInclude Include="Cheats.h" />
-    <ClInclude Include="Chunk.h" />
     <ClInclude Include="Collisions.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Crosshair.h" />
@@ -248,7 +241,6 @@
     <ClInclude Include="DefaultVertices.h" />
     <ClInclude Include="DeferredShading.h" />
     <ClInclude Include="Doors.h" />
-    <ClInclude Include="Entity.h" />
     <ClInclude Include="Entrance.h" />
     <ClInclude Include="EventListing.h" />
     <ClInclude Include="Files.h" />
@@ -275,8 +267,6 @@
     <ClInclude Include="MenuOptions.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Network.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="Nodes.h" />
     <ClInclude Include="ObjectsMenu.h" />
     <ClInclude Include="Pathfinding.h" />
     <ClInclude Include="PauseMenu.h" />
@@ -285,10 +275,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Playtest.h" />
     <ClInclude Include="Props.h" />
-    <ClInclude Include="Quad2.h" />
     <ClInclude Include="RayCasting.h" />
     <ClInclude Include="Reading.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scripting.h" />
     <ClInclude Include="Set.h" />
@@ -299,9 +287,7 @@
     <ClInclude Include="SSAO.h" />
     <ClInclude Include="Sync.h" />
     <ClInclude Include="Tools.h" />
-    <ClInclude Include="Utils.h" />
     <ClInclude Include="Vectors.h" />
-    <ClInclude Include="VectorXYZ.h" />
     <ClInclude Include="VictoryDefeat.h" />
     <ClInclude Include="Wav.h" />
     <ClInclude Include="Window.h" />
@@ -311,13 +297,9 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Triangle.h" />
-    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Arrows.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

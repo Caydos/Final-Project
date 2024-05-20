@@ -67,6 +67,6 @@ void main()
     //     return;
     // }
 
-    gLightingSpec = vec4(CalcSpotLight(norm, WorldPos, viewDir, Albedo, 0.0, 0.0), 1.0);
-    // gLightingSpec = vec4(1.0,0.0,0.0, 1.0);
+    // gLightingSpec = vec4(CalcSpotLight(norm, WorldPos, viewDir, Albedo, 0.0, 0.0), 1.0);
+    gLightingSpec = vec4(Albedo, 1.0);
 }
