@@ -41,7 +41,7 @@ void Tools::Initialize(GameData* _gameData)
 	//directionalLight->SetActive(true);
 
 	loadingClock.Restart();
-	Map::GenerateMaze(8, 1);
+	//Map::GenerateMaze(8, 1);
 	std::cout << "Loading time : " << loadingClock.GetElapsedTime() / 1000 << " seconds." << std::endl;
 
 	loadingClock.Restart();
