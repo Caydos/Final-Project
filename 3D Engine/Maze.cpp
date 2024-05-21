@@ -209,20 +209,28 @@ void Maze::InitLaby(Map::Stage& _stage, int _mapW)
 
 			for (int id = 0; id < _stage.chunckList[map].cellList.size(); id++)
 			{
+				_stage.chunckList[map].cellList[id].ground[1].isVisible = false;
+
 				for (int shortcut = 0; shortcut < _stage.chunckList[map].cellList[id].wallList.size(); shortcut++)
 				{
 					int randomLuck = rand() % 100;
+					//if (randomLuck > SHORTCUT_LUCK)
+					//{
+					//	_stage.chunckList[map].cellList[id].wallList[shortcut].isVisible = false;
+					//}
 					if (randomLuck > SHORTCUT_LUCK)
 					{
-						_stage.chunckList[map].cellList[id].wallList[shortcut].isVisible = false;
+						if ((id + 1) % nbCell == 0 /*|| id > NB_CELL*NB_CELL - NB_CELL - 1*/)
+						{
+							std::cout << "test" << std::endl;
+							_stage.chunckList[map].cellList[id].wallList[LEFT].isVisible = false;
+						}
+						if (id >= nbCell * nbCell - nbCell /*|| id > NB_CELL*NB_CELL - NB_CELL - 1*/)
+						{
+							std::cout << "test" << std::endl;
+							_stage.chunckList[map].cellList[id].wallList[BOTTOM].isVisible = false;
+						}
 					}
-					//if (randomLuck < SHORTCUT_LUCK)
-					//{
-					//	if (id % NB_CELL == 0 || id > NB_CELL*NB_CELL - NB_CELL - 1)
-					//	{
-					//		chunk.cellList[id].wallList[shortcut].decor->SetVisible(false);
-					//	}
-					//}
 				}
 
 				if ((map + 1) % _mapW == 0 && (id + 1) % nbCell == 0)
@@ -237,6 +245,36 @@ void Maze::InitLaby(Map::Stage& _stage, int _mapW)
 					_stage.chunckList[map].cellList[id].wallList[BOTTOM].isVisible = true;
 					_stage.chunckList[map].cellList[id].wallList[BOTTOM].name = txt.wallWindow[_stage.chunckList[map].type];
 				}
+			}
+		}
+	}
+}
+
+void Maze::InitEmpty(Map::Stage& _stage, int _mapW)
+{
+	for (int map = 0; map < _mapW * _mapW; map++)
+	{
+
+		int nbCell = _stage.chunckList[map].size;
+		Map::ManagmentText txt = _stage.chunckList[map].txt;
+
+		for (int id = 0; id < _stage.chunckList[map].cellList.size(); id++)
+		{		
+			for (int wall = 0; wall < _stage.chunckList[map].cellList[id].wallList.size(); wall++)
+			{
+				_stage.chunckList[map].cellList[id].wallList[wall].isVisible = false;
+			}
+			if ((map + 1) % _mapW == 0 && (id + 1) % nbCell == 0)
+			{
+				_stage.chunckList[map].cellList[id].wallList[LEFT].isVisible = true;
+				//_stage.chunckList[map].cellList[id].wallList[LEFT].name = _text.wallLeftWindow[_stage.chunckList[map].type];
+				_stage.chunckList[map].cellList[id].wallList[LEFT].name = txt.wallWindow[_stage.chunckList[map].type];
+			}
+
+			if (map >= _mapW * _mapW - _mapW && id >= nbCell * nbCell - nbCell)
+			{
+				_stage.chunckList[map].cellList[id].wallList[BOTTOM].isVisible = true;
+				_stage.chunckList[map].cellList[id].wallList[BOTTOM].name = txt.wallWindow[_stage.chunckList[map].type];
 			}
 		}
 	}
@@ -330,7 +368,11 @@ void Maze::InitExit(Map::Stage& _stage, int _mapW, int _stageNb) // !!!!!!!!! EX
 		{
 			for (int cell = 0; cell < nbCell * nbCell; cell++)
 			{
-				//_stage.chunckList[map].cellList[cell].ground[1].isVisible = false;
+				if (_stage.type == Map::LABO)
+				{
+					_stage.chunckList[map].cellList[cell].ground[1].isVisible = false;
+				}
+				_stage.chunckList[map].cellList[cell].ground[0].isVisible = false;
 
 				for (int wall = 0; wall < _stage.chunckList[map].cellList[cell].wallMissingList.size(); wall++)
 				{
@@ -380,6 +422,10 @@ void Maze::InitRoom(Map::Stage& _stage, int _mapW, int _stageNb) // !!!!!!!!! RO
 		{
 			for (int cell = 0; cell < nbCell * nbCell; cell++)
 			{
+				if (_stage.type == Map::LABO)
+				{
+					_stage.chunckList[map].cellList[cell].ground[1].isVisible = false;
+				}
 				//_stage.chunckList[map].cellList[cell].ground[1].isVisible = false;
 				_stage.chunckList[map].cellList[cell].ground[0].isVisible = false;
 				for (int wall = 0; wall < _stage.chunckList[map].cellList[cell].wallMissingList.size(); wall++)

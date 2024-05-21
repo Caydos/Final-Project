@@ -9,14 +9,14 @@ Map::ManagmentText Map::InitText(int _size)
 	ManagmentText text;
 	if (_size == NORMAL)
 	{
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //LABY
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //GARDEN
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //HOSPITAL
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //EXIT
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //ROOM
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //PARCEL
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //BALCONY
-		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground.json"); //EMPTY
+		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground2.json"); //LABY
+		text.ground.push_back("../Sets/GARDEN/Map/GRD_S1Dirt.json"); //GARDEN
+		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground2.json"); //HOSPITAL
+		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground2.json"); //EXIT
+		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground2.json"); //ROOM
+		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground2.json"); //PARCEL
+		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground2.json"); //BALCONY
+		text.ground.push_back("../Sets/HOSPITAL/Map/HSP_Ground2.json"); //EMPTY
 		text.ground.push_back("../Sets/LIBRARY/Map/LBR_S.json"); //EMPTY
 		text.ground.push_back("../Sets/LIBRARY/Map/LBR_S.json"); //EMPTY
 
@@ -34,7 +34,7 @@ Map::ManagmentText Map::InitText(int _size)
 		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
 		//text.wall.push_back("../Sets/LIBRARY/Map/HSP_Wall1.json");
 		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Wall.json");
-		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
+		text.wall.push_back("../Sets/GARDEN/Map/GRD_W1b.json");
 		text.wall.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
 		text.wall.push_back("../Sets/HOSPITAL/Map/HSP_Wall2.json");
@@ -68,8 +68,8 @@ Map::ManagmentText Map::InitText(int _size)
 		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
 		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
 
-		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-		text.garden.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
+		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json"); 
+		text.garden.push_back("../Sets/GARDEN/Map/GRD_W1b.json");
 		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 		text.garden.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
@@ -136,11 +136,11 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 	}
 	else if (_stageNb == 1)
 	{
-		_stage.type = LIBRARY;
+		_stage.type = LABO;
 	}
 	else
 	{
-		_stage.type = LABO;
+		_stage.type = FIELDS;
 	}
 
 	//_stage.type = _stageNb;
@@ -243,9 +243,8 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 			do
 			{
 				randomExit = rand() % sizeMap;
-			} while (_stage.chunckList[randomExit].type == GARDEN);
-		} while (randomExit < _mapW || randomExit >= _mapW * _mapW - _mapW || randomExit % _mapW == 0 || (randomExit + 1) % _mapW == 0);
-
+			} while (randomExit < _mapW || randomExit >= _mapW * _mapW - _mapW || randomExit % _mapW == 0 || (randomExit + 1) % _mapW == 0);
+		} while (_stage.chunckList[randomExit].type == GARDEN || _stage.chunckList[randomExit - 1].type == GARDEN || _stage.chunckList[randomExit + 1].type == GARDEN || _stage.chunckList[randomExit + _mapW].type == GARDEN || _stage.chunckList[randomExit - _mapW].type == GARDEN);
 
 		_stage.chunckList[randomExit].type = EXIT;
 		_stage.chunckList[randomExit].nameRoom = Props::TextChunck(_stage.type).exit[_stage.type];
@@ -271,9 +270,9 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 				do
 				{
 					randomEntrance = rand() % sizeMap;
-				} while (_stage.chunckList[randomEntrance].type == GARDEN);
-			} while (_stage.chunckList[randomEntrance].type == EXIT);
-		} while (randomEntrance < _mapW || randomEntrance >= _mapW * _mapW - _mapW || randomEntrance % _mapW == 0 || (randomEntrance + 1) % _mapW == 0);
+				} while (randomEntrance < _mapW || randomEntrance >= _mapW * _mapW - _mapW || randomEntrance % _mapW == 0 || (randomEntrance + 1) % _mapW == 0);
+			} while (_stage.chunckList[randomEntrance].type == GARDEN || _stage.chunckList[randomEntrance - 1].type == GARDEN || _stage.chunckList[randomEntrance + 1].type == GARDEN || _stage.chunckList[randomEntrance + _mapW].type == GARDEN || _stage.chunckList[randomEntrance - _mapW].type == GARDEN);
+		} while (_stage.chunckList[randomEntrance].type == EXIT);
 		_stage.chunckList[randomEntrance].type = ENTRANCE;
 		_stage.chunckList[randomEntrance].nameRoom = Props::TextChunck(_stage.type).entrance[_stage.type];
 	}
@@ -282,8 +281,6 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 	{
 		int randomRoom = 0;
 		int randomRoomTxt = rand() % _stage.txtRoom.size();
-		//do
-		//{
 		do
 		{
 			do
@@ -295,19 +292,19 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 						do
 						{
 							randomRoom = rand() % sizeMap;
-						} while (_stage.chunckList[randomRoom].type == GARDEN);
-					} while (_stage.chunckList[randomRoom].type == ENTRANCE);
-				} while (_stage.chunckList[randomRoom].type == EXIT);
-			} while (_stage.chunckList[randomRoom].type == ROOM);
-		} while (randomRoom < _mapW || randomRoom >= _mapW * _mapW - _mapW || randomRoom % _mapW == 0 || (randomRoom + 1) % _mapW == 0);
-
+						} while (randomRoom < _mapW || randomRoom >= _mapW * _mapW - _mapW || randomRoom % _mapW == 0 || (randomRoom + 1) % _mapW == 0);
+					} while (_stage.chunckList[randomRoom].type == GARDEN || _stage.chunckList[randomRoom - 1].type == GARDEN || _stage.chunckList[randomRoom + 1].type == GARDEN || _stage.chunckList[randomRoom + _mapW].type == GARDEN || _stage.chunckList[randomRoom - _mapW].type == GARDEN);
+				} while (_stage.chunckList[randomRoom].type == ENTRANCE);
+			} while (_stage.chunckList[randomRoom].type == EXIT);
+		} while (_stage.chunckList[randomRoom].type == ROOM);
 		_stage.chunckList[randomRoom].type = ROOM;
 		_stage.chunckList[randomRoom].nameRoom = _stage.txtRoom[randomRoomTxt];
 		_stage.txtRoom.erase(_stage.txtRoom.begin() + randomRoomTxt);
 	}
+
 	for (int i = 0; i < _mapW * _mapW; i++)
 	{
-		if (_stage.chunckList[i].type == Map::GARDEN)
+		if (_stage.chunckList[i].type == Map::GARDEN /*|| _stage.chunckList[i].type == Map::ROOM || _stage.chunckList[i].type == Map::ROOM*/)
 		{
 			if (i > 0)
 			{
@@ -438,21 +435,6 @@ void Map::CreateMaze()
 					}
 				}
 
-				//for (int wallOut = 0; wallOut < maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList.size(); wallOut++)
-				//{
-				//	//wallOut load
-				//	if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].isVisible)
-				//	{
-				//		maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor = Sets::Create();
-				//		maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
-				//		maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetRenderingInstance(instanceAddr);
-				//		maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].name)), false);
-				//		maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetName("Wall");
-				//		maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetPath("../Sets/");
-				//		maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].wallOutList[wallOut].pos);
-				//	}
-				//}
-
 				for (int Props = 0; Props < map[stageNb].chunckList[mapNb].cellList[cell].props.size(); Props++)
 				{
 					//props load
@@ -476,42 +458,10 @@ void Map::CreateMaze()
 						map[stageNb].chunckList[mapNb].cellList[cell].props[Props].decor->SetPosition(map[stageNb].chunckList[mapNb].cellList[cell].props[Props].pos);
 					}
 				}
-
-				//			for (int bedroom = 0; bedroom < maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom.size(); bedroom++)
-				//			{
-				//				//props load
-				//				if (maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].isVisible)
-				//				{
-				//					maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor = Sets::Create();
-				//					maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetParent(maze[mapNb].stageList[stageNb].chunk.parentSet, true);
-				//					maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetRenderingInstance(instanceAddr);
-				//					maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->LoadFromJson(json::parse(Files::GetFileContent(maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].name)), false);
-				//					maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetName("Props");
-				//					maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetPath("../Sets/");
-				//					maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetRotation(maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].rot, true);
-				//					maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].decor->SetPosition(maze[mapNb].stageList[stageNb].chunk.cellList[cell].bedroom[bedroom].pos);
-				//				}
-				//			}
-				//		}
 			}
 
 			map[stageNb].chunckList[mapNb].parentSet->ApplyTransformation();
 			map[stageNb].chunckList[mapNb].parentSet->CalculateBoundingBox();
-			//	}
-			//}
-			//for (int objective = 0; objective < objectiveList.size(); objective++)
-			//{
-			//	if (objectiveList[objective].isVisible)
-			//	{
-			//		objectiveList[objective].decor = Sets::Create();
-			//		objectiveList[objective].decor->GenerateRenderingInstance();
-			//		objectiveList[objective].decor->LoadFromJson(json::parse(Files::GetFileContent(objectiveList[objective].name)), false);
-			//		objectiveList[objective].decor->SetName("Books");
-			//		objectiveList[objective].decor->SetPath("../Sets/");
-			//		objectiveList[objective].decor->SetRotation(objectiveList[objective].rot, true);
-			//		objectiveList[objective].decor->SetPosition(objectiveList[objective].pos);
-			//	}
-			//}
 		}
 	}
 }

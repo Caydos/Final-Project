@@ -14,21 +14,42 @@ Map::ManagmentTextProps Props::TextChunck(int _stageType)
 		text.room.push_back("../Sets/HOSPITAL/Map/HSP_PlayRoom.json");
 		text.room.push_back("../Sets/HOSPITAL/Map/HSP_GiantBedRoom.json");
 
+		text.exit.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+		text.exit.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+		text.exit.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+
+		text.entrance.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
+		text.entrance.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
+		text.entrance.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
 	}
 	if (_stageType == Map::LIBRARY)
 	{
 		text.room.push_back("../Sets/LIBRARY/Map/LBR_LongTableRoom.json");
 		text.room.push_back("../Sets/LIBRARY/Map/LBR_MediaRoom.json");
 		text.room.push_back("../Sets/LIBRARY/Map/LBR_RugRoom.json");
+
+		text.exit.push_back("../Sets/LIBRARY/Map/LBR_LIBRARYEXIT.json");
+		text.exit.push_back("../Sets/LIBRARY/Map/LBR_LIBRARYEXIT.json");
+		text.exit.push_back("../Sets/LIBRARY/Map/LBR_LIBRARYEXIT.json");
+
+		text.entrance.push_back("../Sets/LIBRARY/Map/LBR_ReceptionDesk.json");
+		text.entrance.push_back("../Sets/LIBRARY/Map/LBR_ReceptionDesk.json");
+		text.entrance.push_back("../Sets/LIBRARY/Map/LBR_ReceptionDesk.json");
 	}
+	if (_stageType == Map::LABO)
+	{
+		text.room.push_back("../Sets/GARDEN/Map/GRD_Fountain.json");
+		text.room.push_back("../Sets/GARDEN/Map/GRD_Place.json");
+		text.room.push_back("../Sets/GARDEN/Map/GRD_House.json");
 
-	text.exit.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
-	text.exit.push_back("../Sets/LIBRARY/Map/LBR_LIBRARYEXIT.json");
-	text.exit.push_back("../Sets/HOSPITAL/Map/HSP_HOSPITALEXIT.json");
+		text.exit.push_back("../Sets/GARDEN/Map/GRD_EXIT.json");
+		text.exit.push_back("../Sets/GARDEN/Map/GRD_EXIT.json");
+		text.exit.push_back("../Sets/GARDEN/Map/GRD_EXIT.json");
 
-	text.entrance.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
-	text.entrance.push_back("../Sets/LIBRARY/Map/LBR_ReceptionDesk.json");
-	text.entrance.push_back("../Sets/HOSPITAL/Map/HSP_ReceptionDesk.json");
+		text.entrance.push_back("../Sets/GARDEN/Map/GRD_ENTER.json");
+		text.entrance.push_back("../Sets/GARDEN/Map/GRD_ENTER.json");
+		text.entrance.push_back("../Sets/GARDEN/Map/GRD_ENTER.json");
+	}
 
 	return text;
 }
@@ -201,10 +222,10 @@ std::vector<Map::Decor> Props::GenerateHospital(Map::Cell _cell, int _chunckType
 			}
 		}
 
-		//PANCARTE DANS LES CORRIDOR MURS LEFT ET BOTTOM
-		if (_cell.type == Maze::BEDROOM)
-		{
-			//std::cout << _cell.type << std::endl;
+	//PANCARTE DANS LES CORRIDOR MURS LEFT ET BOTTOM
+	if (_cell.type == Maze::BEDROOM)
+	{
+		//std::cout << _cell.type << std::endl;
 
 			for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
 			{
@@ -376,79 +397,79 @@ std::vector<Map::Decor> Props::GenerateHospital(Map::Cell _cell, int _chunckType
 					{
 						int itemRoll = rand() % 100;  //chance total qu'un type d'objet soit plac�
 
-						if (itemRoll > 35 && itemRoll < 100)
+					if (itemRoll > 35 && itemRoll < 100)
+					{
+						Map::Decor bench;
+						if (wallId == Maze::LEFT)
 						{
-							Map::Decor bench;
-							if (wallId == Maze::LEFT)
-							{
-								bench.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.98, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
-								bench.rot = glm::vec3(0, 180, 0);
-								bench.isVisible = true;
-								bench.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
-							}
-							else if (wallId == Maze::BOTTOM)
-							{
-								bench.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.8, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.98);
-								bench.rot = glm::vec3(0, 90, 0);
-								bench.isVisible = true;
-								bench.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
-							}
-							propList.push_back(bench);
+							bench.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.98, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
+							bench.rot = glm::vec3(0, 180, 0);
+							bench.isVisible = true;
+							bench.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
 						}
-						else if (itemRoll > 15 && itemRoll < 35)
+						else if (wallId == Maze::BOTTOM)
 						{
-							Map::Decor bed;
-							if (wallId == Maze::LEFT)
-							{
-								bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
-								bed.rot = glm::vec3(0, 0, 0);
-								bed.isVisible = true;
-								bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
-							}
-							else if (wallId == Maze::BOTTOM)
-							{
-								bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.9, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.9);
-								bed.rot = glm::vec3(0, 90, 0);
-								bed.isVisible = true;
-								bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
-							}
-							propList.push_back(bed);
+							bench.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.8, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.98);
+							bench.rot = glm::vec3(0, 90, 0);
+							bench.isVisible = true;
+							bench.name = "../Sets/HOSPITAL/Props/HSP_Bench.json";
 						}
-						else if (itemRoll > 10 && itemRoll < 15)
+						propList.push_back(bench);
+					}
+					else if (itemRoll > 15 && itemRoll < 35)
+					{
+						Map::Decor bed;
+						if (wallId == Maze::LEFT)
 						{
-							Map::Decor distrib;
-							if (wallId == Maze::LEFT)
-							{
-								distrib.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 1);
-								distrib.rot = glm::vec3(0, 90, 0);
-								distrib.isVisible = true;
-								distrib.name = "../Sets/HOSPITAL/Props/HSP_VendingMachine.json";
-							}
-							propList.push_back(distrib);
+							bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
+							bed.rot = glm::vec3(0, 0, 0);
+							bed.isVisible = true;
+							bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
 						}
-						else if (itemRoll > 0 && itemRoll < 10)
+						else if (wallId == Maze::BOTTOM)
 						{
-							Map::Decor extinguisher;
-							if (wallId == Maze::LEFT)
-							{
-								extinguisher.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.25, _cell.wallList[wallId].pos.y + 0.4, _cell.wallList[wallId].pos.z + 1.25);
-								extinguisher.rot = glm::vec3(0, 0, 0);
-								extinguisher.isVisible = true;
-								extinguisher.name = "../Sets/HOSPITAL/Props/HSP_Extinguisher.json";
-							}
-							else if (wallId == Maze::BOTTOM)
-							{
-								extinguisher.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.25, _cell.wallList[wallId].pos.y + 0.4, _cell.wallList[wallId].pos.z + 0.25);
-								extinguisher.rot = glm::vec3(0, -90, 0);
-								extinguisher.isVisible = true;
-								extinguisher.name = "../Sets/HOSPITAL/Props/HSP_Extinguisher.json";
-							}
-							propList.push_back(extinguisher);
+							bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.9, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.9);
+							bed.rot = glm::vec3(0, 90, 0);
+							bed.isVisible = true;
+							bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
 						}
+						propList.push_back(bed);
+					}
+					else if (itemRoll > 10 && itemRoll < 15)
+					{
+						Map::Decor distrib;
+						if (wallId == Maze::LEFT)
+						{
+							distrib.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 1);
+							distrib.rot = glm::vec3(0, 90, 0);
+							distrib.isVisible = true;
+							distrib.name = "../Sets/HOSPITAL/Props/HSP_VendingMachine.json";
+						}
+						propList.push_back(distrib);
+					}
+					else if (itemRoll > 0 && itemRoll < 10)
+					{
+						Map::Decor extinguisher;
+						if (wallId == Maze::LEFT)
+						{
+							extinguisher.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.25, _cell.wallList[wallId].pos.y + 0.4, _cell.wallList[wallId].pos.z + 1.25);
+							extinguisher.rot = glm::vec3(0, 0, 0);
+							extinguisher.isVisible = true;
+							extinguisher.name = "../Sets/HOSPITAL/Props/HSP_Extinguisher.json";
+						}
+						else if (wallId == Maze::BOTTOM)
+						{
+							extinguisher.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.25, _cell.wallList[wallId].pos.y + 0.4, _cell.wallList[wallId].pos.z + 0.25);
+							extinguisher.rot = glm::vec3(0, -90, 0);
+							extinguisher.isVisible = true;
+							extinguisher.name = "../Sets/HOSPITAL/Props/HSP_Extinguisher.json";
+						}
+						propList.push_back(extinguisher);
 					}
 				}
 			}
 		}
+	}
 
 		/////SPAWN DES LIT DANS BEDROOM/////
 		if (_cell.type == Maze::CORRIDOR)
@@ -462,28 +483,28 @@ std::vector<Map::Decor> Props::GenerateHospital(Map::Cell _cell, int _chunckType
 
 					const int CHANCE_OF_ANY_PROP = 50;  //% de chance qu'un objet soit plac� a un emplacement mur
 
-					if (roll < CHANCE_OF_ANY_PROP)
+				if (roll < CHANCE_OF_ANY_PROP)
+				{
+					Map::Decor bed;
+					if (wallId == Maze::LEFT)
 					{
-						Map::Decor bed;
-						if (wallId == Maze::LEFT)
-						{
-							bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
-							bed.rot = glm::vec3(0, 0, 0);
-							bed.isVisible = true;
-							bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
-						}
-						else if (wallId == Maze::BOTTOM)
-						{
-							bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.9, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.98);
-							bed.rot = glm::vec3(0, 90, 0);
-							bed.isVisible = true;
-							bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
-						}
-						propList.push_back(bed);
+						bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.2, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 2);
+						bed.rot = glm::vec3(0, 0, 0);
+						bed.isVisible = true;
+						bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
 					}
+					else if (wallId == Maze::BOTTOM)
+					{
+						bed.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.9, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 0.98);
+						bed.rot = glm::vec3(0, 90, 0);
+						bed.isVisible = true;
+						bed.name = "../Sets/HOSPITAL/Props/HSP_bed.json";
+					}
+					propList.push_back(bed);
 				}
 			}
 		}
+	}
 
 		/////SPAWN DES TABLE / PERCH DANS BEDROOM/////
 		if (_cell.type == Maze::BEDROOM)
@@ -504,46 +525,46 @@ std::vector<Map::Decor> Props::GenerateHospital(Map::Cell _cell, int _chunckType
 						if (itemRoll > 50 && itemRoll < 100)
 						{
 
-							Map::Decor perch;
-							if (wallId == Maze::LEFT)
-							{
-								perch.pos = glm::vec3(_cell.wallList[wallId].pos.x - 0.7, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 1.5);
-								perch.rot = glm::vec3(0, 0, 0);
-								perch.isVisible = true;
-								perch.name = "../Sets/HOSPITAL/Props/HSP_Perch.json";
-							}
-							else if (wallId == Maze::BOTTOM)
-							{
-								perch.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z - 0.5);
-								perch.rot = glm::vec3(0, 90, 0);
-								perch.isVisible = true;
-								perch.name = "../Sets/HOSPITAL/Props/HSP_Perch.json";
-							}
-							propList.push_back(perch);
-						}
-						else if (itemRoll > 0 && itemRoll < 50)
+						Map::Decor perch;
+						if (wallId == Maze::LEFT)
 						{
-							Map::Decor table;
-							if (wallId == Maze::LEFT)
-							{
-								table.pos = glm::vec3(_cell.wallList[wallId].pos.x - 0.4, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 1.5);
-								table.rot = glm::vec3(0, 90, 0);
-								table.isVisible = true;
-								table.name = "../Sets/HOSPITAL/Props/HSP_Table.json";
-							}
-							else if (wallId == Maze::BOTTOM)
-							{
-								table.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.5, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z - 0.35);
-								table.rot = glm::vec3(0, 0, 0);
-								table.isVisible = true;
-								table.name = "../Sets/HOSPITAL/Props/HSP_Table.json";
-							}
-							propList.push_back(table);
+							perch.pos = glm::vec3(_cell.wallList[wallId].pos.x - 0.7, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z + 1.5);
+							perch.rot = glm::vec3(0, 0, 0);
+							perch.isVisible = true;
+							perch.name = "../Sets/HOSPITAL/Props/HSP_Perch.json";
 						}
+						else if (wallId == Maze::BOTTOM)
+						{
+							perch.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1, _cell.wallList[wallId].pos.y + 0.08, _cell.wallList[wallId].pos.z - 0.5);
+							perch.rot = glm::vec3(0, 90, 0);
+							perch.isVisible = true;
+							perch.name = "../Sets/HOSPITAL/Props/HSP_Perch.json";
+						}
+						propList.push_back(perch);
+					}
+					else if (itemRoll > 0 && itemRoll < 50)
+					{
+						Map::Decor table;
+						if (wallId == Maze::LEFT)
+						{
+							table.pos = glm::vec3(_cell.wallList[wallId].pos.x - 0.4, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z + 1.5);
+							table.rot = glm::vec3(0, 90, 0);
+							table.isVisible = true;
+							table.name = "../Sets/HOSPITAL/Props/HSP_Table.json";
+						}
+						else if (wallId == Maze::BOTTOM)
+						{
+							table.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.5, _cell.wallList[wallId].pos.y + 0.1, _cell.wallList[wallId].pos.z - 0.35);
+							table.rot = glm::vec3(0, 0, 0);
+							table.isVisible = true;
+							table.name = "../Sets/HOSPITAL/Props/HSP_Table.json";
+						}
+						propList.push_back(table);
 					}
 				}
 			}
 		}
+	}
 
 		/////SPAWN DES MEDIKIT / CLEANING TROLLEY / WATER2 DANS CORRIDOR/////
 		if (_cell.type == Maze::CORRIDOR)
@@ -674,9 +695,9 @@ std::vector<Map::Decor> Props::GenerateHospital(Map::Cell _cell, int _chunckType
 ////GENERATE LGHT AND COLONNE////
 std::vector<Map::Decor> Props::GenerateProps(Map::Chunck& _chunck)
 {
-	std::vector<Map::Decor> props;
 	for (int cell = 0; cell < _chunck.cellList.size(); cell++)
 	{
+		std::vector<Map::Decor> props;
 
 		props = GenerateHospital(_chunck.cellList[cell], _chunck.type);
 		// Toujours g�n�rer et ajouter des lights
@@ -699,7 +720,6 @@ std::vector<Map::Decor> Props::GenerateProps(Map::Chunck& _chunck)
 
 		_chunck.cellList[cell].props = props;
 	}
-	return props;
 }
 
 
@@ -714,7 +734,7 @@ std::vector<Map::Decor> Props::GenerateRoom(Map::Chunck& _chunk)
 
 	Map::Decor room;
 
-	room.pos = glm::vec3(_chunk.cellList[0].ground[0].pos.x - BRICK_W / 2, _chunk.cellList[0].ground[0].pos.y + BRICK_W + (BRICK_W / 5) - BRICK_W / 5, _chunk.cellList[0].ground[0].pos.z + BRICK_W / 2);
+	room.pos = glm::vec3(_chunk.cellList[0].ground[0].pos.x - BRICK_W / 2, _chunk.cellList[0].ground[0].pos.y + BRICK_W + (BRICK_W / 5) - BRICK_W / 5, _chunk.cellList[0].ground[0].pos.z + BRICK_W/2);
 	room.rot = glm::vec3(0, 0, 0);
 	room.isVisible = true;
 	room.name = _chunk.nameRoom  /*"../Sets/HOSPITAL/Map/HSP_PlayRoomDodu.json"*/;

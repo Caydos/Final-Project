@@ -7,7 +7,7 @@ static unsigned int spotVertexVBO;
 static unsigned int spotInstanceVBO;
 static Shaders::Shader* spotShader;
 
-#define SPOT_MAX_COUNT 20000
+#define SPOT_MAX_COUNT 1
 
 void Scene::Lights::Initialize(GameData* _gameData)
 {

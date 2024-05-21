@@ -103,6 +103,7 @@ namespace Maze
 	void InitCell(Map::Stage& _stage, int _stageNb, int _mapW, int _nbStage);
 
 	void InitLaby(Map::Stage& _stage, int _mapW);
+	void InitEmpty(Map::Stage& _stage, int _mapW);
 	void InitGarden(Map::Stage& _stage, int _mapW, int _stageNb);
 	void InitExit(Map::Stage& _stage, int _mapW, int _stageNb);
 	void InitRoom(Map::Stage& _stage, int _mapW, int _stageNb);

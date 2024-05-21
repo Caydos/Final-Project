@@ -1,21 +1,10 @@
 {
-  "attributes": {
-    "scale": [0.5, 0.1, 0.5],
-    "lightDependent": true,
-    "diffuse": [1.0, 0.5, 0.31],
-    "specular": [0.5, 0.5, 0.5],
-    "shininess": 32.0,
-    "light": {
-      "position": [0, 0, 0],
-      "direction": [0, -1, 0],
-      "ambient": [0, 0, 0],
-      "diffuse": [0.5, 0.5, 0.5],
-      "specular": [0, 0, 0],
-      "constant": 0.000001,
-      "linear": 0.0,
-      "quadratic": 0.0,
-      "cutOff": 20.0,
-      "outerCutOff": 70.0
+    "attributes":
+    {
+		"scale": [0.5,0.1,0.5],
+		"lightDependent": true,
+        "diffuse": [1.0, 0.5, 0.31],
+        "specular": [0.5, 0.5, 0.5],
+        "shininess": 32.0
     }
-  }
 }

@@ -78,8 +78,8 @@ int main()
 
 
 	gameData.gameStates[TOOLS] = &Tools::Tick;
-	//gameData.gameStates[GAME] = &Scripting::Tick;
-	gameData.gameStates[GAME] = &Playtest::Tick;
+	gameData.gameStates[GAME] = &Scripting::Tick;
+	//gameData.gameStates[GAME] = &Playtest::Tick;
 	gameData.gameState = GAME;
 
 #ifdef _DEBUG

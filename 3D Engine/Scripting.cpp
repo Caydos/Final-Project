@@ -41,7 +41,7 @@ void Generation()
 {
 	Clock loadingClock;
 	loadingClock.Restart();
-	Map::GenerateMaze(8, 1);
+	Map::GenerateMaze(7, 2);
 	Doors::RegisterAll();
 	std::vector<Lighting::Spot*>* spots = Scene::Lights::GetSpots();
 
