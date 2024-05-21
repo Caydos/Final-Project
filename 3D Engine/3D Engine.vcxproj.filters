@@ -226,6 +226,9 @@
     <Filter Include="Source Files\Game\Scripting\Pathfinding">
       <UniqueIdentifier>{9cc3df80-cd1c-49dc-aad1-ed02ce746d4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripting\Intelligence">
+      <UniqueIdentifier>{ce03799a-1d6b-4659-bfbb-9d808f399abd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -452,6 +455,9 @@
     </ClCompile>
     <ClCompile Include="Pathfinding.cpp">
       <Filter>Source Files\Game\Scripting\Pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="Intelligence.cpp">
+      <Filter>Source Files\Game\Scripting\Intelligence</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -694,6 +700,9 @@
     </ClInclude>
     <ClInclude Include="Pathfinding.h">
       <Filter>Source Files\Game\Scripting\Pathfinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Intelligence.h">
+      <Filter>Source Files\Game\Scripting\Intelligence</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

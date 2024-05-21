@@ -1,7 +1,7 @@
 #include "Hospital.h"
 #include "KeyPad.h"
 #include "Reading.h"
-
+#include "Pathfinding.h"
 
 static bool initialized = false;
 static Map::Stage* stage = nullptr;
@@ -35,41 +35,56 @@ const char* socketPaths[] = {
 	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockYellow.json",
 };
 
-Sets::Set* clown = nullptr;
-Sets::Set* sockets[4] = { nullptr };
-Sets::Set* cubes[4] = { nullptr };
+static Sets::Set* clown = nullptr;
+static Sets::Set* sockets[4] = { nullptr };
+static Sets::Set* cubes[4] = { nullptr };
 bool validCubes[4] = { false };
 
-glm::vec3 socketInPosition(0.05, 0.05, 0.0);
-std::vector<glm::vec3> socketsPositions = {
+static glm::vec3 socketInPosition(0.05, 0.05, 0.0);
+static std::vector<glm::vec3> socketsPositions = {
 	glm::vec3(9.35,0.85,10.95),
 	glm::vec3(9.35,0.85,11.1),
 	glm::vec3(9.35,0.85,11.230),
 	glm::vec3(9.35,0.85,11.360),
 };
-glm::vec3 clownSpawnPoint(1.150, 1.9, 1.0);
-
+static glm::vec3 clownSpawnPoint(1.150, 1.9, 1.0);
+static std::vector<Pathfinding::Cube> nodes;
+static std::vector<Pathfinding::Cube> obstacles;
 
 void PathLoad(GameData* _gameData)
 {
-	
+	std::vector<Sets::Set*> parents = Sets::GetAllParents();
+	for (size_t parentId = 0; parentId < parents.size(); parentId++)
+	{
+		if (parents[parentId]->GetName() == "Chunk")
+		{
+			std::vector<Sets::Set*> childArray = parents[parentId]->GetChildArray();
+			for (size_t childId = 0; childId < childArray.size(); childId++)
+			{
+				if (childArray[childId]->GetName() == "Ground")
+				{
+					glm::vec3 parentPos = childArray[childId]->GetWorldPosition();
+					Sets::Set* ctPart = Sets::Create();
+					ctPart->SetName("ctPart");
+					ctPart->GenerateRenderingInstance();
+					ctPart->AppplyVisibility();
 
-	//std::vector<Sets::Set*> parents = Sets::GetAllParents();
-	//for (size_t parentId = 0; parentId < parents.size(); parentId++)
-	//{
-	//	if (parents[parentId]->GetName() == "Chunk")
-	//	{
-	//		std::vector<Sets::Set*> childArray = parents[parentId]->GetChildArray();
-	//		for (size_t childId = 0; childId < childArray.size(); childId++)
-	//		{
-	//			if (childArray[childId]->GetName() == "Ground")
-	//			{
-	//				glm::vec3 parentPos = childArray[childId]->GetWorldPosition();
-	//				c->addBlock(parentPos.x + 1.25, parentPos.y + 1.0f, parentPos.z + 1.25);
-	//			}
-	//		}
-	//	}
-	//}
+					Blocks::Block block;
+					block.GenerateModel();
+					Blocks::MaterialCheck(&block, "HSP_S1");
+					Blocks::BlockType* type = block.GetType();
+
+					block.SetScale(0.3f);
+					ctPart->InsertBlock(block);
+
+					glm::vec3 position(parentPos.x + 1.25, parentPos.y + 1.0f, parentPos.z + 1.25);
+
+					ctPart->SetPosition(position);
+					nodes.push_back(Pathfinding::Cube(childId, position.x, position.y));
+				}
+			}
+		}
+	}
 }
 
 void Hospital::RegisterInteractions()
@@ -311,7 +326,7 @@ void Hospital::Initialize(GameData* _gameData)
 	clown->SetPosition(clownSpawnPoint, false);
 	clown->SetScale(glm::vec3(0.6),true);
 	clown->SetName("Clown");
-	//PathLoad(_gameData);
+	PathLoad(_gameData);
 
 	initialized = true;
 }

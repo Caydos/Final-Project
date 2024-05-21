@@ -139,7 +139,7 @@ int main()
 	glfwTerminate();
 
 	Audio::Destroy();
-
+	std::cout << "On ne sait pas comment retirer la console" << std::endl;
 	system("pause");
 	return 0;
 }
