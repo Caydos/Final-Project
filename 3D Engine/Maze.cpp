@@ -222,12 +222,12 @@ void Maze::InitLaby(Map::Stage& _stage, int _mapW)
 					{
 						if ((id + 1) % nbCell == 0 /*|| id > NB_CELL*NB_CELL - NB_CELL - 1*/)
 						{
-							//std::cout << "test" << std::endl;
+							std::cout << "test" << std::endl;
 							_stage.chunckList[map].cellList[id].wallList[LEFT].isVisible = false;
 						}
 						if (id >= nbCell * nbCell - nbCell /*|| id > NB_CELL*NB_CELL - NB_CELL - 1*/)
 						{
-							//std::cout << "test" << std::endl;
+							std::cout << "test" << std::endl;
 							_stage.chunckList[map].cellList[id].wallList[BOTTOM].isVisible = false;
 						}
 					}

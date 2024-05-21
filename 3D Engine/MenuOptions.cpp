@@ -83,12 +83,15 @@ void MenuOptions::Tick(GameData* _gameData)
 					MenuOptions::Close();
 					PauseMenu::Open();
 					PauseMenu::SetOpen(false);
+					std::this_thread::sleep_for(std::chrono::milliseconds(125));
+
 				}
 				else if (MainMenu::GetOpen())
 				{
 					MenuOptions::Close();
 					MainMenu::Open();
 					MainMenu::SetOpen(false);
+					std::this_thread::sleep_for(std::chrono::milliseconds(125));
 				}
 			}
 			else
