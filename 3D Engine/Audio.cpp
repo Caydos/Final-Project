@@ -260,6 +260,7 @@ void Audio::Initialize()
 void Audio::Tick(glm::vec3 _position, glm::vec3 _frontVector, glm::vec3 _upVector)
 {
 	alListener3f(AL_POSITION, _position.x, _position.y, _position.z);
+	alListenerf(AL_GAIN, GetGameData()->settings.volume);
 
 	float orientation[] = { _frontVector.x, _frontVector.y, _frontVector.z, _upVector.x, _upVector.y, _upVector.z };
 	alListenerfv(AL_ORIENTATION, orientation);
