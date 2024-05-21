@@ -58,7 +58,7 @@ Map::ManagmentText Map::InitText(int _size)
 		text.door.push_back("../Sets/HOSPITAL/Map/HSP_Door.json");
 
 		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
-		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
+		text.wallWindow.push_back("../Sets/GARDEN/Map/GRD_W1b.json");
 		text.wallWindow.push_back("../Sets/LIBRARY/Map/LBR_Window.json");
 		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
 		text.wallWindow.push_back("../Sets/HOSPITAL/Map/HSP_Window2.json");
@@ -219,21 +219,21 @@ void Map::StageManagment(Stage& _stage, int _stageNb, int _mapW, int _nbStage)
 	}
 
 	int sizeMap = _mapW * _mapW;
-	for (int garden = 0; garden < 2; garden++)
-	{
-		if (_stageNb == 0)
-		{
-			_stage.chunckList[rand() % sizeMap].type = GARDEN;
-		}
-	}
+	//for (int garden = 0; garden < 2; garden++)
+	//{
+	//	if (_stageNb == 0)
+	//	{
+	//		_stage.chunckList[rand() % sizeMap].type = GARDEN;
+	//	}
+	//}
 
-	for (int i = 0; i < _mapW * _mapW; i++)
-	{
-		if (_stageNb > 0 && map[_stageNb - 1].chunckList[i].type == Map::GARDEN)
-		{
-			_stage.chunckList[i].type = Map::GARDEN;
-		}
-	}
+	//for (int i = 0; i < _mapW * _mapW; i++)
+	//{
+	//	if (_stageNb > 0 && map[_stageNb - 1].chunckList[i].type == Map::GARDEN)
+	//	{
+	//		_stage.chunckList[i].type = Map::GARDEN;
+	//	}
+	//}
 
 	for (int i = 0; i < 1; i++)
 	{
