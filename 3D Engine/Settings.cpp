@@ -22,6 +22,10 @@ void Settings::Load(GameData* _gameData)
 		std::string path = savedSettingsObj["crosshair"];
 		Crosshairs::Get()->LoadFromFile(path.c_str());
 	}
+	if (savedSettingsObj.contains("volume"))
+	{
+		_gameData->settings.volume = savedSettingsObj["volume"];
+	}
 }
 
 void Settings::Save(GameData* _gameData)

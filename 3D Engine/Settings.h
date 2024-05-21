@@ -11,6 +11,7 @@ namespace Settings
 	{
 		float sentivity;
 		float renderDistance;
+		float volume;
 	};
 	void Load(GameData* _gameData);
 	void Save(GameData* _gameData);
