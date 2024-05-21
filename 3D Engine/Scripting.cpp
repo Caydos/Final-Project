@@ -35,7 +35,13 @@ static Audio::Sound* tampon;
 static bool connected = false;
 static int gameState = 0;
 static std::shared_mutex gameStateMutex;
-
+static Sprite bloc1;
+static Sprite bloc2;
+static Sprite bloc3;
+static Sprite bloc4;
+static Sprite hud;
+static Sprite hudCard;
+static Sprite card;
 
 void Generation()
 {
@@ -127,10 +133,15 @@ void Scripting::Initialize(GameData* _gameData)
 
 	Hospital::RegisterInteractions();
 	camOverlays[0] = new Texture;
-	camOverlays[0]->LoadFromFile("../Textures/OverlayOff.png");
-	camOverlays[1] = new Texture;
-	camOverlays[1]->LoadFromFile("../Textures/Overlay.png");
+	camOverlays[0]->LoadFromFile("../Textures/Overlay.png");
 
+	hud.Load("../Textures/Hud.png", glm::vec3(157, 965, 0), glm::vec3(300, 65, 0), 1);
+	hudCard.Load("../Textures/Hud_card.png", glm::vec3(1620, 940, 0), glm::vec3(150, 76, 0), 1);
+	bloc1.Load("../Textures/Bloc1.png", glm::vec3(167, 974, 0), glm::vec3(51, 46, 0), 1);
+	bloc2.Load("../Textures/Bloc2.png", glm::vec3(243, 974, 0), glm::vec3(52, 46, 0), 1);
+	bloc3.Load("../Textures/Bloc3.png", glm::vec3(319, 974, 0), glm::vec3(52, 46, 0), 1);
+	bloc4.Load("../Textures/Bloc4.png", glm::vec3(395, 974, 0), glm::vec3(52, 46, 0), 1);
+	card.Load("../Textures/Card.png", glm::vec3(1623, 943, 0), glm::vec3(144, 70, 0), 1);
 
 
 	camOverlay.Load("", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0), 1);
@@ -177,6 +188,36 @@ void Scripting::Tick(GameData* _gameData)
 			camOverlay.SetTexture(camOverlays[1]);
 		}
 		camOverlay.Draw();
+		if (Levels::Get() == Levels::HOSPITAL)
+		{
+
+			if (_gameData->window.IsFocused())
+			{
+				hud.Draw();
+				hudCard.Draw();
+				bool* boolSockets = Hospital::GetSocketsBool();
+				if (boolSockets[Hospital::BLUE])
+				{
+					bloc1.Draw();
+				}
+				if (boolSockets[Hospital::GREEN])
+				{
+					bloc2.Draw();
+				}
+				if (boolSockets[Hospital::RED])
+				{
+					bloc3.Draw();
+				}
+				if (boolSockets[Hospital::YELLOW])
+				{
+					bloc4.Draw();
+				}
+				if (Hospital::GetCard())
+				{
+					card.Draw();
+				}
+			}
+		}
 	}
 	else
 	{

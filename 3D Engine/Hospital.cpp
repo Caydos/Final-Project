@@ -2,6 +2,7 @@
 #include "KeyPad.h"
 #include "Reading.h"
 #include "Pathfinding.h"
+#include "Intelligence.h"
 
 static bool initialized = false;
 static Map::Stage* stage = nullptr;
@@ -14,14 +15,6 @@ Sets::Set* playRoom = nullptr;
 Sets::Set* giantBedRoom = nullptr;
 Sets::Set* breakRoom = nullptr;
 
-
-enum SocketNames
-{
-	BLUE,
-	GREEN,
-	RED,
-	YELLOW
-};
 const char* cubesPaths[] = {
 	"../Sets/HOSPITAL/Gameplay/HSP_N7BB.json",
 	"../Sets/HOSPITAL/Gameplay/HSP_N5BV.json",
@@ -29,18 +22,21 @@ const char* cubesPaths[] = {
 	"../Sets/HOSPITAL/Gameplay/HSP_N1BJ.json",
 };
 const char* socketPaths[] = {
-	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockBlue.json",
-	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockGreen.json",
-	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockRed.json",
-	"../Sets/HOSPITAL/Gameplay/HSP_CubeStockYellow.json",
+	"HSP_CubeStockBlue",
+	"HSP_CubeStockGreen",
+	"HSP_CubeStockRed",
+	"HSP_CubeStockYellow",
 };
 
 static Sets::Set* clown = nullptr;
 static Sets::Set* sockets[4] = { nullptr };
 static Sets::Set* cubes[4] = { nullptr };
 bool validCubes[4] = { false };
+bool socketsBool[4] = { false };
 
-static glm::vec3 socketInPosition(0.05, 0.05, 0.0);
+static bool card = false;
+
+static glm::vec3 socketInPosition(0.09, 0.025, 0.05);
 static std::vector<glm::vec3> socketsPositions = {
 	glm::vec3(9.35,0.85,10.95),
 	glm::vec3(9.35,0.85,11.1),
@@ -49,10 +45,12 @@ static std::vector<glm::vec3> socketsPositions = {
 };
 static glm::vec3 clownSpawnPoint(1.150, 1.9, 1.0);
 static std::vector<Pathfinding::Cube> nodes;
-static std::vector<Pathfinding::Cube> obstacles;
-
+static std::vector<Bounds::Box> obstacles;
+static Intelligence::AI* clownAI;
+static float cubeUpOff = 0.05;
 void PathLoad(GameData* _gameData)
 {
+	clownAI = Intelligence::Create();
 	std::vector<Sets::Set*> parents = Sets::GetAllParents();
 	for (size_t parentId = 0; parentId < parents.size(); parentId++)
 	{
@@ -61,9 +59,13 @@ void PathLoad(GameData* _gameData)
 			std::vector<Sets::Set*> childArray = parents[parentId]->GetChildArray();
 			for (size_t childId = 0; childId < childArray.size(); childId++)
 			{
+				glm::vec3 parentPos = childArray[childId]->GetWorldPosition();
+				if (parentPos.y > 2.0)
+				{
+					continue;//Skip other stages Nodes
+				}
 				if (childArray[childId]->GetName() == "Ground")
 				{
-					glm::vec3 parentPos = childArray[childId]->GetWorldPosition();
 					Sets::Set* ctPart = Sets::Create();
 					ctPart->SetName("ctPart");
 					ctPart->GenerateRenderingInstance();
@@ -80,11 +82,20 @@ void PathLoad(GameData* _gameData)
 					glm::vec3 position(parentPos.x + 1.25, parentPos.y + 1.0f, parentPos.z + 1.25);
 
 					ctPart->SetPosition(position);
-					nodes.push_back(Pathfinding::Cube(childId, position.x, position.y));
+					nodes.push_back(Pathfinding::Cube(rand() % 250565464, position.x, position.z));
+				}
+				else if (childArray[childId]->GetName() == "Wall" && childArray[childId]->GetChildArray().size() >= 1)
+				{
+					obstacles.push_back(childArray[childId]->GetBoundingBox());
 				}
 			}
 		}
 	}
+
+	clownAI->BindToNodes(&nodes);
+	clownAI->SetStartPosition(glm::vec3(0.0f));
+	clownAI->SetDestination(glm::vec3(10.0,0.0f,45.0));
+	clownAI->CalculatePath(obstacles);
 }
 
 void Hospital::RegisterInteractions()
@@ -107,7 +118,7 @@ void SocketInteraction(Sets::Set* _set)
 		{
 			path = cubesPaths[i];
 			validCubes[i] = true;
-			
+
 			cubes[i]->SetPosition(sockets[i]->GetWorldPosition() + socketInPosition, true);
 			std::cout << cubesPaths[i] << std::endl;
 			break;
@@ -118,25 +129,32 @@ void SocketInteraction(Sets::Set* _set)
 void CubePickup(Sets::Set* _set)
 {
 	std::string cubeName = _set->GetName();
-	if (cubeName == cubesPaths[BLUE])
+	if (cubeName == cubesPaths[Hospital::BLUE])
 	{
 		std::cout << "Picked up : Blue" << std::endl;
-		GameObjects::Register(sockets[BLUE], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
+		GameObjects::Register(sockets[Hospital::BLUE], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
+		socketsBool[Hospital::BLUE] = true;
 	}
-	else if (cubeName == cubesPaths[GREEN])
+	else if (cubeName == cubesPaths[Hospital::GREEN])
 	{
 		std::cout << "Picked up : Green" << std::endl;
-		GameObjects::Register(sockets[GREEN], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
+		GameObjects::Register(sockets[Hospital::GREEN], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
+		socketsBool[Hospital::GREEN] = true;
+
 	}
-	else if (cubeName == cubesPaths[RED])
+	else if (cubeName == cubesPaths[Hospital::RED])
 	{
 		std::cout << "Picked up : Red" << std::endl;
-		GameObjects::Register(sockets[RED], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
+		GameObjects::Register(sockets[Hospital::RED], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
+		socketsBool[Hospital::RED] = true;
+
 	}
-	else if (cubeName == cubesPaths[YELLOW])
+	else if (cubeName == cubesPaths[Hospital::YELLOW])
 	{
 		std::cout << "Picked up : Yellow" << std::endl;
-		GameObjects::Register(sockets[YELLOW], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
+		GameObjects::Register(sockets[Hospital::YELLOW], 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &SocketInteraction);
+		socketsBool[Hospital::YELLOW] = true;
+
 	}
 	GameObjects::UnRegister(_set);
 	_set->Move(glm::vec3(0.0, -2.0f, 0.0f), true);
@@ -144,9 +162,9 @@ void CubePickup(Sets::Set* _set)
 
 void InteractExit(Sets::Set* _set)
 {
-	Scripting::SetgameState(1);
+	Levels::Set(Levels::GARDEN);
+	GameObjects::UnRegister(_set);
 }
-
 void Hospital::Initialize(GameData* _gameData)
 {
 	if (initialized) { return; }
@@ -199,29 +217,41 @@ void Hospital::Initialize(GameData* _gameData)
 	if (playRoom != nullptr)
 	{
 		std::vector<glm::vec3> playRoomPositions = {
-			glm::vec3(0.750,0.45,2.85),
-			glm::vec3(5.05,0.3,2.65),
-			glm::vec3(7.45,0.4,5.7),
-			glm::vec3(7.45,0.4,5.7),
-			glm::vec3(10.05,0.3,6.45),
+			glm::vec3(0.750,0.45 + cubeUpOff,2.85),
+			glm::vec3(5.05,0.3 + cubeUpOff,2.65),
+			glm::vec3(7.45,0.4 + cubeUpOff,5.7),
+			glm::vec3(7.45,0.4 + cubeUpOff,5.7),
+			glm::vec3(10.05,0.3 + cubeUpOff,6.45),
 		};
 
-		{// Fucked up because not following the enum
-			for (size_t i = 0; i < 4; i++)
-			{
-				sockets[i] = Sets::Create();
-				sockets[i]->SetParent(playRoom, true);
-				sockets[i]->SetRenderingInstance(playRoom->GetRenderingInstance());
-				sockets[i]->LoadFromJson(json::parse(Files::GetFileContent(socketPaths[i])), false);
-				sockets[i]->SetPosition(socketsPositions[i], true);
-				sockets[i]->SetName(socketPaths[i]);
-			}
-		}
+		//{// Fucked up because not following the enum
+		//	for (size_t i = 0; i < 4; i++)
+		//	{
+		//		sockets[i] = Sets::Create();
+		//		sockets[i]->SetParent(playRoom, true);
+		//		sockets[i]->SetRenderingInstance(playRoom->GetRenderingInstance());
+		//		sockets[i]->LoadFromJson(json::parse(Files::GetFileContent(socketPaths[i])), false);
+		//		sockets[i]->SetPosition(socketsPositions[i], true);
+		//		sockets[i]->SetName(socketPaths[i]);
+		//	}
+		//}
 		cubes[BLUE] = Sets::Create();
 		cubes[BLUE]->GenerateRenderingInstance();
 		cubes[BLUE]->LoadFromJson(json::parse(Files::GetFileContent(cubesPaths[BLUE])), false);
 		cubes[BLUE]->SetPosition(playRoom->GetWorldPosition() + (playRoomPositions[rand() % playRoomPositions.size()]), true);
 		cubes[BLUE]->SetName(cubesPaths[BLUE]);
+		std::vector<Sets::Set*> childArray = playRoom->GetChildArray();
+		for (size_t i = 0; i < childArray.size(); i++)
+		{
+			for (size_t socketId = 0; socketId < 4; socketId++)
+			{
+				if (childArray[i]->GetName() == socketPaths[socketId])
+				{
+					sockets[socketId] = childArray[i];
+					break;
+				}
+			}
+		}
 	}
 	else
 	{
@@ -231,9 +261,9 @@ void Hospital::Initialize(GameData* _gameData)
 	if (giantBedRoom != nullptr)
 	{
 		std::vector<glm::vec3> giantBedroomPositions = {
-			glm::vec3(2.6,0.55,3.85),
-			glm::vec3(1.25, 0.55, 11.4),
-			glm::vec3(11.5,0.5,11.9),
+			glm::vec3(2.6,0.55 + cubeUpOff,3.85),
+			glm::vec3(1.25, 0.55 + cubeUpOff, 11.4),
+			glm::vec3(11.5,0.5 + cubeUpOff,11.9),
 		};
 
 		cubes[GREEN] = Sets::Create();
@@ -265,9 +295,9 @@ void Hospital::Initialize(GameData* _gameData)
 		}
 
 		std::vector<glm::vec3> waitingRoomPositions = {
-			glm::vec3(8.850,1.2,0.15),
-			glm::vec3(4.450,0.55,1.2),
-			glm::vec3(9.4,0.28,3.55),
+			glm::vec3(8.850,1.2 + cubeUpOff,0.15),
+			glm::vec3(4.450,0.55 + cubeUpOff,1.2),
+			glm::vec3(9.4,0.28 + cubeUpOff,3.55),
 		};
 
 
@@ -287,9 +317,9 @@ void Hospital::Initialize(GameData* _gameData)
 	if (breakRoom != nullptr)
 	{
 		std::vector<glm::vec3> breakRoomPositions = {
-			glm::vec3(1.5,0.45,0.15),
-			glm::vec3(2.25,0.8,3.85),
-			glm::vec3(3.65,0.7,3.25),
+			glm::vec3(1.5,0.45 + cubeUpOff,0.15),
+			glm::vec3(2.25,0.8 + cubeUpOff,3.85),
+			glm::vec3(3.65,0.7 + cubeUpOff,3.25),
 		};
 
 
@@ -324,9 +354,9 @@ void Hospital::Initialize(GameData* _gameData)
 	clown->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")), false);
 	clown->SetRotation(glm::vec3(0.0, 90.0f, 0.0f), false);
 	clown->SetPosition(clownSpawnPoint, false);
-	clown->SetScale(glm::vec3(0.6),true);
+	clown->SetScale(glm::vec3(0.6), true);
 	clown->SetName("Clown");
-	PathLoad(_gameData);
+	//PathLoad(_gameData);
 
 	initialized = true;
 }
@@ -390,6 +420,11 @@ void Hospital::Tick(GameData* _gameData)
 	}
 }
 
+bool* Hospital::GetSocketsBool()
+{
+	return socketsBool;
+}
+
 void Hospital::UnlockExit()
 {
 	GameObjects::Register(elevator, 2.0f, 1000.0, &Interactions::Overlay::HoveredCrosshair, &InteractExit);
@@ -403,6 +438,12 @@ void Hospital::UnlockExit()
 			break;
 		}
 	}
+	card = true;
+}
+
+bool Hospital::GetCard()
+{
+	return card;
 }
 
 void Hospital::CleanUp(GameData* _gameData)

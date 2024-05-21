@@ -266,10 +266,10 @@ void Interactions::Overlay::Draw(GameData* _gameData)
 
 void Interactions::Overlay::HoveredCrosshair()
 {
-
 	SetCrosshairOpacity(1.0f);
 }
 
 void Interactions::Overlay::SetCrosshairOpacity(float _opacity)
 {
+	crosshair->SetOpacity(_opacity);
 }

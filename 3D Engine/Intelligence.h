@@ -11,16 +11,19 @@ namespace Intelligence
 		AI();
 		~AI();
 
-		void SetStartPosition(); // According to the node placements
+		void SetStartPosition(glm::vec3 _position); // According to the node placements
 		void SetDestination(glm::vec3 _destination);
+		void CalculatePath(std::vector < Bounds::Box > obstacles);
 		void Update(GameData* _gameData);
 
+		void BindToNodes(std::vector<Pathfinding::Cube>* _nodes);
 
 	private:
-		std::vector<Pathfinding::Cube*> nodes;
+		std::vector<Pathfinding::Cube>* nodes;
 		Sets::Set* boundSet;
-		Pathfinding::Cube* destination;
-		std::vector<Pathfinding::Cube*> path;
+		Pathfinding::Cube position;
+		Pathfinding::Cube destination;
+		std::vector<Pathfinding::Cube> path;
 	};
 
 	AI* Create();
