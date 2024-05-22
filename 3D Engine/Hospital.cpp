@@ -3,8 +3,11 @@
 #include "Reading.h"
 #include "Pathfinding.h"
 #include "Intelligence.h"
+#include "LoadingScreen.h"
 
 static bool initialized = false;
+static Clock cooldown;
+
 static Map::Stage* stage = nullptr;
 Sets::Set* vendingMachine = nullptr;
 Sets::Set* elevator = nullptr;
@@ -46,56 +49,104 @@ static std::vector<glm::vec3> socketsPositions = {
 static glm::vec3 clownSpawnPoint(1.150, 1.9, 1.0);
 static std::vector<Pathfinding::Cube> nodes;
 static std::vector<Bounds::Box> obstacles;
-static Intelligence::AI* clownAI;
-static float cubeUpOff = 0.05;
-void PathLoad(GameData* _gameData)
+struct Monsters
 {
-	clownAI = Intelligence::Create();
-	std::vector<Sets::Set*> parents = Sets::GetAllParents();
-	for (size_t parentId = 0; parentId < parents.size(); parentId++)
+	Sets::Set* set;
+	std::vector<float> headings;
+	std::vector<glm::vec3> points;
+	float speed = 2.0f;
+	bool forward = true;
+	int currentPoint = 1;  // Add a variable to track the current target point
+};
+static std::vector<Monsters> monsters;
+
+void updateMonsterPosition(Monsters& monster, float deltaTime)
+{
+	deltaTime = std::min(deltaTime, 1.0f);
+	glm::vec3 currentPosition = monster.set->GetPosition(); // Use GetPosition to get the current position
+	glm::vec3 targetPosition = monster.points[monster.currentPoint];
+	glm::vec3 direction = glm::normalize(targetPosition - currentPosition);
+
+	// Move the monster towards the target position
+	glm::vec3 movement = direction * monster.speed * deltaTime;
+	glm::vec3 newPosition = currentPosition + movement;
+
+	if (glm::distance(newPosition, targetPosition) <= 0.5f)
 	{
-		if (parents[parentId]->GetName() == "Chunk")
+		if (monster.forward)
 		{
-			std::vector<Sets::Set*> childArray = parents[parentId]->GetChildArray();
-			for (size_t childId = 0; childId < childArray.size(); childId++)
+			std::cout << monster.currentPoint << " " << monster.points[monster.currentPoint].x << " " << monster.points[monster.currentPoint].y << " " << monster.points[monster.currentPoint].z << std::endl;
+				monster.set->SetRotation(glm::vec3(0.0, monster.headings[monster.currentPoint] - 90.0f, 0.0), false);
+			monster.set->SetPosition(monster.points[monster.currentPoint]);
+			monster.currentPoint++;
+			if (monster.currentPoint >= monster.points.size() - 1)
 			{
-				glm::vec3 parentPos = childArray[childId]->GetWorldPosition();
-				if (parentPos.y > 2.0)
-				{
-					continue;//Skip other stages Nodes
-				}
-				if (childArray[childId]->GetName() == "Ground")
-				{
-					Sets::Set* ctPart = Sets::Create();
-					ctPart->SetName("ctPart");
-					ctPart->GenerateRenderingInstance();
-					ctPart->AppplyVisibility();
-
-					Blocks::Block block;
-					block.GenerateModel();
-					Blocks::MaterialCheck(&block, "HSP_S1");
-					Blocks::BlockType* type = block.GetType();
-
-					block.SetScale(0.3f);
-					ctPart->InsertBlock(block);
-
-					glm::vec3 position(parentPos.x + 1.25, parentPos.y + 1.0f, parentPos.z + 1.25);
-
-					ctPart->SetPosition(position);
-					nodes.push_back(Pathfinding::Cube(rand() % 250565464, position.x, position.z));
-				}
-				else if (childArray[childId]->GetName() == "Wall"/* && childArray[childId]->GetChildArray().size() >= 1*/)
-				{
-					obstacles.push_back(childArray[childId]->GetBoundingBox());
-				}
+				monster.forward = false;
+				monster.currentPoint -= 2;
+			}
+		}
+		else
+		{
+			std::cout << monster.currentPoint << " " << monster.points[monster.currentPoint].x << " " << monster.points[monster.currentPoint].y << " " << monster.points[monster.currentPoint].z << std::endl;
+			monster.set->SetRotation(glm::vec3(0.0, monster.headings[monster.currentPoint] - 90.0f, 0.0), false);
+			monster.set->SetPosition(monster.points[monster.currentPoint]);
+			monster.currentPoint--;
+			if (monster.currentPoint < 0)
+			{
+				monster.forward = true;
+				monster.currentPoint = 1;
 			}
 		}
 	}
+	else
+	{
+		monster.set->SetPosition(newPosition);
+	}
+}
 
-	clownAI->BindToNodes(&nodes);
-	clownAI->SetStartPosition(glm::vec3(0.0f));
-	clownAI->SetDestination(glm::vec3(10.0,0.0f,45.0));
-	clownAI->CalculatePath(obstacles);
+static float cubeUpOff = 0.05;
+void PathLoad(GameData* _gameData)
+{
+	Monsters first;
+
+	first.headings.push_back(-90);
+	first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 60.1625));
+
+	first.headings.push_back(90);
+	first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 31.8185));
+
+	first.headings.push_back(-90);
+	first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 60.1625));
+
+	first.headings.push_back(-45);
+	first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 61.1856));
+
+	first.headings.push_back(-90);
+	first.points.push_back(glm::vec3(51.31, clownSpawnPoint.y, 61.1856));
+
+	first.headings.push_back(0.0);
+	first.points.push_back(glm::vec3(51.31, clownSpawnPoint.y, 51.0826));
+
+	first.headings.push_back(-90);
+	first.points.push_back(glm::vec3(76.3642, clownSpawnPoint.y, 51.0826));
+
+	first.headings.push_back(-180);
+	first.points.push_back(glm::vec3(76.3642, clownSpawnPoint.y, 23.2297));
+
+	first.headings.push_back(0.0);
+	first.points.push_back(glm::vec3(62.7376, clownSpawnPoint.y, 23.2297));
+
+	first.set = Sets::Create();
+	first.set->GenerateRenderingInstance();
+	first.set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")), false);
+	first.set->SetRotation(glm::vec3(0.0, 0.0f, 0.0f), false);
+	first.set->SetPosition(first.points[0], false);
+	first.set->SetRotation(glm::vec3(0.0,first.headings[0] - 90.0f,0.0), false);
+	first.set->SetScale(glm::vec3(0.6), true);
+	first.set->SetName("Clown");
+
+
+	monsters.push_back(first);
 }
 
 void Hospital::RegisterInteractions()
@@ -358,13 +409,23 @@ void Hospital::Initialize(GameData* _gameData)
 	clown->SetName("Clown");
 	PathLoad(_gameData);
 
+	cooldown.Restart();
 	initialized = true;
 }
 
 void Hospital::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
+	//if (cooldown.GetElapsedTime() < 3000)
+	//{
+	//	LoadingScreen::Render(_gameData);
+	//	return;
+	//}
 	KeyPad::Tick(_gameData);
+	if (_gameData->window.IsKeyPressed(Keys::F8))
+	{
+		std::cout << " x: " << _gameData->camera->Position.x << " y: " << _gameData->camera->Position.y << " z: " << _gameData->camera->Position.z << " w: " << _gameData->camera->Yaw << std::endl;
+	}
 	if (_gameData->window.IsFocused())
 	{
 		if (vendingMachine != nullptr)
@@ -402,20 +463,30 @@ void Hospital::Tick(GameData* _gameData)
 				playerPed->SetPosition(elevator->GetWorldPosition(), true);
 			}
 		}
-		if (clown != nullptr)
+		//if (clown != nullptr)
+		//{
+		//	if (_gameData->window.IsKeyPressed(Keys::KP_4))
+		//	{
+		//		Peds::Ped* playerPed = Scripting::GetPlayerPed();
+		//		playerPed->SetPosition(clown->GetWorldPosition(), true);
+		//	}
+		//	if (_gameData->window.IsKeyPressed(Keys::KP_9))
+		//	{
+		//		Scripting::SetgameState(-1);
+		//	}
+		//	//aiController.update();
+		//	//entity.update(_gameData->dt);
+		//	//clown->SetPosition(entity.position);
+		//}
+
+		if (_gameData->window.IsKeyPressed(Keys::KP_4) && monsters.size() > 0 && monsters[0].set != nullptr)
 		{
-			if (_gameData->window.IsKeyPressed(Keys::KP_4))
-			{
-				Peds::Ped* playerPed = Scripting::GetPlayerPed();
-				playerPed->SetPosition(clown->GetWorldPosition(), true);
-			}
-			if (_gameData->window.IsKeyPressed(Keys::KP_9))
-			{
-				Scripting::SetgameState(-1);
-			}
-			//aiController.update();
-			//entity.update(_gameData->dt);
-			//clown->SetPosition(entity.position);
+			Peds::Ped* playerPed = Scripting::GetPlayerPed();
+			playerPed->SetPosition(monsters[0].set->GetPosition());
+		}
+		for (size_t i = 0; i < monsters.size(); i++)
+		{
+			updateMonsterPosition(monsters[i], _gameData->dt);
 		}
 	}
 }

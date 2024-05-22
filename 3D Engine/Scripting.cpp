@@ -171,7 +171,7 @@ void Scripting::Initialize(GameData* _gameData)
 
 
 	camOverlay.Load("", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0), 1);
-
+	Levels::Set(Levels::HOSPITAL);
 	initialized = true;
 }
 
@@ -200,7 +200,10 @@ void Scripting::Tick(GameData* _gameData)
 				GameObjects::Tick(_gameData);
 				Interactions::Overlay::Draw(_gameData); // Crosshair
 			}
-			Levels::Tick(_gameData);
+			if (!MainMenu::IsOpen())
+			{
+				Levels::Tick(_gameData);
+			}
 
 			Menu::Tick(_gameData);
 		}

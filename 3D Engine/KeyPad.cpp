@@ -10,6 +10,7 @@ static Sprite keypadSprites[13];
 static const glm::vec2 keypadBackSize(486, 525);
 static const glm::vec2 keypadPosition(1920 - keypadBackSize.x, 1080 - keypadBackSize.y);
 static const glm::vec2 keypadKeySize(133.5, 117.75);
+static Audio::Sound* keySound;
 
 bool displayed = false;
 static const char* keyNames[] = {
@@ -34,6 +35,9 @@ static Clock keyClock;
 
 void KeyPad::Initialize(GameData* _gameData)
 {
+	keySound = Audio::CreateSound();
+	keySound->LoadFromFile("../Sounds/GAMEPLAY/NumPad.wav");
+
 	GameData* gameData = GetGameData();
 	keypadSprites[0].Load("../Textures/Keypad/BrightBackground.jpg", glm::vec3(keypadPosition, 0.0), glm::vec3(keypadBackSize, 0.0), 1);
 	keypadSprites[0].BindShader(gameData->shaders[Shaders::UI]);
@@ -68,6 +72,7 @@ void KeyPad::Tick(GameData* _gameData)
 				{
 					if (_gameData->window.IsKeyPressed(Keys::MouseButtons::MOUSE_BUTTON_LEFT) && keyClock.GetElapsedTime() > 150)
 					{
+						keySound->Play();
 						keypadSprites[spriteId].SetScale(glm::vec3(0.8f * keypadKeySize, 0.0f));
 						for (size_t combId = 1; combId < 4; combId++)
 						{

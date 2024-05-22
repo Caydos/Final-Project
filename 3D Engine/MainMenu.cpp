@@ -5,7 +5,7 @@
 
 static bool initialized = false;
 static bool displayed = true;
-static bool beenOpen = false;
+static bool beenOpen = true;
 static AnimationM animation;
 static AnimationM animation2;
 static Sprite title;
@@ -206,8 +206,5 @@ void MainMenu::SetOpen(bool _open)
 
 bool MainMenu::IsOpen()
 {
-	if (displayed == true)
-	{
-		return true;
-	}
+	return displayed;
 }
