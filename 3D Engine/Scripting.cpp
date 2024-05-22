@@ -171,7 +171,7 @@ void Scripting::Initialize(GameData* _gameData)
 
 
 	camOverlay.Load("", glm::vec3(0.0), glm::vec3(_gameData->resolution[0], _gameData->resolution[1], 0.0), 1);
-	Levels::Set(Levels::HOSPITAL);
+	Levels::Set(Levels::ENTRANCE);
 	initialized = true;
 }
 

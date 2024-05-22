@@ -56,7 +56,7 @@ int main()
 	//// Get the video mode for the primary monitor
 	//const GLFWvidmode* vidmode = glfwGetVideoMode(monitor);
 
-	//glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+	glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
 
 	gameData.window.Create("3D Rendering Engine", gameData.resolution[0], gameData.resolution[1]);

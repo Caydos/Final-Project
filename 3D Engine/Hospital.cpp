@@ -455,11 +455,11 @@ void Hospital::Initialize(GameData* _gameData)
 void Hospital::Tick(GameData* _gameData)
 {
 	if (!initialized) { Initialize(_gameData); }
-	//if (cooldown.GetElapsedTime() < 3000)
-	//{
-	//	LoadingScreen::Render(_gameData);
-	//	return;
-	//}
+	if (cooldown.GetElapsedTime() < 3000)
+	{
+		LoadingScreen::Render(_gameData);
+		return;
+	}
 	KeyPad::Tick(_gameData);
 	if (_gameData->window.IsKeyPressed(Keys::F8))
 	{
