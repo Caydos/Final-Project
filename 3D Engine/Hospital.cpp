@@ -60,6 +60,7 @@ struct Monsters
 };
 static std::vector<Monsters> monsters;
 
+
 void updateMonsterPosition(Monsters& monster, float deltaTime)
 {
 	deltaTime = std::min(deltaTime, 1.0f);
@@ -107,52 +108,86 @@ void updateMonsterPosition(Monsters& monster, float deltaTime)
 static float cubeUpOff = 0.05;
 void PathLoad(GameData* _gameData)
 {
-	Monsters first;
+	{
+		Monsters first;
 
-	first.headings.push_back(-90);
-	first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 60.1625));
+		first.headings.push_back(-90);
+		first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 60.1625));
 
-	first.headings.push_back(90);
-	first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 31.8185));
+		first.headings.push_back(90);
+		first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 31.8185));
 
-	first.headings.push_back(-90);
-	first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 60.1625));
+		first.headings.push_back(-90);
+		first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 60.1625));
 
-	first.headings.push_back(-45);
-	first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 61.1856));
+		first.headings.push_back(-45);
+		first.points.push_back(glm::vec3(36.7726, clownSpawnPoint.y, 61.1856));
 
-	first.headings.push_back(-90);
-	first.points.push_back(glm::vec3(51.31, clownSpawnPoint.y, 61.1856));
+		first.headings.push_back(-90);
+		first.points.push_back(glm::vec3(51.31, clownSpawnPoint.y, 61.1856));
 
-	first.headings.push_back(0.0);
-	first.points.push_back(glm::vec3(51.31, clownSpawnPoint.y, 51.0826));
+		first.headings.push_back(0.0);
+		first.points.push_back(glm::vec3(51.31, clownSpawnPoint.y, 51.0826));
 
-	first.headings.push_back(-90);
-	first.points.push_back(glm::vec3(76.3642, clownSpawnPoint.y, 51.0826));
+		first.headings.push_back(-90);
+		first.points.push_back(glm::vec3(76.3642, clownSpawnPoint.y, 51.0826));
 
-	first.headings.push_back(-180);
-	first.points.push_back(glm::vec3(76.3642, clownSpawnPoint.y, 23.2297));
+		first.headings.push_back(-180);
+		first.points.push_back(glm::vec3(76.3642, clownSpawnPoint.y, 23.2297));
 
-	first.headings.push_back(0.0);
-	first.points.push_back(glm::vec3(62.7376, clownSpawnPoint.y, 23.2297));
+		first.headings.push_back(0.0);
+		first.points.push_back(glm::vec3(62.7376, clownSpawnPoint.y, 23.2297));
 
-	first.set = Sets::Create();
-	first.set->GenerateRenderingInstance();
-	first.set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")), false);
-	first.set->SetRotation(glm::vec3(0.0, 0.0f, 0.0f), false);
-	first.set->SetPosition(first.points[0], false);
-	first.set->SetRotation(glm::vec3(0.0,first.headings[0] - 90.0f,0.0), false);
-	first.set->SetScale(glm::vec3(0.6), true);
-	first.set->SetName("Clown");
+		first.set = Sets::Create();
+		first.set->GenerateRenderingInstance();
+		first.set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")), false);
+		first.set->SetRotation(glm::vec3(0.0, 0.0f, 0.0f), false);
+		first.set->SetPosition(first.points[0], false);
+		first.set->SetRotation(glm::vec3(0.0, first.headings[0] - 90.0f, 0.0), false);
+		first.set->SetScale(glm::vec3(0.6), true);
+		first.set->SetName("Clown");
 
 
-	monsters.push_back(first);
+		monsters.push_back(first);
+	}
+
+
+	{
+		Monsters first;
+
+		first.headings.push_back(90.0);
+		first.points.push_back(glm::vec3(52.462, clownSpawnPoint.y, 54.9958));
+
+		first.headings.push_back(0.0);
+		first.points.push_back(glm::vec3(57.2422, clownSpawnPoint.y, 66.0108));
+
+		first.headings.push_back(90.0);
+		first.points.push_back(glm::vec3(75.5838, clownSpawnPoint.y, 65.9147));
+
+		first.headings.push_back(180.0);
+		first.points.push_back(glm::vec3(75.6403, clownSpawnPoint.y, 76.5649));
+
+
+		first.set = Sets::Create();
+		first.set->GenerateRenderingInstance();
+		first.set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")), false);
+		first.set->SetRotation(glm::vec3(0.0, 0.0f, 0.0f), false);
+		first.set->SetPosition(first.points[0], false);
+		first.set->SetRotation(glm::vec3(0.0, first.headings[0] - 90.0f, 0.0), false);
+		first.set->SetScale(glm::vec3(0.6), true);
+		first.set->SetName("Clown");
+
+
+		monsters.push_back(first);
+	}
 }
 
 void Hospital::RegisterInteractions()
 {
 	//Interactions::Register("KeyPad", &KeyPad::Interaction);
 }
+
+
 
 void InteractVendingMachine(Sets::Set* _set)
 {
@@ -216,6 +251,7 @@ void InteractExit(Sets::Set* _set)
 	Levels::Set(Levels::GARDEN);
 	GameObjects::UnRegister(_set);
 }
+
 void Hospital::Initialize(GameData* _gameData)
 {
 	if (initialized) { return; }
@@ -400,14 +436,9 @@ void Hospital::Initialize(GameData* _gameData)
 	}
 
 	KeyPad::Initialize(_gameData);
-	clown = Sets::Create();
-	clown->GenerateRenderingInstance();
-	clown->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")), false);
-	clown->SetRotation(glm::vec3(0.0, 90.0f, 0.0f), false);
-	clown->SetPosition(clownSpawnPoint, false);
-	clown->SetScale(glm::vec3(0.6), true);
-	clown->SetName("Clown");
+
 	PathLoad(_gameData);
+
 
 	cooldown.Restart();
 	initialized = true;
