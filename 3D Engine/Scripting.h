@@ -20,6 +20,7 @@ namespace Scripting
 
 	void SetConnectionState(bool _state);
 	void SetgameState(int _state);
+	int GetGameState();
 
 	Players::Player* GetPlayer();
 	Peds::Ped* GetPlayerPed();

@@ -15,7 +15,7 @@ void Cheats::Tick(GameData* _gameData)
 	}
 	if (_gameData->window.IsKeyPressed(Keys::F3))
 	{
-		//player->GetPed()->SetPosition(spawnPoint);
+		std::cout << player->GetPed()->GetPosition().x << " " << player->GetPed()->GetPosition().y << " " << player->GetPed()->GetPosition().z << std::endl;
 	}
 	if (_gameData->window.IsKeyPressed(Keys::ESCAPE))
 	{

@@ -212,11 +212,10 @@ void Scripting::Tick(GameData* _gameData)
 			VictoryDefeat::Tick(_gameData, gameState);
 		}
 		camOverlay.SetTexture(camOverlays[0]);
-		if (connected)
+		if (GetGameState() == 0)
 		{
-			camOverlay.SetTexture(camOverlays[1]);
+			camOverlay.Draw();
 		}
-		camOverlay.Draw();
 		if (Levels::Get() == Levels::HOSPITAL)
 		{
 
@@ -252,6 +251,26 @@ void Scripting::Tick(GameData* _gameData)
 	{
 		LoadingScreen::Render(_gameData);
 	}
+
+	if (_gameData->window.IsKeyPressed(Keys::KP_9))
+	{
+		Scripting::SetgameState(-1);
+	}
+
+	if (_gameData->window.IsKeyPressed(Keys::KP_6) && Levels::Get() == Levels::GARDEN)
+	{
+		
+		player->GetPed()->SetPosition(64.0045, 4.12687, 55.9758);
+	}
+
+	if (_gameData->window.IsKeyPressed(Keys::F11))
+	{
+		Scripting::SetgameState(0);
+		Levels::Set(Levels::HOSPITAL);
+		player->GetPed()->SetPosition(53.8328, 1.62688 ,28.5161, true);
+
+	}
+
 }
 
 Players::Player* Scripting::GetPlayer()
@@ -279,4 +298,9 @@ void Scripting::SetgameState(int _state)
 {
 	std::unique_lock<std::shared_mutex> lock(gameStateMutex);
 	gameState = _state;
+}
+
+int Scripting::GetGameState()
+{
+	return gameState;
 }

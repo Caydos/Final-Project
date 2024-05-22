@@ -11,6 +11,8 @@ namespace Garden
 	void Initialize(GameData* _gameData);
 	void Tick(GameData* _gameData);
 
+	void InteractExit(Sets::Set* _set);
+
 	void CleanUp(GameData* _gameData);
 }
 

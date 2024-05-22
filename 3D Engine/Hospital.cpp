@@ -76,7 +76,7 @@ void updateMonsterPosition(Monsters& monster, float deltaTime)
 		if (monster.forward)
 		{
 			std::cout << monster.currentPoint << " " << monster.points[monster.currentPoint].x << " " << monster.points[monster.currentPoint].y << " " << monster.points[monster.currentPoint].z << std::endl;
-				monster.set->SetRotation(glm::vec3(0.0, monster.headings[monster.currentPoint] - 90.0f, 0.0), false);
+			monster.set->SetRotation(glm::vec3(0.0, monster.headings[monster.currentPoint] - 90.0f, 0.0), false);
 			monster.set->SetPosition(monster.points[monster.currentPoint]);
 			monster.currentPoint++;
 			if (monster.currentPoint >= monster.points.size() - 1)
@@ -141,7 +141,7 @@ void PathLoad(GameData* _gameData)
 	first.set->LoadFromJson(json::parse(Files::GetFileContent("../Sets/HOSPITAL/Mobs/Clown/Clown.json")), false);
 	first.set->SetRotation(glm::vec3(0.0, 0.0f, 0.0f), false);
 	first.set->SetPosition(first.points[0], false);
-	first.set->SetRotation(glm::vec3(0.0,first.headings[0] - 90.0f,0.0), false);
+	first.set->SetRotation(glm::vec3(0.0, first.headings[0] - 90.0f, 0.0), false);
 	first.set->SetScale(glm::vec3(0.6), true);
 	first.set->SetName("Clown");
 
@@ -460,36 +460,24 @@ void Hospital::Tick(GameData* _gameData)
 			if (_gameData->window.IsKeyPressed(Keys::KP_3))
 			{
 				Peds::Ped* playerPed = Scripting::GetPlayerPed();
-				playerPed->SetPosition(elevator->GetWorldPosition(), true);
+				//playerPed->SetPosition(elevator->GetWorldPosition(), true);
+				playerPed->SetPosition(18.8492, 1.62687, 14.7918, true);
 			}
 		}
-		//if (clown != nullptr)
-		//{
-		//	if (_gameData->window.IsKeyPressed(Keys::KP_4))
-		//	{
-		//		Peds::Ped* playerPed = Scripting::GetPlayerPed();
-		//		playerPed->SetPosition(clown->GetWorldPosition(), true);
-		//	}
-		//	if (_gameData->window.IsKeyPressed(Keys::KP_9))
-		//	{
-		//		Scripting::SetgameState(-1);
-		//	}
-		//	//aiController.update();
-		//	//entity.update(_gameData->dt);
-		//	//clown->SetPosition(entity.position);
-		//}
 
-		if (_gameData->window.IsKeyPressed(Keys::KP_4) && monsters.size() > 0 && monsters[0].set != nullptr)
-		{
-			Peds::Ped* playerPed = Scripting::GetPlayerPed();
-			playerPed->SetPosition(monsters[0].set->GetPosition());
-		}
-		for (size_t i = 0; i < monsters.size(); i++)
-		{
-			updateMonsterPosition(monsters[i], _gameData->dt);
-		}
+	}
+
+	if (_gameData->window.IsKeyPressed(Keys::KP_4) && monsters.size() > 0 && monsters[0].set != nullptr)
+	{
+		Peds::Ped* playerPed = Scripting::GetPlayerPed();
+		playerPed->SetPosition(monsters[0].set->GetPosition());
+	}
+	for (size_t i = 0; i < monsters.size(); i++)
+	{
+		updateMonsterPosition(monsters[i], _gameData->dt);
 	}
 }
+
 
 bool* Hospital::GetSocketsBool()
 {

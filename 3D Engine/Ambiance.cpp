@@ -250,7 +250,6 @@ void Ambiance::Tick(GameData* _gameData)
 		if (!nightSound->IsPlaying())
 		{
 			nightSound->Play();
-			std::cout << "Playing" << std::endl;
 		}
 		nightSound->SetPosition(_gameData->camera->Position);
 
