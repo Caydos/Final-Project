@@ -18,6 +18,9 @@ static Clock tempClock;
 static Texture* textureTitle;
 static Texture* textureBack;
 
+
+static Sprite creajeux;
+
 static Audio::Sound* gresillement;
 static Audio::Sound* beep;
 static Audio::Sound* interfaceText;
@@ -41,6 +44,8 @@ void MainMenu::Initialize(GameData* _gameData)
 	options.Load("../Textures/Menu/Options.png", glm::vec3(1450, 665, 0), glm::vec3(247, 69, 0), 1);
 	quit.Load("../Textures/Menu/Quit.png", glm::vec3(1500, 830, 0), glm::vec3(136, 58, 0), 1);
 	selection.Load("../Textures/Menu/Selection.png", glm::vec3(1700, 500, 0), glm::vec3(49, 67, 0), 1);
+
+	creajeux.Load("../Textures/Creajeux.png", glm::vec3(1777, 961,0), glm::vec3(150, 150, 0), 1);
 
 	tempClock.Restart();
 	Open();
@@ -168,6 +173,7 @@ void MainMenu::Tick(GameData* _gameData)
 		quit.Draw();
 		options.Draw();
 		selection.Draw();
+		creajeux.Draw();
 	}
 }
 
