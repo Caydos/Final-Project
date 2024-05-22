@@ -17,6 +17,9 @@ static Sprite logo;
 static Sprite options;
 static Sprite resume;
 
+static Audio::Sound* beep;
+static Audio::Sound* interfaceText;
+
 void PauseMenu::Initialize(GameData* _gameData)
 {
 	//SPRITE
@@ -30,6 +33,15 @@ void PauseMenu::Initialize(GameData* _gameData)
 	options.Load("../Textures/Pause/Options.png", glm::vec3(177, 640, 0), glm::vec3(265, 70, 0), 1);
 	back.Load("../Textures/Pause/Back.png", glm::vec3(177, 820, 0), glm::vec3(471, 55, 0), 1);
 	selection.Load("../Textures/Pause/Fleche.png", glm::vec3(100, 465, 0), glm::vec3(49, 67, 0), 1);
+
+
+	beep = Audio::CreateSound();
+	beep->LoadFromFile("../Sounds/Tampon.wav");
+	beep->SetVolume(5.0f);
+
+	interfaceText = Audio::CreateSound();
+	interfaceText->LoadFromFile("../Sounds/UI/InterfaceSound.wav");
+	interfaceText->SetVolume(5.0f);
 
 	if (MainMenu::IsOpen() == true)
 	{
@@ -52,31 +64,68 @@ void PauseMenu::Tick(GameData* _gameData)
 	{
 		glm::vec2 mousePos = _gameData->window.GetCursorPosition();
 
+
 		if (resume.IsMouseOverQuad(mousePos))
 		{
 			selection.SetPosition(glm::vec3(100, 465, 0));
+			interfaceText->Play();
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
+				if (!beep->IsPlaying())
+				{
+					beep->Play();
+				}
 				PauseMenu::Close();
+			}
+			else
+			{
+				if (beep->IsPlaying())
+				{
+					beep->Pause();
+				}
 			}
 		}
 		if (options.IsMouseOverQuad(mousePos))
 		{
 			selection.SetPosition(glm::vec3(100, 637, 0));
+			interfaceText->Play();
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
+				if (!beep->IsPlaying())
+				{
+					beep->Play();
+				}
 				PauseMenu::Close();
 				MenuOptions::Open();
 				beenOpen = true;
+			}
+			else
+			{
+				if (beep->IsPlaying())
+				{
+					beep->Pause();
+				}
 			}
 		}
 		if (back.IsMouseOverQuad(mousePos))
 		{
 			selection.SetPosition(glm::vec3(100, 817, 0));
+			interfaceText->Play();
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
+				if (!beep->IsPlaying())
+				{
+					beep->Play();
+				}
 				PauseMenu::Close();
 				MainMenu::Open();
+			}
+			else
+			{
+				if (beep->IsPlaying())
+				{
+					beep->Pause();
+				}
 			}
 		}
 

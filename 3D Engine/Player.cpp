@@ -4,6 +4,7 @@ Players::Player::Player()
 {
 	this->footSteps = nullptr;
 	this->footSteps2 = nullptr;
+	this->fastBreathing = nullptr;
 }
 
 Players::Player::~Player()
@@ -21,6 +22,11 @@ void Players::Player::SetFootStepSound2(Audio::Sound* _sound)
 	this->footSteps2 = _sound;
 }
 
+void Players::Player::SetFastBreathing(Audio::Sound* _sound)
+{
+	this->fastBreathing = _sound;
+}
+
 void Players::Player::Control(GameData* _gameData)
 {
 	Camera* camera = this->ped->GetCamera();
@@ -35,6 +41,8 @@ void Players::Player::Control(GameData* _gameData)
 		glm::vec3 pedPosition = this->ped->GetPosition();
 		this->footSteps->SetPosition(pedPosition);
 		this->footSteps2->SetPosition(pedPosition);
+		this->fastBreathing->SetPosition(pedPosition);
+
 		if (_gameData->window.IsKeyPressed(Keys::W))
 		{
 			velocityVec += horizontalFront * velocity;
@@ -98,17 +106,19 @@ void Players::Player::Control(GameData* _gameData)
 			this->ped->Run();
 			velocityVec.x *= this->ped->GetRunningMultiplier();
 			velocityVec.z *= this->ped->GetRunningMultiplier();
-			if (!this->footSteps2->IsPlaying())
+			if (!this->footSteps2->IsPlaying() && !this->fastBreathing->IsPlaying())
 			{
 				this->footSteps2->Play();
+				this->fastBreathing->Play();
 				this->footSteps->Pause();
 			}
 		}
 		else
 		{
-			if (this->footSteps2->IsPlaying())
+			if (this->footSteps2->IsPlaying() && this->fastBreathing->IsPlaying())
 			{
 				this->footSteps2->Pause();
+				this->fastBreathing->Pause();
 			}
 		}
 

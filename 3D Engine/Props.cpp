@@ -643,6 +643,97 @@ std::vector<Map::Decor> Props::GenerateHospital(Map::Cell _cell, int _chunckType
 				}
 			}
 		}
+
+	}
+
+	if (_chunckType == Map::LABY)
+	{
+		//Chance random de pop chaque objet
+		int randomLuck = 0;
+		randomLuck = rand() % 100;
+		//std::cout << randomLuck << std::endl;
+
+		int randomLuckBanc = 0;
+		randomLuckBanc = rand() % 100;
+
+		int randomLuckItem = 0;
+		randomLuckItem = rand() % 100;
+
+
+		/////SPAWN PROPS GARDEN/////
+		for (int wallId = 0; wallId < _cell.wallList.size(); wallId++)
+		{
+
+			Map::Decor lampadaire;
+			Map::Decor banc;
+			Map::Decor item;
+
+			////LAMPADAIRE////
+			if (randomLuck > 85)
+			{
+				if (wallId == Maze::BOTTOM)
+				{
+					lampadaire.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.45, _cell.wallList[wallId].pos.y + 0.15, _cell.wallList[wallId].pos.z - 0.35);
+				}
+				else
+				{
+					lampadaire.pos = glm::vec3(_cell.wallList[wallId].pos.x - 0.35, _cell.wallList[wallId].pos.y + 0.15, _cell.wallList[wallId].pos.z + 0.45);
+				}
+
+				lampadaire.rot = _cell.wallList[wallId].rot;
+				lampadaire.isVisible = _cell.wallList[wallId].isVisible;
+				lampadaire.name = "../Sets/GARDEN/Props/GRD_Lampadaire.json";
+				propList.push_back(lampadaire);
+			}
+
+			////BANC////
+			if (randomLuckBanc > 95)
+			{
+				if (wallId == Maze::BOTTOM)
+				{
+					banc.pos = glm::vec3(_cell.wallList[wallId].pos.x + 1.5, _cell.wallList[wallId].pos.y + 0.6, _cell.wallList[wallId].pos.z - 0.35);
+				}
+				else
+				{
+					banc.pos = glm::vec3(_cell.wallList[wallId].pos.x - 0.35, _cell.wallList[wallId].pos.y + 0.6, _cell.wallList[wallId].pos.z + 1.5);
+				}
+
+				banc.rot = _cell.wallList[wallId].rot;
+				banc.isVisible = _cell.wallList[wallId].isVisible;
+				banc.name = "../Sets/GARDEN/Props/GRD_Banc.json";
+				propList.push_back(banc);
+			}
+
+			////ITEM//// (GRD_Rake / GRD_Shovel)
+			if (randomLuckItem > 95)
+			{
+				int randomItem = rand() % 2;
+
+				if (wallId == Maze::BOTTOM)
+				{
+					item.pos = glm::vec3(_cell.wallList[wallId].pos.x + 0.8, _cell.wallList[wallId].pos.y + 0.07, _cell.wallList[wallId].pos.z - 0.37);
+					item.rot = glm::vec3(0, 90, 10);
+				}
+				else
+				{
+					item.pos = glm::vec3(_cell.wallList[wallId].pos.x - 0.37, _cell.wallList[wallId].pos.y + 0.07, _cell.wallList[wallId].pos.z + 0.8);
+					item.rot = glm::vec3(0, 180, 10);
+				}
+
+				item.isVisible = _cell.wallList[wallId].isVisible;
+
+				if (randomItem == 0)
+				{
+					item.name = "../Sets/GARDEN/Props/GRD_Shovel.json";
+				}
+				else if (randomItem == 1)
+				{
+					item.name = "../Sets/GARDEN/Props/GRD_Rake.json";
+				}
+
+				propList.push_back(item);
+			}
+		}
 	}
 	return propList;
 }

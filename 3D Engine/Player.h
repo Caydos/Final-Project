@@ -14,6 +14,7 @@ namespace Players
 
 		void SetFootStepSound(Audio::Sound* _sound);
 		void SetFootStepSound2(Audio::Sound* _sound);
+		void SetFastBreathing(Audio::Sound* _sound);
 		void Control(GameData* _gameData);
 
 		Peds::Ped* GetPed();
@@ -24,6 +25,8 @@ namespace Players
 		Clock jumpClock;
 		Audio::Sound* footSteps;
 		Audio::Sound* footSteps2;
+		Audio::Sound* fastBreathing;
+
 	};
 	Player* Create();
 	void Erase(Player* _player);

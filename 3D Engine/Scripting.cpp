@@ -27,9 +27,11 @@ static Texture* camOverlays[2] = { nullptr };
 static Sprite camOverlay;
 
 
+
 static Audio::Sound* footSteps;
 static Audio::Sound* footRun;
 static Audio::Sound* tampon;
+static Audio::Sound* fastBreathing;
 
 
 static bool connected = false;
@@ -42,6 +44,7 @@ static Sprite bloc4;
 static Sprite hud;
 static Sprite hudCard;
 static Sprite card;
+
 
 void Generation()
 {
@@ -95,19 +98,42 @@ void Scripting::Initialize(GameData* _gameData)
 	player->SetPed(playerPed);
 	playerPed->SetAdditionalRotation(glm::vec3(0.0, -90.0, 0.0));
 
-	footSteps = Audio::CreateSound();
-	footSteps->SetName("Walk");
-	footSteps->LoadFromFile("../Sounds/MC/Walk.wav");
-	footSteps->Loop(true);
-	footSteps->SetPosition(playerPed->GetPosition());
-	player->SetFootStepSound(footSteps);
 
-	footRun = Audio::CreateSound();
-	footRun->SetName("Run");
-	footRun->LoadFromFile("../Sounds/MC/Run.wav");
-	footRun->Loop(true);
-	footRun->SetPosition(playerPed->GetPosition());
-	player->SetFootStepSound2(footRun);
+	if (Levels::Level::HOSPITAL)
+	{
+		footSteps = Audio::CreateSound();
+		footSteps->LoadFromFile("../Sounds/MC/Walk/ConcreteWalk.wav");
+		footSteps->Loop(true);
+		footSteps->SetPosition(playerPed->GetPosition());
+		player->SetFootStepSound(footSteps);
+
+		footRun = Audio::CreateSound();
+		footRun->LoadFromFile("../Sounds/MC/Run/ConcreteRun.wav");
+		footRun->Loop(true);
+		footRun->SetPosition(playerPed->GetPosition());
+		player->SetFootStepSound2(footRun);
+	}
+	else if (Levels::Level::GARDEN)
+	{
+		footSteps = Audio::CreateSound();
+		footSteps->LoadFromFile("../Sounds/MC/Walk/GravelWalk.wav");
+		footSteps->Loop(true);
+		footSteps->SetPosition(playerPed->GetPosition());
+		player->SetFootStepSound(footSteps);
+
+		footRun = Audio::CreateSound();
+		footRun->LoadFromFile("../Sounds/MC/Run/GravelRun.wav");
+		footRun->Loop(true);
+		footRun->SetPosition(playerPed->GetPosition());
+		player->SetFootStepSound2(footRun);
+	}
+
+	fastBreathing = Audio::CreateSound();
+	fastBreathing->LoadFromFile("../Sounds/MC/MC after run.wav");
+	fastBreathing->Loop(true);
+	fastBreathing->SetPosition(playerPed->GetPosition());
+	player->SetFastBreathing(fastBreathing);
+
 
 
 

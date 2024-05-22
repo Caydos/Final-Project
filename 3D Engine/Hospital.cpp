@@ -84,7 +84,7 @@ void PathLoad(GameData* _gameData)
 					ctPart->SetPosition(position);
 					nodes.push_back(Pathfinding::Cube(rand() % 250565464, position.x, position.z));
 				}
-				else if (childArray[childId]->GetName() == "Wall" && childArray[childId]->GetChildArray().size() >= 1)
+				else if (childArray[childId]->GetName() == "Wall"/* && childArray[childId]->GetChildArray().size() >= 1*/)
 				{
 					obstacles.push_back(childArray[childId]->GetBoundingBox());
 				}
@@ -356,7 +356,7 @@ void Hospital::Initialize(GameData* _gameData)
 	clown->SetPosition(clownSpawnPoint, false);
 	clown->SetScale(glm::vec3(0.6), true);
 	clown->SetName("Clown");
-	//PathLoad(_gameData);
+	PathLoad(_gameData);
 
 	initialized = true;
 }

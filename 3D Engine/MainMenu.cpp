@@ -20,6 +20,8 @@ static Texture* textureBack;
 
 static Audio::Sound* gresillement;
 static Audio::Sound* beep;
+static Audio::Sound* interfaceText;
+static Audio::Sound* menuMusic;
 
 void MainMenu::Initialize(GameData* _gameData)
 {
@@ -40,14 +42,27 @@ void MainMenu::Initialize(GameData* _gameData)
 	quit.Load("../Textures/Menu/Quit.png", glm::vec3(1500, 830, 0), glm::vec3(136, 58, 0), 1);
 	selection.Load("../Textures/Menu/Selection.png", glm::vec3(1700, 500, 0), glm::vec3(49, 67, 0), 1);
 
-	gresillement = Audio::CreateSound();
-	gresillement->LoadFromFile("../Sounds/Gresillement.wav");
-
-	beep = Audio::CreateSound();
-	beep->LoadFromFile("../Sounds/Beep.wav");
-
 	tempClock.Restart();
 	Open();
+
+
+	gresillement = Audio::CreateSound();
+	gresillement->LoadFromFile("../Sounds/Gresillement.wav");
+	gresillement->SetVolume(0.1f);
+
+	beep = Audio::CreateSound();
+	beep->LoadFromFile("../Sounds/Tampon.wav");
+	beep->SetVolume(5.0f);
+
+	interfaceText = Audio::CreateSound();
+	interfaceText->LoadFromFile("../Sounds/UI/InterfaceSound.wav");
+	interfaceText->SetVolume(5.0f);
+
+	menuMusic = Audio::CreateSound();
+	menuMusic->LoadFromFile("../Sounds/Hospital/Neon.wav");
+	menuMusic->Loop(true);
+	menuMusic->SetVolume(0.1f);
+	//menuMusic->Play(); //s'entend partout
 
 	initialized = true;
 }
@@ -63,6 +78,7 @@ void MainMenu::Tick(GameData* _gameData)
 		if (start.IsMouseOverQuad(mousePos))
 		{
 			selection.SetPosition(glm::vec3(1700, 500, 0));
+			interfaceText->Play();
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
 				if (!beep->IsPlaying())
@@ -82,6 +98,7 @@ void MainMenu::Tick(GameData* _gameData)
 		if (options.IsMouseOverQuad(mousePos))
 		{
 			selection.SetPosition(glm::vec3(1750, 665, 0));
+			interfaceText->Play();
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
 				if (!beep->IsPlaying())
@@ -103,6 +120,7 @@ void MainMenu::Tick(GameData* _gameData)
 		if (quit.IsMouseOverQuad(mousePos))
 		{
 			selection.SetPosition(glm::vec3(1700, 830, 0));
+			interfaceText->Play();
 			if (_gameData->window.IsKeyPressed(Keys::MOUSE_BUTTON_LEFT))
 			{
 				if (!beep->IsPlaying())
@@ -170,6 +188,8 @@ void MainMenu::Open()
 
 void MainMenu::Close()
 {
+	menuMusic->Pause();
+
 	GetGameData()->window.Focus(true);
 	displayed = false;
 }

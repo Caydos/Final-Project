@@ -2,7 +2,7 @@
 #include "Ambiance.h"
 
 static bool initialized = false;
-static Levels::Level level = Levels::Level::HOSPITAL;
+static Levels::Level level = Levels::Level::ENTRANCE;
 static void (*levels[Levels::Level::LEVELCOUNT])(GameData* _gameData);
 
 void Levels::Initialize(GameData* _gameData)

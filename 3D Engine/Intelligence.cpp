@@ -58,6 +58,7 @@ void Intelligence::AI::SetDestination(glm::vec3 _destination)
 
 void Intelligence::AI::CalculatePath(std::vector < Bounds::Box > obstacles)
 {
+	std::cout << "Obstacle count : " << obstacles.size() << std::endl;
 	path = Pathfinding::a_star(&this->position, &this->destination, *this->nodes, obstacles,4.5f);
 	for (size_t cubeId = 0; cubeId < path.size(); cubeId++)
 	{
